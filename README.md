@@ -2,151 +2,145 @@
 
 El manual pedagógico, técnico e interactivo del ecosistema **Gentleman Programming**.
 
----
-
-## 🎯 Propósito
-
-Este repositorio contiene un curso completo, un manual de referencia y una aplicación web interactiva que enseña **qué es el ecosistema Gentle-AI, cómo funciona internamente, cómo configurarlo y cómo construir productos reales con él**.
-
-No es una guía de comandos. Es un sistema de aprendizaje progresivo que lleva al lector desde "no sé nada de programación" hasta "puedo diseñar, construir, revisar y gobernar un producto con agentes de IA".
+> 🌐 **Versión web**: [harrysxavio.github.io/gentle-ai-manual](https://harrysxavio.github.io/gentle-ai-manual/)
 
 ---
 
-## 🧭 ¿Qué es Gentle-AI?
+## 🎯 ¿Qué es esto?
 
-**Gentle-AI** es una capa de configuración, gobierno y herramientas que se instala sobre **OpenCode** (y próximamente **Codex**) para transformar un asistente de código genérico en un ecosistema estructurado de desarrollo con agentes.
+Un curso completo que te lleva desde **"no sé nada de programación"** hasta **"diseño, construyo, reviso y gobierno productos con agentes de IA"**.
 
-Agrega:
-
-| Capacidad | ¿Qué resuelve? |
-|-----------|---------------|
-| **SDD (Spec-Driven Development)** | Planificar antes de codificar, con fases, artefactos y verificación |
-| **Engram** | Memoria persistente entre sesiones, con búsqueda y gobierno |
-| **Skills** | Conocimiento especializado cargado según contexto |
-| **GGA (Gentleman Guardian Angel)** | Hooks de Git que revisan código antes de cada commit |
-| **Judgment Day** | Revisión adversarial ciega con dos jueces independientes |
-| **Native Bounded Review** | Revisión determinística con presupuesto, linaje y receipt |
-| **Model Routing** | Asignación de modelos por agente, fase y perfil de costo |
-| **Personas** | Personalidades predefinidas para el orquestador |
-| **Perfiles** | Configuraciones reutilizables (económico, equilibrado, potente) |
+No es una referencia de comandos. Es un sistema de aprendizaje progresivo con 20 módulos, 49 capítulos, 20 laboratorios prácticos y 8 rutas de aprendizaje según tu perfil.
 
 ---
 
-## 🗺️ Diagrama del ecosistema
+## 🧭 ¿Cómo estudiar con este manual?
 
-```mermaid
-graph TB
-    USER[👤 Usuario] --> OC[OpenCode / Codex]
-    OC --> GO[gentle-orchestrator]
-    GO --> SDD[Fases SDD]
-    GO --> SKILLS[Skills cargadas]
-    GO --> ENGRAM[Engram - Memoria]
-    GO --> GGA[GGA - Hooks Git]
-    GO --> REVIEW[Native Bounded Review]
-    
-    SDD --> INIT[sdd-init]
-    SDD --> EXPLORE[sdd-explore]
-    SDD --> PROPOSE[sdd-propose]
-    SDD --> SPEC[sdd-spec]
-    SDD --> DESIGN[sdd-design]
-    SDD --> TASKS[sdd-tasks]
-    SDD --> APPLY[sdd-apply]
-    SDD --> VERIFY[sdd-verify]
-    SDD --> ARCHIVE[sdd-archive]
-    
-    ENGRAM --> SQLITE[(SQLite + FTS5)]
-    ENGRAM --> MCP[MCP stdio/HTTP]
-    
-    GGA --> HOOKS[pre-commit / commit-msg]
-    REVIEW --> LENSES[4R Lenses]
-    REVIEW --> RECEIPT[Receipt criptográfico]
-    
-    GO --> MODEL[Modelo configurado]
-    MODEL --> PROVIDER[Proveedor: OpenAI / Google / Anthropic / Zen]
-```
+### Paso 1 — Elegí tu perfil
+
+| Soy... | Ruta | Tiempo estimado |
+|--------|------|:---:|
+| 🟢 **Principiante total** | `00 → 01 → 02 → 03 → 04 → 05 → 06 → 15` | ~8 horas |
+| 🟡 **Ya sé programar** | `03 → 04 → 05 → 06 → 07 → 08 → 09 → 10` | ~6 horas |
+| 🔵 **Uso OpenCode** | `04 → 05 → 07 → 08 → 09 → 10 → 02 → 11 → 12 → 14` | ~8 horas |
+| 🟣 **Uso Codex** | `04 → 05 → 07 → 08 → 09 → 10 → 02 → 11 → 13 → 14` | ~7 horas |
+| 🟠 **Quiero entender Engram** | `01 → 03 → 04 → 05 → 07 → 09 → 02 → 11 → 16` | ~7 horas |
+| 🔴 **Quiero configurar modelos** | `01 → 03 → 05 → 07 → 10 → 12/13 → 14 → 17` | ~6 horas |
+| ⚫ **Quiero construir un producto** | `00 → 01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 14 → 18 → 19` | ~12 horas |
+| 🟤 **Arquitectura del ecosistema** | `02 → 03 → 04 → 05 → 07 → 08 → 09 → 11 → 14 → 16 → 17` | ~9 horas |
+
+### Paso 2 — Seguí la ruta en orden
+
+Cada módulo declara sus **prerrequisitos**. No saltees módulos: el contenido está diseñado para construirse capa sobre capa. La [versión web](https://harrysxavio.github.io/gentle-ai-manual/) tiene navegación lateral, búsqueda y barra de progreso.
+
+### Paso 3 — Hacé los laboratorios
+
+El Módulo 19 contiene **20 laboratorios prácticos** con instrucciones paso a paso, resultado esperado y autodiagnóstico. Hacé cada lab al terminar su módulo correspondiente.
+
+### Paso 4 — Construí algo real
+
+El Módulo 18 te guía en la construcción de un producto completo con el ecosistema: idea → SDD → código → tests → revisión → deploy.
 
 ---
 
-## 🚀 Instalación y ejecución local
+## 📚 Mapa de módulos
+
+| # | Módulo | Dificultad | ¿Qué aprendés? |
+|:-:|--------|:----------:|-----------------|
+| 00 | Empezar aquí | 1 | Cómo usar este manual, perfiles de aprendizaje |
+| 01 | Fundamentos tecnológicos | 1 | Computadora, terminal, programación, frontend/backend, bases de datos |
+| 02 | Git y GitHub | 1-2 | Commits, ramas, remotos, PRs, hooks, worktrees |
+| 03 | Fundamentos de IA | 1-2 | Modelos, proveedores, agentes, tokens, contexto, MCP, tool calling |
+| 04 | Ecosistema Gentle | 2 | Arquitectura general, OpenCode vs Codex |
+| 05 | Instalación | 1 | Instalar y verificar todo el ecosistema |
+| 06 | Primer proyecto | 2 | Tutorial guiado de SDD completo |
+| 07 | Gentle-AI | 2 | CLI, TUI, componentes, agentes, personas, permisos |
+| 08 | SDD | 2 | Las 10 fases, artefactos, Strict TDD, OpenSpec/Engram/Híbrido |
+| 09 | Engram | 2 | Memoria persistente, herramientas MCP, arquitectura interna |
+| 10 | Skills | 2 | Crear skills, registry, descubrimiento |
+| 11 | Calidad y revisión | 2 | GGA, Native Bounded Review, Judgment Day |
+| 12 | OpenCode | 2 | Configuración de agentes, modelos, permisos, skills |
+| 13 | Codex | 2 | Perfiles TOML, razonamiento, multiagente |
+| 14 | Modelos y enrutamiento | 2 | Catálogo de 34 modelos, selección por tarea/riesgo/costo |
+| 15 | Terminal | 1 | Pipes, redirección, procesos, scripts |
+| 16 | Arquitectura técnica | 3 | Paquetes Go, Bubbletea TUI, pipeline, contribución |
+| 17 | Seguridad, costos y gobierno | 2 | Permisos, presupuestos, auditoría, políticas |
+| 18 | Construcción de productos | 3 | Ciclo completo idea→deploy con el ecosistema |
+| 19 | Laboratorios | 2-3 | 20 ejercicios prácticos acumulativos |
+| 20 | Referencia | 3 | Comandos, glosario, modelos, compatibilidad |
+
+---
+
+## 🚀 Ejecutar localmente
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/Gentleman-Programming/gentle-ai-mega-manual-es.git
-cd gentle-ai-mega-manual-es
-
-# Instalar dependencias
+git clone https://github.com/harrysxavio/gentle-ai-manual.git
+cd gentle-ai-manual/gentle-ai-mega-manual-es
 npm install
-
-# Ejecutar en modo desarrollo
-npm run dev
-
-# Compilar versión estática
-npm run build
-
-# Previsualizar build
-npm run preview
+npm run dev        # http://localhost:4321
+npm run build      # compila a dist/
+npm run validate   # lint + mermaid + modelos + tests + build
 ```
 
 ---
 
-## 📚 Rutas de aprendizaje
+## 🧪 Verificaciones automáticas
 
-| Soy... | Empieza por... |
-|--------|---------------|
-| 🟢 **Principiante total** | `content/00-empezar-aqui/` → fundamentos → primer proyecto |
-| 🟡 **Ya sé programar** | `content/04-ecosistema-gentle/` → instalación → SDD |
-| 🔵 **Uso OpenCode** | `content/12-opencode/` → configuración → modelos |
-| 🟣 **Uso Codex** | `content/13-codex/` → perfiles → multiagente |
-| 🟠 **Quiero entender Engram** | `content/09-engram/` → memoria → protocolo |
-| 🔴 **Quiero configurar modelos** | `content/14-modelos-y-enrutamiento/` → catálogo → routing |
-| ⚫ **Quiero construir un producto** | `content/18-construccion-de-productos/` → laboratorios |
-| 🟤 **Quiero entender la arquitectura** | `content/16-arquitectura-tecnica/` → código fuente |
-| ⚪ **Quiero contribuir** | `CONTRIBUTING.md` → `appendices/` |
-
----
-
-## 📸 Snapshot de versiones
-
-Ver [SOURCE_SNAPSHOT.md](SOURCE_SNAPSHOT.md) para las versiones congeladas usadas en esta edición del manual.
-
-Ver [MODEL_CATALOG_SNAPSHOT.md](MODEL_CATALOG_SNAPSHOT.md) para el catálogo de modelos verificado.
+| Comando | Qué verifica |
+|---------|-------------|
+| `npm run check` | TypeScript/Astro type-checking |
+| `npm run lint` | Markdownlint en todo el contenido |
+| `npm run check-mermaid` | Sintaxis de diagramas Mermaid |
+| `npm run check-models` | Catálogo de 34 modelos |
+| `npm test` | Integridad de archivos, caracteres, frontmatter |
+| `npm run build` | Build Astro + Pagefind + validación de enlaces |
+| `npm run check-links` | Enlaces rotos en el sitio generado |
+| `npm run validate` | Todos los anteriores en secuencia |
 
 ---
 
-## ⚠️ Funciones experimentales
+## 🤝 Contribuir
 
-Las funciones marcadas como **experimentales** o **beta** están señalizadas en todo el manual con este aviso:
+1. **Fork** del repositorio
+2. **Rama**: `feat/tu-mejora`
+3. **Commits**: convencionales (`feat:`, `fix:`, `docs:`)
+4. **Validación**: `npm run validate` debe pasar
+5. **PR**: contra `main`, describí qué cambia y por qué
 
-> 🧪 **Experimental**: esta funcionalidad puede cambiar sin previo aviso. Verificada en Gentle-AI X.Y.Z, commit abc123.
+Ver [`CONTRIBUTING.md`](CONTRIBUTING.md) para la guía completa de estilo y estructura de capítulos.
 
 ---
 
-## 🤝 Contribución
+## 📸 Versiones verificadas
 
-Ver [CONTRIBUTING.md](CONTRIBUTING.md).
+| Herramienta | Versión |
+|------------|---------|
+| Gentle-AI | 2.1.10 |
+| OpenCode | 1.17.20 |
+| Codex | 0.144.0 |
+| Engram | 1.19.0 |
+| GGA | 2.10.1 |
+| Node.js | 22.x |
 
-Este manual sigue un proceso estructurado de contribución con:
-- Snapshot de versiones
-- Trazabilidad de fuentes
-- Validación automática de enlaces, Mermaid, modelos y comandos
+Ver [`SOURCE_SNAPSHOT.md`](SOURCE_SNAPSHOT.md) para el snapshot completo con commits verificados.
+
+---
+
+## 🔗 Ecosistema
+
+| Repositorio | Propósito |
+|------------|-----------|
+| [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) | Orquestador, CLI, TUI, SDD |
+| [engram](https://github.com/Gentleman-Programming/engram) | Memoria persistente (MCP + SQLite + FTS5) |
+| [gga](https://github.com/Gentleman-Programming/gentleman-guardian-angel) | Hooks Git de revisión (Bash) |
+| [Gentleman-Skills](https://github.com/Gentleman-Programming/Gentleman-Skills) | Biblioteca de 24 skills curadas |
 
 ---
 
 ## 📄 Licencia
 
-Ver [LICENSE](LICENSE).
+Ver [`LICENSE`](LICENSE).
 
 ---
 
-## 🔗 Repositorios del ecosistema
-
-| Repositorio | Propósito |
-|------------|-----------|
-| [gentle-ai](https://github.com/Gentleman-Programming/gentle-ai) | Orquestador, CLI, configuración, SDD |
-| [engram](https://github.com/Gentleman-Programming/engram) | Memoria persistente |
-| [gentleman-guardian-angel](https://github.com/Gentleman-Programming/gentleman-guardian-angel) | Hooks Git de revisión |
-| [Gentleman-Skills](https://github.com/Gentleman-Programming/Gentleman-Skills) | Biblioteca de skills curadas |
-
----
-
-*Manual en construcción activa. ¿Encontraste un error? ¿Querés contribuir? Abrí un issue o un PR.*
+*¿Encontraste un error? ¿Querés contribuir un capítulo o laboratorio? Abrí un [issue](https://github.com/harrysxavio/gentle-ai-manual/issues) o un PR.*
