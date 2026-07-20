@@ -25,13 +25,16 @@ learningOutcomes:
 
 ## Qué aprenderás
 
-Este capítulo consolida la información dispersa de todos los módulos anteriores en un solo lugar. No es para leer de principio a fin — es para **consultar** cuando necesitás un comando, una definición o un dato de compatibilidad rápido.
+Este capítulo consolida la información dispersa de todos los módulos anteriores en un solo lugar.
+No es para leer de principio a fin — es para **consultar** cuando necesitás un comando,
+una definición o un dato de compatibilidad rápido.
 
 Cada sección tiene referencias cruzadas al capítulo donde se explica el tema en detalle.
 
 ## Por qué importa
 
-Cuando estás en medio de una tarea, no querés navegar 20 capítulos para encontrar la flag de un comando o el nombre exacto de una variable de entorno. Este capítulo existe para que puedas resolver eso en 10 segundos.
+Cuando estás en medio de una tarea, no querés navegar 20 capítulos para encontrar la flag de un comando
+o el nombre exacto de una variable de entorno. Este capítulo existe para que puedas resolver eso en 10 segundos.
 
 ## Gentle-AI CLI — Referencia rápida
 
