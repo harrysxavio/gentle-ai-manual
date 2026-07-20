@@ -1,0 +1,76 @@
+---
+---
+
+<div class="comp-caso-opencode" data-component="caso-opencode" role="note" aria-label="Caso OpenCode">
+  <div class="comp-caso-header comp-caso-opencode-header">
+    <span class="comp-caso-icon" aria-hidden="true">🔵</span>
+    <strong>OpenCode</strong>
+  </div>
+  <div class="comp-caso-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .comp-caso-opencode {
+    border: 1px solid var(--sl-color-purple-300);
+    border-left: 4px solid var(--sl-color-purple-500);
+    margin: 1.5em 0;
+    border-radius: 0 8px 8px 0;
+    overflow: hidden;
+  }
+
+  :root[data-theme="dark"] .comp-caso-opencode,
+  :global([data-theme="dark"]) .comp-caso-opencode {
+    border-color: var(--sl-color-purple-700);
+    border-left-color: var(--sl-color-purple-400);
+  }
+
+  .comp-caso-header {
+    padding: 0.55em 1.1em;
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+    font-size: 0.85em;
+  }
+
+  .comp-caso-opencode-header {
+    background: var(--sl-color-purple-50);
+    color: var(--sl-color-purple-700);
+  }
+
+  :root[data-theme="dark"] .comp-caso-opencode-header,
+  :global([data-theme="dark"]) .comp-caso-opencode-header {
+    background: var(--sl-color-purple-950);
+    color: var(--sl-color-purple-300);
+  }
+
+  .comp-caso-icon {
+    font-size: 1em;
+    flex-shrink: 0;
+  }
+
+  .comp-caso-body {
+    padding: 0.85em 1.1em;
+    font-size: 0.93em;
+    line-height: 1.6;
+    color: var(--sl-color-text);
+  }
+
+  @media (max-width: 720px) {
+    .comp-caso-opencode {
+      margin-left: 0;
+      margin-right: 0;
+      border-radius: 0 4px 4px 0;
+    }
+  }
+
+  @media print {
+    .comp-caso-opencode {
+      border-width: 1px;
+    }
+    .comp-caso-opencode-header {
+      background: none;
+    }
+  }
+</style>

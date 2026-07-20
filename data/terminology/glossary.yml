@@ -1,0 +1,303 @@
+# Glossary — structured terminology data
+# Source: GLOSSARY.md (2026-07-20)
+# Last updated: 2026-07-20
+terms:
+  - term: "Agente"
+    simple: "Un programa que usa un modelo de IA, tiene instrucciones, puede usar herramientas y actúa por su cuenta para cumplir una tarea."
+    reference: "content/03-fundamentos-de-ia/"
+    category: "fundamentos-de-ia"
+
+  - term: "API"
+    simple: "Un contrato que permite que dos programas se comuniquen entre sí."
+    reference: "content/01-fundamentos-tecnologicos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Apply (sdd-apply)"
+    simple: "Fase de SDD donde se escribe el código según las tareas planificadas."
+    reference: "content/08-sdd/"
+    category: "sdd"
+
+  - term: "Base de datos"
+    simple: "Un sistema que guarda datos de forma organizada y permite recuperarlos después."
+    reference: "content/01-fundamentos-tecnologicos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Binario"
+    simple: "Un archivo ejecutable compilado desde código fuente."
+    reference: "content/01-fundamentos-tecnologicos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Branch (rama)"
+    simple: "Una línea independiente de desarrollo en Git."
+    reference: "content/02-git-y-github/"
+    category: "git-y-github"
+
+  - term: "CLI (Command Line Interface)"
+    simple: "Una interfaz de texto donde se escriben comandos."
+    reference: "content/15-terminal/"
+    category: "terminal"
+
+  - term: "Codex"
+    simple: "El CLI de OpenAI para desarrollo asistido por IA."
+    reference: "content/13-codex/"
+    category: "codex"
+
+  - term: "Commit"
+    simple: "Un punto guardado en el historial de Git con un mensaje que describe el cambio."
+    reference: "content/02-git-y-github/"
+    category: "git-y-github"
+
+  - term: "Compactación"
+    simple: "Proceso de resumir el historial de una conversación cuando excede la ventana de contexto del modelo."
+    reference: "content/03-fundamentos-de-ia/"
+    category: "fundamentos-de-ia"
+
+  - term: "Context window"
+    simple: "La cantidad máxima de tokens que un modelo puede procesar en una sola solicitud."
+    reference: "content/03-fundamentos-de-ia/"
+    category: "fundamentos-de-ia"
+
+  - term: "Design (sdd-design)"
+    simple: "Fase de SDD donde se define la arquitectura técnica de la solución."
+    reference: "content/08-sdd/"
+    category: "sdd"
+
+  - term: "Dependencia"
+    simple: "Una biblioteca o módulo externo que un proyecto necesita para funcionar."
+    reference: "content/01-fundamentos-tecnologicos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Diff"
+    simple: "La diferencia entre dos versiones de un archivo o conjunto de archivos."
+    reference: "content/02-git-y-github/"
+    category: "git-y-github"
+
+  - term: "Engram"
+    simple: "Sistema de memoria persistente que guarda decisiones, descubrimientos y contexto entre sesiones."
+    reference: "content/09-engram/"
+    category: "engram"
+
+  - term: "Explore (sdd-explore)"
+    simple: "Fase de SDD para investigar ideas antes de comprometerse a un cambio."
+    reference: "content/08-sdd/"
+    category: "sdd"
+
+  - term: "Fallback"
+    simple: "Un modelo o estrategia de respaldo que se usa cuando el principal falla."
+    reference: "content/14-modelos-y-enrutamiento/"
+    category: "modelos"
+
+  - term: "Frontmatter"
+    simple: "Bloque de metadatos al inicio de un archivo Markdown, entre '---'."
+    reference: "content/10-skills/"
+    category: "skills"
+
+  - term: "FTS5 (Full-Text Search 5)"
+    simple: "Motor de búsqueda de texto completo integrado en SQLite."
+    reference: "content/16-arquitectura-tecnica/"
+    category: "arquitectura-tecnica"
+
+  - term: "GGA (Gentleman Guardian Angel)"
+    simple: "Sistema de hooks de Git que ejecuta revisiones automáticas antes de commits y push."
+    reference: "content/11-calidad-y-revision/"
+    category: "calidad-y-revision"
+
+  - term: "Git"
+    simple: "Sistema de control de versiones distribuido."
+    reference: "content/02-git-y-github/"
+    category: "git-y-github"
+
+  - term: "GitHub"
+    simple: "Plataforma web para alojar repositorios Git y colaborar en código."
+    reference: "content/02-git-y-github/"
+    category: "git-y-github"
+
+  - term: "Hook (Git)"
+    simple: "Un script que Git ejecuta automáticamente en respuesta a eventos como commit o push."
+    reference: "content/02-git-y-github/"
+    category: "git-y-github"
+
+  - term: "HTTP (HyperText Transfer Protocol)"
+    simple: "Protocolo de comunicación usado por navegadores y servidores web."
+    reference: "content/01-fundamentos-tecnologicos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Init (sdd-init)"
+    simple: "Comando que inicializa el contexto SDD para un proyecto."
+    reference: "content/08-sdd/"
+    category: "sdd"
+
+  - term: "Judgment Day"
+    simple: "Protocolo de revisión de código con dos jueces independientes que evalúan el mismo cambio sin comunicarse entre sí."
+    reference: "content/11-calidad-y-revision/"
+    category: "calidad-y-revision"
+
+  - term: "Lens (lente de revisión)"
+    simple: "Una perspectiva especializada de revisión de código (riesgo, legibilidad, confiabilidad, resiliencia)."
+    reference: "content/11-calidad-y-revision/"
+    category: "calidad-y-revision"
+
+  - term: "Linaje"
+    simple: "Cadena de identidad criptográfica que conecta revisiones, correcciones y recibos."
+    reference: "content/11-calidad-y-revision/"
+    category: "calidad-y-revision"
+
+  - term: "MCP (Model Context Protocol)"
+    simple: "Protocolo estándar para que agentes de IA se conecten a herramientas y fuentes de datos externas."
+    reference: "content/03-fundamentos-de-ia/"
+    category: "fundamentos-de-ia"
+
+  - term: "Modelo (de IA)"
+    simple: "Un sistema entrenado para procesar instrucciones y generar respuestas."
+    reference: "content/03-fundamentos-de-ia/"
+    category: "fundamentos-de-ia"
+
+  - term: "Native Bounded Review"
+    simple: "Sistema determinístico de revisión de código con presupuesto, linaje y recibo verificable."
+    reference: "content/11-calidad-y-revision/"
+    category: "calidad-y-revision"
+
+  - term: "OpenCode"
+    simple: "Entorno de desarrollo con agentes de IA, extensible con MCP, skills y plugins."
+    reference: "content/12-opencode/"
+    category: "opencode"
+
+  - term: "OpenSpec"
+    simple: "Formato de archivos para artefactos SDD (propuesta, especificación, diseño, tareas)."
+    reference: "content/08-sdd/"
+    category: "sdd"
+
+  - term: "Orquestador"
+    simple: "Un agente especial que distribuye trabajo a otros agentes y controla el flujo."
+    reference: "content/03-fundamentos-de-ia/"
+    category: "fundamentos-de-ia"
+
+  - term: "Persona"
+    simple: "Una personalidad predefinida que el orquestador adopta al responder al usuario."
+    reference: "content/07-gentle-ai/"
+    category: "gentle-ai"
+
+  - term: "Plugin"
+    simple: "Extensión de código que agrega funcionalidad a OpenCode o Codex."
+    reference: "content/12-opencode/"
+    category: "opencode"
+
+  - term: "PR (Pull Request)"
+    simple: "Una solicitud para fusionar cambios de una rama a otra en GitHub."
+    reference: "content/02-git-y-github/"
+    category: "git-y-github"
+
+  - term: "Prompt"
+    simple: "El texto de instrucción que se envía al modelo de IA."
+    reference: "content/03-fundamentos-de-ia/"
+    category: "fundamentos-de-ia"
+
+  - term: "Proposal (sdd-propose)"
+    simple: "Fase de SDD donde se define el alcance, objetivo y enfoque de un cambio."
+    reference: "content/08-sdd/"
+    category: "sdd"
+
+  - term: "Proveedor"
+    simple: "La empresa o servicio que ofrece acceso a modelos de IA (OpenAI, Google, Anthropic)."
+    reference: "content/03-fundamentos-de-ia/"
+    category: "fundamentos-de-ia"
+
+  - term: "Razonamiento"
+    simple: "Control de cuánto 'piensa' un modelo antes de responder."
+    reference: "content/14-modelos-y-enrutamiento/"
+    category: "modelos"
+
+  - term: "Receipt (recibo)"
+    simple: "Registro verificable de que una revisión de código se completó para un conjunto específico de cambios."
+    reference: "content/11-calidad-y-revision/"
+    category: "calidad-y-revision"
+
+  - term: "Review"
+    simple: "Proceso de examinar código para encontrar errores, riesgos o mejoras."
+    reference: "content/11-calidad-y-revision/"
+    category: "calidad-y-revision"
+
+  - term: "Runtime"
+    simple: "El entorno donde se ejecuta un programa (Node.js, Go, navegador)."
+    reference: "content/01-fundamentos-tecnologicos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "SDD (Spec-Driven Development)"
+    simple: "Metodología de desarrollo donde se planifica y especifica antes de implementar."
+    reference: "content/08-sdd/"
+    category: "sdd"
+
+  - term: "Shell"
+    simple: "El programa que interpreta comandos en la terminal (PowerShell, Bash, Zsh)."
+    reference: "content/15-terminal/"
+    category: "terminal"
+
+  - term: "Skill"
+    simple: "Un archivo de conocimiento especializado que se carga cuando el contexto coincide."
+    reference: "content/10-skills/"
+    category: "skills"
+
+  - term: "Spec (sdd-spec)"
+    simple: "Fase de SDD donde se escriben los requisitos detallados y escenarios."
+    reference: "content/08-sdd/"
+    category: "sdd"
+
+  - term: "SQL (Structured Query Language)"
+    simple: "Lenguaje para consultar y manipular bases de datos relacionales."
+    reference: "content/01-fundamentos-tecnologicos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "SQLite"
+    simple: "Base de datos liviana que guarda todo en un solo archivo, sin servidor."
+    reference: "content/01-fundamentos-tecnologicos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Staging (Git)"
+    simple: "Área intermedia donde se preparan los archivos antes de hacer commit."
+    reference: "content/02-git-y-github/"
+    category: "git-y-github"
+
+  - term: "Subagente"
+    simple: "Un agente especializado, con instrucciones y herramientas limitadas, que recibe tareas del orquestador."
+    reference: "content/03-fundamentos-de-ia/"
+    category: "fundamentos-de-ia"
+
+  - term: "System prompt"
+    simple: "Las instrucciones base que definen cómo debe comportarse un agente."
+    reference: "content/03-fundamentos-de-ia/"
+    category: "fundamentos-de-ia"
+
+  - term: "Tasks (sdd-tasks)"
+    simple: "Fase de SDD donde se desglosa la implementación en tareas concretas."
+    reference: "content/08-sdd/"
+    category: "sdd"
+
+  - term: "TDD (Test-Driven Development)"
+    simple: "Metodología donde se escribe el test antes del código."
+    reference: "content/08-sdd/"
+    category: "sdd"
+
+  - term: "Token"
+    simple: "La unidad mínima de texto que un modelo de IA procesa (aproximadamente ¾ de palabra en inglés)."
+    reference: "content/03-fundamentos-de-ia/"
+    category: "fundamentos-de-ia"
+
+  - term: "Tool calling"
+    simple: "Capacidad de un modelo de solicitar ejecutar una herramienta externa."
+    reference: "content/03-fundamentos-de-ia/"
+    category: "fundamentos-de-ia"
+
+  - term: "TUI (Text User Interface)"
+    simple: "Interfaz de usuario basada en texto con elementos visuales como paneles y menús."
+    reference: "content/15-terminal/"
+    category: "terminal"
+
+  - term: "Verify (sdd-verify)"
+    simple: "Fase de SDD donde se comprueba que la implementación cumple las especificaciones."
+    reference: "content/08-sdd/"
+    category: "sdd"
+
+  - term: "Worktree (Git)"
+    simple: "Una copia de trabajo adicional de un repositorio Git, útil para trabajar en múltiples ramas simultáneamente."
+    reference: "content/02-git-y-github/"
+    category: "git-y-github"

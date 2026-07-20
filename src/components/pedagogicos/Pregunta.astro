@@ -1,0 +1,61 @@
+---
+---
+
+<div class="comp-pregunta" data-component="pregunta" role="region" aria-label="Pregunta de reflexión">
+  <div class="comp-pregunta-header">
+    <span class="comp-pregunta-icon" aria-hidden="true">❓</span>
+    <span class="comp-pregunta-label">Pregunta</span>
+  </div>
+  <div class="comp-pregunta-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .comp-pregunta {
+    border: 1px solid var(--sl-color-purple-200);
+    border-radius: 8px;
+    margin: 1.5em 0;
+    overflow: hidden;
+  }
+
+  :root[data-theme="dark"] .comp-pregunta,
+  :global([data-theme="dark"]) .comp-pregunta {
+    border-color: var(--sl-color-purple-700);
+  }
+
+  .comp-pregunta-header {
+    padding: 0.6em 1.1em;
+    background: var(--sl-color-purple-50);
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--sl-color-purple-700);
+  }
+
+  :root[data-theme="dark"] .comp-pregunta-header,
+  :global([data-theme="dark"]) .comp-pregunta-header {
+    background: var(--sl-color-purple-950);
+    color: var(--sl-color-purple-300);
+  }
+
+  .comp-pregunta-icon {
+    font-size: 1.1em;
+  }
+
+  .comp-pregunta-body {
+    padding: 0.85em 1.1em;
+    font-size: 0.95em;
+    font-style: italic;
+    color: var(--sl-color-text);
+    line-height: 1.6;
+  }
+
+  @media print {
+    .comp-pregunta-header {
+      background: none;
+    }
+  }
+</style>

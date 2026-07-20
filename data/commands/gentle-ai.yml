@@ -1,0 +1,383 @@
+# gentle-ai CLI commands — verified against v2.1.10
+# Source: .research/upstream/gentle-ai/cmd/gentle-ai/main.go + internal/app/app.go + help.go
+# Last updated: 2026-07-20
+commands:
+  - name: "install"
+    description: "Configure AI coding agents on this machine"
+    usage: "gentle-ai install [flags]"
+    arguments:
+      - name: "[flags]"
+        description: "Install options"
+    flags:
+      - "--dry-run"
+      - "--yes"
+    modifies_files: true
+    requires_git: false
+    risk: medium
+    phases: [init-setup]
+    examples:
+      - "gentle-ai install"
+      - "gentle-ai install --dry-run"
+
+  - name: "uninstall"
+    description: "Remove Gentle AI managed files from this machine"
+    usage: "gentle-ai uninstall [component] [flags]"
+    arguments:
+      - name: "[component]"
+        description: "Component to uninstall (e.g. opencode-plugin)"
+    flags: []
+    modifies_files: true
+    requires_git: false
+    risk: high
+    phases: [maintenance]
+    examples:
+      - "gentle-ai uninstall"
+      - "gentle-ai uninstall opencode-plugin"
+
+  - name: "sync"
+    description: "Sync agent configs and skills to current version"
+    usage: "gentle-ai sync [flags]"
+    arguments: []
+    flags:
+      - "--include-permissions"
+    modifies_files: true
+    requires_git: false
+    risk: medium
+    phases: [maintenance, init-setup]
+    examples:
+      - "gentle-ai sync"
+      - "gentle-ai sync --include-permissions"
+
+  - name: "update"
+    description: "Check for available updates for managed tools"
+    usage: "gentle-ai update"
+    arguments: []
+    flags: []
+    modifies_files: false
+    requires_git: false
+    risk: low
+    phases: [maintenance]
+    examples:
+      - "gentle-ai update"
+
+  - name: "upgrade"
+    description: "Apply updates to managed tools (gentle-ai, engram, gga)"
+    usage: "gentle-ai upgrade [tool...] [--dry-run] [--no-backup]"
+    arguments:
+      - name: "[tool...]"
+        description: "Specific tools to upgrade (gentle-ai, engram, gga)"
+    flags:
+      - "--dry-run"
+      - "--no-backup"
+    modifies_files: true
+    requires_git: false
+    risk: high
+    phases: [maintenance]
+    examples:
+      - "gentle-ai upgrade"
+      - "gentle-ai upgrade engram"
+      - "gentle-ai upgrade --dry-run"
+
+  - name: "restore"
+    description: "Restore a config backup"
+    usage: "gentle-ai restore [flags]"
+    arguments:
+      - name: "[flags]"
+        description: "Restore options"
+    flags:
+      - "--yes"
+    modifies_files: true
+    requires_git: false
+    risk: high
+    phases: [maintenance, recovery]
+    examples:
+      - "gentle-ai restore"
+
+  - name: "doctor"
+    description: "Run ecosystem health diagnostics"
+    usage: "gentle-ai doctor"
+    arguments: []
+    flags: []
+    modifies_files: false
+    requires_git: false
+    risk: low
+    phases: [maintenance]
+    examples:
+      - "gentle-ai doctor"
+
+  - name: "skill-registry refresh"
+    description: "Refresh .atl/skill-registry.md with cache-hit fast path"
+    usage: "gentle-ai skill-registry refresh [--force] [--quiet] [--no-gitignore] [--cwd PATH]"
+    arguments: []
+    flags:
+      - "--force"
+      - "--quiet"
+      - "--no-gitignore"
+      - "--cwd PATH"
+    modifies_files: true
+    requires_git: true
+    risk: low
+    phases: [maintenance]
+    examples:
+      - "gentle-ai skill-registry refresh"
+      - "gentle-ai skill-registry refresh --force"
+
+  - name: "skill-registry list"
+    description: "List registered skills"
+    usage: "gentle-ai skill-registry list [--json] [--cwd PATH]"
+    arguments: []
+    flags:
+      - "--json"
+      - "--cwd PATH"
+    modifies_files: false
+    requires_git: true
+    risk: low
+    phases: [maintenance]
+    examples:
+      - "gentle-ai skill-registry list"
+      - "gentle-ai skill-registry list --json"
+
+  - name: "sdd-status"
+    description: "Print native SDD phase status for orchestrators"
+    usage: "gentle-ai sdd-status [change]"
+    arguments:
+      - name: "[change]"
+        description: "Optional change name"
+    flags: []
+    modifies_files: false
+    requires_git: false
+    risk: low
+    phases: [sdd]
+    examples:
+      - "gentle-ai sdd-status"
+      - "gentle-ai sdd-status my-change"
+
+  - name: "sdd-continue"
+    description: "Print native SDD dispatcher routing output"
+    usage: "gentle-ai sdd-continue [change]"
+    arguments:
+      - name: "[change]"
+        description: "Optional change name"
+    flags: []
+    modifies_files: false
+    requires_git: false
+    risk: low
+    phases: [sdd]
+    examples:
+      - "gentle-ai sdd-continue"
+      - "gentle-ai sdd-continue my-change"
+
+  - name: "review"
+    description: "Primary review orchestrator command"
+    usage: "gentle-ai review [subcommand] [flags]"
+    arguments:
+      - name: "[subcommand]"
+        description: "start | finalize | validate | status"
+    flags:
+      - "--cwd PATH"
+      - "--base-ref REF"
+      - "--focus RISK|RESILIENCE|READABILITY|RELIABILITY"
+      - "--gate GATE"
+    modifies_files: true
+    requires_git: true
+    risk: high
+    phases: [review]
+    examples:
+      - "gentle-ai review start --cwd . --base-ref main"
+      - "gentle-ai review finalize --cwd . --result review.json"
+      - "gentle-ai review validate --gate resilience --cwd ."
+
+  - name: "review start"
+    description: "Start a new bounded review session"
+    usage: "gentle-ai review start [--cwd REPO] [--base-ref REF] [--focus LENS]"
+    arguments: []
+    flags:
+      - "--cwd REPO"
+      - "--base-ref REF"
+      - "--focus RISK|RESILIENCE|READABILITY|RELIABILITY"
+    modifies_files: true
+    requires_git: true
+    risk: medium
+    phases: [review]
+    examples:
+      - "gentle-ai review start --cwd . --base-ref main --focus risk"
+
+  - name: "review finalize"
+    description: "Finalize a review with results and evidence"
+    usage: "gentle-ai review finalize [--cwd REPO] [--result JSON...] [--evidence PATH]"
+    arguments: []
+    flags:
+      - "--cwd REPO"
+      - "--result JSON"
+      - "--evidence PATH"
+    modifies_files: true
+    requires_git: true
+    risk: medium
+    phases: [review]
+    examples:
+      - "gentle-ai review finalize --cwd . --result review.json --evidence ./evidence/"
+
+  - name: "review validate"
+    description: "Validate review authority and receipts"
+    usage: "gentle-ai review validate --gate GATE [--cwd REPO]"
+    arguments: []
+    flags:
+      - "--gate GATE"
+      - "--cwd REPO"
+    modifies_files: false
+    requires_git: true
+    risk: low
+    phases: [review]
+    examples:
+      - "gentle-ai review validate --gate reliability --cwd ."
+
+  - name: "review status"
+    description: "Read-only inventory of review authority state"
+    usage: "gentle-ai review status [--cwd REPO]"
+    arguments: []
+    flags:
+      - "--cwd REPO"
+    modifies_files: false
+    requires_git: true
+    risk: low
+    phases: [review]
+    examples:
+      - "gentle-ai review status --cwd ."
+
+  - name: "review-start"
+    description: "Legacy v1 review start surface (read-only)"
+    usage: "gentle-ai review-start --cwd REPO --lineage ID --policy-file PATH"
+    arguments: []
+    flags:
+      - "--cwd REPO"
+      - "--lineage ID"
+      - "--policy-file PATH"
+    modifies_files: false
+    requires_git: true
+    risk: low
+    phases: [review, legacy]
+    examples: []
+
+  - name: "review-resume"
+    description: "Read shipped v1 review authority without mutation (legacy)"
+    usage: "gentle-ai review-resume --cwd REPO --lineage ID"
+    arguments: []
+    flags:
+      - "--cwd REPO"
+      - "--lineage ID"
+    modifies_files: false
+    requires_git: true
+    risk: low
+    phases: [review, legacy]
+    examples: []
+
+  - name: "review-step"
+    description: "Legacy v1 step execution (read-only, rejects mutation)"
+    usage: "gentle-ai review-step --cwd REPO --lineage ID --operation OP --input JSON"
+    arguments: []
+    flags:
+      - "--cwd REPO"
+      - "--lineage ID"
+      - "--operation OP"
+      - "--input JSON"
+    modifies_files: false
+    requires_git: true
+    risk: low
+    phases: [review, legacy]
+    examples: []
+
+  - name: "review-bundle-export"
+    description: "Export review transport bundle"
+    usage: "gentle-ai review-bundle-export --cwd REPO --lineage ID --out PATH"
+    arguments: []
+    flags:
+      - "--cwd REPO"
+      - "--lineage ID"
+      - "--out PATH"
+    modifies_files: true
+    requires_git: true
+    risk: low
+    phases: [review]
+    examples: []
+
+  - name: "review-bundle-import"
+    description: "Import review transport bundle"
+    usage: "gentle-ai review-bundle-import --cwd REPO --bundle PATH"
+    arguments: []
+    flags:
+      - "--cwd REPO"
+      - "--bundle PATH"
+      - "--receipt PATH"
+      - "--request PATH"
+    modifies_files: true
+    requires_git: true
+    risk: medium
+    phases: [review]
+    examples: []
+
+  - name: "review-validate"
+    description: "Validate legacy v1 review authority"
+    usage: "gentle-ai review-validate --cwd REPO --receipt PATH (--request PATH | --lineage ID --gate GATE)"
+    arguments: []
+    flags:
+      - "--cwd REPO"
+      - "--receipt PATH"
+      - "--request PATH"
+      - "--lineage ID"
+      - "--gate GATE"
+    modifies_files: false
+    requires_git: true
+    risk: low
+    phases: [review, legacy]
+    examples: []
+
+  - name: "codegraph"
+    description: "CodeGraph intelligence tool (delegates to upstream CLI)"
+    usage: "gentle-ai codegraph [subcommand] [flags]"
+    arguments:
+      - name: "[subcommand]"
+        description: "init | status | query | explore | node | files | callers | callees | impact | affected"
+    flags: []
+    modifies_files: true
+    requires_git: true
+    risk: medium
+    phases: [explore]
+    examples:
+      - "gentle-ai codegraph init --cwd ."
+
+  - name: "version"
+    description: "Print version"
+    usage: "gentle-ai version"
+    arguments: []
+    flags: []
+    modifies_files: false
+    requires_git: false
+    risk: low
+    phases: [any]
+    examples:
+      - "gentle-ai version"
+
+  - name: "help"
+    description: "Show help message"
+    usage: "gentle-ai help"
+    arguments: []
+    flags: []
+    modifies_files: false
+    requires_git: false
+    risk: low
+    phases: [any]
+    examples:
+      - "gentle-ai help"
+
+  - name: "(no command/TUI)"
+    description: "Launch interactive TUI for agent management"
+    usage: "gentle-ai"
+    arguments: []
+    flags:
+      - "--yes"
+    modifies_files: true
+    requires_git: false
+    risk: medium
+    phases: [init-setup]
+    examples:
+      - "gentle-ai"

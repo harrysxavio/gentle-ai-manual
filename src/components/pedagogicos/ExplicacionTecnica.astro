@@ -1,0 +1,74 @@
+---
+---
+
+<div class="comp-explicacion-tecnica" data-component="explicacion-tecnica" role="note" aria-label="Explicación técnica">
+  <div class="comp-badge comp-badge-gray">Mecanismo técnico</div>
+  <div class="comp-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .comp-explicacion-tecnica {
+    border-left: 4px solid var(--sl-color-gray-700);
+    background: var(--sl-color-gray-100);
+    padding: 1em 1.25em;
+    margin: 1.5em 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.93em;
+  }
+
+  :root[data-theme="dark"] .comp-explicacion-tecnica,
+  :global([data-theme="dark"]) .comp-explicacion-tecnica {
+    background: var(--sl-color-gray-900);
+    border-left-color: var(--sl-color-gray-500);
+  }
+
+  .comp-badge {
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.15em 0.6em;
+    border-radius: 3px;
+    margin-bottom: 0.5em;
+  }
+
+  .comp-badge-gray {
+    background: var(--sl-color-gray-300);
+    color: var(--sl-color-gray-800);
+  }
+
+  :root[data-theme="dark"] .comp-badge-gray,
+  :global([data-theme="dark"]) .comp-badge-gray {
+    background: var(--sl-color-gray-600);
+    color: var(--sl-color-gray-100);
+  }
+
+  .comp-body {
+    color: var(--sl-color-gray-700);
+    line-height: 1.6;
+  }
+
+  :root[data-theme="dark"] .comp-body,
+  :global([data-theme="dark"]) .comp-body {
+    color: var(--sl-color-gray-300);
+  }
+
+  @media (max-width: 720px) {
+    .comp-explicacion-tecnica {
+      margin-left: 0;
+      margin-right: 0;
+      border-radius: 0 4px 4px 0;
+    }
+  }
+
+  @media print {
+    .comp-explicacion-tecnica {
+      background: none;
+      border-left-width: 2px;
+      padding: 0.5em 0.75em;
+    }
+  }
+</style>

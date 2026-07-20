@@ -1,0 +1,134 @@
+# GGA (Gentleman Guardian Angel) CLI commands — verified against v2.10.1
+# Source: .research/upstream/gga/bin/gga
+# Last updated: 2026-07-20
+
+commands:
+  - name: "run"
+    description: "Run AI code review on staged files (or CI/PR mode)"
+    usage: "gga run [--no-cache] [--ci] [--pr-mode] [--diff-only]"
+    arguments: []
+    flags:
+      - "--no-cache"
+      - "--ci"
+      - "--pr-mode"
+      - "--diff-only"
+    modifies_files: false
+    requires_git: true
+    risk: low
+    phases: [review]
+    examples:
+      - "gga run"
+      - "gga run --no-cache"
+      - "gga run --ci"
+      - "gga run --pr-mode"
+      - "gga run --pr-mode --diff-only"
+
+  - name: "install"
+    description: "Install git hooks (pre-commit by default)"
+    usage: "gga install [--commit-msg]"
+    arguments: []
+    flags:
+      - "--commit-msg"
+    modifies_files: true
+    requires_git: true
+    risk: medium
+    phases: [init-setup]
+    examples:
+      - "gga install"
+      - "gga install --commit-msg"
+
+  - name: "uninstall"
+    description: "Remove git hooks from current repo"
+    usage: "gga uninstall"
+    arguments: []
+    flags: []
+    modifies_files: true
+    requires_git: true
+    risk: medium
+    phases: [maintenance]
+    examples:
+      - "gga uninstall"
+
+  - name: "config"
+    description: "Show current configuration"
+    usage: "gga config"
+    arguments: []
+    flags: []
+    modifies_files: false
+    requires_git: true
+    risk: low
+    phases: [any]
+    examples:
+      - "gga config"
+
+  - name: "init"
+    description: "Create a sample .gga config file"
+    usage: "gga init"
+    arguments: []
+    flags: []
+    modifies_files: true
+    requires_git: true
+    risk: low
+    phases: [init-setup]
+    examples:
+      - "gga init"
+
+  - name: "cache status"
+    description: "Show cache status for current project"
+    usage: "gga cache status"
+    arguments: []
+    flags: []
+    modifies_files: false
+    requires_git: true
+    risk: low
+    phases: [maintenance]
+    examples:
+      - "gga cache status"
+
+  - name: "cache clear"
+    description: "Clear cache for current project"
+    usage: "gga cache clear"
+    arguments: []
+    flags: []
+    modifies_files: true
+    requires_git: true
+    risk: low
+    phases: [maintenance]
+    examples:
+      - "gga cache clear"
+
+  - name: "cache clear-all"
+    description: "Clear all cached data across all projects"
+    usage: "gga cache clear-all"
+    arguments: []
+    flags: []
+    modifies_files: true
+    requires_git: false
+    risk: medium
+    phases: [maintenance]
+    examples:
+      - "gga cache clear-all"
+
+  - name: "version"
+    description: "Show version"
+    usage: "gga version"
+    arguments: []
+    flags: []
+    modifies_files: false
+    requires_git: false
+    risk: low
+    phases: [any]
+    examples:
+      - "gga version"
+
+  - name: "help"
+    description: "Show help message"
+    usage: "gga help"
+    arguments: []
+    flags: []
+    modifies_files: false
+    requires_git: false
+    risk: low
+    phases: [any]
+    examples:
+      - "gga help"

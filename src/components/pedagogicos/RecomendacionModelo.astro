@@ -1,0 +1,155 @@
+---
+interface Props {
+  agente: string;
+  tarea: string;
+  riesgo: "bajo" | "medio" | "alto" | "xhigh";
+}
+
+const { agente, tarea, riesgo } = Astro.props;
+
+const riesgoLabel = {
+  bajo: "Bajo",
+  medio: "Medio",
+  alto: "Alto",
+  xhigh: "Crítico",
+}[riesgo] ?? riesgo;
+
+const riesgoColor = {
+  bajo: "comp-riesgo-bajo",
+  medio: "comp-riesgo-medio",
+  alto: "comp-riesgo-alto",
+  xhigh: "comp-riesgo-critico",
+}[riesgo] ?? "comp-riesgo-medio";
+---
+
+<div class="comp-recomendacion-modelo" data-component="recomendacion-modelo" role="region" aria-label={`Recomendación de modelo para ${agente}`}>
+  <div class="comp-rec-header">
+    <span class="comp-rec-agent">
+      <code>{agente}</code>
+    </span>
+    <span class={`comp-rec-riesgo ${riesgoColor}`}>Riesgo: {riesgoLabel}</span>
+  </div>
+  <div class="comp-rec-tarea">{tarea}</div>
+  <div class="comp-rec-table">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .comp-recomendacion-modelo {
+    border: 1px solid var(--sl-color-gray-300);
+    border-radius: 8px;
+    margin: 1.5em 0;
+    overflow: hidden;
+  }
+
+  :root[data-theme="dark"] .comp-recomendacion-modelo,
+  :global([data-theme="dark"]) .comp-recomendacion-modelo {
+    border-color: var(--sl-color-gray-700);
+  }
+
+  .comp-rec-header {
+    padding: 0.65em 1.1em;
+    background: var(--sl-color-gray-50);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+    flex-wrap: wrap;
+  }
+
+  :root[data-theme="dark"] .comp-rec-header,
+  :global([data-theme="dark"]) .comp-rec-header {
+    background: var(--sl-color-gray-900);
+  }
+
+  .comp-rec-agent code {
+    font-size: 0.9em;
+    font-weight: 600;
+    background: var(--sl-color-gray-200);
+    padding: 0.15em 0.5em;
+    border-radius: 4px;
+  }
+
+  :root[data-theme="dark"] .comp-rec-agent code,
+  :global([data-theme="dark"]) .comp-rec-agent code {
+    background: var(--sl-color-gray-700);
+  }
+
+  .comp-rec-riesgo {
+    font-size: 0.8em;
+    font-weight: 700;
+    padding: 0.2em 0.6em;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  .comp-riesgo-bajo {
+    background: var(--sl-color-green-200);
+    color: var(--sl-color-green-800);
+  }
+
+  .comp-riesgo-medio {
+    background: var(--sl-color-orange-200);
+    color: var(--sl-color-orange-800);
+  }
+
+  .comp-riesgo-alto {
+    background: var(--sl-color-red-200);
+    color: var(--sl-color-red-800);
+  }
+
+  .comp-riesgo-critico {
+    background: var(--sl-color-red-500);
+    color: #fff;
+  }
+
+  :root[data-theme="dark"] .comp-riesgo-bajo,
+  :global([data-theme="dark"]) .comp-riesgo-bajo {
+    background: var(--sl-color-green-700);
+    color: var(--sl-color-green-100);
+  }
+
+  :root[data-theme="dark"] .comp-riesgo-medio,
+  :global([data-theme="dark"]) .comp-riesgo-medio {
+    background: var(--sl-color-orange-700);
+    color: var(--sl-color-orange-100);
+  }
+
+  :root[data-theme="dark"] .comp-riesgo-alto,
+  :global([data-theme="dark"]) .comp-riesgo-alto {
+    background: var(--sl-color-red-700);
+    color: var(--sl-color-red-100);
+  }
+
+  :root[data-theme="dark"] .comp-riesgo-critico,
+  :global([data-theme="dark"]) .comp-riesgo-critico {
+    background: var(--sl-color-red-600);
+  }
+
+  .comp-rec-tarea {
+    padding: 0.5em 1.1em;
+    font-size: 0.9em;
+    color: var(--sl-color-gray-600);
+  }
+
+  :root[data-theme="dark"] .comp-rec-tarea,
+  :global([data-theme="dark"]) .comp-rec-tarea {
+    color: var(--sl-color-gray-400);
+  }
+
+  .comp-rec-table {
+    padding: 0 1.1em 0.85em;
+    font-size: 0.9em;
+  }
+
+  @media print {
+    .comp-rec-header {
+      background: none;
+    }
+    .comp-riesgo-critico {
+      background: var(--sl-color-red-200);
+      color: var(--sl-color-red-900);
+    }
+  }
+</style>

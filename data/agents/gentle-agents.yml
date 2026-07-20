@@ -1,0 +1,213 @@
+# Gentle AI ecosystem agents — verified against gentle-ai v2.1.10
+# Source: SOURCE_SNAPSHOT.md (16 supported agents), routing.yml, upstream code
+# Last updated: 2026-07-20
+
+agents:
+  # ── SDD Agents ──
+
+  - id: "sdd-init"
+    name: "SDD Init"
+    type: executor
+    role: "Initializes SDD context, testing capabilities, registry, and persistence for a project"
+    phase: sdd-init
+    risk: low
+    tools: [read, glob, grep, write, bash]
+    model_profile: economic
+
+  - id: "sdd-explore"
+    name: "SDD Explore"
+    type: explorer
+    role: "Explores SDD ideas and codebase before committing to a change"
+    phase: sdd-explore
+    risk: medium
+    tools: [read, glob, grep, lsp, bash, codegraph_explore]
+    model_profile: balanced
+
+  - id: "sdd-propose"
+    name: "SDD Propose"
+    type: executor
+    role: "Creates SDD change proposals with intent, scope, and approach"
+    phase: sdd-propose
+    risk: high
+    tools: [read, glob, grep, write, bash]
+    model_profile: powerful
+
+  - id: "sdd-spec"
+    name: "SDD Spec"
+    type: executor
+    role: "Writes SDD delta specs with requirements and scenarios"
+    phase: sdd-spec
+    risk: medium
+    tools: [read, write, grep, glob]
+    model_profile: powerful
+
+  - id: "sdd-design"
+    name: "SDD Design"
+    type: executor
+    role: "Creates SDD technical design and architecture approach"
+    phase: sdd-design
+    risk: high
+    tools: [read, glob, grep, lsp, write, bash]
+    model_profile: powerful
+
+  - id: "sdd-tasks"
+    name: "SDD Tasks"
+    type: executor
+    role: "Breaks SDD change into implementation tasks"
+    phase: sdd-tasks
+    risk: medium
+    tools: [read, write, grep, glob]
+    model_profile: balanced
+
+  - id: "sdd-apply"
+    name: "SDD Apply"
+    type: executor
+    role: "Implements SDD tasks from specs and design"
+    phase: sdd-apply
+    risk: medium
+    tools: [read, write, edit, glob, grep, lsp, bash]
+    model_profile: balanced
+
+  - id: "sdd-verify"
+    name: "SDD Verify"
+    type: reviewer
+    role: "Executes tests and proves implementation matches specs, design, and tasks"
+    phase: sdd-verify
+    risk: high
+    tools: [read, glob, grep, lsp, bash]
+    model_profile: powerful
+
+  - id: "sdd-archive"
+    name: "SDD Archive"
+    type: executor
+    role: "Archives a completed SDD change by syncing delta specs"
+    phase: sdd-archive
+    risk: low
+    tools: [read, write, bash]
+    model_profile: economic
+
+  - id: "sdd-onboard"
+    name: "SDD Onboard"
+    type: explorer
+    role: "Walks users through the full SDD cycle on the real codebase"
+    phase: sdd-onboard
+    risk: medium
+    tools: [read, glob, grep, write, bash]
+    model_profile: balanced
+
+  # ── Review Agents (The 5 R's) ──
+
+  - id: "review-risk"
+    name: "Review Risk"
+    type: reviewer
+    role: "Reviews code for security vulnerabilities and risk patterns"
+    phase: review
+    risk: xhigh
+    tools: [read, glob, grep, lsp, bash]
+    model_profile: powerful
+
+  - id: "review-resilience"
+    name: "Review Resilience"
+    type: reviewer
+    role: "Reviews code for error handling, recovery, and fault tolerance"
+    phase: review
+    risk: high
+    tools: [read, glob, grep, lsp, bash]
+    model_profile: powerful
+
+  - id: "review-readability"
+    name: "Review Readability"
+    type: reviewer
+    role: "Reviews code for clarity, naming, structure, and documentation"
+    phase: review
+    risk: low
+    tools: [read, glob, grep, lsp]
+    model_profile: balanced
+
+  - id: "review-reliability"
+    name: "Review Reliability"
+    type: reviewer
+    role: "Reviews code for correctness, edge cases, and logical flaws"
+    phase: review
+    risk: high
+    tools: [read, glob, grep, lsp, bash]
+    model_profile: powerful
+
+  - id: "review-refuter"
+    name: "Review Refuter"
+    type: reviewer
+    role: "Adversarial reviewer that tries to find flaws other lenses missed"
+    phase: review
+    risk: high
+    tools: [read, glob, grep, lsp, bash]
+    model_profile: powerful
+
+  # ── Judgment Day Agents ──
+
+  - id: "jd-judge-a"
+    name: "Judgment Day Judge A"
+    type: reviewer
+    role: "Independent judge A in dual blind review protocol"
+    phase: judgment-day
+    risk: high
+    tools: [read, glob, grep, lsp]
+    model_profile: powerful
+    notes: "Must NOT share provider/model with jd-judge-b"
+
+  - id: "jd-judge-b"
+    name: "Judgment Day Judge B"
+    type: reviewer
+    role: "Independent judge B in dual blind review protocol"
+    phase: judgment-day
+    risk: high
+    tools: [read, glob, grep, lsp]
+    model_profile: powerful
+    notes: "Must NOT share provider/model with jd-judge-a"
+
+  - id: "jd-fix-agent"
+    name: "Judgment Day Fix Agent"
+    type: executor
+    role: "Applies surgical corrections after Judgment Day findings"
+    phase: judgment-day
+    risk: high
+    tools: [read, write, edit, bash]
+    model_profile: powerful
+
+  # ── General / Orchestrator Agents ──
+
+  - id: "gentle-orchestrator"
+    name: "Gentle Orchestrator (Manager)"
+    type: orchestrator
+    role: "Classifies requests, chooses smallest safe route, distributes work to subagents"
+    phase: orchestration
+    risk: high
+    tools: [read, glob, grep, lsp, write, edit, bash, skill, webfetch, websearch]
+    model_profile: powerful
+
+  - id: "explore"
+    name: "Explore"
+    type: explorer
+    role: "General-purpose codebase exploration and research agent"
+    phase: explore
+    risk: low
+    tools: [read, glob, grep, lsp, bash]
+    model_profile: balanced
+
+  - id: "general"
+    name: "General"
+    type: executor
+    role: "General-purpose coding agent for broad software engineering tasks"
+    phase: apply
+    risk: medium
+    tools: [read, write, edit, glob, grep, lsp, bash]
+    model_profile: balanced
+
+  - id: "frontend-specialist"
+    name: "Frontend Specialist"
+    type: executor
+    role: "Specializes in frontend development: UI components, styling, design systems"
+    phase: apply
+    risk: medium
+    tools: [read, write, edit, glob, grep, lsp, bash, skill]
+    model_profile: balanced
+    notes: "Must respect DESIGN.md and agreed aesthetic direction"

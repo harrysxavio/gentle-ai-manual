@@ -1,0 +1,479 @@
+# Generic agent profiles — 25 user-creatable agents beyond the built-in Gentle ecosystem
+# Based on: gentle-ai v2.1.10 agent architecture, SDD methodology, routing profile system
+# Last updated: 2026-07-20
+
+agents:
+  - id: "investigador"
+    name: "Investigador"
+    type: explorer
+    system_prompt_summary: "Research agent for codebase exploration, technology evaluation, and deep investigation. Gathers facts, reads documentation, and produces analysis reports."
+    allowed_tools: [read, glob, grep, lsp, webfetch, websearch]
+    forbidden_tools: [write, edit, bash]
+    recommended_model:
+      openai: openai/gpt-5.6-terra
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/deepseek-v4-pro
+    reasoning_level: medium
+    temperature: 0.3
+    cost_level: balanced
+    appropriate_cases: [research, technology evaluation, codebase exploration, "how does X work?", reading APIs/docs]
+    inappropriate_cases: ["implement code", "deploy changes", "modify production configs"]
+    fallback: openai/gpt-5.6-luna
+    escalation_criteria: "Unclear findings → escalate to powerful model"
+
+  - id: "product-manager"
+    name: "Product Manager"
+    type: explorer
+    system_prompt_summary: "Defines product requirements, user stories, and acceptance criteria. Translates business needs into technical specifications."
+    allowed_tools: [read, glob, grep, webfetch, websearch]
+    forbidden_tools: [write, edit, bash]
+    recommended_model:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.1-pro-preview
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/kimi-k3
+    reasoning_level: high
+    temperature: 0.5
+    cost_level: powerful
+    appropriate_cases: [requirements gathering, user stories, stakeholder alignment, feature scoping]
+    inappropriate_cases: [implementation, code review, architectural decision without evidence]
+    fallback: openai/gpt-5.6-terra
+    escalation_criteria: "Ambiguous requirements → escalate to architect review"
+
+  - id: "project-manager"
+    name: "Project Manager"
+    type: orchestrator
+    system_prompt_summary: "Plans sprints, tracks progress, manages dependencies, and coordinates SDD phase transitions."
+    allowed_tools: [read, glob, grep, write]
+    forbidden_tools: [edit, bash]
+    recommended_model:
+      openai: openai/gpt-5.6-terra
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/deepseek-v4-pro
+    reasoning_level: medium
+    temperature: 0.3
+    cost_level: balanced
+    appropriate_cases: [sprint planning, task tracking, dependency management, phase coordination]
+    inappropriate_cases: [code implementation, architectural decisions, security review]
+    fallback: openai/gpt-5.6-luna
+    escalation_criteria: "Blocked dependencies → escalate to orchestrator"
+
+  - id: "arquitecto"
+    name: "Arquitecto"
+    type: executor
+    system_prompt_summary: "Designs system architecture, makes technology decisions, evaluates tradeoffs. Follows Clean/Hexagonal/Screaming Architecture patterns."
+    allowed_tools: [read, glob, grep, lsp, write, webfetch, websearch]
+    forbidden_tools: [edit, bash]
+    recommended_model:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.1-pro-preview
+      anthropic: openrouter/anthropic/claude-opus-4.8
+      opencode-go: opencode-go/kimi-k3
+    reasoning_level: xhigh
+    temperature: 0.2
+    cost_level: powerful
+    appropriate_cases: [system design, technology selection, architecture decisions, refactoring plans]
+    inappropriate_cases: [routine bug fixes, formatting, simple CRUD]
+    fallback: openrouter/anthropic/claude-sonnet-5
+    escalation_criteria: "Security-critical decisions → escalate to security reviewer"
+
+  - id: "backend-engineer"
+    name: "Backend Engineer"
+    type: executor
+    system_prompt_summary: "Implements backend services, APIs, database schemas, business logic. Follows established patterns and conventions."
+    allowed_tools: [read, write, edit, glob, grep, lsp, bash]
+    forbidden_tools: [webfetch, websearch]
+    recommended_model:
+      openai: openai/gpt-5.6-terra
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/kimi-k2.7-code
+    reasoning_level: medium
+    temperature: 0.2
+    cost_level: balanced
+    appropriate_cases: [API development, database design, server-side logic, middleware, testing]
+    inappropriate_cases: [frontend UI, visual design, aesthetic decisions]
+    fallback: openai/gpt-5.6-luna
+    escalation_criteria: "Complex algorithm or security flaw → escalate to powerful"
+
+  - id: "frontend-engineer"
+    name: "Frontend Engineer"
+    type: executor
+    system_prompt_summary: "Implements UI components, pages, and client-side logic. Respects DESIGN.md and accessibility standards."
+    allowed_tools: [read, write, edit, glob, grep, lsp, bash, skill]
+    forbidden_tools: []
+    recommended_model:
+      openai: openai/gpt-5.6-terra
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/kimi-k2.7-code
+    reasoning_level: medium
+    temperature: 0.3
+    cost_level: balanced
+    appropriate_cases: [UI components, pages, responsive layouts, data fetching, state management]
+    inappropriate_cases: [backend API design, database schema, infrastructure]
+    fallback: openai/gpt-5.6-luna
+    escalation_criteria: "Complex UX interaction or design system change → escalate to UX designer"
+
+  - id: "ui-ux-designer"
+    name: "UI/UX Designer"
+    type: explorer
+    system_prompt_summary: "Designs user interfaces with accessibility, responsiveness, and visual hierarchy. Produces DESIGN.md-compliant specs."
+    allowed_tools: [read, glob, grep, write, webfetch, skill]
+    forbidden_tools: [edit, bash]
+    recommended_model:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.1-pro-preview
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/kimi-k3
+    reasoning_level: high
+    temperature: 0.6
+    cost_level: powerful
+    appropriate_cases: [design systems, visual audits, accessibility reviews, component design]
+    inappropriate_cases: [backend logic, database queries, infrastructure]
+    fallback: openai/gpt-5.6-terra
+    escalation_criteria: "Design system inconsistency → escalate to architect"
+
+  - id: "database-engineer"
+    name: "Database Engineer"
+    type: executor
+    system_prompt_summary: "Designs and optimizes database schemas, queries, indexes, and migrations. Expert in SQL and NoSQL."
+    allowed_tools: [read, glob, grep, lsp, write, edit, bash]
+    forbidden_tools: [webfetch, websearch]
+    recommended_model:
+      openai: openai/gpt-5.6-terra
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/kimi-k2.7-code
+    reasoning_level: medium
+    temperature: 0.1
+    cost_level: balanced
+    appropriate_cases: [schema design, query optimization, migration scripts, indexing, normalization]
+    inappropriate_cases: [UI design, API routing, auth logic]
+    fallback: openai/gpt-5.6-luna
+    escalation_criteria: "Critical data loss risk → escalate to powerful"
+
+  - id: "data-analyst"
+    name: "Data Analyst"
+    type: explorer
+    system_prompt_summary: "Analyzes data, creates reports, writes SQL queries, builds dashboards. Governs data memory and catalogs."
+    allowed_tools: [read, glob, grep, webfetch]
+    forbidden_tools: [write, edit, bash]
+    recommended_model:
+      openai: openai/gpt-5.6-terra
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/deepseek-v4-pro
+    reasoning_level: medium
+    temperature: 0.2
+    cost_level: balanced
+    appropriate_cases: [data exploration, reporting, BigQuery profiling, trend analysis]
+    inappropriate_cases: [production code, schema changes without review]
+    fallback: openai/gpt-5.6-luna
+    escalation_criteria: "Data integrity issue → escalate to database engineer"
+
+  - id: "qa-engineer"
+    name: "QA Engineer"
+    type: reviewer
+    system_prompt_summary: "Creates test plans, writes automated tests, finds edge cases, validates against acceptance criteria."
+    allowed_tools: [read, glob, grep, lsp, write, edit, bash]
+    forbidden_tools: []
+    recommended_model:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.1-pro-preview
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/glm-5.2
+    reasoning_level: high
+    temperature: 0.2
+    cost_level: powerful
+    appropriate_cases: [test writing, edge case discovery, regression testing, TDD enforcement]
+    inappropriate_cases: [feature implementation, architectural change]
+    fallback: openai/gpt-5.6-terra
+    escalation_criteria: "Test failure root cause unclear → escalate to debugger"
+
+  - id: "debugger"
+    name: "Debugger"
+    type: executor
+    system_prompt_summary: "Traces bugs to root cause, reproduces issues, proposes minimal fixes. Methodical and evidence-based."
+    allowed_tools: [read, glob, grep, lsp, write, edit, bash]
+    forbidden_tools: []
+    recommended_model:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.1-pro-preview
+      anthropic: openrouter/anthropic/claude-opus-4.8
+      opencode-go: opencode-go/kimi-k3
+    reasoning_level: xhigh
+    temperature: 0.1
+    cost_level: powerful
+    appropriate_cases: [bug reproduction, root cause analysis, stack trace analysis, race conditions]
+    inappropriate_cases: [feature development, refactoring, formatting]
+    fallback: openrouter/anthropic/claude-sonnet-5
+    escalation_criteria: "Root cause unclear after 2 attempts → escalate to architect"
+
+  - id: "code-reviewer"
+    name: "Code Reviewer"
+    type: reviewer
+    system_prompt_summary: "Reviews code for correctness, style, performance, and best practices. Provides actionable feedback."
+    allowed_tools: [read, glob, grep, lsp]
+    forbidden_tools: [write, edit, bash]
+    recommended_model:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.1-pro-preview
+      anthropic: openrouter/anthropic/claude-opus-4.8
+      opencode-go: opencode-go/glm-5.2
+    reasoning_level: high
+    temperature: 0.2
+    cost_level: powerful
+    appropriate_cases: [code review, PR feedback, style enforcement, performance analysis]
+    inappropriate_cases: [feature implementation, large rewrites]
+    fallback: openrouter/anthropic/claude-sonnet-5
+    escalation_criteria: "Security vulnerability found → escalate to security reviewer"
+
+  - id: "security-reviewer"
+    name: "Security Reviewer"
+    type: reviewer
+    system_prompt_summary: "Audits code for security vulnerabilities, OWASP Top 10, injection risks, auth flaws, and data leaks."
+    allowed_tools: [read, glob, grep, lsp]
+    forbidden_tools: [write, edit, bash]
+    recommended_model:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.1-pro-preview
+      anthropic: openrouter/anthropic/claude-opus-4.8
+      opencode-go: opencode-go/qwen3.7-max
+    reasoning_level: xhigh
+    temperature: 0.1
+    cost_level: powerful
+    appropriate_cases: [security audit, auth review, injection prevention, secret management]
+    inappropriate_cases: [UI polish, formatting, documentation]
+    fallback: openrouter/anthropic/claude-sonnet-5
+    escalation_criteria: "Critical vulnerability found → escalate to architect + product owner"
+
+  - id: "devops-engineer"
+    name: "DevOps Engineer"
+    type: executor
+    system_prompt_summary: "Manages CI/CD pipelines, infrastructure as code, containerization, and deployment strategies."
+    allowed_tools: [read, glob, grep, write, edit, bash]
+    forbidden_tools: []
+    recommended_model:
+      openai: openai/gpt-5.6-terra
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/deepseek-v4-pro
+    reasoning_level: medium
+    temperature: 0.2
+    cost_level: balanced
+    appropriate_cases: [CI/CD config, Docker, Kubernetes, infrastructure scripts, deployment]
+    inappropriate_cases: [UI development, business logic, algorithm design]
+    fallback: openai/gpt-5.6-luna
+    escalation_criteria: "Production incident → escalate to powerful + security reviewer"
+
+  - id: "release-manager"
+    name: "Release Manager"
+    type: orchestrator
+    system_prompt_summary: "Manages release cycles, changelogs, version bumps, and deployment gates."
+    allowed_tools: [read, glob, grep, write, bash]
+    forbidden_tools: [edit]
+    recommended_model:
+      openai: openai/gpt-5.6-terra
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/deepseek-v4-pro
+    reasoning_level: medium
+    temperature: 0.1
+    cost_level: balanced
+    appropriate_cases: [version bumping, changelog generation, release notes, deploy gates]
+    inappropriate_cases: [code changes, architecture design, new features]
+    fallback: openai/gpt-5.6-luna
+    escalation_criteria: "Deploy gate failure → escalate to architect + DevOps"
+
+  - id: "git-specialist"
+    name: "Git Specialist"
+    type: executor
+    system_prompt_summary: "Manages Git operations: branching strategies, rebasing, conflict resolution, worktree management."
+    allowed_tools: [bash]
+    forbidden_tools: [write, edit]
+    recommended_model:
+      openai: openai/gpt-5.6-luna
+      google: openrouter/google/gemini-3.1-flash-lite
+      anthropic: openrouter/anthropic/claude-haiku-4.5
+      opencode-go: opencode-go/deepseek-v4-flash
+    reasoning_level: low
+    temperature: 0.1
+    cost_level: economic
+    appropriate_cases: [branch management, rebasing, conflict resolution, stash operations, worktrees]
+    inappropriate_cases: [code implementation, design decisions, architecture]
+    fallback: openai/gpt-5.6-terra
+    escalation_criteria: "Complex merge conflict → escalate to senior engineer"
+
+  - id: "technical-writer"
+    name: "Technical Writer"
+    type: executor
+    system_prompt_summary: "Writes documentation, READMEs, API docs, and guides. Follows cognitive-doc-design principles."
+    allowed_tools: [read, glob, grep, write]
+    forbidden_tools: [edit, bash, lsp]
+    recommended_model:
+      openai: openai/gpt-5.6-terra
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/deepseek-v4-pro
+    reasoning_level: medium
+    temperature: 0.4
+    cost_level: balanced
+    appropriate_cases: [README writing, API documentation, guides, tutorials, RFCs]
+    inappropriate_cases: [code implementation, architecture decisions, testing]
+    fallback: openai/gpt-5.6-luna
+    escalation_criteria: "Missing technical context → escalate to subject matter agent"
+
+  - id: "teacher"
+    name: "Teacher"
+    type: explorer
+    system_prompt_summary: "Explains concepts, teaches fundamentals, answers questions with pedagogical clarity. Concepts over code."
+    allowed_tools: [read, glob, webfetch, websearch]
+    forbidden_tools: [write, edit, bash]
+    recommended_model:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.1-pro-preview
+      anthropic: openrouter/anthropic/claude-opus-4.8
+      opencode-go: opencode-go/kimi-k3
+    reasoning_level: high
+    temperature: 0.5
+    cost_level: powerful
+    appropriate_cases: [concept explanation, mentoring, fundamentals teaching, learning guidance]
+    inappropriate_cases: [production code, deployment, critical fixes]
+    fallback: openai/gpt-5.6-terra
+    escalation_criteria: "Concept too complex for one explanation → escalate to specialist + examples"
+
+  - id: "ideation-agent"
+    name: "Ideation Agent"
+    type: explorer
+    system_prompt_summary: "Generates creative ideas, prototypes concepts, brainstorms solutions. Divergent thinking."
+    allowed_tools: [read, glob, grep, webfetch, websearch]
+    forbidden_tools: [write, edit, bash]
+    recommended_model:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.1-pro-preview
+      anthropic: openrouter/anthropic/claude-fable-5
+      opencode-go: opencode-go/kimi-k3
+    reasoning_level: high
+    temperature: 0.8
+    cost_level: powerful
+    appropriate_cases: [brainstorming, creative concepts, feature ideation, problem exploration]
+    inappropriate_cases: [production code, critical fixes, security audit]
+    fallback: openai/gpt-5.6-terra
+    escalation_criteria: "Ideas need validation → escalate to architect review"
+
+  - id: "skill-designer"
+    name: "Skill Designer"
+    type: executor
+    system_prompt_summary: "Creates and improves LLM-first skills with valid frontmatter and clear triggers."
+    allowed_tools: [read, write, glob, grep]
+    forbidden_tools: [edit, bash]
+    recommended_model:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.1-pro-preview
+      anthropic: openrouter/anthropic/claude-opus-4.8
+      opencode-go: opencode-go/kimi-k3
+    reasoning_level: high
+    temperature: 0.3
+    cost_level: powerful
+    appropriate_cases: [creating skills, improving skills, skill audits, pattern capture]
+    inappropriate_cases: [application code, deployment, infrastructure]
+    fallback: openai/gpt-5.6-terra
+    escalation_criteria: "Skill trigger ambiguity → escalate to architect"
+
+  - id: "prompt-designer"
+    name: "Prompt Designer"
+    type: executor
+    system_prompt_summary: "Designs, tests, and optimizes system prompts and agent instructions for quality output."
+    allowed_tools: [read, write, glob, grep]
+    forbidden_tools: [edit, bash]
+    recommended_model:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.1-pro-preview
+      anthropic: openrouter/anthropic/claude-opus-4.8
+      opencode-go: opencode-go/kimi-k3
+    reasoning_level: high
+    temperature: 0.3
+    cost_level: powerful
+    appropriate_cases: [prompt engineering, agent instruction design, persona definition]
+    inappropriate_cases: [application code, deployment, operations]
+    fallback: openai/gpt-5.6-terra
+    escalation_criteria: "Output quality degradation → escalate to architect"
+
+  - id: "refactoring-agent"
+    name: "Refactoring Agent"
+    type: executor
+    system_prompt_summary: "Performs safe, incremental refactorings with tests as safety net. Never changes behavior."
+    allowed_tools: [read, write, edit, glob, grep, lsp, bash]
+    forbidden_tools: []
+    recommended_model:
+      openai: openai/gpt-5.6-terra
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/kimi-k2.7-code
+    reasoning_level: medium
+    temperature: 0.1
+    cost_level: balanced
+    appropriate_cases: [code cleanup, rename, extract method, pattern application, test coverage]
+    inappropriate_cases: [new features, behavior changes, API changes without spec]
+    fallback: openai/gpt-5.6-luna
+    escalation_criteria: "Test failure after refactoring → escalate to debugger"
+
+  - id: "migration-agent"
+    name: "Migration Agent"
+    type: executor
+    system_prompt_summary: "Plans and executes migrations: frameworks, databases, APIs, versions. Maintains rollback plan."
+    allowed_tools: [read, write, edit, glob, grep, lsp, bash]
+    forbidden_tools: []
+    recommended_model:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.1-pro-preview
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/kimi-k3
+    reasoning_level: high
+    temperature: 0.2
+    cost_level: powerful
+    appropriate_cases: [framework upgrades, database migration, API versioning, dependency updates]
+    inappropriate_cases: [new feature development, UI design, documentation-only]
+    fallback: openai/gpt-5.6-terra
+    escalation_criteria: "Migration causes data loss risk → escalate to architect + DBA"
+
+  - id: "formatter"
+    name: "Formatter"
+    type: executor
+    system_prompt_summary: "Applies consistent formatting, linting, and style rules. No logic changes."
+    allowed_tools: [read, edit, bash]
+    forbidden_tools: [write]
+    recommended_model:
+      openai: openai/gpt-5.6-luna
+      google: openrouter/google/gemini-3.1-flash-lite
+      anthropic: openrouter/anthropic/claude-haiku-4.5
+      opencode-go: opencode-go/deepseek-v4-flash
+    reasoning_level: minimal
+    temperature: 0.0
+    cost_level: economic
+    appropriate_cases: [code formatting, white space fixes, import sorting, style enforcement]
+    inappropriate_cases: [logic changes, algorithm changes, behavior modification]
+    fallback: openai/gpt-5.6-terra
+    escalation_criteria: "Formatting tool unavailable → escalate to refactoring agent"
+
+  - id: "summarizer"
+    name: "Summarizer"
+    type: explorer
+    system_prompt_summary: "Creates concise summaries of code, documents, conversations, and changes."
+    allowed_tools: [read, glob, grep]
+    forbidden_tools: [write, edit, bash]
+    recommended_model:
+      openai: openai/gpt-5.6-luna
+      google: openrouter/google/gemini-3.1-flash-lite
+      anthropic: openrouter/anthropic/claude-haiku-4.5
+      opencode-go: opencode-go/deepseek-v4-flash
+    reasoning_level: low
+    temperature: 0.2
+    cost_level: economic
+    appropriate_cases: [diff summaries, meeting notes, code walkthrough, changelog bullet points]
+    inappropriate_cases: [architectural decisions, code implementation, critical analysis]
+    fallback: openai/gpt-5.6-terra
+    escalation_criteria: "Content too complex for summary → escalate to technical writer"

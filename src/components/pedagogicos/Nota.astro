@@ -1,0 +1,53 @@
+---
+---
+
+<div class="comp-nota" data-component="nota" role="note" aria-label="Nota">
+  <div class="comp-nota-icon" aria-hidden="true">ℹ️</div>
+  <div class="comp-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .comp-nota {
+    border: 1px solid var(--sl-color-gray-300);
+    background: var(--sl-color-gray-50);
+    padding: 0.85em 1.1em;
+    margin: 1.25em 0;
+    border-radius: 8px;
+    display: flex;
+    gap: 0.65em;
+    align-items: flex-start;
+    font-size: 0.93em;
+  }
+
+  :root[data-theme="dark"] .comp-nota,
+  :global([data-theme="dark"]) .comp-nota {
+    background: var(--sl-color-gray-900);
+    border-color: var(--sl-color-gray-700);
+  }
+
+  .comp-nota-icon {
+    font-size: 1em;
+    flex-shrink: 0;
+    margin-top: 0.1em;
+    opacity: 0.7;
+  }
+
+  .comp-body {
+    color: var(--sl-color-gray-600);
+    line-height: 1.6;
+  }
+
+  :root[data-theme="dark"] .comp-body,
+  :global([data-theme="dark"]) .comp-body {
+    color: var(--sl-color-gray-400);
+  }
+
+  @media print {
+    .comp-nota {
+      background: none;
+      border: 1px solid var(--sl-color-gray-300);
+    }
+  }
+</style>

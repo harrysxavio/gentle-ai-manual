@@ -1,0 +1,77 @@
+---
+interface Props {
+  titulo?: string;
+}
+
+const { titulo } = Astro.props;
+---
+
+<div class="comp-analogia" data-component="analogia" role="note" aria-label={titulo ? `Analogía: ${titulo}` : "Analogía"}>
+  <div class="comp-analogia-icon" aria-hidden="true">💡</div>
+  <div class="comp-analogia-content">
+    {titulo && <strong class="comp-analogia-titulo">{titulo}</strong>}
+    <div class="comp-analogia-text">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  .comp-analogia {
+    border: 2px dashed var(--sl-color-gray-400);
+    background: var(--sl-color-gray-50);
+    padding: 1em 1.25em;
+    margin: 1.5em 0;
+    border-radius: 8px;
+    display: flex;
+    gap: 0.75em;
+    align-items: flex-start;
+  }
+
+  :root[data-theme="dark"] .comp-analogia,
+  :global([data-theme="dark"]) .comp-analogia {
+    background: var(--sl-color-gray-900);
+    border-color: var(--sl-color-gray-600);
+  }
+
+  .comp-analogia-icon {
+    font-size: 1.3em;
+    flex-shrink: 0;
+    margin-top: 0.1em;
+  }
+
+  .comp-analogia-content {
+    flex: 1;
+  }
+
+  .comp-analogia-titulo {
+    display: block;
+    margin-bottom: 0.25em;
+    color: var(--sl-color-text);
+    font-size: 0.95em;
+  }
+
+  .comp-analogia-text {
+    font-style: italic;
+    color: var(--sl-color-gray-600);
+  }
+
+  :root[data-theme="dark"] .comp-analogia-text,
+  :global([data-theme="dark"]) .comp-analogia-text {
+    color: var(--sl-color-gray-400);
+  }
+
+  @media (max-width: 720px) {
+    .comp-analogia {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  @media print {
+    .comp-analogia {
+      background: none;
+      border: 1px dashed var(--sl-color-gray-400);
+    }
+  }
+</style>

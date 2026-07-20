@@ -1,0 +1,133 @@
+# Essential Git commands in the gentle-ai ecosystem context
+# Verified against: gentle-ai v2.1.10, GGA v2.10.1, Native Review workflows
+# Last updated: 2026-07-20
+commands:
+  - name: "init"
+    description: "Initialize a new Git repository"
+    usage: "git init [directory]"
+    ecosystem_usage: "Project setup, worktree creation"
+    used_by: [gentle-ai, core]
+    risk: low
+
+  - name: "clone"
+    description: "Clone a repository from a remote URL"
+    usage: "git clone <url> [directory]"
+    ecosystem_usage: "Repo setup, upstream research mirrors"
+    used_by: [gentle-ai, core]
+    risk: low
+
+  - name: "status"
+    description: "Show working tree status"
+    usage: "git status"
+    ecosystem_usage: "GGA pre-commit hooks, gentle-ai doctor, codegraph sync detection"
+    used_by: [gga, gentle-ai, codegraph]
+    risk: low
+
+  - name: "diff"
+    description: "Show changes between commits, working tree, etc."
+    usage: "git diff [options] [<commit>] [-- <path>...]"
+    ecosystem_usage: "GGA review (diffs sent to AI providers), codegraph change detection"
+    used_by: [gga, gentle-ai]
+    risk: low
+
+  - name: "add"
+    description: "Add file contents to the staging area"
+    usage: "git add [options] <pathspec>..."
+    ecosystem_usage: "Pre-commit staging, engram sync artifacts"
+    used_by: [gga, engram]
+    risk: medium
+
+  - name: "commit"
+    description: "Record changes to the repository"
+    usage: "git commit [options]"
+    ecosystem_usage: "GGA commit-msg hook, conventional commits enforcement"
+    used_by: [gga]
+    risk: medium
+
+  - name: "push"
+    description: "Update remote refs along with associated objects"
+    usage: "git push [options] [<repository> [<refspec>...]]"
+    ecosystem_usage: "Publishing changes, cloud sync push"
+    used_by: [core]
+    risk: medium
+
+  - name: "pull"
+    description: "Fetch from and integrate with another repository"
+    usage: "git pull [options] [<repository> [<refspec>...]]"
+    ecosystem_usage: "Syncing upstream, cloud sync pull"
+    used_by: [core]
+    risk: medium
+
+  - name: "fetch"
+    description: "Download objects and refs from another repository"
+    usage: "git fetch [options] [<repository> [<refspec>...]]"
+    ecosystem_usage: "Upstream research, codegraph updates"
+    used_by: [codegraph]
+    risk: low
+
+  - name: "branch"
+    description: "List, create, or delete branches"
+    usage: "git branch [options] [<branch-name>]"
+    ecosystem_usage: "Branch management in SDD workflows"
+    used_by: [gentle-ai, core]
+    risk: medium
+
+  - name: "checkout"
+    description: "Switch branches or restore working tree files"
+    usage: "git checkout [options] <branch>"
+    ecosystem_usage: "Branch switching, worktree checkout"
+    used_by: [gentle-ai, core]
+    risk: medium
+
+  - name: "merge"
+    description: "Join two or more development histories together"
+    usage: "git merge [options] <branch>"
+    ecosystem_usage: "PR merging, chained PR resolution"
+    used_by: [core]
+    risk: high
+
+  - name: "log"
+    description: "Show commit logs"
+    usage: "git log [options]"
+    ecosystem_usage: "GGA PR mode base detection, codegraph history"
+    used_by: [gga, codegraph]
+    risk: low
+
+  - name: "remote"
+    description: "Manage set of tracked repositories"
+    usage: "git remote [options]"
+    ecosystem_usage: "Upstream tracking, research sources"
+    used_by: [core]
+    risk: low
+
+  - name: "stash"
+    description: "Stash changes in a dirty working directory"
+    usage: "git stash [options]"
+    ecosystem_usage: "Pre-review cleanup, temporary saves"
+    used_by: [gga]
+    risk: low
+
+  - name: "tag"
+    description: "Create, list, or delete tags"
+    usage: "git tag [options] [<tagname>]"
+    ecosystem_usage: "Release versioning (gentle-ai, engram, gga)"
+    used_by: [core]
+    risk: low
+
+  - name: "worktree"
+    description: "Manage multiple working trees attached to the same repository"
+    usage: "git worktree <subcommand> [options]"
+    ecosystem_usage: "Parallel SDD work, codegraph-aware worktree placement"
+    used_by: [codegraph, gentle-ai]
+    risk: medium
+
+hooks:
+  - name: "pre-commit"
+    description: "Runs GGA review on staged files before commit"
+    used_by: [gga]
+    risk: low
+
+  - name: "commit-msg"
+    description: "Validates commit message format (conventional commits)"
+    used_by: [gga]
+    risk: low

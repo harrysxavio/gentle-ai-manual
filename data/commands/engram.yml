@@ -1,0 +1,518 @@
+# engram CLI commands — verified against v1.19.0/v1.20.0
+# Source: .research/upstream/engram/cmd/engram/main.go
+# Last updated: 2026-07-20
+
+cli:
+  description: "engram v1.19.0+ — Persistent memory for AI coding agents"
+
+  commands:
+    - name: "serve"
+      description: "Start HTTP API server"
+      usage: "engram serve [port]"
+      arguments:
+        - name: "[port]"
+          description: "Port number (default: 7437)"
+      flags: []
+      modifies_files: false
+      requires_git: false
+      risk: low
+      phases: [serve]
+      examples:
+        - "engram serve"
+        - "engram serve 8080"
+
+    - name: "mcp"
+      description: "Start MCP server (stdio transport, for any AI agent)"
+      usage: "engram mcp [--tools=PROFILE] [--project NAME]"
+      arguments: []
+      flags:
+        - "--tools PROFILE"
+        - "--project NAME"
+      modifies_files: false
+      requires_git: false
+      risk: low
+      phases: [serve]
+      examples:
+        - "engram mcp"
+        - "engram mcp --tools=agent"
+        - "engram mcp --tools=agent,admin"
+        - "engram mcp --project my-project"
+
+    - name: "tui"
+      description: "Launch interactive terminal UI"
+      usage: "engram tui"
+      arguments: []
+      flags: []
+      modifies_files: false
+      requires_git: false
+      risk: low
+      phases: [any]
+      examples:
+        - "engram tui"
+
+    - name: "search"
+      description: "Search memories"
+      usage: "engram search <query> [--type TYPE] [--project PROJECT] [--scope SCOPE] [--limit N]"
+      arguments:
+        - name: "<query>"
+          description: "Search term"
+      flags:
+        - "--type TYPE"
+        - "--project PROJECT"
+        - "--scope SCOPE"
+        - "--limit N"
+      modifies_files: false
+      requires_git: false
+      risk: low
+      phases: [any]
+      examples:
+        - "engram search 'architecture decision'"
+        - "engram search 'bug fix' --project my-project --limit 20"
+
+    - name: "save"
+      description: "Save a memory from CLI"
+      usage: "engram save <title> <content> [--type TYPE] [--project PROJECT] [--scope SCOPE] [--topic TOPIC_KEY]"
+      arguments:
+        - name: "<title>"
+          description: "Memory title"
+        - name: "<content>"
+          description: "Memory content"
+      flags:
+        - "--type TYPE"
+        - "--project PROJECT"
+        - "--scope SCOPE"
+        - "--topic TOPIC_KEY"
+      modifies_files: true
+      requires_git: false
+      risk: low
+      phases: [any]
+      examples:
+        - 'engram save "Design decision" "Chose SQLite for local storage"'
+        - 'engram save "Bug fix" "Fixed N+1 query" --project my-project --scope project'
+
+    - name: "context"
+      description: "Show recent context from previous sessions"
+      usage: "engram context [project] [--scope SCOPE]"
+      arguments:
+        - name: "[project]"
+          description: "Filter by project"
+      flags:
+        - "--scope SCOPE"
+      modifies_files: false
+      requires_git: false
+      risk: low
+      phases: [any]
+      examples:
+        - "engram context"
+        - "engram context my-project"
+        - "engram context --scope project"
+
+    - name: "stats"
+      description: "Show memory system statistics"
+      usage: "engram stats"
+      arguments: []
+      flags: []
+      modifies_files: false
+      requires_git: false
+      risk: low
+      phases: [any]
+      examples:
+        - "engram stats"
+
+    - name: "delete"
+      description: "Delete an observation, session, prompt, or project"
+      usage: "engram delete <obs_id|session|prompt|project> [--hard]"
+      arguments:
+        - name: "<target>"
+          description: "Observation ID | session ID | prompt ID | project NAME"
+      flags:
+        - "--hard"
+      modifies_files: true
+      requires_git: false
+      risk: high
+      phases: [maintenance]
+      examples:
+        - "engram delete 42"
+        - "engram delete 42 --hard"
+        - "engram delete session abc123"
+        - "engram delete prompt 7"
+        - "engram delete project old-project --hard"
+
+    - name: "timeline"
+      description: "Show chronological context around an observation"
+      usage: "engram timeline <observation_id> [--before N] [--after N]"
+      arguments:
+        - name: "<observation_id>"
+          description: "Observation ID"
+      flags:
+        - "--before N"
+        - "--after N"
+      modifies_files: false
+      requires_git: false
+      risk: low
+      phases: [any]
+      examples:
+        - "engram timeline 42"
+        - "engram timeline 42 --before 10 --after 10"
+
+    - name: "conflicts"
+      description: "Inspect and manage memory conflict relations"
+      usage: "engram conflicts <sub> [flags]"
+      arguments:
+        - name: "<sub>"
+          description: "list | show | stats | scan | deferred"
+      flags:
+        - "--project P"
+        - "--status S"
+        - "--since RFC3339"
+        - "--limit N"
+        - "--dry-run"
+        - "--apply"
+        - "--max-insert N"
+        - "--semantic"
+        - "--concurrency N"
+        - "--timeout-per-call SECONDS"
+        - "--max-semantic N"
+        - "--yes"
+        - "--inspect SYNC_ID"
+        - "--replay"
+      modifies_files: false
+      requires_git: false
+      risk: medium
+      phases: [maintenance]
+      examples:
+        - "engram conflicts list"
+        - "engram conflicts stats --project my-project"
+        - "engram conflicts scan --semantic --apply"
+
+    - name: "doctor"
+      description: "Run read-only operational diagnostics"
+      usage: "engram doctor [--json] [--project P] [--check CODE]"
+      arguments: []
+      flags:
+        - "--json"
+        - "--project P"
+        - "--check CODE"
+      modifies_files: false
+      requires_git: false
+      risk: low
+      phases: [maintenance]
+      examples:
+        - "engram doctor"
+        - "engram doctor --json"
+        - "engram doctor --project my-project"
+
+    - name: "export"
+      description: "Export all memories to JSON"
+      usage: "engram export [file]"
+      arguments:
+        - name: "[file]"
+          description: "Output path (default: engram-export.json)"
+      flags: []
+      modifies_files: true
+      requires_git: false
+      risk: medium
+      phases: [maintenance]
+      examples:
+        - "engram export"
+        - "engram export backup.json"
+
+    - name: "import"
+      description: "Import memories from a JSON export file"
+      usage: "engram import <file>"
+      arguments:
+        - name: "<file>"
+          description: "JSON file to import"
+      flags: []
+      modifies_files: true
+      requires_git: false
+      risk: high
+      phases: [maintenance, recovery]
+      examples:
+        - "engram import backup.json"
+
+    - name: "sync"
+      description: "Export new memories as compressed chunk to .engram/ or cloud"
+      usage: "engram sync [--import | --status] [--all] [--cloud --project PROJECT]"
+      arguments: []
+      flags:
+        - "--import"
+        - "--status"
+        - "--all"
+        - "--project PROJECT"
+        - "--cloud"
+      modifies_files: true
+      requires_git: true
+      risk: medium
+      phases: [maintenance]
+      examples:
+        - "engram sync"
+        - "engram sync --import"
+        - "engram sync --status"
+        - "engram sync --cloud --project my-project"
+
+    - name: "cloud"
+      description: "Cloud integration commands (opt-in)"
+      usage: "engram cloud <subcommand> [flags]"
+      arguments:
+        - name: "<subcommand>"
+          description: "status | enroll | config | serve"
+      flags: []
+      modifies_files: true
+      requires_git: false
+      risk: high
+      phases: [cloud]
+      examples:
+        - "engram cloud status"
+        - "engram cloud enroll"
+        - "engram cloud config --server https://my-server.example.com"
+
+    - name: "projects list"
+      description: "List all projects with observation, session, and prompt counts"
+      usage: "engram projects list"
+      arguments: []
+      flags: []
+      modifies_files: false
+      requires_git: false
+      risk: low
+      phases: [maintenance]
+      examples:
+        - "engram projects list"
+
+    - name: "projects consolidate"
+      description: "Merge similar project names into one canonical name"
+      usage: "engram projects consolidate [--all] [--dry-run]"
+      arguments: []
+      flags:
+        - "--all"
+        - "--dry-run"
+      modifies_files: true
+      requires_git: false
+      risk: high
+      phases: [maintenance]
+      examples:
+        - "engram projects consolidate"
+        - "engram projects consolidate --all --dry-run"
+
+    - name: "projects prune"
+      description: "Remove empty projects with 0 observations"
+      usage: "engram projects prune [--dry-run]"
+      arguments: []
+      flags:
+        - "--dry-run"
+      modifies_files: true
+      requires_git: false
+      risk: medium
+      phases: [maintenance]
+      examples:
+        - "engram projects prune"
+        - "engram projects prune --dry-run"
+
+    - name: "setup"
+      description: "Install/setup agent integration plugin"
+      usage: "engram setup [agent] [--protocol=slim|full]"
+      arguments:
+        - name: "[agent]"
+          description: "claude-code | opencode | gemini-cli | codex | antigravity-cli | windsurf | qwen | kiro | cursor | vscode-copilot | kilocode | pi"
+      flags:
+        - "--protocol slim|full"
+      modifies_files: true
+      requires_git: false
+      risk: medium
+      phases: [init-setup]
+      examples:
+        - "engram setup"
+        - "engram setup opencode"
+        - "engram setup claude-code --protocol=slim"
+
+    - name: "protocol-mode"
+      description: "Print protocol mode (slim/full) for a given agent slug"
+      usage: "engram protocol-mode <slug>"
+      arguments:
+        - name: "<slug>"
+          description: "Agent slug (e.g. claude-code)"
+      flags: []
+      modifies_files: false
+      requires_git: false
+      risk: low
+      phases: [any]
+      examples:
+        - "engram protocol-mode claude-code"
+
+    - name: "obsidian-export"
+      description: "Export memories to an Obsidian-compatible markdown vault"
+      usage: "engram obsidian-export --vault PATH [flags]"
+      arguments: []
+      flags:
+        - "--vault PATH"
+        - "--project PROJECT"
+        - "--limit N"
+        - "--since DATE"
+        - "--force"
+        - "--graph-config preserve|force|skip"
+        - "--watch"
+        - "--interval DURATION"
+      modifies_files: true
+      requires_git: false
+      risk: medium
+      phases: [export]
+      examples:
+        - "engram obsidian-export --vault ~/vaults/notes"
+        - "engram obsidian-export --vault ~/vaults/notes --project my-project --watch"
+
+    - name: "version"
+      description: "Print version"
+      usage: "engram version"
+      arguments: []
+      flags: []
+      modifies_files: false
+      requires_git: false
+      risk: low
+      phases: [any]
+      examples:
+        - "engram version"
+
+    - name: "help"
+      description: "Show help message"
+      usage: "engram help"
+      arguments: []
+      flags: []
+      modifies_files: false
+      requires_git: false
+      risk: low
+      phases: [any]
+      examples:
+        - "engram help"
+
+mcp_tools:
+  profiles:
+    agent:
+      count: 18
+      description: "Standard tools for MCP agents"
+    admin:
+      count: 4
+      description: "Administrative tools"
+    all:
+      count: 20
+      description: "All available tools"
+
+  tools:
+    - name: "mem_save"
+      description: "Save a decision, discovery, bug fix, or convention to persistent memory"
+      category: core
+      profile: agent
+      risk: medium
+
+    - name: "mem_search"
+      description: "Search past memories by keywords"
+      category: core
+      profile: agent
+      risk: low
+
+    - name: "mem_context"
+      description: "Get recent session history for context recovery"
+      category: core
+      profile: agent
+      risk: low
+
+    - name: "mem_get_observation"
+      description: "Get full untruncated content of a specific observation by ID"
+      category: core
+      profile: agent
+      risk: low
+
+    - name: "mem_session_summary"
+      description: "Save end-of-session summary (MANDATORY before session close)"
+      category: core
+      profile: agent
+      risk: low
+
+    - name: "mem_current_project"
+      description: "Detect current project from working directory"
+      category: core
+      profile: agent
+      risk: low
+
+    - name: "mem_save_prompt"
+      description: "Save user prompt for context and deduplication"
+      category: core
+      profile: agent
+      risk: low
+
+    - name: "mem_pin"
+      description: "Pin a local observation to top of context"
+      category: deferred
+      profile: agent
+      risk: low
+
+    - name: "mem_unpin"
+      description: "Unpin a local observation"
+      category: deferred
+      profile: agent
+      risk: low
+
+    - name: "mem_update"
+      description: "Update an existing observation"
+      category: deferred
+      profile: agent
+      risk: medium
+
+    - name: "mem_review"
+      description: "Review memory lifecycle (list, mark_reviewed)"
+      category: deferred
+      profile: agent
+      risk: medium
+
+    - name: "mem_suggest_topic_key"
+      description: "Suggest a stable topic key for an evolving topic"
+      category: deferred
+      profile: agent
+      risk: low
+
+    - name: "mem_session_start"
+      description: "Register the start of a new coding session"
+      category: deferred
+      profile: agent
+      risk: low
+
+    - name: "mem_session_end"
+      description: "Mark a coding session as completed with optional summary"
+      category: deferred
+      profile: agent
+      risk: low
+
+    - name: "mem_stats"
+      description: "Show memory system statistics"
+      category: deferred
+      profile: agent
+      risk: low
+
+    - name: "mem_delete"
+      description: "Delete an observation"
+      category: deferred
+      profile: admin
+      risk: high
+
+    - name: "mem_timeline"
+      description: "Show chronological context around an observation"
+      category: deferred
+      profile: agent
+      risk: low
+
+    - name: "mem_capture_passive"
+      description: "Capture passive context from the environment"
+      category: deferred
+      profile: agent
+      risk: low
+
+    - name: "mem_merge_projects"
+      description: "Merge project names"
+      category: deferred
+      profile: admin
+      risk: high
+
+    - name: "mem_judge"
+      description: "Resolve memory conflict relations"
+      category: deferred
+      profile: agent
+      risk: medium

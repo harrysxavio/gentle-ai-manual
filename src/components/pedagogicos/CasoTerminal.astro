@@ -1,0 +1,103 @@
+---
+---
+
+<div class="comp-caso-terminal" data-component="caso-terminal" role="figure" aria-label="Sesión de terminal">
+  <div class="comp-terminal-bar">
+    <span class="comp-terminal-dot comp-dot-red" aria-hidden="true"></span>
+    <span class="comp-terminal-dot comp-dot-yellow" aria-hidden="true"></span>
+    <span class="comp-terminal-dot comp-dot-green" aria-hidden="true"></span>
+    <span class="comp-terminal-title">Terminal</span>
+  </div>
+  <div class="comp-terminal-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .comp-caso-terminal {
+    margin: 1.5em 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--sl-color-gray-700);
+    background: #1a1a2e;
+    font-family: var(--sl-font-mono, 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace);
+  }
+
+  .comp-terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.5em 0.85em;
+    background: #2d2d44;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .comp-terminal-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .comp-dot-red {
+    background: #ff5f57;
+  }
+
+  .comp-dot-yellow {
+    background: #febc2e;
+  }
+
+  .comp-dot-green {
+    background: #28c840;
+  }
+
+  .comp-terminal-title {
+    margin-left: 0.5em;
+    font-size: 0.75em;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.05em;
+  }
+
+  .comp-terminal-body {
+    padding: 0.85em 1em;
+    font-size: 0.88em;
+    line-height: 1.65;
+    color: #e2e8f0;
+    overflow-x: auto;
+  }
+
+  /* Style code blocks inside terminal */
+  .comp-terminal-body :global(pre) {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+  }
+
+  .comp-terminal-body :global(code) {
+    background: transparent !important;
+    color: #e2e8f0 !important;
+    text-shadow: none !important;
+  }
+
+  @media print {
+    .comp-caso-terminal {
+      background: #fff;
+      border: 1px solid #000;
+      color: #000;
+    }
+
+    .comp-terminal-bar {
+      display: none;
+    }
+
+    .comp-terminal-body {
+      color: #000;
+      padding: 0.5em;
+    }
+
+    .comp-terminal-body :global(code) {
+      color: #000 !important;
+    }
+  }
+</style>

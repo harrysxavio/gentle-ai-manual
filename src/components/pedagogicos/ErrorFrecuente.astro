@@ -1,0 +1,131 @@
+---
+interface Props {
+  problema: string;
+  causa: string;
+  solucion: string;
+}
+
+const { problema, causa, solucion } = Astro.props;
+---
+
+<div class="comp-error-frecuente" data-component="error-frecuente" role="alert" aria-label="Error frecuente">
+  <div class="comp-error-header">
+    <span class="comp-error-icon" aria-hidden="true">❌</span>
+    <strong>Error frecuente</strong>
+  </div>
+
+  <details class="comp-error-section" open>
+    <summary class="comp-error-summary">Problema</summary>
+    <div class="comp-error-content">{problema}</div>
+  </details>
+
+  <details class="comp-error-section">
+    <summary class="comp-error-summary">Causa</summary>
+    <div class="comp-error-content">{causa}</div>
+  </details>
+
+  <details class="comp-error-section">
+    <summary class="comp-error-summary">Solución</summary>
+    <div class="comp-error-content comp-error-solucion">{solucion}</div>
+  </details>
+</div>
+
+<style>
+  .comp-error-frecuente {
+    border: 1px solid var(--sl-color-red-400);
+    border-left: 4px solid var(--sl-color-red-500);
+    border-radius: 0 8px 8px 0;
+    margin: 1.5em 0;
+    overflow: hidden;
+  }
+
+  :root[data-theme="dark"] .comp-error-frecuente,
+  :global([data-theme="dark"]) .comp-error-frecuente {
+    border-color: var(--sl-color-red-700);
+    border-left-color: var(--sl-color-red-500);
+  }
+
+  .comp-error-header {
+    padding: 0.75em 1.1em;
+    background: var(--sl-color-red-50);
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+    font-size: 0.9em;
+  }
+
+  :root[data-theme="dark"] .comp-error-header,
+  :global([data-theme="dark"]) .comp-error-header {
+    background: var(--sl-color-red-950);
+  }
+
+  .comp-error-icon {
+    font-size: 1.1em;
+  }
+
+  .comp-error-section {
+    border-top: 1px solid var(--sl-color-red-200);
+  }
+
+  :root[data-theme="dark"] .comp-error-section,
+  :global([data-theme="dark"]) .comp-error-section {
+    border-top-color: var(--sl-color-red-800);
+  }
+
+  .comp-error-summary {
+    cursor: pointer;
+    padding: 0.6em 1.1em;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--sl-color-red-700);
+    background: var(--sl-color-red-25);
+    list-style: none;
+  }
+
+  .comp-error-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  :root[data-theme="dark"] .comp-error-summary,
+  :global([data-theme="dark"]) .comp-error-summary {
+    color: var(--sl-color-red-300);
+    background: var(--sl-color-red-980);
+  }
+
+  .comp-error-content {
+    padding: 0.75em 1.1em;
+    font-size: 0.9em;
+    line-height: 1.6;
+    color: var(--sl-color-text);
+  }
+
+  .comp-error-solucion {
+    background: var(--sl-color-green-50);
+    border-left: 3px solid var(--sl-color-green-500);
+    margin: 0.25em 0.75em 0.75em;
+    border-radius: 0 4px 4px 0;
+  }
+
+  :root[data-theme="dark"] .comp-error-solucion,
+  :global([data-theme="dark"]) .comp-error-solucion {
+    background: var(--sl-color-green-950);
+    border-left-color: var(--sl-color-green-600);
+  }
+
+  @media (max-width: 720px) {
+    .comp-error-frecuente {
+      margin-left: 0;
+      margin-right: 0;
+      border-radius: 0 4px 4px 0;
+    }
+  }
+
+  @media print {
+    .comp-error-frecuente {
+      border-width: 1px;
+    }
+    .comp-error-header {
+      background: none;
+    }
+  }
+</style>

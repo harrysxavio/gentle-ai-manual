@@ -1,0 +1,107 @@
+---
+---
+
+<div class="comp-como-verificar" data-component="como-verificar">
+  <div class="comp-verificar-header">
+    <span class="comp-badge comp-badge-green">Cómo verificar</span>
+  </div>
+  <div class="comp-verificar-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .comp-como-verificar {
+    border: 1px solid var(--sl-color-green-200);
+    border-left: 4px solid var(--sl-color-green-500);
+    margin: 1.5em 0;
+    border-radius: 0 8px 8px 0;
+    overflow: hidden;
+  }
+
+  :root[data-theme="dark"] .comp-como-verificar,
+  :global([data-theme="dark"]) .comp-como-verificar {
+    border-color: var(--sl-color-green-700);
+    border-left-color: var(--sl-color-green-500);
+  }
+
+  .comp-verificar-header {
+    padding: 0.6em 1.1em;
+    background: var(--sl-color-green-50);
+  }
+
+  :root[data-theme="dark"] .comp-verificar-header,
+  :global([data-theme="dark"]) .comp-verificar-header {
+    background: var(--sl-color-green-950);
+  }
+
+  .comp-badge {
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.15em 0.6em;
+    border-radius: 3px;
+  }
+
+  .comp-badge-green {
+    background: var(--sl-color-green-200);
+    color: var(--sl-color-green-800);
+  }
+
+  :root[data-theme="dark"] .comp-badge-green,
+  :global([data-theme="dark"]) .comp-badge-green {
+    background: var(--sl-color-green-700);
+    color: var(--sl-color-green-100);
+  }
+
+  .comp-verificar-body {
+    padding: 0.75em 1.1em;
+    font-size: 0.93em;
+    line-height: 1.7;
+  }
+
+  /* Style ordered lists inside -- green checkmarks */
+  .comp-verificar-body :global(ol) {
+    list-style: none;
+    counter-reset: verificar;
+    padding-left: 0;
+  }
+
+  .comp-verificar-body :global(ol > li) {
+    counter-increment: verificar;
+    padding-left: 2em;
+    position: relative;
+  }
+
+  .comp-verificar-body :global(ol > li)::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--sl-color-green-600);
+    font-weight: 700;
+  }
+
+  :root[data-theme="dark"] .comp-verificar-body :global(ol > li)::before,
+  :global([data-theme="dark"]) .comp-verificar-body :global(ol > li)::before {
+    color: var(--sl-color-green-400);
+  }
+
+  @media (max-width: 720px) {
+    .comp-como-verificar {
+      margin-left: 0;
+      margin-right: 0;
+      border-radius: 0 4px 4px 0;
+    }
+  }
+
+  @media print {
+    .comp-como-verificar {
+      border-width: 1px;
+    }
+    .comp-verificar-header {
+      background: none;
+    }
+  }
+</style>

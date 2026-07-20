@@ -1,0 +1,78 @@
+---
+interface Props {
+  repositorio: string;
+  commit: string;
+  archivo: string;
+  fecha: string;
+}
+
+const { repositorio, commit, archivo, fecha } = Astro.props;
+---
+
+<div class="comp-fuente" data-component="fuente" role="contentinfo" aria-label="Fuente verificada">
+  <span class="comp-fuente-icon" aria-hidden="true">📋</span>
+  <span class="comp-fuente-text">
+    Fuente: <strong>{repositorio}</strong>
+    — commit <code>{commit}</code>
+    — <em>{archivo}</em>
+    — {fecha}
+  </span>
+</div>
+
+<style>
+  .comp-fuente {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+    padding: 0.5em 0.75em;
+    margin: 1.5em 0 0.5em;
+    font-size: 0.8em;
+    color: var(--sl-color-gray-500);
+    border-top: 1px solid var(--sl-color-gray-200);
+    border-bottom: 1px solid var(--sl-color-gray-200);
+    background: var(--sl-color-gray-25, #fafafa);
+  }
+
+  :root[data-theme="dark"] .comp-fuente,
+  :global([data-theme="dark"]) .comp-fuente {
+    color: var(--sl-color-gray-400);
+    border-color: var(--sl-color-gray-800);
+    background: var(--sl-color-gray-950);
+  }
+
+  .comp-fuente-icon {
+    font-size: 1em;
+    flex-shrink: 0;
+  }
+
+  .comp-fuente-text {
+    line-height: 1.5;
+  }
+
+  .comp-fuente-text code {
+    font-size: 0.9em;
+    background: var(--sl-color-gray-200);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+
+  :root[data-theme="dark"] .comp-fuente-text code,
+  :global([data-theme="dark"]) .comp-fuente-text code {
+    background: var(--sl-color-gray-800);
+  }
+
+  @media (max-width: 720px) {
+    .comp-fuente {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25em;
+    }
+  }
+
+  @media print {
+    .comp-fuente {
+      border: 1px solid var(--sl-color-gray-300);
+      background: none;
+    }
+  }
+</style>

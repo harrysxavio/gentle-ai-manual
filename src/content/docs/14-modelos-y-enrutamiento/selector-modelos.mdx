@@ -1,0 +1,113 @@
+---
+title: Selector de modelos
+description: Herramienta interactiva para filtrar y seleccionar modelos por proveedor, clase y nivel de razonamiento.
+level: 2
+estimatedTime: 10 min
+tags:
+  - modelos
+  - selector
+  - catálogo
+  - interactivo
+prerequisites:
+  - Modelos y enrutamiento (capítulo 14)
+verifiedVersion: "opencode models 2026-07-20"
+---
+
+# Selector de modelos
+
+Una tabla filtrable del catálogo completo de modelos disponibles en el ecosistema Gentle-AI. Usá los filtros abajo para encontrar el modelo adecuado para tu tarea.
+
+<div class="selector-filters" id="filters">
+  <div class="filter-group">
+    <span class="filter-label">Proveedor:</span>
+    <button class="filter-chip active" data-filter="provider" data-value="all">Todos</button>
+    <button class="filter-chip" data-filter="provider" data-value="openai">OpenAI</button>
+    <button class="filter-chip" data-filter="provider" data-value="google">Google</button>
+    <button class="filter-chip" data-filter="provider" data-value="anthropic">Anthropic</button>
+    <button class="filter-chip" data-filter="provider" data-value="opencode-go">OpenCode Go</button>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Clase:</span>
+    <button class="filter-chip active" data-filter="class" data-value="all">Todas</button>
+    <button class="filter-chip" data-filter="class" data-value="frontier">Frontier</button>
+    <button class="filter-chip" data-filter="class" data-value="powerful">Potente</button>
+    <button class="filter-chip" data-filter="class" data-value="balanced">Equilibrado</button>
+    <button class="filter-chip" data-filter="class" data-value="economic">Económico</button>
+    <button class="filter-chip" data-filter="class" data-value="code-specialized">Código</button>
+    <button class="filter-chip" data-filter="class" data-value="creative">Creativo</button>
+  </div>
+  <div class="filter-group">
+    <span class="filter-label">Razonamiento:</span>
+    <button class="filter-chip active" data-filter="reasoning" data-value="all">Todos</button>
+    <button class="filter-chip" data-filter="reasoning" data-value="xhigh">xHigh</button>
+    <button class="filter-chip" data-filter="reasoning" data-value="high">High</button>
+    <button class="filter-chip" data-filter="reasoning" data-value="medium">Medium</button>
+    <button class="filter-chip" data-filter="reasoning" data-value="low">Low</button>
+    <button class="filter-chip" data-filter="reasoning" data-value="limited">Limited</button>
+  </div>
+  <div class="filter-group filter-search">
+    <input type="text" id="search-input" class="filter-search-input" placeholder="Buscar por nombre o ID..." aria-label="Buscar modelo" />
+    <button class="filter-clear" id="clear-filters">Limpiar filtros</button>
+  </div>
+</div>
+
+<div class="selector-results" id="results-count">
+  Mostrando <strong id="visible-count">35</strong> de <strong id="total-count">35</strong> modelos
+</div>
+
+<div class="table-wrapper">
+  <table class="model-table" id="model-table">
+    <thead>
+      <tr>
+        <th>Modelo ID</th>
+        <th>Proveedor</th>
+        <th>Clase</th>
+        <th>Razonamiento</th>
+        <th>Tool Calling</th>
+        <th>Contexto</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody id="model-tbody"></tbody>
+  </table>
+</div>
+
+<div class="selector-no-results" id="no-results" style="display:none;">
+  <p>No se encontraron modelos con los filtros seleccionados.</p>
+</div>
+
+<script src="/gentle-ai-mega-manual-es/scripts/model-selector.js" defer></script>
+
+---
+
+## 🎯 ¿Qué modelo para qué agente?
+
+Tabla de recomendaciones basada en el enrutamiento real de gentle-ai v2.1.10.
+
+| Agente | Riesgo | Razonamiento | OpenAI | Google | Anthropic | OpenCode Go |
+|--------|--------|-------------|--------|--------|-----------|-------------|
+| `gentle-orchestrator` | <span class="risk-high">Alto</span> | high | gpt-5.6-sol | gemini-3.5-flash | claude-sonnet-5 | kimi-k3 |
+| `sdd-init` | <span class="risk-low">Bajo</span> | low | gpt-5.6-luna | gemini-3.1-flash-lite | claude-haiku-4.5 | deepseek-v4-flash |
+| `sdd-explore` | <span class="risk-medium">Medio</span> | medium | gpt-5.6-terra | gemini-3.5-flash | claude-sonnet-5 | deepseek-v4-pro |
+| `sdd-propose` | <span class="risk-high">Alto</span> | high | gpt-5.6-sol | gemini-3.5-flash | claude-sonnet-5 | kimi-k3 |
+| `sdd-spec` | <span class="risk-medium">Medio</span> | medium | gpt-5.6-sol | gemini-3.5-flash | claude-sonnet-5 | kimi-k3 |
+| `sdd-design` | <span class="risk-high">Alto</span> | high | gpt-5.6-sol | gemini-3.1-pro-preview | claude-opus-4.8 | kimi-k3 |
+| `sdd-tasks` | <span class="risk-medium">Medio</span> | medium | gpt-5.6-terra | gemini-3.5-flash | claude-sonnet-5 | deepseek-v4-pro |
+| `sdd-apply` | <span class="risk-medium">Medio</span> | medium | gpt-5.6-terra | gemini-3.5-flash | claude-sonnet-5 | kimi-k2.7-code |
+| `sdd-verify` | <span class="risk-high">Alto</span> | high | gpt-5.6-sol | gemini-3.1-pro-preview | claude-opus-4.8 | glm-5.2 |
+| `sdd-archive` | <span class="risk-low">Bajo</span> | low | gpt-5.6-luna | gemini-3.1-flash-lite | claude-haiku-4.5 | deepseek-v4-flash |
+| `jd-judge-a` | <span class="risk-high">Alto</span> | high | gpt-5.6-sol | — | claude-opus-4.8 | glm-5.2 |
+| `jd-judge-b` | <span class="risk-high">Alto</span> | high | gpt-5.6-sol | — | claude-opus-4.8 | qwen3.7-max |
+| `review-risk` | <span class="risk-xhigh">Crítico</span> | xhigh | gpt-5.6-sol | — | claude-opus-4.8 | qwen3.7-max |
+
+> **Importante**: Para Judgment Day, los jueces A y B deben usar modelos de proveedores diferentes. Esto reduce errores correlacionados.
+
+## Niveles de escalamiento
+
+| Nivel | Modelo (OpenAI) | Condición de activación |
+|-------|----------------|------------------------|
+| 1 — Económico | `gpt-5.6-luna` | Tareas mecánicas: init, archive, formato |
+| 2 — Equilibrado | `gpt-5.6-terra` | Tareas estándar: explore, tasks, apply |
+| 3 — Potente | `gpt-5.5` | Incertidumbre alta tras 2 intentos |
+| 4 — Frontier | `gpt-5.6-sol` | Decisiones críticas, seguridad, release |
+| 5 — Revisión humana | 👤 | Si el frontier aún falla o la decisión es irreversible |

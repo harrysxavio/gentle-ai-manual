@@ -1,0 +1,52 @@
+---
+---
+
+<div class="comp-alternativa-economica" data-component="alternativa-economica" role="note" aria-label="Alternativa económica">
+  <div class="comp-alt-icon" aria-hidden="true">💰</div>
+  <div class="comp-alt-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .comp-alternativa-economica {
+    border: 1px solid var(--sl-color-green-300);
+    background: var(--sl-color-green-50);
+    padding: 0.85em 1.1em;
+    margin: 1.25em 0;
+    border-radius: 8px;
+    display: flex;
+    gap: 0.65em;
+    align-items: flex-start;
+    font-size: 0.93em;
+  }
+
+  :root[data-theme="dark"] .comp-alternativa-economica,
+  :global([data-theme="dark"]) .comp-alternativa-economica {
+    background: var(--sl-color-green-950);
+    border-color: var(--sl-color-green-700);
+  }
+
+  .comp-alt-icon {
+    font-size: 1.1em;
+    flex-shrink: 0;
+    margin-top: 0.1em;
+  }
+
+  .comp-alt-body {
+    color: var(--sl-color-green-800);
+    line-height: 1.6;
+  }
+
+  :root[data-theme="dark"] .comp-alt-body,
+  :global([data-theme="dark"]) .comp-alt-body {
+    color: var(--sl-color-green-200);
+  }
+
+  @media print {
+    .comp-alternativa-economica {
+      background: none;
+      border: 1px solid var(--sl-color-green-400);
+    }
+  }
+</style>

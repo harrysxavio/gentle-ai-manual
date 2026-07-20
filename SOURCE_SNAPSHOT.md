@@ -101,8 +101,8 @@
 
 | Fuente | URL | Estado |
 |--------|-----|--------|
-| Canal YouTube | https://youtube.com/@gentlemanprogramming | 🔴 PENDIENTE |
-| Libro oficial | https://the-amazing-gentleman-programming-book.vercel.app/es/book | 🔴 PENDIENTE |
+| Canal YouTube | https://youtube.com/@gentlemanprogramming | 🟢 Verificado — ~843 videos, ~124K subs, investigado 2026-07-20 |
+| Libro oficial | https://the-amazing-gentleman-programming-book.vercel.app/es/book | 🟢 Verificado — 21 capítulos, investigado 2026-07-20 |
 | Documentación OpenCode | https://opencode.ai/docs | 🔴 PENDIENTE |
 | Documentación Codex | https://github.com/openai/codex | 🔴 PENDIENTE |
 | MCP spec | https://modelcontextprotocol.io | 🔴 PENDIENTE |

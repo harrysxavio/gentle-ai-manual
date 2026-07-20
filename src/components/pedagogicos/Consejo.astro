@@ -1,0 +1,62 @@
+---
+---
+
+<div class="comp-consejo" data-component="consejo" role="note" aria-label="Consejo">
+  <div class="comp-consejo-icon" aria-hidden="true">💡</div>
+  <div class="comp-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .comp-consejo {
+    border: 1px solid var(--sl-color-green-300);
+    border-left: 4px solid var(--sl-color-green-500);
+    background: var(--sl-color-green-50);
+    padding: 0.85em 1.1em;
+    margin: 1.25em 0;
+    border-radius: 0 8px 8px 0;
+    display: flex;
+    gap: 0.65em;
+    align-items: flex-start;
+    font-size: 0.93em;
+  }
+
+  :root[data-theme="dark"] .comp-consejo,
+  :global([data-theme="dark"]) .comp-consejo {
+    background: var(--sl-color-green-950);
+    border-color: var(--sl-color-green-700);
+    border-left-color: var(--sl-color-green-500);
+  }
+
+  .comp-consejo-icon {
+    font-size: 1em;
+    flex-shrink: 0;
+    margin-top: 0.1em;
+  }
+
+  .comp-body {
+    color: var(--sl-color-green-800);
+    line-height: 1.6;
+  }
+
+  :root[data-theme="dark"] .comp-body,
+  :global([data-theme="dark"]) .comp-body {
+    color: var(--sl-color-green-200);
+  }
+
+  @media (max-width: 720px) {
+    .comp-consejo {
+      margin-left: 0;
+      margin-right: 0;
+      border-radius: 0 4px 4px 0;
+    }
+  }
+
+  @media print {
+    .comp-consejo {
+      background: none;
+      border-width: 1px;
+    }
+  }
+</style>

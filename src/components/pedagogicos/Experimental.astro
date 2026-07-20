@@ -1,0 +1,87 @@
+---
+interface Props {
+  version: string;
+  componente: string;
+}
+
+const { version, componente } = Astro.props;
+---
+
+<div class="comp-experimental" data-component="experimental" role="note" aria-label="Funcionalidad experimental">
+  <div class="comp-experimental-badge">🧪 Experimental</div>
+  <div class="comp-experimental-body">
+    <p class="comp-experimental-meta">
+      <strong>{componente}</strong> — verificado en v{version}
+    </p>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .comp-experimental {
+    border: 1px solid var(--sl-color-orange-300);
+    border-left: 4px solid var(--sl-color-orange-500);
+    margin: 1.5em 0;
+    border-radius: 0 8px 8px 0;
+    overflow: hidden;
+  }
+
+  :root[data-theme="dark"] .comp-experimental,
+  :global([data-theme="dark"]) .comp-experimental {
+    border-color: var(--sl-color-orange-700);
+    border-left-color: var(--sl-color-orange-500);
+  }
+
+  .comp-experimental-badge {
+    display: inline-block;
+    font-size: 0.8em;
+    font-weight: 700;
+    padding: 0.35em 0.8em;
+    background: var(--sl-color-orange-500);
+    color: #fff;
+    margin: 0.75em 1em 0;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  :root[data-theme="dark"] .comp-experimental-badge,
+  :global([data-theme="dark"]) .comp-experimental-badge {
+    background: var(--sl-color-orange-600);
+  }
+
+  .comp-experimental-body {
+    padding: 0.75em 1.1em 0.85em;
+    font-size: 0.93em;
+    line-height: 1.6;
+  }
+
+  .comp-experimental-meta {
+    color: var(--sl-color-orange-700);
+    font-size: 0.9em;
+    margin-bottom: 0.3em;
+  }
+
+  :root[data-theme="dark"] .comp-experimental-meta,
+  :global([data-theme="dark"]) .comp-experimental-meta {
+    color: var(--sl-color-orange-300);
+  }
+
+  @media (max-width: 720px) {
+    .comp-experimental {
+      margin-left: 0;
+      margin-right: 0;
+      border-radius: 0 4px 4px 0;
+    }
+  }
+
+  @media print {
+    .comp-experimental {
+      border-width: 1px;
+    }
+    .comp-experimental-badge {
+      background: var(--sl-color-orange-200);
+      color: var(--sl-color-orange-900);
+      border: 1px solid var(--sl-color-orange-400);
+    }
+  }
+</style>

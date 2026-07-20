@@ -1,0 +1,58 @@
+---
+---
+
+<div class="comp-ejemplo-basico" data-component="ejemplo-basico" role="note" aria-label="Ejemplo básico">
+  <div class="comp-badge comp-badge-example">Ejemplo básico</div>
+  <div class="comp-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .comp-ejemplo-basico {
+    background: var(--sl-color-gray-50);
+    border: 1px solid var(--sl-color-gray-200);
+    padding: 1em 1.25em;
+    margin: 1.5em 0;
+    border-radius: 8px;
+  }
+
+  :root[data-theme="dark"] .comp-ejemplo-basico,
+  :global([data-theme="dark"]) .comp-ejemplo-basico {
+    background: var(--sl-color-gray-950);
+    border-color: var(--sl-color-gray-700);
+  }
+
+  .comp-badge {
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.15em 0.6em;
+    border-radius: 3px;
+    margin-bottom: 0.75em;
+  }
+
+  .comp-badge-example {
+    background: var(--sl-color-gray-200);
+    color: var(--sl-color-gray-800);
+  }
+
+  :root[data-theme="dark"] .comp-badge-example,
+  :global([data-theme="dark"]) .comp-badge-example {
+    background: var(--sl-color-gray-600);
+    color: var(--sl-color-gray-100);
+  }
+
+  .comp-body {
+    color: var(--sl-color-text);
+  }
+
+  @media print {
+    .comp-ejemplo-basico {
+      background: none;
+      border: 1px solid var(--sl-color-gray-300);
+    }
+  }
+</style>

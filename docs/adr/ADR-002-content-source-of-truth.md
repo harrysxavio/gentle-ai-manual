@@ -10,7 +10,7 @@ El sitio web puede renderizar contenido de dos formas: generarlo desde Markdown 
 
 ## Decisión
 
-Markdown es la fuente de verdad absoluta. La web se genera desde los archivos `.md` en `content/`.
+Markdown es la fuente de verdad absoluta. La web se genera desde los archivos `.md` y `.mdx` en `src/content/docs/`.
 
 Esto significa:
 - Todo el contenido educativo existe en Markdown primero

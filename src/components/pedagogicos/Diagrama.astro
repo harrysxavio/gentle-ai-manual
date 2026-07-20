@@ -1,0 +1,80 @@
+---
+interface Props {
+  titulo: string;
+  fuente: string;
+}
+
+const { titulo, fuente } = Astro.props;
+---
+
+<figure class="comp-diagrama" data-component="diagrama" role="figure" aria-label={titulo}>
+  <div class="comp-diagrama-wrapper">
+    <slot />
+  </div>
+  <figcaption class="comp-diagrama-caption">
+    <span class="comp-diagrama-titulo">{titulo}</span>
+    <span class="comp-diagrama-fuente">Fuente: {fuente}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .comp-diagrama {
+    margin: 2em 0;
+    border: 1px solid var(--sl-color-gray-200);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  :root[data-theme="dark"] .comp-diagrama,
+  :global([data-theme="dark"]) .comp-diagrama {
+    border-color: var(--sl-color-gray-700);
+  }
+
+  .comp-diagrama-wrapper {
+    padding: 1.25em;
+    background: var(--sl-color-bg);
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+  }
+
+  .comp-diagrama-caption {
+    padding: 0.6em 1.1em;
+    background: var(--sl-color-gray-50);
+    border-top: 1px solid var(--sl-color-gray-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+    font-size: 0.82em;
+    flex-wrap: wrap;
+  }
+
+  :root[data-theme="dark"] .comp-diagrama-caption,
+  :global([data-theme="dark"]) .comp-diagrama-caption {
+    background: var(--sl-color-gray-900);
+    border-top-color: var(--sl-color-gray-700);
+  }
+
+  .comp-diagrama-titulo {
+    font-weight: 600;
+    color: var(--sl-color-text);
+  }
+
+  .comp-diagrama-fuente {
+    color: var(--sl-color-gray-500);
+    font-style: italic;
+  }
+
+  :root[data-theme="dark"] .comp-diagrama-fuente,
+  :global([data-theme="dark"]) .comp-diagrama-fuente {
+    color: var(--sl-color-gray-400);
+  }
+
+  @media print {
+    .comp-diagrama-caption {
+      background: none;
+      border-top: 1px solid var(--sl-color-gray-300);
+    }
+  }
+</style>

@@ -1,0 +1,201 @@
+# Version compatibility matrix — structured data
+# Source: VERSION_COMPATIBILITY.md (verified 2026-07-20)
+# Last updated: 2026-07-20
+
+components:
+  - name: "gentle-ai"
+    version_verified: "2.1.10"
+    installed: true
+    latest: "2.1.10"
+    runtime: "OpenCode 1.x (required), Codex (optional)"
+    install: "npm global or dedicated installer"
+    requirements:
+      - "OpenCode >= 1.17.x"
+      - "Git"
+      - "Node.js >= 18"
+    dependencies:
+      - name: "engram"
+        compatible_versions: ["1.18.x", "1.19.0", "1.20.0"]
+        relationship: "optional — memory system"
+      - name: "gga"
+        compatible_versions: ["2.8.x", "2.9.x", "2.10.1"]
+        relationship: "optional — git hooks"
+    paths:
+      global_config: "~/.config/gentle-ai/ (Linux/macOS), %APPDATA%/gentle-ai/ (Windows)"
+      workspace: "{project}/.gentle-ai/"
+    notes: "16 agents supported, 10 components, 10 SDD phases, 22 embedded skills"
+
+  - name: "engram"
+    version_verified: "1.19.0"
+    installed: true
+    latest: "1.20.0"
+    update_available: true
+    runtime: "Go 1.25.10 (compiled, no Go runtime needed)"
+    database: "SQLite + FTS5 (local), Postgres (cloud optional)"
+    protocol: "MCP stdio (agents), HTTP REST (tools/TUI)"
+    requirements: []
+    dependencies: []
+    paths:
+      data: "~/.engram/engram.db"
+      project_config: "{project}/.engram/config.json"
+      cloud_config: "~/.engram/cloud.json"
+    features:
+      - name: "MCP Tools"
+        count: 20
+        profiles: ["agent (18)", "admin (4)", "all (20)"]
+      - name: "Cloud Sync"
+        status: "opt-in"
+        requires: ["Postgres", "cloud server"]
+      - name: "Autosync"
+        status: "experimental"
+        version: "1.20.0"
+      - name: "Obsidian Plugin"
+        status: "beta"
+        version: "1.19.0"
+      - name: "Cloud Dashboard"
+        status: "beta"
+        tech: "HTMX"
+
+  - name: "gga"
+    name_full: "Gentleman Guardian Angel"
+    version_verified: "2.10.1"
+    installed: false
+    latest: "2.10.1"
+    runtime: "Bash 5.0+ (no Go, no Node.js)"
+    entry_point: "bin/gga (1372 lines)"
+    tests: "266+ (ShellSpec BDD)"
+    requirements: ["git", "curl or provider CLI"]
+    dependencies: []
+    paths:
+      config: ".gga file in project root"
+      global_config: "~/.config/gga/config"
+    providers:
+      - "claude"
+      - "opencode"
+      - "gemini"
+      - "codex"
+      - "cursor"
+      - "kilo"
+      - "kiro"
+      - "ollama"
+      - "lmstudio"
+      - "github"
+      - "minimax"
+    hooks: ["pre-commit", "commit-msg"]
+    notes: "Windows requires Git Bash. install.sh creates gga.bat wrapper"
+
+  - name: "opencode"
+    version_verified: "1.17.20"
+    installed: true
+    runtime: "Node.js 18+"
+    install: "npm global (opencode)"
+    requirements: ["Node.js >= 18"]
+    dependencies:
+      - name: "engram"
+        compatible_versions: ["1.18.x", "1.19.0", "1.20.0"]
+        relationship: "integrated plugin"
+    paths:
+      config: "opencode.json or opencode.jsonc"
+      skills: "%USERPROFILE%\\.config\\opencode\\skills\\"
+    features:
+      - "Plugins (TypeScript)"
+      - "MCP support"
+      - "Engram plugin integrated"
+      - "Model catalog: OpenRouter + OpenCode Go + NVIDIA + Ollama Cloud"
+
+  - name: "codex-cli"
+    version_verified: "0.144.0"
+    installed: true
+    runtime: "Node.js 18+"
+    install: "npm global (@openai/codex)"
+    requirements: ["Node.js >= 18"]
+    dependencies:
+      - name: "engram"
+        compatible_versions: ["1.18.x", "1.19.0", "1.20.0"]
+        relationship: "MCP support"
+    paths:
+      config: "config.toml (project directory)"
+      skills: "%USERPROFILE%\\.codex\\skills\\"
+    features:
+      - "Multi-agent (experimental)"
+      - "MCP support"
+      - "Active development — config format may change"
+
+  - name: "git"
+    version_verified: "2.55.0"
+    installed: true
+    role: "Version control"
+    notes: "Required by all tools"
+
+  - name: "nodejs"
+    version_verified: "22.17.0"
+    installed: true
+    role: "Runtime for OpenCode, Codex"
+    notes: "Required for OpenCode and Codex CLI"
+
+  - name: "go"
+    version_verified: "N/A"
+    installed: false
+    role: "Build tool for gentle-ai, engram"
+    notes: "Not needed for normal usage. Only for development/builds from source"
+
+  - name: "gentleman-skills"
+    version_verified: "No tagged release"
+    latest_commit: "c8036a3"
+    latest_commit_date: "2026-03-28"
+    language: "Markdown (SKILL.md with YAML frontmatter)"
+    total_skills: 24
+    curated: 18
+    community: 6
+    license: "MIT"
+    notes: "No releases, no tags — community-managed"
+
+compatibility_matrix:
+  - gentle_ai: "2.1.10"
+    opencode: "1.17.20"
+    status: "compatible"
+    codex: "0.144.0"
+    codex_status: "compatible"
+    engram: "1.19.0"
+    engram_status: "compatible"
+    gga: "2.10.1"
+    gga_status: "compatible"
+    nodejs: "22.17.0"
+    nodejs_status: "compatible"
+
+  - gentle_ai: "2.1.10"
+    opencode: "1.16.x"
+    status: "compatible"
+    codex: "0.143.x"
+    codex_status: "compatible"
+    engram: "1.18.x"
+    engram_status: "compatible"
+    gga: "2.9.x"
+    gga_status: "compatible"
+    nodejs: "20.x"
+    nodejs_status: "compatible"
+
+  - gentle_ai: "2.0.x"
+    opencode: "1.15.x"
+    status: "verify"
+    codex: "0.140.x"
+    codex_status: "verify"
+    engram: "1.17.x"
+    engram_status: "compatible"
+    gga: "2.8.x"
+    gga_status: "compatible"
+    nodejs: "18.x"
+    nodejs_status: "compatible"
+
+known_issues:
+  - component: "engram"
+    description: "v1.19.0 → v1.20.0 update available. Changes not yet verified."
+    recommendation: "Update before depending on new features"
+
+  - component: "opencode"
+    description: "Breaking changes between minor versions"
+    recommendation: "Verify opencode.json when upgrading"
+
+  - component: "codex-cli"
+    description: "Active development — config.toml format may change"
+    recommendation: "Check release notes before upgrading"

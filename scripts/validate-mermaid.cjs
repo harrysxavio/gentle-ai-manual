@@ -5,7 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const contentDir = path.join(__dirname, '..', 'content');
+const contentDir = path.join(__dirname, '..', 'src', 'content', 'docs');
 const mermaidRegex = /```mermaid\n([\s\S]*?)```/g;
 
 let errors = 0;

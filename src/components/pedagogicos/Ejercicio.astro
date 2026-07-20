@@ -1,0 +1,153 @@
+---
+interface Props {
+  titulo: string;
+  tiempo: string;
+  dificultad: "fácil" | "medio" | "difícil";
+}
+
+const { titulo, tiempo, dificultad } = Astro.props;
+
+const dificultadClass = {
+  "fácil": "comp-diff-easy",
+  "medio": "comp-diff-medium",
+  "difícil": "comp-diff-hard",
+}[dificultad] ?? "comp-diff-medium";
+---
+
+<div class="comp-ejercicio" data-component="ejercicio" role="region" aria-label={`Ejercicio: ${titulo}`}>
+  <div class="comp-ejercicio-header">
+    <span class="comp-ejercicio-icon" aria-hidden="true">✏️</span>
+    <div class="comp-ejercicio-info">
+      <strong class="comp-ejercicio-titulo">{titulo}</strong>
+      <div class="comp-ejercicio-meta">
+        <span class="comp-meta-item">⏱ {tiempo}</span>
+        <span class={`comp-meta-item comp-diff ${dificultadClass}`}>
+          {dificultad === "fácil" ? "🟢" : dificultad === "medio" ? "🟡" : "🔴"} {dificultad}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="comp-ejercicio-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .comp-ejercicio {
+    border: 1px solid var(--sl-color-blue-300);
+    border-left: 4px solid var(--sl-color-blue-500);
+    margin: 1.5em 0;
+    border-radius: 0 8px 8px 0;
+    overflow: hidden;
+  }
+
+  :root[data-theme="dark"] .comp-ejercicio,
+  :global([data-theme="dark"]) .comp-ejercicio {
+    border-color: var(--sl-color-blue-700);
+    border-left-color: var(--sl-color-blue-400);
+  }
+
+  .comp-ejercicio-header {
+    padding: 0.85em 1.1em;
+    background: var(--sl-color-blue-50);
+    display: flex;
+    gap: 0.75em;
+    align-items: flex-start;
+  }
+
+  :root[data-theme="dark"] .comp-ejercicio-header,
+  :global([data-theme="dark"]) .comp-ejercicio-header {
+    background: var(--sl-color-blue-950);
+  }
+
+  .comp-ejercicio-icon {
+    font-size: 1.2em;
+    flex-shrink: 0;
+    margin-top: 0.1em;
+  }
+
+  .comp-ejercicio-info {
+    flex: 1;
+  }
+
+  .comp-ejercicio-titulo {
+    display: block;
+    font-size: 0.95em;
+    color: var(--sl-color-text);
+  }
+
+  .comp-ejercicio-meta {
+    display: flex;
+    gap: 1em;
+    margin-top: 0.3em;
+    font-size: 0.8em;
+  }
+
+  .comp-meta-item {
+    color: var(--sl-color-gray-500);
+  }
+
+  .comp-diff {
+    font-weight: 600;
+  }
+
+  .comp-diff-easy {
+    color: var(--sl-color-green-600);
+  }
+
+  .comp-diff-medium {
+    color: var(--sl-color-orange-600);
+  }
+
+  .comp-diff-hard {
+    color: var(--sl-color-red-600);
+  }
+
+  :root[data-theme="dark"] .comp-diff-easy,
+  :global([data-theme="dark"]) .comp-diff-easy { color: var(--sl-color-green-400); }
+  :root[data-theme="dark"] .comp-diff-medium,
+  :global([data-theme="dark"]) .comp-diff-medium { color: var(--sl-color-orange-400); }
+  :root[data-theme="dark"] .comp-diff-hard,
+  :global([data-theme="dark"]) .comp-diff-hard { color: var(--sl-color-red-400); }
+
+  .comp-ejercicio-body {
+    padding: 0.85em 1.1em;
+    font-size: 0.93em;
+    line-height: 1.7;
+  }
+
+  .comp-ejercicio-body :global(ul) {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  .comp-ejercicio-body :global(ul > li) {
+    padding-left: 1.6em;
+    position: relative;
+  }
+
+  .comp-ejercicio-body :global(ul > li)::before {
+    content: "☐";
+    position: absolute;
+    left: 0;
+    color: var(--sl-color-blue-500);
+    font-size: 0.9em;
+  }
+
+  @media (max-width: 720px) {
+    .comp-ejercicio {
+      margin-left: 0;
+      margin-right: 0;
+      border-radius: 0 4px 4px 0;
+    }
+  }
+
+  @media print {
+    .comp-ejercicio {
+      border-width: 1px;
+    }
+    .comp-ejercicio-header {
+      background: none;
+    }
+  }
+</style>

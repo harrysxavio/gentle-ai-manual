@@ -1,0 +1,84 @@
+---
+interface Props {
+  desde: string;
+  hasta: string;
+  componente: string;
+}
+
+const { desde, hasta, componente } = Astro.props;
+---
+
+<div class="comp-diferencia-version" data-component="diferencia-version" role="note" aria-label={`Cambio de ${componente} entre v${desde} y v${hasta}`}>
+  <div class="comp-diff-header">
+    <span class="comp-diff-badge">{componente}</span>
+    <span class="comp-diff-versions">v{desde} → v{hasta}</span>
+  </div>
+  <div class="comp-diff-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .comp-diferencia-version {
+    border: 1px solid var(--sl-color-gray-300);
+    border-radius: 8px;
+    margin: 1.5em 0;
+    overflow: hidden;
+  }
+
+  :root[data-theme="dark"] .comp-diferencia-version,
+  :global([data-theme="dark"]) .comp-diferencia-version {
+    border-color: var(--sl-color-gray-700);
+  }
+
+  .comp-diff-header {
+    padding: 0.65em 1.1em;
+    background: var(--sl-color-gray-50);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+    flex-wrap: wrap;
+  }
+
+  :root[data-theme="dark"] .comp-diff-header,
+  :global([data-theme="dark"]) .comp-diff-header {
+    background: var(--sl-color-gray-900);
+  }
+
+  .comp-diff-badge {
+    display: inline-block;
+    font-size: 0.8em;
+    font-weight: 700;
+    padding: 0.2em 0.6em;
+    background: var(--sl-color-gray-200);
+    color: var(--sl-color-gray-700);
+    border-radius: 4px;
+  }
+
+  :root[data-theme="dark"] .comp-diff-badge,
+  :global([data-theme="dark"]) .comp-diff-badge {
+    background: var(--sl-color-gray-700);
+    color: var(--sl-color-gray-200);
+  }
+
+  .comp-diff-versions {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--sl-color-accent);
+    font-family: var(--sl-font-mono, monospace);
+  }
+
+  .comp-diff-body {
+    padding: 0.85em 1.1em;
+    font-size: 0.93em;
+    line-height: 1.6;
+  }
+
+  @media print {
+    .comp-diff-header {
+      background: none;
+      border-bottom: 1px solid var(--sl-color-gray-300);
+    }
+  }
+</style>

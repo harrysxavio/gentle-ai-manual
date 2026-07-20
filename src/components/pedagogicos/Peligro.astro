@@ -1,0 +1,63 @@
+---
+---
+
+<div class="comp-peligro" data-component="peligro" role="alert" aria-label="Peligro">
+  <div class="comp-peligro-icon" aria-hidden="true">🛑</div>
+  <div class="comp-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .comp-peligro {
+    border: 1px solid var(--sl-color-red-600);
+    border-left: 4px solid var(--sl-color-red-700);
+    background: var(--sl-color-red-50);
+    padding: 1em 1.25em;
+    margin: 1.5em 0;
+    border-radius: 0 8px 8px 0;
+    display: flex;
+    gap: 0.75em;
+    align-items: flex-start;
+  }
+
+  :root[data-theme="dark"] .comp-peligro,
+  :global([data-theme="dark"]) .comp-peligro {
+    background: var(--sl-color-red-950);
+    border-color: var(--sl-color-red-700);
+    border-left-color: var(--sl-color-red-500);
+  }
+
+  .comp-peligro-icon {
+    font-size: 1.2em;
+    flex-shrink: 0;
+    margin-top: 0.1em;
+  }
+
+  .comp-body {
+    color: var(--sl-color-red-800);
+    font-size: 0.93em;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+
+  :root[data-theme="dark"] .comp-body,
+  :global([data-theme="dark"]) .comp-body {
+    color: var(--sl-color-red-200);
+  }
+
+  @media (max-width: 720px) {
+    .comp-peligro {
+      margin-left: 0;
+      margin-right: 0;
+      border-radius: 0 4px 4px 0;
+    }
+  }
+
+  @media print {
+    .comp-peligro {
+      background: none;
+      border-width: 1px;
+    }
+  }
+</style>

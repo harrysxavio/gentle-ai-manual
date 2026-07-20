@@ -3,6 +3,7 @@ import starlight from '@astrojs/starlight';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import starlightLinksValidator from 'starlight-links-validator';
+import { autoImportComponents } from './src/plugins/auto-import-components.js';
 
 export default defineConfig({
   site: 'https://gentleman-programming.github.io/gentle-ai-mega-manual-es',
@@ -132,4 +133,7 @@ export default defineConfig({
     sitemap(),
     starlightLinksValidator(),
   ],
+  vite: {
+    plugins: [autoImportComponents()],
+  },
 });
