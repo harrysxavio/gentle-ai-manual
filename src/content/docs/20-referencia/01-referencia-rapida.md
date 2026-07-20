@@ -84,7 +84,6 @@ Cuando estás en medio de una tarea, no querés navegar 20 capítulos para encon
 | `engram serve` | Inicia servidor HTTP REST en puerto 7437 | 09-01 |
 | `engram doctor` | Diagnóstico de salud de la base de datos | 09-01 |
 
-
 ### Herramientas MCP core (siempre disponibles)
 
 | Herramienta | ¿Qué hace? |
