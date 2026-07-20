@@ -6,8 +6,8 @@ import starlightLinksValidator from 'starlight-links-validator';
 import { autoImportComponents } from './src/plugins/auto-import-components.js';
 
 export default defineConfig({
-  site: 'https://gentleman-programming.github.io/gentle-ai-mega-manual-es',
-  base: '/gentle-ai-mega-manual-es',
+  site: 'https://harrysxavio.github.io',
+  base: '/gentle-ai-manual/',
   integrations: [
     starlight({
       title: 'Gentle AI — Mega Manual',
