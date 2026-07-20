@@ -1,0 +1,58 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+build/
+.next/
+.astro/
+
+# Research clones (keep metadata only)
+.research/upstream/
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporary
+*.tmp
+*.temp
+tmp/
+
+# Engram local data
+.engram/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Go (if any scripts use Go)
+*.exe
+*.test
+
+# Archives
+*.tar.gz
+*.zip

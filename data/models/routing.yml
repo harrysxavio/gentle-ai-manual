@@ -1,0 +1,241 @@
+# Enrutamiento de modelos por agente SDD y propósito
+# Basado en: código de gentle-ai v2.1.10, catálogo opencode models 2026-07-20
+# Última actualización: 2026-07-20
+
+# Perfiles de enrutamiento
+profiles:
+  economic:
+    description: "Mínimo consumo, escalar solo cuando sea necesario"
+    default_reasoning: low
+    
+  balanced:
+    description: "Calidad consistente con costos controlados"
+    default_reasoning: medium
+    
+  powerful:
+    description: "Máxima calidad en fases de alta decisión"
+    default_reasoning: high
+
+# Rutas por subagente Gentle-AI
+subagent_routing:
+  gentle-orchestrator:
+    role: "Orquestador principal"
+    risk: high
+    recommended_reasoning: high
+    models:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/kimi-k3
+    fallback:
+      - openai/gpt-5.6-terra
+      - opencode-go/deepseek-v4-pro
+
+  sdd-init:
+    role: "Inicialización SDD del proyecto"
+    risk: low
+    recommended_reasoning: low
+    models:
+      openai: openai/gpt-5.6-luna
+      google: openrouter/google/gemini-3.1-flash-lite
+      anthropic: openrouter/anthropic/claude-haiku-4.5
+      opencode-go: opencode-go/deepseek-v4-flash
+    fallback:
+      - openai/gpt-5.6-terra
+
+  sdd-explore:
+    role: "Exploración de ideas y codebase"
+    risk: medium
+    recommended_reasoning: medium
+    models:
+      openai: openai/gpt-5.6-terra
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/deepseek-v4-pro
+    fallback:
+      - openai/gpt-5.6-sol
+
+  sdd-propose:
+    role: "Creación de propuestas de cambio"
+    risk: high
+    recommended_reasoning: high
+    models:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/kimi-k3
+    fallback:
+      - openai/gpt-5.6-terra
+
+  sdd-spec:
+    role: "Especificación de requisitos y escenarios"
+    risk: medium
+    recommended_reasoning: medium
+    models:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/kimi-k3
+    fallback:
+      - openai/gpt-5.6-terra
+
+  sdd-design:
+    role: "Diseño técnico y arquitectura"
+    risk: high
+    recommended_reasoning: high
+    models:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.1-pro-preview
+      anthropic: openrouter/anthropic/claude-opus-4.8
+      opencode-go: opencode-go/kimi-k3
+    fallback:
+      - openrouter/anthropic/claude-sonnet-5
+      - openai/gpt-5.5
+
+  sdd-tasks:
+    role: "Desglose en tareas de implementación"
+    risk: medium
+    recommended_reasoning: medium
+    models:
+      openai: openai/gpt-5.6-terra
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/deepseek-v4-pro
+    fallback:
+      - openai/gpt-5.6-sol
+
+  sdd-apply:
+    role: "Implementación de código"
+    risk: medium
+    recommended_reasoning: medium
+    models:
+      openai: openai/gpt-5.6-terra
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/kimi-k2.7-code
+    fallback:
+      - openai/gpt-5.6-sol
+      - opencode-go/deepseek-v4-pro
+
+  sdd-verify:
+    role: "Verificación contra especificaciones"
+    risk: high
+    recommended_reasoning: high
+    models:
+      openai: openai/gpt-5.6-sol
+      google: openrouter/google/gemini-3.1-pro-preview
+      anthropic: openrouter/anthropic/claude-opus-4.8
+      opencode-go: opencode-go/glm-5.2
+    fallback:
+      - openai/gpt-5.5
+
+  sdd-archive:
+    role: "Archivo de cambios completados"
+    risk: low
+    recommended_reasoning: low
+    models:
+      openai: openai/gpt-5.6-luna
+      google: openrouter/google/gemini-3.1-flash-lite
+      anthropic: openrouter/anthropic/claude-haiku-4.5
+      opencode-go: opencode-go/deepseek-v4-flash
+    fallback:
+      - openai/gpt-5.6-terra
+
+  sdd-onboard:
+    role: "Onboarding a través del ciclo SDD"
+    risk: medium
+    recommended_reasoning: medium
+    models:
+      openai: openai/gpt-5.6-terra
+      google: openrouter/google/gemini-3.5-flash
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/kimi-k3
+    fallback:
+      - openai/gpt-5.6-sol
+
+  jd-judge-a:
+    role: "Juez A de Judgment Day"
+    risk: high
+    recommended_reasoning: high
+    models:
+      openai: openai/gpt-5.6-sol
+      anthropic: openrouter/anthropic/claude-opus-4.8
+      opencode-go: opencode-go/glm-5.2
+    notes: "NO usar mismo modelo que juez B. Preferir proveedor diferente."
+
+  jd-judge-b:
+    role: "Juez B de Judgment Day"
+    risk: high
+    recommended_reasoning: high
+    models:
+      anthropic: openrouter/anthropic/claude-opus-4.8
+      openai: openai/gpt-5.6-sol
+      opencode-go: opencode-go/qwen3.7-max
+    notes: "NO usar mismo modelo que juez A. Preferir proveedor diferente."
+
+  jd-fix-agent:
+    role: "Corrección quirúrgica post-Judgment Day"
+    risk: high
+    recommended_reasoning: high
+    models:
+      openai: openai/gpt-5.6-terra
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/kimi-k2.7-code
+    fallback:
+      - openai/gpt-5.6-sol
+
+  review-readability:
+    role: "Revisión de legibilidad"
+    risk: low
+    recommended_reasoning: medium
+    models:
+      openai: openai/gpt-5.6-terra
+      anthropic: openrouter/anthropic/claude-sonnet-5
+      opencode-go: opencode-go/kimi-k2.7-code
+
+  review-reliability:
+    role: "Revisión de confiabilidad"
+    risk: high
+    recommended_reasoning: high
+    models:
+      openai: openai/gpt-5.6-sol
+      anthropic: openrouter/anthropic/claude-opus-4.8
+      opencode-go: opencode-go/glm-5.2
+
+  review-resilience:
+    role: "Revisión de resiliencia"
+    risk: high
+    recommended_reasoning: high
+    models:
+      openai: openai/gpt-5.6-sol
+      anthropic: openrouter/anthropic/claude-opus-4.8
+      opencode-go: opencode-go/kimi-k3
+
+  review-risk:
+    role: "Revisión de seguridad y riesgos"
+    risk: xhigh
+    recommended_reasoning: xhigh
+    models:
+      openai: openai/gpt-5.6-sol
+      anthropic: openrouter/anthropic/claude-opus-4.8
+      opencode-go: opencode-go/qwen3.7-max
+
+# Reglas de enrutamiento generales
+routing_rules:
+  - if: "tool_calling_required AND model_does_not_support_tool_call"
+    then: "NO ASIGNAR. Buscar modelo alternativo con tool calling verificado."
+
+  - if: "reasoning > model_capability"
+    then: "Escalar a modelo superior o reducir complejidad de la tarea."
+
+  - if: "cost_exceeded AND low_risk"
+    then: "Usar modelo económico del mismo proveedor."
+
+  - if: "provider_unavailable"
+    then: "Usar fallback del mismo nivel de razonamiento."
+
+  - if: "two_consecutive_failures"
+    then: "Escalar al siguiente nivel de capacidad."
+
+  - if: "security_critical OR release"
+    then: "Usar modelo frontier. No delegar a económico."

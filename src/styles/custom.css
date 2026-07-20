@@ -1,0 +1,77 @@
+/* Gentle AI Mega Manual - Custom Styles */
+
+/* Niveles de lectura en frontmatter */
+.sl-markdown-content .level-badge {
+  display: inline-block;
+  padding: 0.2em 0.6em;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.level-1 {
+  background-color: var(--sl-color-green-600);
+  color: white;
+}
+
+.level-2 {
+  background-color: var(--sl-color-blue-600);
+  color: white;
+}
+
+.level-3 {
+  background-color: var(--sl-color-purple-600);
+  color: white;
+}
+
+/* Badges de verificación */
+.verified-badge {
+  display: inline-block;
+  padding: 0.15em 0.5em;
+  border-radius: 3px;
+  font-size: 0.75em;
+  font-weight: 600;
+}
+
+.verified-ok {
+  background-color: var(--sl-color-green-200);
+  color: var(--sl-color-green-1000);
+}
+
+.verified-pending {
+  background-color: var(--sl-color-orange-200);
+  color: var(--sl-color-orange-1000);
+}
+
+/* Tiempo estimado */
+.estimated-time {
+  font-size: 0.9em;
+  color: var(--sl-color-gray-500);
+  margin-bottom: 1em;
+}
+
+/* Disclaimer de funciones experimentales */
+.experimental-notice {
+  border-left: 4px solid var(--sl-color-orange-500);
+  background-color: var(--sl-color-orange-100);
+  padding: 0.75em 1em;
+  margin: 1em 0;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.9em;
+}
+
+/* Versiones verificadas */
+.verified-version {
+  font-size: 0.85em;
+  color: var(--sl-color-gray-500);
+  margin-top: 0.5em;
+}
+
+/* Tablas responsive */
+@media (max-width: 720px) {
+  .sl-markdown-content table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}

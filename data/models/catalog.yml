@@ -1,0 +1,290 @@
+# Catálogo de modelos — Datos estructurados
+# Fuente: opencode models (2026-07-20), verificación de commits
+# Última actualización: 2026-07-20
+
+models:
+  - id: openai/gpt-5.6-sol
+    provider: openai
+    class: frontier
+    reasoning: high
+    tool_call: true
+    context_window: grande
+    status: stable
+    notes: "Modelo más capaz OpenAI para arquitectura y decisiones críticas"
+
+  - id: openai/gpt-5.6-terra
+    provider: openai
+    class: balanced
+    reasoning: medium
+    tool_call: true
+    context_window: grande
+    status: stable
+    notes: "Balance capacidad/costo para implementación SDD"
+
+  - id: openai/gpt-5.6-luna
+    provider: openai
+    class: economic
+    reasoning: low
+    tool_call: true
+    context_window: medio
+    status: stable
+    notes: "Tareas mecánicas, formateo, archivo SDD"
+
+  - id: openai/gpt-5.6-sol-fast
+    provider: openai
+    class: frontier
+    reasoning: medium
+    tool_call: true
+    context_window: grande
+    status: stable
+    notes: "Variante rápida de Sol, menor latencia"
+
+  - id: openai/gpt-5.6-terra-fast
+    provider: openai
+    class: balanced
+    reasoning: low
+    tool_call: true
+    context_window: grande
+    status: stable
+    notes: "Variante rápida de Terra"
+
+  - id: openai/gpt-5.6-luna-fast
+    provider: openai
+    class: economic
+    reasoning: low
+    tool_call: true
+    context_window: medio
+    status: stable
+    notes: "Variante rápida de Luna"
+
+  - id: openai/gpt-5.5
+    provider: openai
+    class: powerful
+    reasoning: high
+    tool_call: true
+    context_window: grande
+    status: stable
+
+  - id: openai/gpt-5.5-fast
+    provider: openai
+    class: powerful
+    reasoning: medium
+    tool_call: true
+    context_window: grande
+    status: stable
+
+  - id: openai/gpt-5.4
+    provider: openai
+    class: powerful
+    reasoning: high
+    tool_call: true
+    context_window: grande
+    status: stable
+
+  - id: openai/gpt-5.4-mini
+    provider: openai
+    class: economic
+    reasoning: limited
+    tool_call: true
+    context_window: medio
+    status: stable
+
+  - id: openai/gpt-5.3-codex-spark
+    provider: openai
+    class: code-specialized
+    reasoning: limited
+    tool_call: true
+    context_window: medio
+    status: stable
+    notes: "Optimizado para Codex CLI"
+
+  - id: openrouter/anthropic/claude-opus-4.8
+    provider: anthropic
+    class: frontier
+    reasoning: xhigh
+    tool_call: true
+    context_window: 200K
+    status: stable
+    notes: "Máxima capacidad Anthropic"
+
+  - id: openrouter/anthropic/claude-opus-4.8-fast
+    provider: anthropic
+    class: frontier
+    reasoning: high
+    tool_call: true
+    context_window: 200K
+    status: stable
+
+  - id: openrouter/anthropic/claude-sonnet-5
+    provider: anthropic
+    class: powerful
+    reasoning: high
+    tool_call: true
+    context_window: 200K
+    status: stable
+    notes: "Balance capacidad/velocidad"
+
+  - id: openrouter/anthropic/claude-haiku-4.5
+    provider: anthropic
+    class: economic
+    reasoning: limited
+    tool_call: true
+    context_window: 200K
+    status: stable
+    notes: "Rápido y económico"
+
+  - id: openrouter/anthropic/claude-fable-5
+    provider: anthropic
+    class: creative
+    reasoning: high
+    tool_call: true
+    context_window: 200K
+    status: stable
+    notes: "Escritura creativa"
+
+  - id: openrouter/google/gemini-3.5-flash
+    provider: google
+    class: balanced
+    reasoning: medium
+    tool_call: true
+    context_window: grande
+    status: stable
+
+  - id: openrouter/google/gemini-3.1-pro-preview
+    provider: google
+    class: powerful
+    reasoning: high
+    tool_call: true
+    context_window: grande
+    status: preview
+    notes: "Preview, puede cambiar sin aviso"
+
+  - id: openrouter/google/gemini-3.1-flash-lite
+    provider: google
+    class: economic
+    reasoning: limited
+    tool_call: true
+    context_window: medio
+    status: stable
+
+  - id: openrouter/google/gemini-3-flash-preview
+    provider: google
+    class: balanced
+    reasoning: medium
+    tool_call: true
+    context_window: grande
+    status: preview
+
+  - id: opencode-go/deepseek-v4-pro
+    provider: opencode-go
+    class: balanced
+    reasoning: medium
+    tool_call: true
+    context_window: 128K
+    status: stable
+
+  - id: opencode-go/deepseek-v4-flash
+    provider: opencode-go
+    class: economic
+    reasoning: low
+    tool_call: true
+    context_window: 128K
+    status: stable
+
+  - id: opencode-go/kimi-k3
+    provider: opencode-go
+    class: powerful
+    reasoning: high
+    tool_call: true
+    context_window: 128K
+    status: stable
+    notes: "Fuerte en código, modelo Moonshot AI"
+
+  - id: opencode-go/kimi-k2.7-code
+    provider: opencode-go
+    class: code-specialized
+    reasoning: medium
+    tool_call: true
+    context_window: 128K
+    status: stable
+    notes: "Optimizado para código"
+
+  - id: opencode-go/glm-5.2
+    provider: opencode-go
+    class: powerful
+    reasoning: high
+    tool_call: true
+    context_window: 128K
+    status: stable
+
+  - id: opencode-go/glm-5.1
+    provider: opencode-go
+    class: balanced
+    reasoning: medium
+    tool_call: true
+    context_window: 128K
+    status: stable
+
+  - id: opencode-go/grok-4.5
+    provider: opencode-go
+    class: powerful
+    reasoning: high
+    tool_call: true
+    context_window: 128K
+    status: stable
+
+  - id: opencode-go/qwen3.7-max
+    provider: opencode-go
+    class: powerful
+    reasoning: high
+    tool_call: true
+    context_window: 128K
+    status: stable
+
+  - id: opencode-go/qwen3.7-plus
+    provider: opencode-go
+    class: balanced
+    reasoning: medium
+    tool_call: true
+    context_window: 128K
+    status: stable
+
+  - id: opencode-go/qwen3.6-plus
+    provider: opencode-go
+    class: balanced
+    reasoning: medium
+    tool_call: true
+    context_window: 128K
+    status: stable
+
+  - id: opencode-go/minimax-m3
+    provider: opencode-go
+    class: powerful
+    reasoning: high
+    tool_call: true
+    context_window: 128K
+    status: stable
+
+  - id: opencode-go/minimax-m2.7
+    provider: opencode-go
+    class: balanced
+    reasoning: medium
+    tool_call: true
+    context_window: 128K
+    status: stable
+
+  - id: opencode-go/mimo-v2.5-pro
+    provider: opencode-go
+    class: powerful
+    reasoning: high
+    tool_call: true
+    context_window: 128K
+    status: stable
+
+  - id: opencode-go/mimo-v2.5
+    provider: opencode-go
+    class: balanced
+    reasoning: medium
+    tool_call: true
+    context_window: 128K
+    status: stable
