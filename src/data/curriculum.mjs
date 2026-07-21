@@ -170,6 +170,7 @@ const MODULES = [
     summary: 'Cuando ya sabés lo que buscás pero necesitás el detalle exacto: sintaxis, parámetros, modelos, comandos.',
     lessons: [
       { slug: '20-referencia/01-referencia-rapida', title: 'Referencia rápida', level: 3, minutes: 'Consulta', outcome: 'Consultar cualquier comando del ecosistema sin buscar en capítulos separados' },
+      { slug: '20-referencia/03-versiones-y-compatibilidad', title: 'Versiones y compatibilidad', level: 2, minutes: '15 min', outcome: 'Consultar la evidencia fechada de versiones verificadas del ecosistema' },
     ],
   },
 ];
