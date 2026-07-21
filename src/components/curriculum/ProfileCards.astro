@@ -1,5 +1,6 @@
 ---
 import { profiles } from '../../data/curriculum.mjs';
+const base = import.meta.env.BASE_URL;
 ---
 
 <section aria-labelledby="rutas-title">
@@ -9,7 +10,7 @@ import { profiles } from '../../data/curriculum.mjs';
     {
       profiles.map((profile) => (
         <a
-          href={profile.routeIndex}
+          href={base.slice(0, -1) + profile.routeIndex}
           class="curriculum-card"
           data-profile-card
           aria-label={`Ruta: ${profile.title} — ${profile.outcome}`}

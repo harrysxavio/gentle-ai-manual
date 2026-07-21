@@ -1,6 +1,8 @@
 ---
 import { stages, modules, profiles } from '../../data/curriculum.mjs';
 
+const base = import.meta.env.BASE_URL;
+
 /** @type {Map<string, Array<typeof profiles[number]>>} */
 const lessonsByProfile = new Map();
 for (const profile of profiles) {
@@ -25,7 +27,7 @@ for (const profile of profiles) {
             stageModules.map((mod) => (
               <div class="ci-module">
                 <h4 class="ci-module-title">
-                  <a href={mod.entry}>{mod.id}. {mod.title}</a>
+                  <a href={base.slice(0, -1) + mod.entry}>{mod.id}. {mod.title}</a>
                 </h4>
                 <p class="ci-module-summary">{mod.summary}</p>
                 <ol class="ci-lessons">
@@ -33,7 +35,7 @@ for (const profile of profiles) {
                     const includedIn = lessonsByProfile.get(lesson.href) || [];
                     return (
                       <li class="ci-lesson">
-                        <a href={`${lesson.href}?ruta=indice`} class="ci-lesson-link">
+                        <a href={`${base.slice(0, -1)}${lesson.href}?ruta=indice`} class="ci-lesson-link">
                           <strong>{lesson.title}</strong>
                         </a>
                         <span class="ci-lesson-meta">
@@ -43,7 +45,7 @@ for (const profile of profiles) {
                         {includedIn.length > 0 && (
                           <div class="ci-lesson-profiles">
                             {includedIn.map((p) => (
-                              <a href={p.routeIndex} class="ci-profile-badge">{p.title}</a>
+                              <a href={base.slice(0, -1) + p.routeIndex} class="ci-profile-badge">{p.title}</a>
                             ))}
                           </div>
                         )}

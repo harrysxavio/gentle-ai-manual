@@ -1,5 +1,6 @@
 ---
 import { stages, modules } from '../../data/curriculum.mjs';
+const base = import.meta.env.BASE_URL;
 ---
 
 <section>
@@ -19,7 +20,7 @@ import { stages, modules } from '../../data/curriculum.mjs';
                 const maxLevel = Math.max(...mod.lessons.map((l) => l.level || 1));
                 return (
                   <li class="module-index-item">
-                    <a href={mod.entry} class="module-index-link" data-module-link>
+                    <a href={base.slice(0, -1) + mod.entry} class="module-index-link" data-module-link>
                       <span class="module-index-num">{mod.id}</span>
                       <span>{mod.title}</span>
                       <span class="module-index-meta">
@@ -38,7 +39,7 @@ import { stages, modules } from '../../data/curriculum.mjs';
       );
     })
   }
-  <a href="/00-empezar-aqui/02-indice-completo/" data-complete-index-link>
+  <a href={base.slice(0, -1) + "/00-empezar-aqui/02-indice-completo/"} data-complete-index-link>
     Ver índice completo →
   </a>
 </section>

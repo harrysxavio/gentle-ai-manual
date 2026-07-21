@@ -1,6 +1,7 @@
 ---
 import { getProfile, lessonsByHref } from '../../data/curriculum.mjs';
 
+const base = import.meta.env.BASE_URL;
 const { slug } = Astro.props;
 const profile = getProfile(slug);
 const totalMinutes = profile.lessonHrefs.reduce((sum, href) => {
@@ -28,7 +29,7 @@ const totalMinutes = profile.lessonHrefs.reduce((sum, href) => {
       if (!lesson) return null;
       return (
         <li>
-          <a href={`${href}?ruta=${slug}`} class="route-lesson-link">
+          <a href={`${base.slice(0, -1)}${href}?ruta=${slug}`} class="route-lesson-link">
             <span class="route-lesson-num">{i + 1}.</span>
             <div>
               <strong>{lesson.title}</strong>

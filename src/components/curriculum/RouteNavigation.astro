@@ -1,6 +1,8 @@
 ---
 import { profiles, lessonsByHref } from '../../data/curriculum.mjs';
 
+const base = import.meta.env.BASE_URL;
+
 const routeData = {};
 for (const profile of profiles) {
   routeData[profile.slug] = profile.lessonHrefs.map((href, i) => {
@@ -13,7 +15,7 @@ for (const profile of profiles) {
 <nav aria-label="Navegación de la ruta de aprendizaje" id="route-navigation">
   <noscript>
     <p style="text-align:center">
-      <a href="/gentle-ai-manual/00-empezar-aqui/02-indice-completo/">Ver índice completo del manual</a>
+      <a href={`${base}00-empezar-aqui/02-indice-completo/`}>Ver índice completo del manual</a>
     </p>
   </noscript>
   <div id="route-nav-content" style="display:none">
@@ -22,9 +24,9 @@ for (const profile of profiles) {
 </nav>
 
 <script id="route-navigation-data" type="application/json">
-  {JSON.stringify(routeData)}
+  {"base":"{base}","routes":{JSON.stringify(routeData)}}
 </script>
-<script src="/gentle-ai-manual/scripts/route-navigation.js" defer></script>
+<script src={`${base}scripts/route-navigation.js`} defer></script>
 
 <style>
 #route-navigation {
