@@ -41,8 +41,8 @@ const firstHref = profile.lessonHrefs[0];
     </a>
   </header>
 
-  <div class="route-page__overview">
-    <div class="route-overview-item">
+  <div class="route-page__overview" data-route-overview>
+    <div class="route-overview-item" data-route-stat>
       <strong>Ideal para</strong>
       <span>{profile.summary}</span>
     </div>
@@ -88,7 +88,7 @@ const firstHref = profile.lessonHrefs[0];
 .route-page { max-width: 48rem; }
 .route-page__header { margin-bottom: 2em; }
 .route-page__header h1 { font-size: 1.8em; margin-bottom: 0.3em; }
-.route-page__summary { font-size: 1.05em; color: var(--sl-color-gray-500); max-width: 36rem; }
+.route-page__summary { font-size: 1.05em; color: var(--sl-color-gray-3); max-width: 36rem; }
 .route-page__start-cta {
   display: inline-block;
   margin-top: 1em;
@@ -115,13 +115,13 @@ const firstHref = profile.lessonHrefs[0];
 }
 .route-overview-item {
   padding: 0.8em 1em;
-  border: 1px solid var(--sl-color-gray-200);
+  border: 1px solid var(--sl-color-gray-5);
   border-radius: 6px;
-  background: var(--sl-color-gray-50);
+  background: var(--sl-color-gray-6);
 }
 [data-theme="dark"] .route-overview-item {
-  border-color: var(--sl-color-gray-800);
-  background: var(--sl-color-gray-900);
+  border-color: var(--sl-color-gray-5);
+  background: var(--sl-color-gray-6);
 }
 .route-overview-item strong {
   display: block;
@@ -129,12 +129,12 @@ const firstHref = profile.lessonHrefs[0];
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  color: var(--sl-color-gray-500);
+  color: var(--sl-color-gray-3);
   margin-bottom: 0.3em;
 }
 .route-overview-item span { font-size: 0.92em; }
 
-.route-page__count { color: var(--sl-color-gray-500); margin-bottom: 1.5em; }
+.route-page__count { color: var(--sl-color-gray-3); margin-bottom: 1.5em; }
 
 /* Timeline */
 .timeline {
@@ -150,10 +150,10 @@ const firstHref = profile.lessonHrefs[0];
   top: 0;
   bottom: 0;
   width: 2px;
-  background: var(--sl-color-gray-200);
+  background: var(--sl-color-gray-5);
 }
 [data-theme="dark"] .timeline::before {
-  background: var(--sl-color-gray-800);
+  background: var(--sl-color-gray-5);
 }
 .timeline__step {
   display: flex;
@@ -186,7 +186,7 @@ const firstHref = profile.lessonHrefs[0];
 }
 .timeline__outcome {
   font-size: 0.82em;
-  color: var(--sl-color-gray-500);
+  color: var(--sl-color-gray-3);
   margin: 0.2em 0 0.35em;
 }
 .timeline__meta {
@@ -194,7 +194,7 @@ const firstHref = profile.lessonHrefs[0];
   gap: 0.5em;
   align-items: center;
   font-size: 0.78em;
-  color: var(--sl-color-gray-500);
+  color: var(--sl-color-gray-3);
 }
 
 @media (max-width: 48rem) {
