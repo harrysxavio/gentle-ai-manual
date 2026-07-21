@@ -11,6 +11,9 @@ jobs:
   quality:
     name: Quality checks
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
     steps:
       - uses: actions/checkout@v4
       
@@ -20,15 +23,21 @@ jobs:
           cache: npm
       
       - run: npm ci
-      
-      - name: Markdown lint
-        run: npx markdownlint-cli src/content/docs
-      
-      - name: Build site
-        run: npm run build
+
+      - name: Install Chromium for Mermaid rendering
+        run: npx playwright install --with-deps chromium
+
+      - name: Validate course
+        run: npm run validate
+
+      - uses: actions/configure-pages@v4
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/
 
   deploy:
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [quality]
     runs-on: ubuntu-latest
     permissions:
@@ -38,19 +47,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      
-      - run: npm ci
-      - run: npm run build
-      
-      - uses: actions/configure-pages@v4
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist/
       - id: deployment
         uses: actions/deploy-pages@v4

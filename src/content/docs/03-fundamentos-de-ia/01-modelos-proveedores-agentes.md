@@ -355,4 +355,4 @@ Engram es un servidor MCP. El agente tiene las tools `mem_save` y `mem_search` c
 
 ---
 
-> **Siguiente capítulo**: [Tokens y contexto](02-tokens-contexto.md) — entendé cómo los modelos procesan texto, qué son los tokens, y por qué el contexto es el recurso más valioso.
+> **Siguiente capítulo**: [Tokens y contexto](../02-tokens-contexto/) — entendé cómo los modelos procesan texto, qué son los tokens, y por qué el contexto es el recurso más valioso.

@@ -350,4 +350,4 @@ Las tools nativas del host (read, write, bash, grep) son específicas de OpenCod
 
 ---
 
-> **Siguiente capítulo**: [Agentes y orquestadores](04-agentes-orquestadores.md) — entendé cómo los agentes se organizan en sistemas multiagente con orquestación SDD.
+> **Siguiente capítulo**: [Agentes y orquestadores](../04-agentes-orquestadores/) — entendé cómo los agentes se organizan en sistemas multiagente con orquestación SDD.

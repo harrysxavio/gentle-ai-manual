@@ -416,7 +416,7 @@ flowchart LR
     A[Inicio de sesión] --> B[Trabajo activo]
     B --> C{¿Cierre con summary?}
     C -->|Sí| D[Sesión cerrada]
-    C -->|No (crash)| E[Sesión huérfana]
+    C -->|"No (crash)"| E[Sesión huérfana]
     E --> F[Detectada por mem_doctor]
     F --> G[Cierre forzado]
     G --> D

@@ -195,13 +195,17 @@ graph LR
     subgraph MAL["🚫 MAL - Mismo modelo"]
         A1[Juez A] ---|GPT-4o| M1[Mismo proveedor]
         B1[Juez B] ---|GPT-4o| M1
-        Note over A1,B1: Si GPT-4o tiene un sesgo,<br>ambos jueces lo tienen
+        N1["Si GPT-4o tiene un sesgo,<br>ambos jueces lo tienen"]
+        A1 -.- N1
+        B1 -.- N1
     end
     
     subgraph BIEN["✅ BIEN - Modelos diferentes"]
         A2[Juez A] ---|GPT-5.6 Sol| M2[OpenAI]
         B2[Juez B] ---|Claude Opus 4.8| M3[Anthropic]
-        Note over A2,B2: Sesgos diferentes,<br>perspectivas complementarias
+        N2["Sesgos diferentes,<br>perspectivas complementarias"]
+        A2 -.- N2
+        B2 -.- N2
     end
 ```
 

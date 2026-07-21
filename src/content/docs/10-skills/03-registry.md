@@ -268,7 +268,8 @@ flowchart LR
     MP --> INJECT
     CUSTOM --> INJECT
     
-    Note over INJECT: Los de proyecto<br>van primero
+    NOTE["Los de proyecto<br>van primero"]
+    INJECT -.- NOTE
 ```
 
 1. **Primero**: skills del proyecto (`<proyecto>/.opencode/skills/`)

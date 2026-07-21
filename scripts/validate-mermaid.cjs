@@ -1,63 +1,57 @@
-// validate-mermaid.cjs
-// Validates Mermaid diagram syntax in Markdown files
-// Usage: node scripts/validate-mermaid.cjs
-
 const fs = require('fs');
 const path = require('path');
+const { JSDOM } = require('jsdom');
+const {
+  extractMermaidBlocks,
+  validateMermaidBlocks,
+} = require('./lib/mermaid-contract.cjs');
 
-const contentDir = path.join(__dirname, '..', 'src', 'content', 'docs');
-const mermaidRegex = /```mermaid\n([\s\S]*?)```/g;
+const rootDir = path.join(__dirname, '..');
+const contentDir = path.join(rootDir, 'src', 'content', 'docs');
 
-let errors = 0;
+function collectContentFiles(directory) {
+  const files = [];
 
-function walk(dir) {
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-  for (const entry of entries) {
-    const full = path.join(dir, entry.name);
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    const fullPath = path.join(directory, entry.name);
+
     if (entry.isDirectory()) {
-      walk(full);
-    } else if (entry.name.endsWith('.md')) {
-      validateFile(full);
+      files.push(...collectContentFiles(fullPath));
+    } else if (entry.isFile() && ['.md', '.mdx'].includes(path.extname(entry.name))) {
+      files.push(fullPath);
     }
   }
+
+  return files;
 }
 
-function validateFile(filepath) {
-  const content = fs.readFileSync(filepath, 'utf-8');
-  let match;
-  let lineErrors = 0;
-  
-  while ((match = mermaidRegex.exec(content)) !== null) {
-    const diagram = match[1].trim();
-    if (!diagram) {
-      const lineNum = content.substring(0, match.index).split('\n').length;
-      console.log(`⚠️  ${path.relative(__dirname, filepath)}:${lineNum} - Empty mermaid block`);
-      lineErrors++;
-    }
-    // Basic structural checks
-    if (!diagram.startsWith('graph') && !diagram.startsWith('sequenceDiagram') && 
-        !diagram.startsWith('classDiagram') && !diagram.startsWith('stateDiagram') &&
-        !diagram.startsWith('flowchart') && !diagram.startsWith('erDiagram') &&
-        !diagram.startsWith('gantt') && !diagram.startsWith('pie') &&
-        !diagram.startsWith('journey') && !diagram.startsWith('mindmap') &&
-        !diagram.startsWith('timeline') && !diagram.startsWith('gitgraph') &&
-        !diagram.startsWith('quadrantChart') && !diagram.startsWith('requirementDiagram')) {
-      const lineNum = content.substring(0, match.index).split('\n').length;
-      console.log(`⚠️  ${path.relative(__dirname, filepath)}:${lineNum} - Unknown diagram type`);
-      lineErrors++;
-    }
+async function main() {
+  const dom = new JSDOM('<!doctype html>');
+  globalThis.window = dom.window;
+  globalThis.document = dom.window.document;
+  globalThis.navigator = dom.window.navigator;
+  const mermaid = await import('mermaid');
+  const blocks = collectContentFiles(contentDir).flatMap((file) => {
+    const source = path.relative(rootDir, file).replaceAll(path.sep, '/');
+    return extractMermaidBlocks(fs.readFileSync(file, 'utf8'), source);
+  });
+  const errors = await validateMermaidBlocks(
+    blocks,
+    (diagram) => mermaid.default.parse(diagram),
+  );
+
+  if (errors.length > 0) {
+    console.error(errors.join('\n'));
+    dom.window.close();
+    process.exitCode = 1;
+    return;
   }
-  
-  if (lineErrors > 0) {
-    errors += lineErrors;
-  }
+
+  console.log(`Parsed ${blocks.length} Mermaid diagrams.`);
+  dom.window.close();
 }
 
-walk(contentDir);
-
-if (errors > 0) {
-  console.log(`\n❌ Found ${errors} potential Mermaid issues`);
-  process.exit(1);
-} else {
-  console.log('✅ All Mermaid diagrams look valid');
-}
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
