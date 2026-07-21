@@ -13,9 +13,10 @@
     "check-links": "astro build",
     "check-mermaid": "node scripts/validate-mermaid.cjs",
     "check-models": "node scripts/validate-models.cjs",
+    "validate:curriculum": "node tests/curriculum-contract.test.cjs",
     "check-site": "node scripts/validate-built-site.cjs --base /gentle-ai-manual/ dist",
     "test": "node tests/run.cjs && node --test",
-    "validate": "npm run check && npm run lint && npm run check-mermaid && npm run check-models && npm run test && npm run build && npm run check-site"
+    "validate": "npm run check && npm run lint && npm run check-mermaid && npm run check-models && npm run validate:curriculum && npm run test && npm run build && npm run check-site"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.0",

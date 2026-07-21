@@ -1,0 +1,35 @@
+---
+import { profiles } from '../../data/curriculum.mjs';
+const base = import.meta.env.BASE_URL;
+---
+
+<section aria-labelledby="rutas-title">
+  <h2 id="rutas-title">🧭 Rutas de aprendizaje</h2>
+  <p class="landing-section-desc">Elegí tu punto de partida según tu perfil:</p>
+  <div class="curriculum-grid">
+    {
+      profiles.map((profile) => (
+        <a
+          href={base.slice(0, -1) + profile.routeIndex}
+          class="curriculum-card"
+          data-profile-card
+          aria-label={`Ruta: ${profile.title} — ${profile.outcome}`}
+        >
+          <h3>{profile.title}</h3>
+          <p>{profile.summary}</p>
+          <dl>
+            <div>
+              <dt>Lecciones</dt>
+              <dd>{profile.lessonHrefs.length}</dd>
+            </div>
+            <div>
+              <dt>Resultado</dt>
+              <dd>{profile.outcome}</dd>
+            </div>
+          </dl>
+          <span aria-hidden="true">Ver índice de la ruta →</span>
+        </a>
+      ))
+    }
+  </div>
+</section>

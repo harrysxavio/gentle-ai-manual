@@ -1,0 +1,17 @@
+---
+import DefaultFooter from '@astrojs/starlight/components/Footer.astro';
+import RouteNavigation from './RouteNavigation.astro';
+---
+
+<div class="curriculum-route-nav-wrapper">
+  <RouteNavigation />
+</div>
+<DefaultFooter {...Astro.props} />
+
+<style>
+  .curriculum-route-nav-wrapper {
+    max-width: var(--sl-content-width, 50rem);
+    margin: 0 auto;
+    padding: 0 var(--sl-content-padding-x, 1rem);
+  }
+</style>

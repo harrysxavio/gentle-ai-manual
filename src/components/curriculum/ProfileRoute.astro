@@ -1,0 +1,70 @@
+---
+import { getProfile, lessonsByHref } from '../../data/curriculum.mjs';
+
+const base = import.meta.env.BASE_URL;
+const { slug } = Astro.props;
+const profile = getProfile(slug);
+const totalMinutes = profile.lessonHrefs.reduce((sum, href) => {
+  const lesson = lessonsByHref.get(href);
+  const mins = lesson?.minutes ? parseInt(lesson.minutes, 10) : 0;
+  return sum + (Number.isFinite(mins) ? mins : 0);
+}, 0);
+---
+
+<article>
+  <h1>{profile.title}</h1>
+  <p class="route-summary">{profile.summary}</p>
+
+  <dl class="route-meta">
+    <div><dt>Conocimientos previos</dt><dd>{profile.prerequisite}</dd></div>
+    <div><dt>Resultado</dt><dd>{profile.outcome}</dd></div>
+    <div><dt>Clases</dt><dd>{profile.lessonHrefs.length}</dd></div>
+    <div><dt>Tiempo estimado</dt><dd>{totalMinutes} min</dd></div>
+  </dl>
+
+  <h2>Clases en esta ruta</h2>
+  <ol class="route-lessons">
+    {profile.lessonHrefs.map((href, i) => {
+      const lesson = lessonsByHref.get(href);
+      if (!lesson) return null;
+      return (
+        <li>
+          <a href={`${base.slice(0, -1)}${href}?ruta=${slug}`} class="route-lesson-link">
+            <span class="route-lesson-num">{i + 1}.</span>
+            <div>
+              <strong>{lesson.title}</strong>
+              {lesson.outcome && <p>{lesson.outcome}</p>}
+            </div>
+            <span class="route-lesson-meta">
+              Nivel {lesson.level} · {lesson.minutes}
+            </span>
+          </a>
+        </li>
+      );
+    })}
+  </ol>
+</article>
+
+<style>
+.route-summary { font-size: 1.05em; color: var(--sl-color-gray-500); margin-bottom: 1em; }
+.route-meta { display: flex; gap: 1.5em; flex-wrap: wrap; margin-bottom: 1.5em; }
+.route-meta dt { font-weight: 600; font-size: 0.85em; color: var(--sl-color-gray-500); }
+.route-meta dd { margin: 0; }
+.route-lessons { list-style: none; padding: 0; }
+.route-lesson-link {
+  display: flex; gap: 0.75em; align-items: flex-start;
+  padding: 0.6em 0.75em; border-radius: 6px;
+  text-decoration: none; color: var(--sl-color-text);
+  transition: background 0.15s;
+}
+.route-lesson-link:hover { background: var(--sl-color-gray-100); }
+[data-theme="dark"] .route-lesson-link:hover { background: var(--sl-color-gray-800); }
+.route-lesson-num { font-weight: 700; color: var(--sl-color-accent); min-width: 2em; }
+.route-lesson-link strong { display: block; font-size: 0.95em; }
+.route-lesson-link p { font-size: 0.82em; color: var(--sl-color-gray-500); margin: 0.15em 0 0; }
+.route-lesson-meta { font-size: 0.78em; color: var(--sl-color-gray-400); white-space: nowrap; margin-left: auto; }
+@media (max-width: 48rem) {
+  .route-lesson-meta { display: none; }
+  .route-lesson-link { flex-wrap: wrap; }
+}
+</style>

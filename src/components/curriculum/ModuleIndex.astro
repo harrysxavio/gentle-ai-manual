@@ -1,0 +1,45 @@
+---
+import { stages, modules } from '../../data/curriculum.mjs';
+const base = import.meta.env.BASE_URL;
+---
+
+<section>
+  <h2>📚 Módulos</h2>
+  {
+    stages.map((stage) => {
+      const stageModules = modules.filter((m) => stage.moduleIds.includes(m.id));
+      if (stageModules.length === 0) return null;
+      return (
+        <div class="module-index-stage">
+          <h3>
+            {stage.label} — {stage.question}
+          </h3>
+          <ul class="module-index-list">
+            {
+              stageModules.map((mod) => {
+                const maxLevel = Math.max(...mod.lessons.map((l) => l.level || 1));
+                return (
+                  <li class="module-index-item">
+                    <a href={base.slice(0, -1) + mod.entry} class="module-index-link" data-module-link>
+                      <span class="module-index-num">{mod.id}</span>
+                      <span>{mod.title}</span>
+                      <span class="module-index-meta">
+                        <span class={`module-badge level-${maxLevel}`}>
+                          Nivel {maxLevel}
+                        </span>
+                        {' '}{mod.lessons.length} lecciones
+                      </span>
+                    </a>
+                  </li>
+                );
+              })
+            }
+          </ul>
+        </div>
+      );
+    })
+  }
+  <a href={base.slice(0, -1) + "/00-empezar-aqui/02-indice-completo/"} data-complete-index-link>
+    Ver índice completo →
+  </a>
+</section>

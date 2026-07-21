@@ -52,5 +52,17 @@ console.log('Verifying frontmatter delimiters...');
   }
 })(DOCS);
 
+// 4. Curriculum contract
+console.log('Checking curriculum contract...');
+try {
+  const { loadCurriculum, validateCurriculum } = require('../scripts/lib/curriculum-contract.cjs');
+  const curriculum = loadCurriculum();
+  const currErrors = validateCurriculum(curriculum);
+  currErrors.forEach(e => err('Curriculum: ' + e));
+  if (curriculum.profilesCount !== 8) err('Curriculum: expected 8 profiles, got ' + curriculum.profilesCount);
+} catch (e) {
+  err('Curriculum contract threw: ' + e.message);
+}
+
 if (errors) { console.log('\n' + errors + ' error(s) found'); process.exit(1); }
 console.log('All checks passed');
