@@ -24,11 +24,31 @@ jobs:
       
       - run: npm ci
 
-      - name: Install Chromium for Mermaid rendering
+      - name: Install Chromium for Playwright and Mermaid
         run: npx playwright install --with-deps chromium
 
-      - name: Validate course
+      - name: Validate course (static + build)
         run: npm run validate
+
+      - name: Start preview server for visual tests
+        run: |
+          npx astro preview --port 4321 &
+          PREVIEW_PID=$!
+          # Wait for server to be ready
+          for i in $(seq 1 30); do
+            if curl -s -o /dev/null http://localhost:4321/gentle-ai-manual/; then
+              echo "Preview server ready after ${i}s"
+              break
+            fi
+            sleep 1
+          done
+          # Run visual tests
+          node tests/curriculum-visual.cjs
+          EXIT_CODE=$?
+          # Stop server even if tests fail
+          kill $PREVIEW_PID 2>/dev/null || true
+          wait $PREVIEW_PID 2>/dev/null || true
+          exit $EXIT_CODE
 
       - uses: actions/configure-pages@v4
 
