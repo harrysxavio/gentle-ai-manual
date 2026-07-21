@@ -1,15 +1,12 @@
 ---
-// @ts-nocheck — js-yaml load returns unknown type
-import { readFileSync } from 'node:fs';
 import { load } from 'js-yaml';
-import { fileURLToPath } from 'node:url';
-import path from 'node:path';
 import { modules } from '../../data/curriculum.mjs';
+import glossarySource from '../../../data/terminology/glossary.yml?raw';
+import { parseGlossary, type GlossaryEntry } from '../../lib/glossary';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ymlPath = path.resolve(__dirname, '../../../data/terminology/glossary.yml');
-const raw = load(readFileSync(ymlPath, 'utf-8'));
-const terms = (raw && raw.terms) || [];
+const parsed = load(glossarySource);
+const document = parseGlossary(parsed, 'data/terminology/glossary.yml');
+const terms: GlossaryEntry[] = document.terms;
 const base = import.meta.env.BASE_URL;
 
 function slugify(text) {
