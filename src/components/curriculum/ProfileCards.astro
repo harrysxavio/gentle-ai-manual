@@ -1,35 +1,69 @@
 ---
 import { profiles } from '../../data/curriculum.mjs';
 const base = import.meta.env.BASE_URL;
+
+function formatDuration(minutes: number): string {
+  if (!minutes || minutes <= 0) return '';
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  if (h === 0) return `${m} min`;
+  if (m === 0) return `${h} h`;
+  return `${h} h ${m} min`;
+}
+
+/* Estimated durations: ~15 min per lesson as a conservative average */
+const profileDurations: Record<string, number> = {};
+for (const profile of profiles) {
+  profileDurations[profile.slug] = profile.lessonHrefs.length * 15;
+}
+
+const RECOMMENDED = 'principiante-total';
 ---
 
 <section aria-labelledby="rutas-title">
   <h2 id="rutas-title">🧭 Rutas de aprendizaje</h2>
-  <p class="landing-section-desc">Elegí tu punto de partida según tu perfil:</p>
+  <p class="route-intro">No necesitás recorrer todo el manual en orden. Elegí la ruta que mejor representa tu punto de partida o tu objetivo actual.</p>
+  
+  <p class="route-help">
+    ¿No sabés cuál elegir?{' '}
+    <a href={`${base}00-empezar-aqui/rutas/principiante-total/`}>Comenzá con Principiante total</a>.
+  </p>
+
   <div class="curriculum-grid">
-    {
-      profiles.map((profile) => (
-        <a
-          href={base.slice(0, -1) + profile.routeIndex}
-          class="curriculum-card"
-          data-profile-card
-          aria-label={`Ruta: ${profile.title} — ${profile.outcome}`}
-        >
+    {profiles.map((profile, i) => (
+      <a
+        href={base.slice(0, -1) + profile.routeIndex}
+        class={`route-card${profile.slug === RECOMMENDED ? ' route-card--recommended' : ''}`}
+        data-profile-card
+        aria-label={`Ruta ${String(i + 1).padStart(2, '0')}: ${profile.title}`}
+      >
+        <div class="route-card__header">
+          <span class="route-card__number">Ruta {String(i + 1).padStart(2, '0')}</span>
+          {profile.slug === RECOMMENDED && (
+            <span class="route-card__badge">Recomendada para empezar</span>
+          )}
+        </div>
+
+        <div class="route-card__body">
           <h3>{profile.title}</h3>
           <p>{profile.summary}</p>
-          <dl>
-            <div>
-              <dt>Lecciones</dt>
-              <dd>{profile.lessonHrefs.length}</dd>
-            </div>
-            <div>
-              <dt>Resultado</dt>
-              <dd>{profile.outcome}</dd>
-            </div>
-          </dl>
-          <span aria-hidden="true">Ver índice de la ruta →</span>
-        </a>
-      ))
-    }
+        </div>
+
+        <div class="route-card__meta">
+          <span>{profile.lessonHrefs.length} clases</span>
+          <span>~{formatDuration(profileDurations[profile.slug])}</span>
+          <span class="level-badge level-1">Nivel inicial</span>
+        </div>
+
+        <div class="route-card__outcome">
+          <strong>Al terminar podrás:</strong>
+          <span>{profile.outcome}</span>
+        </div>
+
+        <span class="route-card__cta" aria-hidden="true">
+          Ver recorrido completo →
+        </span>
+      </a>
+    ))}
   </div>
 </section>

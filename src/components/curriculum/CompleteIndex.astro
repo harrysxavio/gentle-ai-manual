@@ -63,27 +63,85 @@ for (const profile of profiles) {
 </section>
 
 <style>
-.ci-stage { margin-bottom: 2em; }
-.ci-stage-title { font-size: 1.1em; margin-bottom: 0.75em; color: var(--sl-color-accent); }
-.ci-module { margin-bottom: 1.25em; padding-left: 0.75em; border-left: 3px solid var(--sl-color-gray-200); }
+.ci-stage {
+  margin-bottom: 2em;
+  padding: 1em 1.25em;
+  border: 1px solid var(--sl-color-gray-200);
+  border-radius: 8px;
+  background: var(--sl-color-gray-50);
+}
+[data-theme="dark"] .ci-stage {
+  border-color: var(--sl-color-gray-800);
+  background: var(--sl-color-gray-950);
+}
+
+.ci-stage-title {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 0 0 0.75em;
+  color: var(--sl-color-accent);
+}
+
+.ci-module {
+  margin-bottom: 1.25em;
+  padding-left: 0.75em;
+  border-left: 3px solid var(--sl-color-gray-200);
+}
+.ci-module:last-child { margin-bottom: 0; }
 [data-theme="dark"] .ci-module { border-left-color: var(--sl-color-gray-700); }
+
 .ci-module-title { margin: 0 0 0.25em; font-size: 1em; }
 .ci-module-title a { text-decoration: none; color: var(--sl-color-text); }
-.ci-module-title a:hover { text-decoration: underline; }
+.ci-module-title a:hover { text-decoration: underline; color: var(--sl-color-accent); }
+
 .ci-module-summary { font-size: 0.85em; color: var(--sl-color-gray-500); margin: 0 0 0.5em; }
+
 .ci-lessons { list-style: none; padding: 0; margin: 0; }
-.ci-lesson { padding: 0.35em 0; border-bottom: 1px solid var(--sl-color-gray-100); }
+
+.ci-lesson {
+  padding: 0.4em 0.5em;
+  border-bottom: 1px solid var(--sl-color-gray-100);
+  border-radius: 4px;
+}
 [data-theme="dark"] .ci-lesson { border-bottom-color: var(--sl-color-gray-800); }
 .ci-lesson:last-child { border-bottom: none; }
+.ci-lesson:hover {
+  background: var(--sl-color-gray-100);
+}
+[data-theme="dark"] .ci-lesson:hover {
+  background: var(--sl-color-gray-800);
+}
+
 .ci-lesson-link { text-decoration: none; color: var(--sl-color-text); }
 .ci-lesson-link:hover { text-decoration: underline; }
+.ci-lesson-link:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 1px;
+}
+
 .ci-lesson-meta { font-size: 0.8em; color: var(--sl-color-gray-400); margin-left: 0.5em; }
+
 .ci-lesson-outcome { font-size: 0.82em; color: var(--sl-color-gray-500); margin: 0.15em 0 0; }
-.ci-lesson-profiles { display: inline-flex; gap: 0.3em; flex-wrap: wrap; margin-top: 0.25em; }
+
+.ci-lesson-profiles {
+  display: inline-flex;
+  gap: 0.3em;
+  flex-wrap: wrap;
+  margin-top: 0.25em;
+}
+
 .ci-profile-badge {
-  font-size: 0.72em; padding: 0.15em 0.4em; border-radius: 3px;
-  background: var(--sl-color-accent-low); color: var(--sl-color-text-accent);
-  text-decoration: none; white-space: nowrap;
+  font-size: 0.72em;
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  background: var(--sl-color-accent-low);
+  color: var(--sl-color-accent);
+  text-decoration: none;
+  white-space: nowrap;
 }
 .ci-profile-badge:hover { filter: brightness(1.15); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ci-lesson { transition: none; }
+}
 </style>

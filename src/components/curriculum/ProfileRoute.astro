@@ -4,67 +4,204 @@ import { getProfile, lessonsByHref } from '../../data/curriculum.mjs';
 const base = import.meta.env.BASE_URL;
 const { slug } = Astro.props;
 const profile = getProfile(slug);
-const totalMinutes = profile.lessonHrefs.reduce((sum, href) => {
+
+/* Build lesson details with accurate minutes */
+let totalMin = 0;
+const lessonDetails = profile.lessonHrefs.map((href) => {
   const lesson = lessonsByHref.get(href);
-  const mins = lesson?.minutes ? parseInt(lesson.minutes, 10) : 0;
-  return sum + (Number.isFinite(mins) ? mins : 0);
-}, 0);
+  const mins = lesson?.minutes ? parseInt(lesson.minutes, 10) : 15;
+  totalMin += Number.isFinite(mins) ? mins : 15;
+  return {
+    href,
+    title: lesson?.title || href,
+    outcome: lesson?.outcome || '',
+    level: lesson?.level || 1,
+    minutes: mins,
+  };
+});
+
+function formatDuration(m: number): string {
+  const h = Math.floor(m / 60);
+  const min = m % 60;
+  if (h === 0) return `${min} min`;
+  if (min === 0) return `${h} h`;
+  return `${h} h ${min} min`;
+}
+
+const firstHref = profile.lessonHrefs[0];
 ---
 
-<article>
-  <h1>{profile.title}</h1>
-  <p class="route-summary">{profile.summary}</p>
+<article class="route-page">
+  <header class="route-page__header">
+    <h1>{profile.title}</h1>
+    <p class="route-page__summary">{profile.summary}</p>
+    
+    <a href={`${base.slice(0, -1)}${firstHref}?ruta=${slug}`} class="route-page__start-cta">
+      Comenzar esta ruta →
+    </a>
+  </header>
 
-  <dl class="route-meta">
-    <div><dt>Conocimientos previos</dt><dd>{profile.prerequisite}</dd></div>
-    <div><dt>Resultado</dt><dd>{profile.outcome}</dd></div>
-    <div><dt>Clases</dt><dd>{profile.lessonHrefs.length}</dd></div>
-    <div><dt>Tiempo estimado</dt><dd>{totalMinutes} min</dd></div>
-  </dl>
+  <div class="route-page__overview">
+    <div class="route-overview-item">
+      <strong>Ideal para</strong>
+      <span>{profile.summary}</span>
+    </div>
+    <div class="route-overview-item">
+      <strong>Conocimientos previos</strong>
+      <span>{profile.prerequisite}</span>
+    </div>
+    <div class="route-overview-item">
+      <strong>Tiempo estimado</strong>
+      <span>{formatDuration(totalMin)}</span>
+    </div>
+    <div class="route-overview-item">
+      <strong>Resultado final</strong>
+      <span>{profile.outcome}</span>
+    </div>
+  </div>
 
-  <h2>Clases en esta ruta</h2>
-  <ol class="route-lessons">
-    {profile.lessonHrefs.map((href, i) => {
-      const lesson = lessonsByHref.get(href);
-      if (!lesson) return null;
-      return (
-        <li>
-          <a href={`${base.slice(0, -1)}${href}?ruta=${slug}`} class="route-lesson-link">
-            <span class="route-lesson-num">{i + 1}.</span>
-            <div>
+  <section class="route-page__lessons">
+    <h2>Clases en esta ruta</h2>
+    <p class="route-page__count">{lessonDetails.length} clases — {formatDuration(totalMin)} en total</p>
+    
+    <ol class="timeline">
+      {lessonDetails.map((lesson, i) => (
+        <li class="timeline__step">
+          <span class="timeline__marker" aria-hidden="true">Paso {i + 1}</span>
+          <div class="timeline__content">
+            <a href={`${base.slice(0, -1)}${lesson.href}?ruta=${slug}`} class="timeline__link">
               <strong>{lesson.title}</strong>
-              {lesson.outcome && <p>{lesson.outcome}</p>}
+            </a>
+            {lesson.outcome && <p class="timeline__outcome">{lesson.outcome}</p>}
+            <div class="timeline__meta">
+              <span class={`level-badge level-${lesson.level}`}>Nivel {lesson.level}</span>
+              <span>{lesson.minutes} min</span>
             </div>
-            <span class="route-lesson-meta">
-              Nivel {lesson.level} · {lesson.minutes}
-            </span>
-          </a>
+          </div>
         </li>
-      );
-    })}
-  </ol>
+      ))}
+    </ol>
+  </section>
 </article>
 
 <style>
-.route-summary { font-size: 1.05em; color: var(--sl-color-gray-500); margin-bottom: 1em; }
-.route-meta { display: flex; gap: 1.5em; flex-wrap: wrap; margin-bottom: 1.5em; }
-.route-meta dt { font-weight: 600; font-size: 0.85em; color: var(--sl-color-gray-500); }
-.route-meta dd { margin: 0; }
-.route-lessons { list-style: none; padding: 0; }
-.route-lesson-link {
-  display: flex; gap: 0.75em; align-items: flex-start;
-  padding: 0.6em 0.75em; border-radius: 6px;
-  text-decoration: none; color: var(--sl-color-text);
-  transition: background 0.15s;
+.route-page { max-width: 48rem; }
+.route-page__header { margin-bottom: 2em; }
+.route-page__header h1 { font-size: 1.8em; margin-bottom: 0.3em; }
+.route-page__summary { font-size: 1.05em; color: var(--sl-color-gray-500); max-width: 36rem; }
+.route-page__start-cta {
+  display: inline-block;
+  margin-top: 1em;
+  padding: 0.6em 1.5em;
+  background: var(--sl-color-accent);
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95em;
+  transition: filter 0.15s;
 }
-.route-lesson-link:hover { background: var(--sl-color-gray-100); }
-[data-theme="dark"] .route-lesson-link:hover { background: var(--sl-color-gray-800); }
-.route-lesson-num { font-weight: 700; color: var(--sl-color-accent); min-width: 2em; }
-.route-lesson-link strong { display: block; font-size: 0.95em; }
-.route-lesson-link p { font-size: 0.82em; color: var(--sl-color-gray-500); margin: 0.15em 0 0; }
-.route-lesson-meta { font-size: 0.78em; color: var(--sl-color-gray-400); white-space: nowrap; margin-left: auto; }
+.route-page__start-cta:hover { filter: brightness(1.1); }
+.route-page__start-cta:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+}
+
+.route-page__overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75em;
+  margin-bottom: 2.5em;
+}
+.route-overview-item {
+  padding: 0.8em 1em;
+  border: 1px solid var(--sl-color-gray-200);
+  border-radius: 6px;
+  background: var(--sl-color-gray-50);
+}
+[data-theme="dark"] .route-overview-item {
+  border-color: var(--sl-color-gray-800);
+  background: var(--sl-color-gray-900);
+}
+.route-overview-item strong {
+  display: block;
+  font-size: 0.8em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--sl-color-gray-500);
+  margin-bottom: 0.3em;
+}
+.route-overview-item span { font-size: 0.92em; }
+
+.route-page__count { color: var(--sl-color-gray-500); margin-bottom: 1.5em; }
+
+/* Timeline */
+.timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 2.25rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--sl-color-gray-200);
+}
+[data-theme="dark"] .timeline::before {
+  background: var(--sl-color-gray-800);
+}
+.timeline__step {
+  display: flex;
+  gap: 1em;
+  padding: 1em 0;
+  position: relative;
+}
+.timeline__step:first-child { padding-top: 0; }
+.timeline__marker {
+  flex-shrink: 0;
+  width: 4.5rem;
+  text-align: center;
+  font-size: 0.75em;
+  font-weight: 700;
+  color: var(--sl-color-accent);
+  background: var(--sl-color-bg);
+  padding: 0.2em 0;
+  z-index: 1;
+}
+.timeline__content { flex: 1; min-width: 0; }
+.timeline__link {
+  text-decoration: none;
+  color: var(--sl-color-text);
+  font-size: 0.95em;
+}
+.timeline__link:hover { text-decoration: underline; color: var(--sl-color-accent); }
+.timeline__link:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 2px;
+}
+.timeline__outcome {
+  font-size: 0.82em;
+  color: var(--sl-color-gray-500);
+  margin: 0.2em 0 0.35em;
+}
+.timeline__meta {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  font-size: 0.78em;
+  color: var(--sl-color-gray-500);
+}
+
 @media (max-width: 48rem) {
-  .route-lesson-meta { display: none; }
-  .route-lesson-link { flex-wrap: wrap; }
+  .timeline::before { left: 1.5rem; }
+  .timeline__marker { width: 3rem; font-size: 0.7em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .route-page__start-cta { transition: none; }
 }
 </style>

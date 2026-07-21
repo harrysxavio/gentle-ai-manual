@@ -16,6 +16,7 @@
     "validate:curriculum": "node tests/curriculum-contract.test.cjs",
     "check-site": "node scripts/validate-built-site.cjs --base /gentle-ai-manual/ dist",
     "test": "node tests/run.cjs && node --test",
+    "test:visual": "node tests/curriculum-visual.test.cjs",
     "validate": "npm run check && npm run lint && npm run check-mermaid && npm run check-models && npm run validate:curriculum && npm run test && npm run build && npm run check-site"
   },
   "dependencies": {
