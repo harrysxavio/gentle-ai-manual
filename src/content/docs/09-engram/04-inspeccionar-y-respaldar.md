@@ -1,11 +1,11 @@
 ---
 title: Inspeccionar y respaldar la memoria
-description: Cómo consultar, exportar y respaldar la base de datos local de Engram.
+description: Cómo consultar, exportar e importar la base de datos local de Engram.
 level: 1
 estimatedTime: 15 min
 ---
 
-Engram guarda todo en un archivo SQLite. Podés inspeccionar ese archivo, exportarlo y respaldarlo como cualquier otro archivo importante.
+Engram guarda todo en un archivo SQLite. Podés inspeccionarlo, exportarlo a un archivo portable e importarlo después.
 
 ## Ver estadísticas
 
@@ -15,7 +15,7 @@ El comando más rápido para saber el estado de tu memoria:
 engram doctor
 ```
 
-Devuelve: versión, ruta de la base de datos, cantidad de sesiones, observaciones, prompts, y posibles problemas.
+Devuelve: versión, ruta de la base de datos, cantidad de sesiones, observaciones, prompts, y problemas detectados (solo diagnóstico, no modifica nada).
 
 Para estadísticas más detalladas desde el agente:
 
@@ -39,7 +39,7 @@ mem_search(type: "decision", project: "mi-proyecto")
 mem_search(query: "", project: "mi-proyecto")
 ```
 
-Desde la terminal (si `engram serve` está corriendo):
+Desde la terminal (el servidor HTTP corre cuando iniciás una sesión):
 
 ```bash
 curl http://localhost:7437/api/search?q=autenticación
@@ -47,35 +47,35 @@ curl http://localhost:7437/api/search?q=autenticación
 
 ## Interfaz TUI
 
-Engram tiene una interfaz de terminal (TUI) construida con Bubbletea:
+Engram tiene una interfaz de terminal (TUI) construida con Bubbletea que se abre directamente:
 
 ```bash
-# Terminal 1: iniciar servidor
-engram serve
-
-# Terminal 2: abrir TUI
 engram tui
 ```
+
+No necesitás un servidor separado — la TUI accede directo a la base SQLite local.
 
 La TUI muestra:
 
 - **Lista**: observaciones recientes
 - **Búsqueda**: resultados de FTS5 en tiempo real
 - **Detalle**: contenido completo de una observación
-- **Stats**: gráficos ASCII con métricas del proyecto
+- **Stats**: métricas del proyecto
 
 ## Exportar la memoria
 
-Engram usa SQLite estándar. No necesitás herramientas especiales:
+Engram tiene un comando específico para exportar:
 
 ```bash
-# Backup en caliente (mientras Engram corre)
-sqlite3 ~/.engram/engram.db ".backup ~/engram-backup-2026-07-21.db"
+engram export respaldo.json
+```
 
-# Exportar a SQL (para migrar a otra base)
-sqlite3 ~/.engram/engram.db ".dump" > ~/engram-export.sql
+Esto genera un archivo JSON con todas las observaciones, configuraciones y metadatos. Es portátil entre sistemas y versiones.
 
-# Exportar observaciones como JSON
+Para exportar a otro formato desde SQLite directamente (uso avanzado):
+
+```bash
+# Exportar observaciones como JSON plano
 sqlite3 ~/.engram/engram.db "
   SELECT json_group_array(
     json_object('id', id, 'title', title, 'type', type, 'content', content,
@@ -84,58 +84,53 @@ sqlite3 ~/.engram/engram.db "
   FROM observations
   WHERE deleted_at IS NULL;
 " > ~/engram-observations.json
+
+# Exportar la base completa a SQL
+sqlite3 ~/.engram/engram.db ".dump" > ~/engram-export.sql
 ```
 
 ## Importar / restaurar
 
-```bash
-# Restaurar un backup
-copy ~/engram-backup-2026-07-21.db ~/.engram/engram.db
-# (Linux/macOS: cp ~/engram-backup-2026-07-21.db ~/.engram/engram.db)
+Para restaurar una exportación previa:
 
-# Verificar que el archivo es válido
-sqlite3 ~/.engram/engram.db "SELECT count(*) FROM observations;"
+```bash
+engram import respaldo.json
 ```
 
-Importante: Engram debe estar detenido cuando restaurás. Si está corriendo, detenelo primero, reemplazá el archivo, y reinicialo.
+Esto carga las observaciones del archivo JSON a la base local. Engram maneja la deduplicación automáticamente.
 
-## Estrategia de backup
+Importante: la importación agrega datos a la base existente. Si querés una restauración limpia, exportá primero lo actual, luego cerrá Engram, reemplazá el archivo de base de datos, y reiniciá la sesión.
+
+## Estrategia de respaldo
 
 | Frecuencia | Qué respaldar | Cómo |
 |-----------|--------------|------|
-| Diaria (si trabajás con agentes todo el día) | `~/.engram/engram.db` | `.backup` a un archivo con fecha |
-| Semanal | `~/.engram/` completo | Incluye `config.json` |
-| Antes de un cambio grande | `~/.engram/engram.db` | Backup manual con `.backup` |
+| Diaria (si trabajás con agentes todo el día) | Memoria completa | `engram export ~/engram-$(date +%Y-%m-%d).json` |
+| Semanal | Directorio `~/.engram/` completo | Incluye `config.json` |
+| Antes de un cambio grande | Memoria completa | `engram export ~/engram-pre-cambio.json` |
 
 Podés automatizarlo con una tarea programada:
 
 ```bash
-# Windows (Task Scheduler o script .bat)
-sqlite3 %USERPROFILE%\.engram\engram.db ".backup %USERPROFILE%\engram-backup-%DATE:~10,4%-%DATE:~4,2%-%DATE:~7,2%.db"
-
-# Linux/macOS (cron)
-# 0 18 * * * sqlite3 ~/.engram/engram.db ".backup ~/engram-backup-$(date +\%Y-\%m-\%d).db"
+# Linux/macOS (cron) — export diario a las 18:00
+# 0 18 * * * cd $HOME && engram export ~/engram-$(date +\%Y-\%m-\%d).json
 ```
 
-## Verificación post-backup
+## Verificar una exportación
 
 ```bash
-# 1. Verificar que el archivo existe y tiene tamaño razonable
-# Windows: dir %USERPROFILE%\engram-backup-*.db
-# Linux: ls -lh ~/engram-backup-*.db
+# Verificar que el archivo existe y tiene tamaño razonable
+ls -lh ~/engram-*.json
 
-# 2. Verificar que es una base SQLite válida
-sqlite3 ~/engram-backup-2026-07-21.db "SELECT count(*) FROM observations;"
-
-# 3. Verificar que tiene datos
-sqlite3 ~/engram-backup-2026-07-21.db "SELECT type, count(*) FROM observations GROUP BY type;"
+# Si el archivo es válido JSON, Engram lo va a importar sin error
+engram import ~/engram-*.json --dry-run
 ```
 
 ## Errores frecuentes
 
 | Error | Solución |
 |-------|----------|
-| "database is locked" al respaldar | Usá `.backup` en lugar de `cp` directo. `.backup` respeta los locks de SQLite. |
-| Backup vacío | Verificá el path. Engram usa `~/.engram/engram.db`. |
-| El backup se corrompió | Probá con `.backup` en vez de copia directa del archivo mientras Engram corre. |
-| No tengo `sqlite3` instalado | Instalalo con tu gestor de paquetes (`apt install sqlite3`, `brew install sqlite3`, o descargalo de sqlite.org). |
+| "database is locked" al exportar | Usá `engram export` que respeta los locks de SQLite. |
+| Exportación vacía | Verificá el path. Engram usa `~/.engram/engram.db`. |
+| El archivo de importación se corrompió | Verificá que sea JSON válido antes de importar. |
+| No tengo `sqlite3` instalado | Solo es necesario para acceso avanzado. `engram export` no lo requiere. |

@@ -26,10 +26,10 @@ NO es un servidor. NO es una nube. Es un archivo `.db` en tu disco. Si querés c
 
 | Concepto | ¿Qué es? |
 |----------|----------|
-| Datos locales (`~/.engram/engram.db`) | La memoria real — el archivo SQLite |
-| Config del proyecto (`.engram/config.json`) | Ajustes por proyecto (nombre, etc.) |
-| Git sync (directorio `.engram/` en tu repo) | Opción para compartir configuración vía git |
-| Nube (Postgres) | Opcional, requiere configuración explícita. NO es el default |
+| **A. Datos locales** (`~/.engram/engram.db`) | La memoria real — el archivo SQLite en tu máquina. `ENGRAM_DATA_DIR` puede cambiar el directorio. |
+| **B. Config del proyecto** (`<proyecto>/.engram/config.json`) | Ajustes por proyecto (nombre, tema, preferencias). Se versiona con el repo. |
+| **C. Git sync** (`<proyecto>/.engram/manifest.json`, `<proyecto>/.engram/chunks/`) | Sincronización opcional de configuración vía Git. `engram sync` activa el modo. |
+| **D. Nube** (Postgres) | Replicación opcional, requiere configuración explícita. NO es el default. |
 
 ## Cómo fluye la memoria
 

@@ -92,6 +92,19 @@ Esto es útil en monorepos donde la detección automática no puede elegir entre
 
 El archivo `.db` NO debe ir en Git. Solo va la configuración.
 
+Para sincronizar la configuración del proyecto vía Git:
+
+```bash
+# Activar sync para el proyecto actual
+engram sync
+
+# Importar configuración desde Git (al clonar)
+engram sync --import
+
+# Ver estado de sync
+engram sync --status
+```
+
 ## Modo cloud (opcional)
 
 Engram puede usar **Postgres** como backend remoto. Esto habilita sincronización entre máquinas y un dashboard web. No es obligatorio. Engram funciona perfectamente solo con SQLite local.
@@ -107,15 +120,24 @@ Cada observación tiene un `sync_id` único. En modo cloud, un worker sincroniza
 
 ## Exportación e importación
 
-Engram usa SQLite estándar. Cualquier herramienta SQLite sirve para exportar e importar:
+Engram tiene comandos nativos para exportar e importar:
 
 ```bash
-# Exportar a archivo (mientras Engram corre)
+# Exportar a JSON portable
+engram export ~/engram-respaldo.json
+
+# Importar desde JSON
+engram import ~/engram-respaldo.json
+```
+
+Si necesitás acceso directo a la base SQLite (uso avanzado):
+
+```bash
+# Exportar (mientras Engram corre)
 sqlite3 ~/.engram/engram.db ".backup ~/.engram/respaldo.db"
 
-# Importar / restaurar
-copy ~/.engram/respaldo.db ~/.engram/engram.db
-# (en Linux/macOS: cp ~/.engram/respaldo.db ~/.engram/engram.db)
+# Verificar integridad
+sqlite3 ~/.engram/respaldo.db "SELECT count(*) FROM observations;"
 ```
 
 ## Scope y privacidad
