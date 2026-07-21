@@ -16,15 +16,44 @@ learningOutcomes:
   - Saber cómo verificar si el contenido está actualizado
 ---
 
-# Bienvenida
-
 ## ¿Qué es este manual?
 
-Este es el manual completo del ecosistema **Gentleman Programming**. No es una guía de comandos, no es un README de instalación, y no es documentación generada automáticamente.
+Este manual es un **curso técnico y práctico en español** para aprender a trabajar con el ecosistema **Gentleman Programming** de forma progresiva, desde los fundamentos hasta la construcción y el gobierno de productos de software asistidos por agentes de inteligencia artificial.
 
-Es un **curso progresivo** que te lleva desde no saber nada de programación hasta poder diseñar, construir y gobernar productos de software usando agentes de inteligencia artificial.
+No está diseñado para que memorices una colección de comandos. Su objetivo es que puedas responder cinco preguntas frente a cada herramienta o proceso:
 
-Cada capítulo fue escrito investigando el código fuente real de los repositorios, verificando comandos en una terminal real, y congelando las versiones exactas en las que se basa la información.
+1. **Qué es** y qué problema resuelve.
+2. **Por qué existe** y cuándo aporta valor.
+3. **Cómo se utiliza** en un proyecto real.
+4. **Cómo funciona internamente** y qué componentes participan.
+5. **Cómo verificar** que el resultado es correcto y diagnosticarlo cuando falla.
+
+El recorrido combina fundamentos tecnológicos, Git y GitHub, conceptos de IA, instalación, Gentle-AI, SDD, Engram, Skills, revisión de código, configuración de OpenCode y Codex, selección de modelos, seguridad, costos, arquitectura y laboratorios prácticos.
+
+Cada concepto se presenta por capas: primero construís un **modelo mental sencillo**, luego lo aplicás con ejemplos y comandos, y finalmente podés profundizar en su arquitectura, riesgos y decisiones técnicas. De esta manera, una persona principiante puede avanzar sin quedar bloqueada por la jerga, mientras un lector avanzado puede ir directamente a las secciones de mayor profundidad.
+
+El contenido se vincula con versiones, commits, código fuente y fuentes verificadas. Aun así, este ecosistema evoluciona rápidamente: cuando una función depende de una versión, es experimental o todavía necesita validación, el manual debe indicarlo expresamente.
+
+La meta final no es solo que puedas ejecutar Gentle-AI, sino que entiendas **qué está ocurriendo, qué decisión está tomando cada componente y cuándo corresponde intervenir como responsable del producto o del código**.
+
+### Cómo avanza el curso
+
+```mermaid
+flowchart TB
+    A["Elegí tu ruta según tu experiencia"] --> B["Fundamentos<br/>Módulos 00–04"]
+    B --> C["Preparación y primer proyecto<br/>Módulos 05–06"]
+    C --> D["Núcleo del ecosistema<br/>Gentle-AI, SDD, Engram y Skills<br/>Módulos 07–10"]
+    D --> E["Calidad y herramientas de trabajo<br/>Revisión, OpenCode y Codex<br/>Módulos 11–13"]
+    E --> F["Decisiones avanzadas<br/>Modelos, terminal, arquitectura y gobierno<br/>Módulos 14–17"]
+    F --> G["Aplicación real<br/>Producto integrador y laboratorios<br/>Módulos 18–19"]
+    G --> H["Consulta permanente<br/>Referencia, comandos y glosario<br/>Módulo 20"]
+
+    B -. "Entender" .-> D
+    D -. "Aplicar" .-> F
+    F -. "Demostrar" .-> G
+```
+
+El curso no obliga a todas las personas a recorrer cada módulo en el mismo orden. Las rutas recomendadas permiten omitir conocimientos que ya dominás y concentrarte en el resultado que necesitás: aprender desde cero, configurar el ecosistema, optimizar agentes y modelos, comprender su arquitectura o construir un producto completo.
 
 ## ¿Para quién es?
 
