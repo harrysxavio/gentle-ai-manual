@@ -344,4 +344,4 @@ Estos tres componentes de Gentle existen específicamente para administrar las l
 
 ---
 
-> **Siguiente capítulo**: [MCP y tool calling](03-mcp-y-tool-calling.md) — entendé cómo los agentes se conectan a herramientas y cómo MCP estandariza esa conexión.
+> **Siguiente capítulo**: [MCP y tool calling](../03-mcp-y-tool-calling/) — entendé cómo los agentes se conectan a herramientas y cómo MCP estandariza esa conexión.

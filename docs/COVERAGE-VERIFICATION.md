@@ -1,121 +1,105 @@
-# Verificación de cobertura — Criterios de aceptación
+# Verificación de cobertura de los criterios de aceptación
 
-> **Versión**: 2026-07-20 | **Criterios**: 45 | **Estado**: 42 cubiertos, 3 planificados (ver Huecos intencionales)
+> **Versión**: 2026-07-20 | **Criterios**: 45 | **Resultado**: 22 Implemented, 18 Partial, 2 Planned y 3 Not verified
 
----
+Esta matriz mapea los 45 criterios de la sección 48 de la misión a evidencia presente en el repositorio. Un archivo, un ADR, una plantilla o una configuración no demuestran por sí solos que un comportamiento esté completo.
 
-Cada criterio de la sección 48 de la misión mapeado a su módulo o artefacto.
+## Leyenda
+
+| Estado | Significado |
+|---|---|
+| Implemented | El contenido o comportamiento visible para el usuario existe y tiene evidencia directa en el repositorio. |
+| Partial | Existe evidencia, pero no demuestra por completo el criterio de aceptación. |
+| Planned | Existe un diseño, marcador o intención, pero no una implementación utilizable. |
+| Not verified | El repositorio no contiene evidencia suficiente para afirmar el criterio. |
+
+Los elementos `Planned` **no cuentan como cobertura implementada**.
 
 ## Criterios técnicos (1-20)
 
-| # | Criterio | Cobertura |
-|---|----------|-----------|
-| 1 | El sitio compila | ✅ `npm run build` exitoso (Fase 0) |
-| 2 | Markdown es fuente principal | ✅ `src/content/docs/` — ADR-002 |
-| 3 | Sidebar completo | ✅ 20 módulos en `astro.config.mjs` (Fase 0) |
-| 4 | Responsive | ✅ Starlight default + custom CSS (Fase 2) |
-| 5 | Claro/oscuro | ✅ Starlight built-in (Fase 0) |
-| 6 | Búsqueda | ✅ Pagefind 1.5.2 (Fase 0) |
-| 7 | Modos Esencial y Profundo | ✅ ADR-009 + PEDAGOGICAL-COMPONENTS.md (Fase 1) |
-| 8 | Diagramas válidos | ✅ Mermaid en README, validado en build (Fase 0) |
-| 9 | Enlaces válidos | ✅ `starlight-links-validator` en config (Fase 0) |
-| 10 | Comandos documentados | ✅ `data/commands/*.yml` (4 archivos, Fase 0) → Módulo 20 |
-| 11 | Git explicado | ✅ Módulo 02 |
-| 12 | Frontend/backend explicado | ✅ Módulo 01, Capítulo 04 |
-| 13 | Bases de datos explicado | ✅ Módulo 01, Capítulo 05 |
-| 14 | MCP explicado | ✅ Módulo 03 (Fundamentos de IA) + Módulo 09 (Engram MCP) |
-| 15 | Agentes/modelos/proveedores diferenciados | ✅ Módulo 03 + Módulo 14 |
-| 16 | Skills/agentes/comandos diferenciados | ✅ Módulo 07 (agentes), Módulo 10 (skills), Módulo 20 (comandos) |
-| 17 | OpenCode completo | ✅ Módulo 12 |
-| 18 | Codex completo | ✅ Módulo 13 |
-| 19 | Engram funcional y técnico | ✅ Módulo 09 |
-| 20 | GGA/Judgment/Native Review separados | ✅ Módulo 11 |
+| # | Criterio | Estado | Evidencia actual y límite |
+|---|---|---|---|
+| 1 | El sitio compila | Implemented | `package.json` expone `npm run build`; el contrato genera 49 páginas con Astro. |
+| 2 | Markdown es fuente principal | Implemented | El contenido fuente está en `src/content/docs/` como archivos `.md` y `.mdx`; véase también `docs/adr/ADR-002-content-source-of-truth.md`. |
+| 3 | Sidebar completo | Implemented | `astro.config.mjs` declara la navegación de los módulos 00-20. |
+| 4 | Responsive | Partial | Starlight y `src/styles/custom.css` aportan una base adaptable, pero no hay pruebas de viewport ni una auditoría responsive completa. |
+| 5 | Claro/oscuro | Implemented | El tema de Starlight configurado en `astro.config.mjs` incluye el selector de apariencia. |
+| 6 | Búsqueda | Implemented | El build de Starlight genera el índice Pagefind para el sitio. |
+| 7 | Modos Esencial y Profundo | Planned | `docs/adr/ADR-009-learning-modes.md` describe la intención; el selector de modo y su comportamiento no están implementados. |
+| 8 | Diagramas válidos | Implemented | `scripts/validate-mermaid.cjs` analiza 50 diagramas con `mermaid.parse`; `rehype-mermaid` los transforma a SVG y `scripts/validate-built-site.cjs` rechaza bloques sin renderizar. |
+| 9 | Enlaces válidos | Implemented | `scripts/validate-built-site.cjs` comprueba los destinos generados bajo `/gentle-ai-manual/`; `tests/site-contract.test.cjs` cubre rutas relativas, base y escapes. |
+| 10 | Comandos documentados | Partial | Existen cuatro catálogos en `data/commands/` y una referencia en el módulo 20; no se verificó que cubran todos los comandos y versiones actuales. |
+| 11 | Git explicado | Implemented | `src/content/docs/02-git-y-github/` contiene la ruta dedicada a Git y GitHub. |
+| 12 | Frontend/backend explicado | Implemented | `src/content/docs/01-fundamentos-tecnologicos/04-frontend-backend.md` contiene la explicación dedicada. |
+| 13 | Bases de datos explicado | Implemented | `src/content/docs/01-fundamentos-tecnologicos/05-bases-de-datos.md` contiene la explicación dedicada. |
+| 14 | MCP explicado | Implemented | `src/content/docs/03-fundamentos-de-ia/03-mcp-y-tool-calling.md` y el módulo 09 cubren concepto y uso con Engram. |
+| 15 | Agentes/modelos/proveedores diferenciados | Implemented | `src/content/docs/03-fundamentos-de-ia/01-modelos-proveedores-agentes.md` separa los conceptos y el módulo 14 amplía el enrutamiento. |
+| 16 | Skills/agentes/comandos diferenciados | Implemented | Los módulos 07, 10 y 20 presentan cada superficie por separado. |
+| 17 | OpenCode completo | Partial | El módulo 12 contiene instalación y configuración, pero `RESEARCH-GAPS.md` mantiene pendientes las fuentes oficiales y funciones actuales de OpenCode. |
+| 18 | Codex completo | Partial | El módulo 13 contiene configuración y flujos, pero `RESEARCH-GAPS.md` registra verificación oficial y multiagente como pendientes. |
+| 19 | Engram funcional y técnico | Partial | El módulo 09 cubre uso y arquitectura; `RESEARCH-GAPS.md` registra comportamiento de conflictos y estabilidad cloud por verificar. |
+| 20 | GGA/Judgment/Native Review separados | Implemented | El módulo 11 contiene capítulos diferenciados para GGA, Native Review y Judgment Day. |
 
 ## Criterios de modelos y enrutamiento (21-35)
 
-| # | Criterio | Cobertura |
-|---|----------|-----------|
-| 21 | Model routing completo | ✅ Módulo 14 + `data/models/routing.yml` |
-| 22 | Tabla por subagente Gentle | ✅ `data/agents/gentle-agents.yml` → Módulo 14 |
-| 23 | Tabla de agentes genéricos | ✅ `data/agents/generic-agents.yml` → Módulo 14 |
-| 24 | Niveles de razonamiento normalizados | ✅ MODEL_CATALOG_SNAPSHOT.md + Módulo 14 |
-| 25 | OpenAI, Google, Anthropic, Go y Zen cubiertos | ✅ MODEL_CATALOG_SNAPSHOT.md + `data/models/catalog.yml` |
-| 26 | Fallbacks | ✅ `data/models/routing.yml` (routing_rules) + Módulo 14 |
-| 27 | Benchmark local | ✅ `evals/` directorio + Módulo 14 |
-| 28 | Costos | ✅ Módulo 17 (Seguridad, costos y gobierno) |
-| 29 | Laboratorios | ✅ Módulo 19 (20 laboratorios) |
-| 30 | Ruta principiante | ✅ INDEX.md (ruta 🟢) |
-| 31 | Ruta avanzada | ✅ INDEX.md (rutas 🔵🟣🟤) |
-| 32 | Proyecto integrador | ✅ Módulo 18 + Lab 20 |
-| 33 | Trazabilidad | ✅ SOURCE_TRACEABILITY.md + `## Fuentes verificadas` por capítulo |
-| 34 | Funciones experimentales marcadas | ✅ Componente `<Experimental>` + RESEARCH-GAPS.md |
-| 35 | Diferencias de versión | ✅ Componente `<DiferenciaVersion>` + MIGRATIONS-AND-LEGACY.md |
+| # | Criterio | Estado | Evidencia actual y límite |
+|---|---|---|---|
+| 21 | Model routing completo | Partial | El módulo 14 y `data/models/routing.yml` documentan reglas; `RESEARCH-GAPS.md` mantiene fallbacks reales, tool calling y esfuerzo por proveedor sin verificar. |
+| 22 | Tabla por subagente Gentle | Implemented | `data/agents/gentle-agents.yml` contiene el catálogo usado por el módulo 14. |
+| 23 | Tabla de agentes genéricos | Implemented | `data/agents/generic-agents.yml` contiene la tabla correspondiente. |
+| 24 | Niveles de razonamiento normalizados | Implemented | `MODEL_CATALOG_SNAPSHOT.md` y el módulo 14 presentan la normalización utilizada por el curso. |
+| 25 | OpenAI, Google, Anthropic, Go y Zen cubiertos | Partial | `MODEL_CATALOG_SNAPSHOT.md` y `data/models/catalog.yml` contienen entradas de proveedores; `RESEARCH-GAPS.md` mantiene el catálogo Zen y fuentes de modelos pendientes. |
+| 26 | Fallbacks | Implemented | `data/models/routing.yml` incluye `routing_rules` y el módulo 14 explica cadenas de fallback. |
+| 27 | Benchmark local | Planned | Hay instrucciones y un laboratorio de benchmarking, pero no existe un runner ni un conjunto local `evals/` utilizable. |
+| 28 | Costos | Partial | El módulo 17 explica estimación y gobierno; los precios actualizados siguen pendientes en `RESEARCH-GAPS.md`. |
+| 29 | Laboratorios | Partial | `src/content/docs/19-laboratorios/01-laboratorios.md` contiene 20 laboratorios, pero no demuestra una evaluación ejecutada ni una rúbrica completa y validada para todos. |
+| 30 | Ruta principiante | Implemented | `INDEX.md` define la ruta «Principiante total» con su secuencia de módulos. |
+| 31 | Ruta avanzada | Implemented | `INDEX.md` define rutas avanzadas para perfiles técnicos, OpenCode, Codex y arquitectura. |
+| 32 | Proyecto integrador | Partial | El módulo 18 y el laboratorio 20 describen el proyecto; no hay evidencia de una ejecución completa ni una rúbrica de aceptación validada. |
+| 33 | Trazabilidad | Partial | 46 archivos de contenido incluyen `Fuentes verificadas`, pero `SOURCE_TRACEABILITY.md` solo mapea de forma explícita siete capítulos. |
+| 34 | Funciones experimentales marcadas | Partial | Existe `src/components/pedagogicos/Experimental.astro` y un registro en `RESEARCH-GAPS.md`; no hay una comprobación que garantice el marcado de todas las afirmaciones experimentales. |
+| 35 | Diferencias de versión | Partial | Existe `src/components/pedagogicos/DiferenciaVersion.astro` y `VERSION_COMPATIBILITY.md`; no se verificó cobertura completa de todas las diferencias citadas. |
 
 ## Criterios de calidad (36-45)
 
-| # | Criterio | Cobertura |
-|---|----------|-----------|
-| 36 | Interfaz profesional | ✅ Starlight + custom CSS (Fase 2) |
-| 37 | CI | ✅ `.github/workflows/ci.yml` (Fase 0) |
-| 38 | GitHub Pages preparado | ✅ `astro.config.mjs` (base + site URL, Fase 0) |
-| 39 | No existen afirmaciones sin evidencia | ✅ Template de capítulo: `## Fuentes verificadas` |
-| 40 | No existen términos esenciales sin definición | ✅ GLOSSARY.md (A-W) + `data/terminology/glossary.yml` |
-| 41 | Un principiante puede completar el curso | ✅ Ruta 🟢 (8 módulos progresivos) |
-| 42 | Un usuario avanzado puede configurar agentes y modelos | ✅ Módulos 12, 13, 14 |
-| 43 | Un lector técnico puede rastrear funciones al código | ✅ Módulo 16 + SOURCE_TRACEABILITY.md |
-| 44 | El usuario puede construir un producto con el ecosistema | ✅ Módulo 18 + Lab 20 |
-| 45 | El usuario comprende no solo cómo usarlo, sino por qué funciona | ✅ Tres niveles de explicación por capítulo (Nivel 1/2/3) |
+| # | Criterio | Estado | Evidencia actual y límite |
+|---|---|---|---|
+| 36 | Interfaz profesional | Partial | Astro, Starlight y `src/styles/custom.css` producen una interfaz consistente; no existe una auditoría visual, responsive y de accesibilidad que cierre el criterio cualitativo. |
+| 37 | CI | Implemented | `.github/workflows/ci.yml` instala Chromium y ejecuta el contrato secuencial `npm run validate`, que cubre Astro, lint, Mermaid, modelos, pruebas, build y sitio generado. El contrato pasó localmente; la primera ejecución remota posterior al cambio requiere un push. |
+| 38 | GitHub Pages preparado | Implemented | `astro.config.mjs` usa el sitio y base correctos; el job `quality` sube el `dist/` validado y `deploy` consume ese mismo artefacto solo en un push a `main`. La publicación remota posterior al cambio aún no fue comprobada. |
+| 39 | No existen afirmaciones sin evidencia | Not verified | Las secciones `Fuentes verificadas` ayudan, pero no prueban que cada afirmación tenga respaldo ni que las fuentes estén actualizadas. |
+| 40 | No existen términos esenciales sin definición | Partial | `GLOSSARY.md` y `data/terminology/glossary.yml` ofrecen un glosario; no hay una prueba de cobertura de todos los términos esenciales usados. |
+| 41 | Un principiante puede completar el curso | Not verified | Existe una ruta principiante en `INDEX.md`, pero no hay evidencia de prueba con alumnos, finalización o criterios de evaluación completos. |
+| 42 | Un usuario avanzado puede configurar agentes y modelos | Partial | Los módulos 12-14 y los laboratorios 11-14 ofrecen instrucciones; no existe evidencia de ejecución reproducible de extremo a extremo. |
+| 43 | Un lector técnico puede rastrear funciones al código | Partial | El módulo 16 y `SOURCE_TRACEABILITY.md` aportan rutas, pero la matriz explícita solo cubre siete capítulos. |
+| 44 | El usuario puede construir un producto con el ecosistema | Partial | El módulo 18 y el laboratorio 20 describen el recorrido; no hay una implementación de referencia ejecutada y verificada en este repositorio. |
+| 45 | El usuario comprende no solo cómo usarlo, sino por qué funciona | Not verified | Parte del contenido separa explicaciones simples y técnicas, pero la comprensión del alumno no está evaluada ni demostrada. |
 
----
+## Inventario verificable
 
-## Verificación de estructura
+Este inventario ayuda a localizar evidencia, pero sus cantidades no sustituyen los estados de la matriz.
 
-| Requisito estructural | Cobertura |
-|-----------------------|-----------|
-| 20 módulos | ✅ 00-20 creados en `src/content/docs/` |
-| 4 apéndices | ✅ VIDEO-CATALOG, BOOK-MAP, SOURCE-MAP, MIGRATIONS-AND-LEGACY |
-| 9 ADRs | ✅ ADR-001 a ADR-009 |
-| 5 snapshots | ✅ SOURCE_SNAPSHOT, SOURCE_TRACEABILITY, VERSION_COMPATIBILITY, MODEL_CATALOG_SNAPSHOT, RESEARCH-GAPS |
-| Datos estructurados | ✅ 8 archivos YAML en `data/` |
-| CI/CD | ✅ `ci.yml` |
-| Scaffold web | ✅ Astro + Starlight + Mermaid + Pagefind |
-
----
-
-## Huecos intencionales (post-Fase 1)
-
-Estos elementos están planificados pero corresponden a fases posteriores:
-
-| Elemento | Fase | Estado |
-|----------|------|--------|
-| Componentes Astro personalizados (25) | Fase 2 | Especificados, no implementados |
-| Contenido de módulos 02-03, 05-06, 12-13, 15-20 | Fase 3+ | Directorios creados, sin contenido |
-| Página inicial de modelos (interactiva) | Fase 2 | No implementada |
-| Modos Esencial/Profundo (toggle UI) | Fase 2 | Especificados en ADR-009 |
-| Laboratorios (20) | Fase 7 | Planificados en INDEX.md |
-| Evaluaciones y rúbrica | Fase 7 | No implementadas |
-| evals/ benchmarks | Fase 7 | Directorio creado, sin contenido |
-| OpenCode Zen catalog | Fase 0 (pendiente) | Marcado en RESEARCH-GAPS.md |
-| OpenCode docs oficiales | Fase 0 (pendiente) | Marcado en RESEARCH-GAPS.md |
-| Codex docs oficiales | Fase 0 (pendiente) | Marcado en RESEARCH-GAPS.md |
-| MCP spec oficial | Fase 0 (pendiente) | Marcado en RESEARCH-GAPS.md |
-
----
+| Elemento | Evidencia actual |
+|---|---|
+| Módulos | 21 directorios numerados, del 00 al 20, en `src/content/docs/`. |
+| Contenido | 48 archivos `.md` o `.mdx` bajo `src/content/docs/`. |
+| Laboratorios | 20 secciones numeradas en `src/content/docs/19-laboratorios/01-laboratorios.md`. |
+| Componentes pedagógicos | 25 componentes Astro en `src/components/pedagogicos/`. |
+| ADR | 9 archivos `ADR-*.md` en `docs/adr/`. |
+| Datos estructurados | 10 archivos YAML bajo `data/`. |
+| Trazabilidad explícita | 7 capítulos en `SOURCE_TRACEABILITY.md`. |
+| Validación de Mermaid | 50 bloques analizados; el sitio generado debe contener SVG y ningún bloque `language-mermaid` sin renderizar. |
 
 ## Resultado
 
-**42 de 45 criterios tienen cobertura implementada.**
-**3 criterios tienen cobertura planificada pero aún no implementada:**
+| Estado | Cantidad | Interpretación |
+|---|---:|---|
+| Implemented | 22 | Hay contenido o comportamiento y evidencia directa. |
+| Partial | 18 | Existe una base, pero falta evidencia o alcance para cerrar el criterio. |
+| Planned | 2 | Hay intención documentada sin implementación utilizable. |
+| Not verified | 3 | La afirmación no puede demostrarse con el repositorio actual. |
+| **Total** | **45** | Todos los criterios conservan su numeración original. |
 
-| # | Criterio | Motivo |
-|---|----------|--------|
-| 7 | Modos Esencial/Profundo (toggle UI) | Especificado en ADR-009, UI no implementada |
-| 27 | Benchmark local (`evals/`) | Directorio creado, sin contenido |
-| 29 | Laboratorios (20) | Planificados en INDEX.md, capítulos sin implementar |
-
-- 20 criterios cubiertos por estructura existente (Fase 0)
-- 8 criterios cubiertos por arquitectura de información (Fase 1)
-- 14 criterios cubiertos por contenido implementado (Fases 2-8)
-- 3 criterios con cobertura planificada (pendiente de implementación)
+Los principales huecos implementables son los modos Esencial/Profundo, el benchmark local, la evaluación de los laboratorios y la trazabilidad completa. La ejecución remota del nuevo CI y el despliegue deben comprobarse después de un push. Los resultados de aprendizaje que dependen de usuarios reales permanecen `Not verified` hasta contar con evaluación observable.
 
 *Verificación alineada con la sección 48 de la misión.*

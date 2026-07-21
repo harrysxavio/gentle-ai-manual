@@ -31,7 +31,7 @@ No es una referencia de comandos. Es un sistema de aprendizaje progresivo con 20
 
 ### Paso 2 — Seguí la ruta en orden
 
-Cada módulo declara sus **prerrequisitos**. No saltees módulos: el contenido está diseñado para construirse capa sobre capa. La [versión web](https://harrysxavio.github.io/gentle-ai-manual/) tiene navegación lateral, búsqueda y barra de progreso.
+Cada módulo declara sus **prerrequisitos**. No saltees módulos: el contenido está diseñado para construirse capa sobre capa. La [versión web](https://harrysxavio.github.io/gentle-ai-manual/) tiene navegación lateral y búsqueda.
 
 ### Paso 3 — Hacé los laboratorios
 
@@ -75,7 +75,7 @@ El Módulo 18 te guía en la construcción de un producto completo con el ecosis
 
 ```bash
 git clone https://github.com/harrysxavio/gentle-ai-manual.git
-cd gentle-ai-manual/gentle-ai-mega-manual-es
+cd gentle-ai-manual
 npm install
 npm run dev        # http://localhost:4321
 npm run build      # compila a dist/

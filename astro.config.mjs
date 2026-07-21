@@ -3,11 +3,15 @@ import starlight from '@astrojs/starlight';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import starlightLinksValidator from 'starlight-links-validator';
+import rehypeMermaid from 'rehype-mermaid';
 import { autoImportComponents } from './src/plugins/auto-import-components.js';
 
 export default defineConfig({
   site: 'https://harrysxavio.github.io',
   base: '/gentle-ai-manual/',
+  markdown: {
+    rehypePlugins: [[rehypeMermaid, { strategy: 'inline-svg' }]],
+  },
   integrations: [
     starlight({
       title: 'Gentle AI — Mega Manual',
@@ -15,8 +19,9 @@ export default defineConfig({
       logo: {
         src: '/public/logo.svg',
       },
+      favicon: '/logo.svg',
       social: {
-        github: 'https://github.com/Gentleman-Programming/gentle-ai-mega-manual-es',
+        github: 'https://github.com/harrysxavio/gentle-ai-manual',
         youtube: 'https://youtube.com/@gentlemanprogramming',
       },
       defaultLocale: 'root',

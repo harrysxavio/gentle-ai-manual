@@ -13,8 +13,9 @@
     "check-links": "astro build",
     "check-mermaid": "node scripts/validate-mermaid.cjs",
     "check-models": "node scripts/validate-models.cjs",
-    "test": "node tests/run.cjs",
-    "validate": "npm run check & npm run lint & npm run check-mermaid & npm run check-models & npm run test & npm run build"
+    "check-site": "node scripts/validate-built-site.cjs --base /gentle-ai-manual/ dist",
+    "test": "node tests/run.cjs && node --test",
+    "validate": "npm run check && npm run lint && npm run check-mermaid && npm run check-models && npm run test && npm run build && npm run check-site"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.0",
@@ -22,11 +23,15 @@
     "@astrojs/sitemap": "^3.3.0",
     "@astrojs/starlight": "^0.32.0",
     "astro": "^5.6.0",
+    "mermaid": "^11.16.0",
+    "rehype-mermaid": "^3.0.0",
     "sharp": "^0.34.0",
     "starlight-links-validator": "^0.16.0"
   },
   "devDependencies": {
-    "markdownlint-cli": "^0.44.0"
+    "jsdom": "^24.1.3",
+    "markdownlint-cli": "^0.44.0",
+    "playwright": "^1.61.1"
   },
   "engines": {
     "node": ">=18"

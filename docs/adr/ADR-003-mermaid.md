@@ -28,19 +28,24 @@ graph TB
     B --> C
 ```
 
+Durante cada build de Astro, `rehype-mermaid` transforma esos bloques en SVG inline mediante la estrategia `inline-svg`. El proceso usa Playwright, por lo que Chromium debe estar instalado en el entorno de build.
+
 ## Validación
 
 Todos los diagramas Mermaid deben validarse con:
-- `npm run check-mermaid` — script que parsea y verifica sintaxis
-- Build de Starlight (Mermaid plugin nativo)
+
+- `npm run check-mermaid` — usa el parser oficial de Mermaid para verificar la sintaxis fuente.
+- `npm run build` — genera los SVG inline con `rehype-mermaid`.
+- `npm run check-site` — comprueba en el sitio generado que existe salida Mermaid en SVG y que no sobreviven bloques `language-mermaid` sin renderizar.
 
 ## Consecuencias
 
 - Los diagramas viajan con el contenido Markdown
+- La salida publicada contiene SVG inline y no depende de JavaScript de Mermaid en el navegador
+- Playwright Chromium es un requisito del entorno de build
 - Sin dependencia de herramientas gráficas externas
 - Sin imágenes binarias en el repositorio
 - Mermaid tiene limitaciones en diagramas muy complejos (>50 nodos)
-- Algunos navegadores antiguos pueden no renderizar correctamente
 
 ## Referencias
 

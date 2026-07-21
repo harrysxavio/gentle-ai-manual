@@ -251,6 +251,7 @@ Esto genera `.sdd/changes/change_001/03-spec.md`:
 ```
 
 ## Validaciones
+
 - `add` sin texto: error `❌ El texto de la nota no puede estar vacío`
 - `delete` sin ID: error `❌ Usá: notitas delete <id>`
 - Comando desconocido: error `❌ Comando desconocido. Usá: notitas <add|list|search|delete>`
@@ -403,7 +404,7 @@ gentle-ai sdd apply
 
 Esto inicia una sesión donde el agente implementa las tareas pendientes. Veamos qué haría:
 
-**Tarea T002: storage.ts**
+### Tarea T002: storage.ts
 
 ```typescript
 // src/storage.ts
@@ -441,7 +442,7 @@ export function guardarNotas(datos: Datos): void {
 }
 ```
 
-**Tarea T003: notas.ts**
+### Tarea T003: notas.ts
 
 ```typescript
 // src/notas.ts
@@ -481,7 +482,7 @@ export function eliminarNota(id: number): boolean {
 }
 ```
 
-**Tarea T004: index.ts**
+### Tarea T004: index.ts
 
 ```typescript
 // src/index.ts
@@ -563,7 +564,7 @@ function main() {
 main();
 ```
 
-**Tarea T005: package.json y tsconfig.json**
+### Tarea T005: package.json y tsconfig.json
 
 ```json
 // package.json
