@@ -1,0 +1,87 @@
+---
+import { stages, modules, profiles } from '../../data/curriculum.mjs';
+
+/** @type {Map<string, Array<typeof profiles[number]>>} */
+const lessonsByProfile = new Map();
+for (const profile of profiles) {
+  for (const href of profile.lessonHrefs) {
+    const list = lessonsByProfile.get(href) || [];
+    list.push(profile);
+    lessonsByProfile.set(href, list);
+  }
+}
+---
+
+<section aria-labelledby="completo-title">
+  <h2 id="completo-title">Índice completo del manual</h2>
+  {
+    stages.map((stage) => {
+      const stageModules = modules.filter((m) => stage.moduleIds.includes(m.id));
+      if (stageModules.length === 0) return null;
+      return (
+        <div class="ci-stage">
+          <h3 class="ci-stage-title">{stage.label} — {stage.question}</h3>
+          {
+            stageModules.map((mod) => (
+              <div class="ci-module">
+                <h4 class="ci-module-title">
+                  <a href={mod.entry}>{mod.id}. {mod.title}</a>
+                </h4>
+                <p class="ci-module-summary">{mod.summary}</p>
+                <ol class="ci-lessons">
+                  {mod.lessons.map((lesson) => {
+                    const includedIn = lessonsByProfile.get(lesson.href) || [];
+                    return (
+                      <li class="ci-lesson">
+                        <a href={`${lesson.href}?ruta=indice`} class="ci-lesson-link">
+                          <strong>{lesson.title}</strong>
+                        </a>
+                        <span class="ci-lesson-meta">
+                          Nivel {lesson.level} · {lesson.minutes}
+                        </span>
+                        {lesson.outcome && <p class="ci-lesson-outcome">{lesson.outcome}</p>}
+                        {includedIn.length > 0 && (
+                          <div class="ci-lesson-profiles">
+                            {includedIn.map((p) => (
+                              <a href={p.routeIndex} class="ci-profile-badge">{p.title}</a>
+                            ))}
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ol>
+              </div>
+            ))
+          }
+        </div>
+      );
+    })
+  }
+</section>
+
+<style>
+.ci-stage { margin-bottom: 2em; }
+.ci-stage-title { font-size: 1.1em; margin-bottom: 0.75em; color: var(--sl-color-accent); }
+.ci-module { margin-bottom: 1.25em; padding-left: 0.75em; border-left: 3px solid var(--sl-color-gray-200); }
+[data-theme="dark"] .ci-module { border-left-color: var(--sl-color-gray-700); }
+.ci-module-title { margin: 0 0 0.25em; font-size: 1em; }
+.ci-module-title a { text-decoration: none; color: var(--sl-color-text); }
+.ci-module-title a:hover { text-decoration: underline; }
+.ci-module-summary { font-size: 0.85em; color: var(--sl-color-gray-500); margin: 0 0 0.5em; }
+.ci-lessons { list-style: none; padding: 0; margin: 0; }
+.ci-lesson { padding: 0.35em 0; border-bottom: 1px solid var(--sl-color-gray-100); }
+[data-theme="dark"] .ci-lesson { border-bottom-color: var(--sl-color-gray-800); }
+.ci-lesson:last-child { border-bottom: none; }
+.ci-lesson-link { text-decoration: none; color: var(--sl-color-text); }
+.ci-lesson-link:hover { text-decoration: underline; }
+.ci-lesson-meta { font-size: 0.8em; color: var(--sl-color-gray-400); margin-left: 0.5em; }
+.ci-lesson-outcome { font-size: 0.82em; color: var(--sl-color-gray-500); margin: 0.15em 0 0; }
+.ci-lesson-profiles { display: inline-flex; gap: 0.3em; flex-wrap: wrap; margin-top: 0.25em; }
+.ci-profile-badge {
+  font-size: 0.72em; padding: 0.15em 0.4em; border-radius: 3px;
+  background: var(--sl-color-accent-low); color: var(--sl-color-text-accent);
+  text-decoration: none; white-space: nowrap;
+}
+.ci-profile-badge:hover { filter: brightness(1.15); }
+</style>

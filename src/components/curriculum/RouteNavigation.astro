@@ -1,0 +1,96 @@
+---
+import { profiles, lessonsByHref } from '../../data/curriculum.mjs';
+
+const routeData = {};
+for (const profile of profiles) {
+  routeData[profile.slug] = profile.lessonHrefs.map((href, i) => {
+    const lesson = lessonsByHref.get(href);
+    return { href, title: lesson?.title || href, index: i };
+  });
+}
+---
+
+<nav aria-label="Navegación de la ruta de aprendizaje" id="route-navigation">
+  <noscript>
+    <p style="text-align:center">
+      <a href="/gentle-ai-manual/00-empezar-aqui/02-indice-completo/">Ver índice completo del manual</a>
+    </p>
+  </noscript>
+  <div id="route-nav-content" style="display:none">
+    <!-- Filled by client JS -->
+  </div>
+</nav>
+
+<script id="route-navigation-data" type="application/json">
+  {JSON.stringify(routeData)}
+</script>
+<script src="/gentle-ai-manual/scripts/route-navigation.js" defer></script>
+
+<style>
+#route-navigation {
+  margin: 2em 0;
+  padding: 1em;
+  border: 1px solid var(--sl-color-gray-200);
+  border-radius: 8px;
+  background: var(--sl-color-gray-50);
+}
+[data-theme="dark"] #route-navigation {
+  border-color: var(--sl-color-gray-800);
+  background: var(--sl-color-gray-900);
+}
+.route-nav-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+.route-nav-progress {
+  text-align: center;
+  font-size: 0.85em;
+  color: var(--sl-color-gray-500);
+  margin-bottom: 0.5em;
+}
+.route-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.4em 0.8em;
+  border: 1px solid var(--sl-color-gray-300);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--sl-color-text);
+  font-size: 0.9em;
+  transition: background 0.15s;
+  min-height: 44px;
+}
+.route-nav-link:hover {
+  background: var(--sl-color-gray-200);
+}
+[data-theme="dark"] .route-nav-link {
+  border-color: var(--sl-color-gray-700);
+}
+[data-theme="dark"] .route-nav-link:hover {
+  background: var(--sl-color-gray-800);
+}
+.route-nav-link[aria-current="step"] {
+  font-weight: 700;
+}
+.route-nav-index {
+  text-align: center;
+  margin-top: 0.5em;
+}
+.route-nav-index a {
+  font-size: 0.85em;
+  color: var(--sl-color-accent);
+}
+@media (max-width: 48rem) {
+  .route-nav-links {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .route-nav-link {
+    justify-content: center;
+  }
+}
+</style>
