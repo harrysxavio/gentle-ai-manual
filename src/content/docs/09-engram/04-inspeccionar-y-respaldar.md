@@ -32,8 +32,8 @@ Desde el agente:
 # Buscar por texto
 mem_search(query: "autenticación JWT", project: "mi-proyecto")
 
-# Buscar por tipo
-mem_search(type: "decision", project: "mi-proyecto")
+# Buscar por tipo (query vacío para no filtrar por texto)
+mem_search(query: "", type: "decision", project: "mi-proyecto")
 
 # Buscar todo (sin filtro)
 mem_search(query: "", project: "mi-proyecto")

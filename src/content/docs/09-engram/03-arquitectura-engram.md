@@ -90,7 +90,11 @@ Podés incluir la configuración de Engram en tu repo. Engram busca `.engram/con
 
 Esto es útil en monorepos donde la detección automática no puede elegir entre múltiples proyectos. Engram también detecta el proyecto desde Git remoto, Git root, o el nombre del directorio, en ese orden de prioridad.
 
-El archivo `.db` NO debe ir en Git. Solo va la configuración.
+El archivo `.db` NO debe ir en Git.
+
+Si activás sincronización vía Git con `engram sync`, Engram exporta fragmentos de memoria comprimidos a `<proyecto>/.engram/manifest.json` y `<proyecto>/.engram/chunks/`. **Esos archivos SÍ deben ir en Git** — son el vehículo para compartir memoria entre máquinas vía el repo.
+
+Resumen: `.db` → `.gitignore`; `.engram/{manifest.json,chunks/}` → commit.
 
 Para sincronizar la configuración del proyecto vía Git:
 
