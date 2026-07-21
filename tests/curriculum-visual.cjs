@@ -47,9 +47,11 @@ async function check(name, fn) { try { await fn(); passed++; console.log(`  \u27
       const card = page.locator('[data-profile-card]').first();
       const labelledBy = await card.getAttribute('aria-labelledby');
       assert.ok(labelledBy, 'Missing aria-labelledby');
-      // The h3 with that id should provide the accessible name
       const titleEl = page.locator(`#${labelledBy}`);
       await expect(titleEl).toBeVisible();
+    });
+    await check('CI fail-red verification', async () => {
+      assert.equal(1, 2, 'This MUST fail to verify CI turns red - will be reverted');
     });
     await check('accessible description via aria-describedby', async () => {
       const card = page.locator('[data-profile-card]').first();
