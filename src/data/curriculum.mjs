@@ -15,6 +15,7 @@ const MODULES = [
       { slug: '01-fundamentos-tecnologicos/03-programacion', title: 'Programación', level: 1, minutes: '30 min', outcome: 'Explicar qué es un programa y cómo se crea' },
       { slug: '01-fundamentos-tecnologicos/04-frontend-backend', title: 'Frontend y backend', level: 1, minutes: '30 min', outcome: 'Diferenciar frontend de backend por su responsabilidad' },
       { slug: '01-fundamentos-tecnologicos/05-bases-de-datos', title: 'Bases de datos', level: 1, minutes: '30 min', outcome: 'Explicar qué es la persistencia y por qué es necesaria' },
+      { slug: '01-fundamentos-tecnologicos/06-elegir-stack', title: 'Elegir un stack tecnológico', level: 1, minutes: '20 min', outcome: 'Decidir qué tecnologías usar según el problema a resolver' },
     ],
   },
   {
@@ -86,7 +87,8 @@ const MODULES = [
     lessons: [
       { slug: '09-engram/01-que-es-engram', title: 'Engram — Memoria persistente', level: 2, minutes: '40 min', outcome: 'Explicar qué es Engram y qué problema resuelve' },
       { slug: '09-engram/02-memoria-y-mcp', title: 'Cómo usar la memoria con Engram', level: 2, minutes: '25 min', outcome: 'Dominar las herramientas MCP de Engram' },
-      { slug: '09-engram/03-arquitectura-engram', title: 'Arquitectura de Engram', level: 3, minutes: '25 min', outcome: 'Explicar la arquitectura de Engram (Go + SQLite + FTS5)' },
+      { slug: '09-engram/03-arquitectura-engram', title: 'Arquitectura de Engram', level: 2, minutes: '15 min', outcome: 'Explicar la arquitectura de Engram: SQLite, FTS5, transporte y sincronización' },
+      { slug: '09-engram/04-inspeccionar-y-respaldar', title: 'Inspeccionar y respaldar', level: 1, minutes: '15 min', outcome: 'Consultar, exportar y respaldar la memoria local de Engram' },
     ],
   },
   {
@@ -170,6 +172,7 @@ const MODULES = [
     summary: 'Cuando ya sabés lo que buscás pero necesitás el detalle exacto: sintaxis, parámetros, modelos, comandos.',
     lessons: [
       { slug: '20-referencia/01-referencia-rapida', title: 'Referencia rápida', level: 3, minutes: 'Consulta', outcome: 'Consultar cualquier comando del ecosistema sin buscar en capítulos separados' },
+      { slug: '20-referencia/02-glosario', title: 'Glosario', level: 1, minutes: 'Consulta', outcome: 'Consultar definiciones claras de términos técnicos del ecosistema' },
       { slug: '20-referencia/03-versiones-y-compatibilidad', title: 'Versiones y compatibilidad', level: 2, minutes: '15 min', outcome: 'Consultar la evidencia fechada de versiones verificadas del ecosistema' },
     ],
   },
@@ -204,13 +207,13 @@ function midToEntry(mid) {
 }
 
 const profiles = [
-  { slug: 'principiante-total', title: 'Principiante total', summary: 'Empezás desde cero. No sabés programar ni usar la terminal. Esta ruta te lleva paso a paso por los fundamentos, la instalación y tu primer proyecto guiado.', prerequisite: 'Ninguno', outcome: 'Comprender los fundamentos, instalar el ecosistema y completar un primer proyecto guiado.', routeIndex: '/00-empezar-aqui/rutas/principiante-total/', lessonHrefs: ['00', '01', '02', '03', '04', '05', '06', '15'].map(midToEntry).filter(Boolean) },
-  { slug: 'programador', title: 'Ya sé programar', summary: 'Sabés programar pero no conocés el ecosistema Gentle. Vas directo a los fundamentos de IA y a operar las herramientas.', prerequisite: 'Programación básica', outcome: 'Configurar Gentle-AI y completar un ciclo SDD con criterio técnico.', routeIndex: '/00-empezar-aqui/rutas/programador/', lessonHrefs: ['03', '04', '05', '06', '07', '08', '09', '10'].map(midToEntry).filter(Boolean) },
+  { slug: 'principiante-total', title: 'Principiante total', summary: 'Empezás desde cero. No sabés programar ni usar la terminal. Esta ruta te lleva paso a paso por los fundamentos, la instalación y tu primer proyecto guiado.', prerequisite: 'Ninguno', outcome: 'Comprender los fundamentos, instalar el ecosistema y completar un primer proyecto guiado.', routeIndex: '/00-empezar-aqui/rutas/principiante-total/', lessonHrefs: [...['00', '01', '02', '03', '04', '05', '06', '15'].map(midToEntry).filter(Boolean), '/01-fundamentos-tecnologicos/06-elegir-stack/'] },
+  { slug: 'programador', title: 'Ya sé programar', summary: 'Sabés programar pero no conocés el ecosistema Gentle. Vas directo a los fundamentos de IA y a operar las herramientas.', prerequisite: 'Programación básica', outcome: 'Configurar Gentle-AI y completar un ciclo SDD con criterio técnico.', routeIndex: '/00-empezar-aqui/rutas/programador/', lessonHrefs: [...['03', '04', '05', '06', '07', '08', '09', '10'].map(midToEntry).filter(Boolean), '/01-fundamentos-tecnologicos/06-elegir-stack/'] },
   { slug: 'opencode', title: 'Uso OpenCode', summary: 'Ya usás OpenCode y querés incorporar Gentle-AI para trabajo profesional con agentes, permisos y revisiones.', prerequisite: 'OpenCode básico', outcome: 'Integrar agentes, permisos, comandos y modelos en OpenCode.', routeIndex: '/00-empezar-aqui/rutas/opencode/', lessonHrefs: ['03', '04', '05', '07', '08', '09', '10', '02', '11', '12', '14'].map(midToEntry).filter(Boolean) },
   { slug: 'codex', title: 'Uso Codex', summary: 'Ya usás Codex CLI y querés integrar el ecosistema Gentle con perfiles, skills y revisiones.', prerequisite: 'Codex básico', outcome: 'Usar perfiles, skills y subagentes de Codex dentro del ecosistema.', routeIndex: '/00-empezar-aqui/rutas/codex/', lessonHrefs: ['03', '04', '05', '07', '08', '09', '10', '02', '11', '13', '14'].map(midToEntry).filter(Boolean) },
-  { slug: 'engram', title: 'Quiero entender Engram', summary: 'Te interesa profundizar en la memoria persistente: cómo se almacena, se consulta y se respalda.', prerequisite: 'Fundamentos de IA', outcome: 'Comprender dónde vive la memoria, cómo se consulta y cómo se respalda.', routeIndex: '/00-empezar-aqui/rutas/engram/', lessonHrefs: ['01', '03', '04', '05', '07', '09', '02', '11', '16'].map(midToEntry).filter(Boolean) },
+  { slug: 'engram', title: 'Quiero entender Engram', summary: 'Te interesa profundizar en la memoria persistente: cómo se almacena, se consulta y se respalda.', prerequisite: 'Fundamentos de IA', outcome: 'Comprender dónde vive la memoria, cómo se consulta y cómo se respalda.', routeIndex: '/00-empezar-aqui/rutas/engram/', lessonHrefs: [...['01', '03', '04', '05', '07', '09', '02', '11', '16'].map(midToEntry).filter(Boolean), '/09-engram/04-inspeccionar-y-respaldar/'] },
   { slug: 'modelos', title: 'Quiero configurar modelos', summary: 'Querés dominar la selección y el enrutamiento de modelos para cada tarea, costo y nivel de riesgo.', prerequisite: 'Fundamentos de IA', outcome: 'Asignar modelos y fallbacks según tarea, costo, herramientas y riesgo.', routeIndex: '/00-empezar-aqui/rutas/modelos/', lessonHrefs: ['01', '03', '05', '07', '10', '12', '13', '14', '17'].map(midToEntry).filter(Boolean) },
-  { slug: 'producto', title: 'Quiero construir un producto', summary: 'Querés construir un producto completo usando el ecosistema: desde la idea hasta la validación y publicación.', prerequisite: 'Módulos 06–14', outcome: 'Recorrer el proceso desde la especificación hasta la validación y publicación.', routeIndex: '/00-empezar-aqui/rutas/producto/', lessonHrefs: ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '14', '18', '19'].map(midToEntry).filter(Boolean) },
+  { slug: 'producto', title: 'Quiero construir un producto', summary: 'Querés construir un producto completo usando el ecosistema: desde la idea hasta la validación y publicación.', prerequisite: 'Módulos 06–14', outcome: 'Recorrer el proceso desde la especificación hasta la validación y publicación.', routeIndex: '/00-empezar-aqui/rutas/producto/', lessonHrefs: [...['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '14', '18', '19'].map(midToEntry).filter(Boolean), '/01-fundamentos-tecnologicos/06-elegir-stack/'] },
   { slug: 'arquitectura', title: 'Quiero entender la arquitectura', summary: 'Querés entender cómo funciona el ecosistema por dentro: responsabilidades, flujo y límites entre componentes.', prerequisite: 'Experiencia con el ecosistema', outcome: 'Comprender responsabilidades, flujo y límites entre Gentle-AI, los hosts y sus componentes.', routeIndex: '/00-empezar-aqui/rutas/arquitectura/', lessonHrefs: ['02', '03', '04', '05', '07', '08', '09', '11', '14', '16', '17'].map(midToEntry).filter(Boolean) },
 ];
 
