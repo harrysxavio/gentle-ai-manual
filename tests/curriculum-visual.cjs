@@ -50,9 +50,6 @@ async function check(name, fn) { try { await fn(); passed++; console.log(`  \u27
       const titleEl = page.locator(`#${labelledBy}`);
       await expect(titleEl).toBeVisible();
     });
-    await check('CI fail-red verification', async () => {
-      assert.equal(1, 2, 'This MUST fail to verify CI turns red - will be reverted');
-    });
     await check('accessible description via aria-describedby', async () => {
       const card = page.locator('[data-profile-card]').first();
       const describedBy = await card.getAttribute('aria-describedby');
