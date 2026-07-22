@@ -1,0 +1,313 @@
+---
+import { load } from 'js-yaml';
+import { modules } from '../../data/curriculum.mjs';
+import glossarySource from '../../../data/terminology/glossary.yml?raw';
+import { parseGlossary, type GlossaryEntry } from '../../lib/glossary';
+
+const parsed = load(glossarySource);
+const document = parseGlossary(parsed, 'data/terminology/glossary.yml');
+const terms: GlossaryEntry[] = document.terms;
+const base = import.meta.env.BASE_URL;
+
+function slugify(text) {
+  return text.toLowerCase()
+    .replace(/[^a-z0-9\p{L}]+/gu, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function getFirstLetter(t) {
+  return t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').charAt(0).toUpperCase();
+}
+
+const sorted = [...terms].sort((a, b) => a.term.localeCompare(b.term, 'es'));
+const letters = [...new Set(sorted.map((t) => getFirstLetter(t.term)))];
+
+const categories = [...new Set(terms.map((t) => t.category))].sort();
+
+const catLabels = new Map([
+  ['fundamentos-de-ia', 'Fundamentos de IA'],
+  ['fundamentos-tecnologicos', 'Fundamentos Tecnológicos'],
+  ['sdd', 'SDD'],
+  ['git-y-github', 'Git y GitHub'],
+  ['terminal', 'Terminal'],
+  ['codex', 'Codex'],
+  ['engram', 'Engram'],
+  ['modelos', 'Modelos'],
+  ['skills', 'Skills'],
+  ['arquitectura-tecnica', 'Arquitectura Técnica'],
+  ['calidad-y-revision', 'Calidad y Revisión'],
+  ['gentle-ai', 'Gentle-AI'],
+  ['opencode', 'OpenCode'],
+]);
+
+const moduleMap = new Map();
+modules.forEach((m) => moduleMap.set(m.dir, m));
+
+function catLabel(cat) {
+  var label = catLabels.get(cat);
+  return label ? label : cat;
+}
+
+function refLink(ref) {
+  if (!ref) return null;
+  const dir = ref.replace(/^content\//, '').replace(/\/$/, '');
+  const mod = moduleMap.get(dir);
+  if (mod && mod.entry) {
+    return base.replace(/\/$/, '') + mod.entry;
+  }
+  return base.replace(/\/$/, '') + '/' + dir + '/';
+}
+
+function refLabel(ref) {
+  if (!ref) return null;
+  const dir = ref.replace(/^content\//, '').replace(/\/$/, '');
+  const mod = moduleMap.get(dir);
+  return mod ? mod.title : dir;
+}
+---
+
+<div class="glossary" data-glossary>
+  <div class="glossary-controls">
+    <div class="glossary-search-wrapper">
+      <label for="glossary-search" class="glossary-search-label">Buscar términos</label>
+      <div class="glossary-search-row">
+        <input
+          type="search"
+          id="glossary-search"
+          class="glossary-search-input"
+          placeholder="Escribí un término…"
+          aria-describedby="glossary-status"
+        />
+        <button type="button" id="glossary-clear" class="glossary-clear-btn" aria-label="Limpiar búsqueda">Limpiar</button>
+      </div>
+      <div id="glossary-status" class="glossary-status" role="status" aria-live="polite">
+        {sorted.length} de {sorted.length} términos
+      </div>
+    </div>
+
+    <fieldset class="glossary-categories">
+      <legend class="glossary-categories-legend">Filtrar por categoría</legend>
+      <button type="button" class="glossary-cat-btn is-active" data-cat="all" aria-pressed="true">Todas</button>
+      {categories.map((cat) => (
+        <button type="button" class="glossary-cat-btn" data-cat={cat} aria-pressed="false">{catLabel(cat)}</button>
+      ))}
+    </fieldset>
+  </div>
+
+  <nav class="glossary-index" aria-label="Índice alfabético">
+    {letters.map((ch) => (
+      <a href={"#glossary-letter-" + ch} class="glossary-index-link">{ch}</a>
+    ))}
+  </nav>
+
+  {letters.map((ch) => {
+    const group = sorted.filter((t) => getFirstLetter(t.term) === ch);
+    return (
+      <section class="glossary-letter-group" id={"glossary-letter-" + ch}>
+        <h2 class="glossary-letter-heading">{ch}</h2>
+        {group.map((entry) => {
+          const slug = slugify(entry.term);
+          return (
+            <article class="glossary-term" id={"term-" + slug} data-glossary-term data-category={entry.category}>
+              <h3 class="glossary-term-name">{entry.term}</h3>
+              <p class="glossary-term-def">{entry.simple}</p>
+              {entry.reference ? (
+                <a href={refLink(entry.reference)} class="glossary-term-ref">Aprender más en {refLabel(entry.reference)}</a>
+              ) : null}
+            </article>
+          );
+        })}
+      </section>
+    );
+  })}
+</div>
+
+<script is:inline src={base + 'scripts/glossary.js'}></script>
+
+<style>
+  .glossary-controls {
+    margin-bottom: 1.5em;
+    padding: 1em;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 8px;
+    background: var(--sl-color-gray-6);
+  }
+  [data-theme="dark"] .glossary-controls {
+    background: var(--sl-color-black);
+    border-color: var(--sl-color-gray-5);
+  }
+
+  .glossary-search-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.35em;
+    color: var(--sl-color-text);
+  }
+
+  .glossary-search-row {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+  }
+
+  .glossary-search-input {
+    flex: 1;
+    padding: 0.5em 0.75em;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 6px;
+    font-size: 1em;
+    background: var(--sl-color-bg);
+    color: var(--sl-color-text);
+  }
+  .glossary-search-input:focus {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: 1px;
+  }
+
+  .glossary-clear-btn {
+    padding: 0.45em 0.9em;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 6px;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-text);
+    cursor: pointer;
+    font-size: 0.88em;
+  }
+  .glossary-clear-btn:hover {
+    background: var(--sl-color-gray-5);
+  }
+
+  .glossary-status {
+    margin-top: 0.4em;
+    font-size: 0.85em;
+    color: var(--sl-color-gray-3);
+  }
+
+  .glossary-categories {
+    border: none;
+    padding: 0;
+    margin: 1em 0 0;
+  }
+
+  .glossary-categories-legend {
+    font-weight: 600;
+    margin-bottom: 0.4em;
+    color: var(--sl-color-text);
+  }
+
+  .glossary-cat-btn {
+    display: inline-block;
+    margin: 0.2em 0.3em 0.2em 0;
+    padding: 0.3em 0.65em;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 20px;
+    background: var(--sl-color-bg);
+    color: var(--sl-color-text);
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .glossary-cat-btn:hover {
+    border-color: var(--sl-color-accent);
+  }
+  .glossary-cat-btn.is-active {
+    background: var(--sl-color-accent);
+    color: var(--sl-color-bg);
+    border-color: var(--sl-color-accent);
+  }
+  [data-theme="dark"] .glossary-cat-btn.is-active {
+    color: var(--sl-color-black);
+  }
+
+  .glossary-index {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2em;
+    margin-bottom: 1.5em;
+    padding: 0.5em 0;
+    border-bottom: 1px solid var(--sl-color-gray-5);
+  }
+
+  .glossary-index-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2em;
+    height: 2em;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9em;
+    border-radius: 4px;
+    color: var(--sl-color-accent);
+  }
+  .glossary-index-link:hover {
+    background: var(--sl-color-accent-low);
+    text-decoration: underline;
+  }
+
+  .glossary-letter-group {
+    margin-bottom: 2em;
+  }
+
+  .glossary-letter-heading {
+    font-size: 1.3em;
+    margin: 0 0 0.5em;
+    padding-bottom: 0.25em;
+    border-bottom: 2px solid var(--sl-color-gray-5);
+    color: var(--sl-color-accent);
+  }
+
+  .glossary-term {
+    padding: 0.75em 1em;
+    margin-bottom: 0.5em;
+    border: 1px solid var(--sl-color-gray-6);
+    border-radius: 6px;
+    background: var(--sl-color-bg);
+  }
+  .glossary-term:hover {
+    border-color: var(--sl-color-gray-5);
+  }
+
+  .glossary-term-name {
+    font-size: 1.05em;
+    margin: 0 0 0.3em;
+    color: var(--sl-color-text);
+  }
+
+  .glossary-term-def {
+    margin: 0 0 0.3em;
+    font-size: 0.92em;
+    color: var(--sl-color-gray-3);
+    line-height: 1.5;
+  }
+
+  .glossary-term-ref {
+    font-size: 0.82em;
+    color: var(--sl-color-accent);
+    text-decoration: none;
+  }
+  .glossary-term-ref:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 640px) {
+    .glossary-search-row {
+      flex-direction: column;
+    }
+    .glossary-clear-btn {
+      width: 100%;
+    }
+  }
+
+  @media print {
+    .glossary-controls,
+    .glossary-index {
+      display: none;
+    }
+    .glossary-term {
+      border: none;
+      padding: 0.4em 0;
+      page-break-inside: avoid;
+    }
+  }
+</style>

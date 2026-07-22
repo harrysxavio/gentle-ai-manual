@@ -64,5 +64,29 @@ try {
   err('Curriculum contract threw: ' + e.message);
 }
 
+// 5. Glossary YAML integrity
+console.log('Checking glossary YAML...');
+try {
+  const glossaryPath = path.join(ROOT, 'data', 'terminology', 'glossary.yml');
+  if (!fs.existsSync(glossaryPath)) {
+    err('glossary.yml not found at ' + glossaryPath);
+  } else {
+    const { load } = require('js-yaml');
+    const parsed = load(fs.readFileSync(glossaryPath, 'utf8'));
+    if (!parsed || !Array.isArray(parsed.terms)) {
+      err('glossary.yml: missing top-level "terms" array');
+    } else {
+      parsed.terms.forEach((item, i) => {
+        if (!item || typeof item.term !== 'string') err('glossary.yml entry ' + i + ': "term" must be a string');
+        if (typeof item.simple !== 'string') err('glossary.yml entry ' + i + ' (' + (item?.term || '?') + '): "simple" must be a string');
+        if (typeof item.category !== 'string') err('glossary.yml entry ' + i + ' (' + (item?.term || '?') + '): "category" must be a string');
+      });
+      if (parsed.terms.length < 50) err('glossary.yml: expected 50+ terms, got ' + parsed.terms.length);
+    }
+  }
+} catch (e) {
+  err('Glossary check threw: ' + e.message);
+}
+
 if (errors) { console.log('\n' + errors + ' error(s) found'); process.exit(1); }
 console.log('All checks passed');

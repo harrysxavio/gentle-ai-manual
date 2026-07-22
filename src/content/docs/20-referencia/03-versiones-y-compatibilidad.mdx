@@ -1,10 +1,108 @@
 ---
 title: Versiones y compatibilidad
-description: Evidencia verificada de versiones del ecosistema Gentle-AI
+description: Matriz de compatibilidad del ecosistema Gentle-AI y comportamiento de degradación
 level: 2
 ---
 
-Este capítulo presentará la evidencia fechada de versiones para cada componente del ecosistema.
+Esta página documenta qué versiones de cada componente funcionan juntas, cómo se comportan cuando un prerrequisito falta, y cómo las feature flags de configuración afectan el comportamiento.
 
-_Contenido completo en PR 4 — Verdad técnica y trazabilidad._
+## Matriz de compatibilidad
 
+| Componente | Versión mínima | Versión recomendada | Depende de |
+|---|---|---|---|
+| **Node.js** | 18 | 22+ | — |
+| **OpenCode** | 1.14.0 | 1.16.0+ | Node.js |
+| **Codex CLI** | 0.14.0 | 0.17.0+ | Node.js |
+| **Engram** | 1.15.3 | 1.20.0+ | Go runtime (incluido en el binario) |
+| **Gentle-AI (plugin/skills)** | 1.0.0 | actual | OpenCode ≥ 1.14.0 o Codex |
+| **GGA** (hooks) | 1.0.0 | actual | Git ≥ 2.30 |
+| **SQLite** | 3.38 (FTS5) | incluido en Engram | — |
+| **Starlight** (Astro) | 0.32 | 0.32+ | Astro ≥ 5.6 |
+
+### Cómo verificar cada versión
+
+```bash
+node --version        # Node.js
+opencode --version    # OpenCode
+codex --version       # Codex CLI
+engram --version      # Engram (memoria persistente)
+git --version         # Git (para GGA hooks)
+npx astro --version   # Astro (solo para este manual)
+```
+
+## Compatibilidad de proveedores de modelo
+
+| Proveedor | OpenCode | Codex CLI | Feature flags exclusivas |
+|---|---|---|---|
+| **OpenAI** (GPT-4o, o3, o4-mini) | ✅ Completo | ✅ Completo | reasoning_effort, strict_function_calling |
+| **Anthropic** (Claude Sonnet 4, Opus) | ✅ Completo | ⚠️ Parcial (solo chat) | extended_thinking, max_tokens_budget |
+| **Google** (Gemini 2.5 Pro, Flash) | ✅ Completo | ⚠️ Parcial (solo chat) | safety_settings, system_instruction |
+| **OpenRouter** (agregador) | ✅ Completo | ❌ No soportado | provider_routing, fallback_models |
+
+**Comportamiento de degradación**: si un proveedor no está disponible, el modelo de respaldo (fallback) se activa automáticamente cuando está configurado en la cadena de modelos. Sin fallback configurado, la operación falla con un error explícito.
+
+## Interacciones de feature flags
+
+| Feature flag | ¿Qué controla? | ¿Afecta compatibilidad? |
+|---|---|---|
+| `capture_prompt` (engram) | Si mem_save captura el prompt automáticamente | No — solo metadatos |
+| `topic_key` (engram) | Upserts vs creación de observaciones | No — solo comportamiento de almacenamiento |
+| `mem_judge` (engram) | Resolución de conflictos de memoria | Depende de versión ≥ 1.15.3 |
+| `strict_tdd` (sdd) | Orden estricto test → código | No — solo flujo de trabajo |
+| `reasoning_effort` (modelos) | Cuánto "piensa" el modelo | Depende del proveedor |
+| `chained_pr` (skills) | División de PRs grandes en PRs encadenados | No — solo proceso |
+
+**Regla general**: la mayoría de las feature flags son ortogonales entre componentes. Las únicas interdependencias reales son:
+
+1. `reasoning_effort` requiere que el proveedor lo soporte (OpenAI o3, o4-mini lo soportan; Gemini no)
+2. `capture_prompt: false` evita la captura automática pero no afecta otras funciones de mem_save
+3. GGA hooks requieren Git ≥ 2.30 para hooks nativos con `git hook run`
+
+## Comportamiento de degradación
+
+### Cuando Engram no está instalado
+
+| Escenario | Comportamiento |
+|---|---|
+| `mem_save()` llamado sin Engram | Error: `MCP tool not available`. El agente continúa sin guardar memoria. |
+| `mem_context()` al iniciar sesión | Devuelve vacío. La sesión arranca sin contexto previo. |
+| `sdd-init` | Fallo: requiere Engram para detectar stack. |
+| Operaciones de lectura de memoria | Devuelven vacío o error, según la herramienta. |
+
+### Cuando un proveedor de modelo falla
+
+| Configuración | Comportamiento |
+|---|---|
+| Fallback configurado | OpenCode prueba el siguiente modelo en la cadena automáticamente |
+| Sin fallback | Error explícito con el código HTTP y mensaje del proveedor |
+| Fallback agotado (todos fallaron) | Error: `All models in chain exhausted`. |
+
+### Cuando FTS5 no está disponible (SQLite sin extensión)
+
+Engram incluye SQLite con FTS5 compilado estáticamente en el binario de Go. No hay dependencia externa. Si el binario de Engram está correctamente instalado, FTS5 siempre funciona.
+
+## Compatibilidad futura
+
+### Engram v2 (planeado)
+
+| Cambio | Impacto |
+|---|---|
+| Migración de SQLite a almacenamiento híbrido | `engram export` → `engram import` será la ruta de migración compatible |
+| API REST además de MCP | Las herramientas `mem_*` actuales seguirán funcionando; se agregarán endpoints HTTP equivalentes |
+| Cloud sync nativo | Compatible con Git sync existente; no lo reemplaza |
+| `mem_review` con `action=list` | Vida útil extendida para auditoría de ciclo de vida |
+
+### OpenCode v2 (planeado)
+
+| Cambio | Impacto |
+|---|---|
+| Native Review como parte del core | GGA seguirá funcionando como wrapper opcional |
+| SDK de plugins tipado | Los skills actuales (SKILL.md) seguirán cargándose; el SDK agrega tipado, no reemplaza |
+| Multi-agente con worktrees | `sdd-apply` y `sdd-verify` seguirán funcionando con agentes individuales |
+
+## Notas sobre versionado semántico
+
+- **OpenCode** sigue SemVer estricto. `1.14.0` → `1.15.0` = nuevas features, `1.14.0` → `1.14.1` = bug fixes.
+- **Engram** sigue SemVer aproximado. `1.15.3` → `1.20.0` agrega `mem_judge`, `capture_prompt`, y mejoras de sync. Los comandos `mem_*` no rompen compatibilidad hacia atrás.
+- **Gentle-AI skills** no tienen versionado formal. Se actualizan con `skill update` y el changelog está en cada SKILL.md.
+- **GGA hooks** se versionan con el release de Gentle-AI. Cada versión mayor de hooks requiere `git hook run` nativo.
