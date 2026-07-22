@@ -49,6 +49,10 @@ Cada término incluye su primera definición simple (Nivel 1: visión simple) y 
 **Simple**: El CLI de OpenAI para desarrollo asistido por IA.
 **Referencia**: `content/13-codex/` — Codex completo.
 
+### capture_prompt
+**Simple**: Parámetro opcional de `mem_save` que desactiva la captura automática del prompt del usuario. Cuando es `false`, Engram no vincula el prompt actual a la observación guardada.
+**Referencia**: `content/09-engram/03-arquitectura-engram/` — Arquitectura Engram.
+
 ### Commit
 **Simple**: Un punto guardado en el historial de Git con un mensaje que describe el cambio.
 **Referencia**: `content/02-git-y-github/` — Commits.
@@ -84,6 +88,22 @@ Cada término incluye su primera definición simple (Nivel 1: visión simple) y 
 ### Engram
 **Simple**: Sistema de memoria persistente que guarda decisiones, descubrimientos y contexto entre sesiones.
 **Referencia**: `content/09-engram/` — Engram completo.
+
+### engram doctor
+**Simple**: Comando de diagnóstico read-only que verifica el estado de Engram sin modificarlo. Reporta versión, integridad del archivo SQLite, y estado del MCP server. Nunca usa `--fix`.
+**Referencia**: `content/09-engram/04-inspeccionar-y-respaldar/` — Inspeccionar y respaldar.
+
+### engram export
+**Simple**: Respalda toda la base de memoria en un archivo JSON. Incluye sesiones, observaciones y prompts. Se restaura con `engram import`. No existe `engram backup`.
+**Referencia**: `content/09-engram/04-inspeccionar-y-respaldar/` — Inspeccionar y respaldar.
+
+### engram import
+**Simple**: Restaura una base de memoria desde un archivo JSON generado con `engram export`. Reemplaza la base actual si se omite `--merge`. No existe `engram restore`.
+**Referencia**: `content/09-engram/04-inspeccionar-y-respaldar/` — Inspeccionar y respaldar.
+
+### engram sync
+**Simple**: Sincroniza configuración del proyecto vía Git. Usa `.engram/manifest.json` y `.engram/chunks/` para compartir ajustes entre máquinas. No sincroniza `engram.db`.
+**Referencia**: `content/09-engram/03-arquitectura-engram/` — Arquitectura Engram.
 
 ### Explore (sdd-explore)
 **Simple**: Fase de SDD para investigar ideas antes de comprometerse a un cambio.
@@ -168,6 +188,26 @@ Cada término incluye su primera definición simple (Nivel 1: visión simple) y 
 ### MCP (Model Context Protocol)
 **Simple**: Protocolo estándar para que agentes de IA se conecten a herramientas y fuentes de datos externas.
 **Referencia**: `content/03-fundamentos-de-ia/` — MCP.
+
+### mem_context
+**Simple**: Función de Engram que recupera el historial reciente de sesiones de un proyecto. Acepta filtros por `project` y `scope`. Es el primer paso al iniciar una sesión para retomar contexto.
+**Referencia**: `content/09-engram/01-que-es-engram/` — ¿Qué es Engram?
+
+### mem_get_observation
+**Simple**: Función de Engram que recupera el contenido completo de una observación por su ID numérico. Usada cuando un resultado de `mem_search` está truncado y se necesita el texto completo.
+**Referencia**: `content/09-engram/02-memoria-y-mcp/` — Memoria y MCP.
+
+### mem_save
+**Simple**: Función principal de Engram para guardar una observación. Parámetros: `title` (obligatorio), `type` (decision|bugfix|discovery|pattern|preference|config), `scope` (project|personal), `topic_key` (para upserts), `capture_prompt` (true por defecto). El agente la invoca automáticamente.
+**Referencia**: `content/09-engram/02-memoria-y-mcp/` — Memoria y MCP.
+
+### mem_search
+**Simple**: Función de Engram que busca observaciones usando FTS5 con BM25. Acepta filtros por `query` (obligatorio), `type`, `project`, `scope`. Los resultados incluyen fragmentos truncados que se expanden con `mem_get_observation`.
+**Referencia**: `content/09-engram/02-memoria-y-mcp/` — Memoria y MCP.
+
+### mem_session_summary
+**Simple**: Función de Engram que guarda un resumen estructurado al cerrar una sesión. Campos: `goal`, `instructions`, `discoveries`, `accomplished`, `nextSteps`, `relevantFiles`. Es obligatorio llamarla antes de finalizar una sesión.
+**Referencia**: `content/09-engram/01-que-es-engram/` — ¿Qué es Engram?
 
 ### Modelo (de IA)
 **Simple**: Un sistema entrenado para procesar instrucciones y generar respuestas.
@@ -304,6 +344,10 @@ Cada término incluye su primera definición simple (Nivel 1: visión simple) y 
 ### Tool calling
 **Simple**: Capacidad de un modelo de solicitar ejecutar una herramienta externa.
 **Referencia**: `content/03-fundamentos-de-ia/` — Tool calling.
+
+### topic_key
+**Simple**: Clave estable para upserts en Engram. Cuando se usa el mismo `topic_key` en `mem_save`, Engram actualiza la observación existente en lugar de crear una nueva. Útil para temas evolutivos como `architecture/database-choice`.
+**Referencia**: `content/09-engram/02-memoria-y-mcp/` — Memoria y MCP.
 
 ### TUI (Text User Interface)
 **Simple**: Interfaz de usuario basada en texto con elementos visuales como paneles y menús.
