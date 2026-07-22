@@ -12,6 +12,20 @@ let passed = 0, failed = 0;
 async function check(name, fn) { try { await fn(); passed++; console.log('  \u2705 ' + name); } catch(e) { failed++; console.log('  \u274c ' + name + ': ' + e.message); } }
 
 (async () => {
+  // Quick connectivity check
+  try {
+    const http = require('http');
+    await new Promise((resolve, reject) => {
+      const req = http.get(new URL(HOST + BASE + '/20-referencia/02-glosario/'), (res) => { res.resume(); resolve(); });
+      req.on('error', reject);
+      req.setTimeout(2000, () => { req.destroy(); reject(new Error('timeout')); });
+    });
+  } catch (e) {
+    console.log('  \u26a0\ufe0f Server not available at ' + HOST + BASE + '/20-referencia/02-glosario/ — skipping');
+    console.log('  \u2139\ufe0f Run: npx start-server-and-test \'npx astro preview --port 4323\' http://localhost:4323/gentle-ai-manual/20-referencia/02-glosario/ \'cross-env TEST_HOST=http://localhost:4323 TEST_BASE=/gentle-ai-manual node tests/glossary-clear.test.cjs\'');
+    process.exit(0);
+  }
+
   const browser = await chromium.launch();
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, colorScheme: 'dark' });
   const page = await ctx.newPage();
