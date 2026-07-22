@@ -33,10 +33,12 @@ async function check(name, fn) { try { await fn(); passed++; console.log(`  ✅ 
       assert.ok(await page.locator('[data-route-context]').isVisible());
     });
 
-    // Route name is shown
-    await check('route title shown', async () => {
+    // Route name shows canonical title, NOT the slug
+    await check('route title is canonical, not slug', async () => {
       const text = await page.locator('[data-route-name]').textContent();
-      assert.ok(text.includes('Principiante') || text.includes('total'), `route name contains "Principiante", got: "${text}"`);
+      // Slug is "principiante-total"; title is "Principiante total"
+      assert.notEqual(text, 'principiante-total', `route name must not be the raw slug, got: "${text}"`);
+      assert.ok(text.includes('Principiante total'), `route name should be "Principiante total", got: "${text}"`);
     });
 
     // Step N of M is shown

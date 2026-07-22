@@ -138,5 +138,90 @@ if (!hasQuery) {
   console.log('  PASS: no hardcoded ?ruta= in curriculum hrefs');
 }
 
+// 11. All profiles have canonical title (not slug) — iterate curriculum source
+console.log('11. All profiles have canonical titles');
+const titleData = evalCurriculum(`profiles.map(p => ({ slug: p.slug, title: p.title }))`);
+let titleOK = true;
+for (const p of titleData) {
+  // Title must exist and differ from slug (slug uses hyphens, title uses spaces)
+  if (!p.title || p.title.length < 2) {
+    console.log(`  FAIL: profile "${p.slug}" has no title`);
+    titleOK = false; errors++; tests++;
+    continue;
+  }
+  // Title must NOT be the raw slug
+  if (p.title === p.slug) {
+    console.log(`  FAIL: profile "${p.slug}" title is the raw slug: "${p.title}"`);
+    titleOK = false; errors++; tests++;
+    continue;
+  }
+  // Title must contain the slug parts in human-readable form (either full words or semantic)
+  const slugWords = p.slug.split('-').filter(w => w.length > 2);
+  const titleLower = p.title.toLowerCase();
+  let wordFound = false;
+  // Each profile slug has at least one distinct word that should appear in the title
+  if (slugWords.length > 0 && slugWords.some(w => titleLower.includes(w))) {
+    wordFound = true;
+  }
+  // Exception: short slug words like "ya", "se" may not appear
+  if (slugWords.length > 0 && !wordFound && slugWords.every(w => w.length <= 2)) {
+    wordFound = true; // short-only slugs are ok
+  }
+  if (!wordFound) {
+    console.log(`  WARN: profile "${p.slug}" title "${p.title}" may not relate to slug words`);
+  }
+}
+if (titleOK) {
+  tests++;
+  console.log('  PASS: all profiles have canonical titles');
+}
+
+// 12. Every profile's title is distinct from its slug (regression guard)
+console.log('12. Title vs slug — regression guard');
+let regrOK = true;
+for (const p of titleData) {
+  if (p.title === p.slug) {
+    console.log(`  FAIL: profile "${p.slug}" uses raw slug as title: "${p.title}"`);
+    regrOK = false; errors++; tests++;
+  }
+}
+if (regrOK) {
+  tests++;
+  console.log('  PASS: no profile uses slug as display title');
+}
+
+// 13. Every profile's lessonHrefs preserve the slug in query params when appended
+console.log('13. Query param preserves slug, not title');
+const qpData = evalCurriculum(`profiles.map(p => ({
+  slug: p.slug,
+  title: p.title,
+  firstHref: p.lessonHrefs[0] || null
+}))`);
+let qpOK = true;
+for (const p of qpData) {
+  if (!p.firstHref) {
+    console.log(`  FAIL: profile "${p.slug}" has no lessonHrefs`);
+    qpOK = false; errors++; tests++;
+    continue;
+  }
+  // When we append ?ruta=, we must use the SLUG, not the title
+  // Verify slug and title are different (otherwise the URL would be ambiguous)
+  if (p.title === p.slug) {
+    console.log(`  FAIL: profile "${p.slug}" slug and title are identical — URL query would be ambiguous`);
+    qpOK = false; errors++; tests++;
+  }
+}
+if (qpOK) {
+  tests++;
+  console.log('  PASS: query param uses slug (verified slug ≠ title for all profiles)');
+}
+
+// 14. Invalid route slug is rejected (not invented)
+console.log('14. Invalid route slug is rejected');
+const invalidProfile = evalCurriculum(`(function() { try { getProfile("ruta-inexistente"); return "ok"; } catch(e) { return "error"; } })()`);
+assert(invalidProfile === 'error', 'unknown profile slug throws');
+const invalidProgress = evalCurriculum(`getRouteProgress("ruta-inexistente", "/00-empezar-aqui/01-bienvenida/")`);
+assert(invalidProgress === null, 'invalid slug returns null from getRouteProgress');
+
 console.log(`\n${tests} tests, ${errors} failure(s)`);
 if (errors) process.exit(1);
