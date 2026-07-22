@@ -7,6 +7,9 @@ estimatedTime: 15 min
 
 Engram guarda todo en un archivo SQLite. Podés inspeccionarlo, exportarlo a un archivo portable e importarlo después.
 
+![Vista de inspección de Engram](/gentle-ai-manual/screenshots/engram-inspeccionar.png)
+*Pantalla de `engram doctor` y verificación de la base de memoria.*
+
 ## Ver estadísticas
 
 El comando más rápido para saber el estado de tu memoria:

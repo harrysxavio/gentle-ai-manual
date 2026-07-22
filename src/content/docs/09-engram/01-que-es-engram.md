@@ -52,6 +52,9 @@ graph TB
 
 El agente se conecta a Engram vía MCP (estándar de comunicación entre IA y herramientas). Engram lee y escribe en el archivo SQLite. Fin.
 
+![Diagrama de flujo de memoria Engram](/gentle-ai-manual/screenshots/engram-que-es.png)
+*Diagrama conceptual del flujo de memoria entre agente, MCP y base de datos local.*
+
 ## Recorrido práctico
 
 ```text
