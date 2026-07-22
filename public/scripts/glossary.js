@@ -54,11 +54,22 @@
     });
   }
 
+  function resetGlossary() {
+    // Reset search
+    search.value = '';
+    // Reset category to 'all'
+    activeCat = 'all';
+    for (var k = 0; k < catBtns.length; k++) {
+      var btn = catBtns[k];
+      var isActive = btn.getAttribute('data-cat') === 'all';
+      btn.classList.toggle('is-active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    }
+    applyFilters();
+    search.focus();
+  }
+
   if (clear) {
-    clear.addEventListener('click', function() {
-      search.value = '';
-      applyFilters();
-      search.focus();
-    });
+    clear.addEventListener('click', resetGlossary);
   }
 })();
