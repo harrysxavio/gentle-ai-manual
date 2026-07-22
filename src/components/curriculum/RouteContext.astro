@@ -1,0 +1,319 @@
+---
+// RouteContext.astro — Route continuity context banner, prev/next, route map
+// Data is embedded as JSON; the client script detects the route from ?ruta=
+// and renders the full context. SSR fallback: shows "no active route" or noscript link.
+import { profiles, lessonsByHref } from '../../data/curriculum.mjs';
+
+const base = import.meta.env.BASE_URL;
+
+// Build route data for all profiles (single source — no array duplication in JS)
+const routeData = {};
+const profileNames = {};
+for (const profile of profiles) {
+  profileNames[profile.slug] = profile.title;
+  routeData[profile.slug] = profile.lessonHrefs.map((href, i) => {
+    const lesson = lessonsByHref.get(href);
+    return { href, title: lesson?.title || href, index: i };
+  });
+}
+
+// Serialize the route data for client consumption via set:html
+const serializedData = JSON.stringify({ base, routes: routeData, profileNames });
+---
+
+<section data-route-context aria-label="Contexto de ruta de aprendizaje" class="route-context-root">
+  <!-- Empty container filled by route-context.js -->
+  <div data-route-content></div>
+
+  <noscript>
+    <p class="route-context__nojs">
+      <a href={`${base}00-empezar-aqui/02-indice-completo/`}>Ver índice completo del manual</a>
+    </p>
+  </noscript>
+</section>
+
+<script id="route-context-data" type="application/json" set:html={serializedData}>
+</script>
+<script src={`${base}scripts/route-context.js`} defer></script>
+
+<style is:global>
+/* ============================================================
+   ROUTE CONTEXT — global styles (also used by route-context.js)
+   ============================================================ */
+.route-context-root {
+  margin: 1.5em 0;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 8px;
+  background: var(--sl-color-gray-6);
+}
+[data-theme="dark"] .route-context-root {
+  border-color: var(--sl-color-gray-5);
+  background: var(--sl-color-gray-6);
+}
+.route-context__nojs {
+  padding: 0.75em 1em;
+  font-size: 0.88em;
+  color: var(--sl-color-gray-3);
+  text-align: center;
+}
+.route-context__nojs a {
+  color: var(--sl-color-accent);
+  font-weight: 600;
+}
+
+/* ── Context bar ── */
+.route-context__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5em;
+  padding: 0.75em 1em;
+  border-bottom: 1px solid var(--sl-color-gray-5);
+}
+[data-theme="dark"] .route-context__bar {
+  border-bottom-color: var(--sl-color-gray-5);
+}
+.route-context__info {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  flex-wrap: wrap;
+  font-size: 0.9em;
+}
+.route-context__route-link {
+  font-weight: 700;
+  color: var(--sl-color-accent);
+  text-decoration: none;
+}
+.route-context__route-link:hover {
+  text-decoration: underline;
+}
+.route-context__sep {
+  color: var(--sl-color-gray-3);
+}
+.route-context__step,
+.route-context__pct {
+  font-size: 0.88em;
+  color: var(--sl-color-gray-3);
+}
+.route-context__index-link {
+  font-size: 0.82em;
+  font-weight: 600;
+  color: var(--sl-color-accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.route-context__index-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Previous / Next ── */
+.route-context__nav {
+  padding: 0.75em 1em;
+}
+.route-context__nav-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5em;
+}
+.route-context__nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.4em 0.8em;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--sl-color-text);
+  font-size: 0.88em;
+  transition: background 0.15s;
+  min-height: 44px;
+  max-width: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.route-context__nav-link:hover {
+  background: var(--sl-color-gray-5);
+}
+.route-context__nav-link--disabled {
+  visibility: hidden;
+}
+.route-context__nav-current {
+  font-weight: 700;
+  font-size: 0.9em;
+  color: var(--sl-color-text);
+  text-align: center;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Route map ── */
+.route-context__map {
+  margin: 0 1em 0.5em;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 6px;
+  background: var(--sl-color-bg);
+}
+[data-theme="dark"] .route-context__map {
+  border-color: var(--sl-color-gray-5);
+  background: var(--sl-color-gray-6);
+}
+.route-context__map-summary {
+  cursor: pointer;
+  padding: 0.5em 0.75em;
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--sl-color-accent);
+}
+.route-context__map-summary:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: -2px;
+  border-radius: 6px;
+}
+.route-context__map-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.route-context__map-item {
+  border-top: 1px solid var(--sl-color-gray-5);
+}
+[data-theme="dark"] .route-context__map-item {
+  border-top-color: var(--sl-color-gray-5);
+}
+.route-context__map-link {
+  display: flex;
+  gap: 0.5em;
+  align-items: baseline;
+  padding: 0.5em 0.75em;
+  text-decoration: none;
+  color: var(--sl-color-text);
+  font-size: 0.85em;
+  transition: background 0.12s;
+}
+.route-context__map-link:hover {
+  background: var(--sl-color-gray-5);
+}
+.route-context__map-link:focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: -2px;
+}
+.route-context__map-link--current {
+  background: var(--sl-color-accent-low);
+  font-weight: 700;
+}
+[data-theme="dark"] .route-context__map-link--current {
+  background: var(--sl-color-accent-low);
+}
+.route-context__map-link[aria-current="step"] {
+  font-weight: 700;
+}
+.route-context__map-num {
+  font-size: 0.8em;
+  color: var(--sl-color-gray-3);
+  font-weight: 600;
+  flex-shrink: 0;
+  min-width: 4em;
+}
+.route-context__map-title {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Inactive ── */
+.route-context__inactive {
+  padding: 0.75em 1em;
+  font-size: 0.88em;
+  color: var(--sl-color-gray-3);
+  text-align: center;
+}
+.route-context__inactive a {
+  color: var(--sl-color-accent);
+  font-weight: 600;
+}
+
+/* ── Exit ── */
+.route-context__exit {
+  padding: 0.5em 1em 0.75em;
+  text-align: center;
+}
+.route-context__exit-link {
+  font-size: 0.8em;
+  color: var(--sl-color-gray-3);
+  text-decoration: none;
+}
+.route-context__exit-link:hover {
+  color: var(--sl-color-text);
+  text-decoration: underline;
+}
+
+/* ── Mobile sticky bar ── */
+[data-route-mobile-bar] {
+  display: none;
+}
+@media (max-width: 48rem) {
+  [data-route-mobile-bar] {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--sl-color-bg);
+    border-top: 1px solid var(--sl-color-gray-5);
+    padding: 0.5em env(safe-area-inset-right, 0.5em) calc(0.5em + env(safe-area-inset-bottom, 0px)) env(safe-area-inset-left, 0.5em);
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5em;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+  }
+  [data-theme="dark"] [data-route-mobile-bar] {
+    border-top-color: var(--sl-color-gray-5);
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+  }
+  .route-context__mobile-label {
+    font-size: 0.72em;
+    color: var(--sl-color-gray-3);
+    text-align: center;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .route-context__mobile-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2em;
+    padding: 0.35em 0.6em;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--sl-color-accent);
+    font-size: 0.8em;
+    font-weight: 600;
+    min-height: 44px;
+    white-space: nowrap;
+  }
+  .route-context__mobile-link:hover {
+    background: var(--sl-color-gray-5);
+  }
+  .route-context__mobile-link--disabled {
+    visibility: hidden;
+  }
+  /* Push page content above sticky bar */
+  body {
+    padding-bottom: 3.5em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-context__nav-link { transition: none; }
+  .route-context__map-link { transition: none; }
+}
+</style>
