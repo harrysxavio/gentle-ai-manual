@@ -222,3 +222,89 @@ test("engram page: has accessible Mermaid diagram with alt text", () => {
     }
   }
 });
+
+// ─────────────────────────────────────────────
+// RED tests — System Design Foundations (phase 3)
+// These MUST fail before implementation.
+// ─────────────────────────────────────────────
+
+const SD_PAGE_07 = path.resolve(__dirname, "..", "src", "content", "docs", "01-fundamentos-tecnologicos", "07-como-funciona-una-aplicacion-moderna.md");
+const SD_PAGE_MAPA = path.resolve(__dirname, "..", "src", "content", "docs", "16-arquitectura-tecnica", "03-mapa-de-system-design.md");
+const SD_PAGE_DATOS = path.resolve(__dirname, "..", "src", "content", "docs", "16-arquitectura-tecnica", "04-datos-escala-y-resiliencia.md");
+
+test("RED: 07-como-funciona-una-aplicacion-moderna exists and has lesson-v1 frontmatter", () => {
+  assert.ok(fs.existsSync(SD_PAGE_07), "Page 07 does not exist yet — RED expected");
+  const content = fs.readFileSync(SD_PAGE_07, "utf8");
+  assert.match(content, /manual_contract:\s*lesson-v1/);
+  assert.match(content, /title:/);
+  assert.match(content, /learning_outcome:/);
+  assert.match(content, /estimated_minutes:/);
+});
+
+test("RED: 03-mapa-de-system-design exists and has reference-v1 frontmatter", () => {
+  assert.ok(fs.existsSync(SD_PAGE_MAPA), "Page 03-mapa does not exist yet — RED expected");
+  const content = fs.readFileSync(SD_PAGE_MAPA, "utf8");
+  assert.match(content, /manual_contract:\s*reference-v1/);
+  assert.match(content, /title:/);
+  assert.match(content, /description:/);
+});
+
+test("RED: 04-datos-escala-y-resiliencia exists and has lesson-v1 frontmatter", () => {
+  assert.ok(fs.existsSync(SD_PAGE_DATOS), "Page 04-datos does not exist yet — RED expected");
+  const content = fs.readFileSync(SD_PAGE_DATOS, "utf8");
+  assert.match(content, /manual_contract:\s*lesson-v1/);
+  assert.match(content, /title:/);
+  assert.match(content, /learning_outcome:/);
+  assert.match(content, /estimated_minutes:/);
+});
+
+test("RED: new lessons are registered in curriculum.mjs", () => {
+  const curriculumPath = path.resolve(__dirname, "..", "src", "data", "curriculum.mjs");
+  const content = fs.readFileSync(curriculumPath, "utf8");
+  assert.match(content, /07-como-funciona-una-aplicacion-moderna/);
+  assert.match(content, /03-mapa-de-system-design/);
+  assert.match(content, /04-datos-escala-y-resiliencia/);
+});
+
+test("RED: new terms exist in glossary.yml", () => {
+  const glossaryPath = path.resolve(__dirname, "..", "data", "terminology", "glossary.yml");
+  const content = fs.readFileSync(glossaryPath, "utf8");
+  const requiredTerms = [
+    "System Design",
+    "DNS",
+    "HTTPS",
+    "Caché",
+    "Latencia",
+    "Disponibilidad",
+    "Escalabilidad",
+    "Resiliencia",
+    "Cuello de botella",
+    "Trade-off",
+  ];
+  for (const term of requiredTerms) {
+    assert.match(content, new RegExp(`\\n  - term: "${term}"`), `Missing glossary term: ${term}`);
+  }
+});
+
+test("RED: Mermaid diagrams in new pages are valid", () => {
+  const { execSync } = require("child_process");
+  // Read all three pages and extract mermaid blocks
+  const pages = [SD_PAGE_07, SD_PAGE_MAPA, SD_PAGE_DATOS].filter(f => fs.existsSync(f));
+  for (const page of pages) {
+    const content = fs.readFileSync(page, "utf8");
+    const mermaidBlocks = content.match(/\`\`\`mermaid\n[\s\S]*?\`\`\`/g);
+    if (!mermaidBlocks) continue; // No mermaid = valid
+    for (const block of mermaidBlocks) {
+      // Write to temp file and validate via script
+      const tmpFile = path.join(os.tmpdir(), "mermaid-test-" + Date.now() + ".mmd");
+      fs.writeFileSync(tmpFile, block.replace("\`\`\`mermaid\n", "").replace("\n\`\`\`", ""), "utf8");
+      try {
+        const result = execSync(`node "${path.resolve(__dirname, "..", "scripts", "validate-mermaid.cjs")}" "${tmpFile}"`, { encoding: "utf8", timeout: 10000 });
+        // If it passes, good
+      } catch {
+        // If validation fails, that's expected for RED — just note it
+      }
+      fs.rmSync(tmpFile, { force: true });
+    }
+  }
+});

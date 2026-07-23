@@ -356,3 +356,68 @@ terms:
     simple: "Una copia de trabajo adicional de un repositorio Git, útil para trabajar en múltiples ramas simultáneamente."
     reference: "content/02-git-y-github/"
     category: "git-y-github"
+
+  - term: "System Design"
+    simple: "La disciplina de diseñar la arquitectura de un sistema: qué componentes tiene, cómo se comunican, cómo escalan y cómo manejan fallos."
+    reference: "content/16-arquitectura-tecnica/"
+    category: "arquitectura-tecnica"
+
+  - term: "Cliente (contexto red)"
+    simple: "El programa o dispositivo que inicia una solicitud a un servidor. Ej: navegador, app móvil."
+    reference: "content/01-fundamentos-tecnologicos/07-como-funciona-una-aplicacion-moderna/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Servidor (contexto red)"
+    simple: "La computadora o programa que recibe solicitudes de clientes, las procesa y devuelve respuestas."
+    reference: "content/01-fundamentos-tecnologicos/07-como-funciona-una-aplicacion-moderna/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "DNS"
+    simple: "Sistema que traduce nombres de dominio legibles (ejemplo.com) a direcciones IP numéricas. Significa Domain Name System."
+    reference: "content/01-fundamentos-tecnologicos/07-como-funciona-una-aplicacion-moderna/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "HTTPS"
+    simple: "Protocolo HTTP sobre una capa de cifrado TLS que garantiza confidencialidad, integridad y autenticación. Significa HTTP + TLS."
+    reference: "content/01-fundamentos-tecnologicos/07-como-funciona-una-aplicacion-moderna/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Caché"
+    simple: "Copia temporal de datos costosos o lentos de obtener. Acelera lecturas repetidas pero puede servir datos obsoletos."
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
+    category: "arquitectura-tecnica"
+
+  - term: "Latencia"
+    simple: "El tiempo que tarda una solicitud individual en completarse, generalmente medido en milisegundos."
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
+    category: "arquitectura-tecnica"
+
+  - term: "Throughput / capacidad"
+    simple: "La cantidad de solicitudes que un sistema puede procesar por unidad de tiempo (ej: requests por segundo)."
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
+    category: "arquitectura-tecnica"
+
+  - term: "Disponibilidad"
+    simple: "El porcentaje de tiempo que un sistema está operativo y responde correctamente."
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
+    category: "arquitectura-tecnica"
+
+  - term: "Escalabilidad"
+    simple: "La capacidad de un sistema para manejar más carga agregando recursos (vertical) o más máquinas (horizontal)."
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
+    category: "arquitectura-tecnica"
+
+  - term: "Resiliencia"
+    simple: "La capacidad de un sistema de seguir funcionando (quizás degradado) cuando uno o más componentes fallan."
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
+    category: "arquitectura-tecnica"
+
+  - term: "Cuello de botella"
+    simple: "El componente más lento de un sistema que limita el rendimiento total."
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
+    category: "arquitectura-tecnica"
+
+  - term: "Trade-off"
+    simple: "La decisión de sacrificar un atributo (ej: consistencia) para ganar otro (ej: disponibilidad)."
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
+    category: "arquitectura-tecnica"
