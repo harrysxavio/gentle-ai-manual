@@ -1,6 +1,6 @@
 # Glossary — structured terminology data
 # Source: GLOSSARY.md (2026-07-20)
-# Last updated: 2026-07-20
+# Last updated: 2026-07-27
 terms:
   - term: "Agente"
     simple: "Un programa que usa un modelo de IA, tiene instrucciones, puede usar herramientas y actúa por su cuenta para cumplir una tarea."
@@ -420,4 +420,64 @@ terms:
   - term: "Trade-off"
     simple: "La decisión de sacrificar un atributo (ej: consistencia) para ganar otro (ej: disponibilidad)."
     reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
+    category: "arquitectura-tecnica"
+
+  - term: "TCP/IP"
+    simple: "El conjunto de protocolos que define cómo los datos se fragmentan, envían y reensamblan a través de una red."
+    reference: "content/01-fundamentos-tecnologicos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Proxy / Reverse Proxy"
+    simple: "Un intermediario entre el cliente y el servidor: el forward proxy oculta al cliente, el reverse proxy oculta al servidor y distribuye tráfico."
+    reference: "content/01-fundamentos-tecnologicos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "CDN"
+    simple: "Red de servidores distribuidos geográficamente que entregan contenido estático (imágenes, CSS, JS) desde el nodo más cercano al usuario."
+    reference: "content/16-arquitectura-tecnica/"
+    category: "arquitectura-tecnica"
+
+  - term: "Blob storage"
+    simple: "Almacenamiento para archivos binarios grandes (imágenes, videos, backups) accesibles por clave o URL, optimizado para escala masiva."
+    reference: "content/16-arquitectura-tecnica/"
+    category: "arquitectura-tecnica"
+
+  - term: "Índice"
+    simple: "Estructura de datos que acelera las búsquedas en una base de datos evitando escanear toda la tabla."
+    reference: "content/01-fundamentos-tecnologicos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Frontend"
+    simple: "La parte de una aplicación que corre en el cliente (navegador o app) y gestiona la interfaz de usuario."
+    reference: "content/01-fundamentos-tecnologicos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Backend"
+    simple: "La parte de una aplicación que corre en el servidor y gestiona datos, lógica de negocio y autenticación."
+    reference: "content/01-fundamentos-tecnologicos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Single point of failure"
+    simple: "Un componente cuya caída detiene todo el sistema, por ser el único capaz de cumplir esa función."
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
+    category: "arquitectura-tecnica"
+
+  - term: "Redundancia"
+    simple: "Tener copias de componentes críticos para que el sistema siga funcionando si uno falla."
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
+    category: "arquitectura-tecnica"
+
+  - term: "Balanceador de carga"
+    simple: "Componente que distribuye las solicitudes entrantes entre múltiples servidores para evitar sobrecargar uno solo."
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
+    category: "arquitectura-tecnica"
+
+  - term: "Teorema CAP"
+    simple: "En sistemas distribuidos no se pueden garantizar simultáneamente consistencia fuerte, disponibilidad total y tolerancia a partición de red."
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
+    category: "arquitectura-tecnica"
+
+  - term: "Costo"
+    simple: "El impacto económico de cada decisión técnica, incluyendo infraestructura, operación, mantenimiento y deuda técnica."
+    reference: "content/16-arquitectura-tecnica/"
     category: "arquitectura-tecnica"

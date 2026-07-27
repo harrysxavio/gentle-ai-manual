@@ -280,6 +280,10 @@ test("RED: new terms exist in glossary.yml", () => {
     "Resiliencia",
     "Cuello de botella",
     "Trade-off",
+    "Frontend",
+    "Backend",
+    "Proxy / Reverse Proxy",
+    "Teorema CAP",
   ];
   for (const term of requiredTerms) {
     assert.match(content, new RegExp(`\\n  - term: "${term}"`), `Missing glossary term: ${term}`);

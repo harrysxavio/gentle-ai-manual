@@ -22,8 +22,7 @@ canonical_concepts:
   - trade-off
   - costo
   - cap-theorem
-  - microservicios
-  - sharding
+
 source_status: verified
 ---
 
@@ -168,7 +167,7 @@ Más nueves cuestan exponencialmente más. No necesitás cinco nueves para una a
 - **Latencia**: cuánto tarda **una** solicitud. Se mide en milisegundos.
 - **Throughput**: cuántas solicitudes procesa el sistema por segundo.
 
-Son diferentes: podés tener baja latencia (10 ms por request) pero bajo throughput (100 req/s) si solo tenés un servidor. O alta latencia (500 ms por request) pero alto throughput (10 000 req/s) si tenés 20 servidores en paralelo.
+Son diferentes: podés tener baja latencia (10 ms por request) pero bajo throughput (100 req/s) si solo tenés un servidor. O alta latencia (200 ms por request) pero alto throughput (10 000 req/s) si tenés 20 servidores manejando 100 conexiones concurrentes cada uno (20 servidores × 100 conexiones × 5 req/s por conexión).
 
 **Señal de problema de latencia**: los usuarios perciben lentitud. El percentil 99 (P99) está muy por encima del promedio.
 
@@ -187,6 +186,34 @@ Son diferentes: podés tener baja latencia (10 ms por request) pero bajo through
 **Alternativa simple**: backup y restore manual. Si el sistema se cae una vez al año y restaurarlo lleva una hora, capaz es aceptable.
 
 **Cuándo NO usarla**: cuando el sistema es pequeño y las caídas son tolerables. Una base de datos con failover automático para una app de 10 usuarios es sobreingeniería.
+
+### CDN (Content Delivery Network)
+
+Una CDN es una red de servidores distribuidos geográficamente que almacenan contenido estático (imágenes, CSS, JavaScript, videos) y lo entregan desde el servidor más cercano al usuario.
+
+**Problema que resuelve**: reducir la latencia para contenido estático y disminuir la carga en el servidor principal.
+
+**Señal que la justifica**: usuarios en distintas regiones geográficas reportan lentitud para cargar recursos estáticos, o el servidor principal dedica recursos significativos a servir archivos estáticos.
+
+**Alternativa simple**: servir archivos desde el mismo servidor si la audiencia es local o el contenido estático es mínimo. Para sitios pequeños, un solo servidor con disco rápido alcanza.
+
+**Cómo verificar**: medí el tiempo de carga de recursos estáticos (imágenes, CSS, JS) antes y después de incorporar la CDN. La diferencia debería ser notable para usuarios en regiones alejadas del servidor principal.
+
+**Cuándo NO usarla**: cuando la audiencia es local, el tráfico es bajo, o el contenido cambia constantemente y necesita invalidación frecuente.
+
+### Blob storage
+
+El blob storage (object storage) guarda archivos binarios grandes: imágenes, videos, backups, archivos. A diferencia de una base de datos, no está optimizado para consultas complejas sino para almacenamiento masivo y acceso por clave (como una URL).
+
+**Problema que resuelve**: almacenar archivos que no caben o no pertenecen en una base de datos relacional.
+
+**Señal que la justifica**: tenés que guardar imágenes de perfil, archivos subidos por usuarios, o logs que ocupan gigabytes.
+
+**Alternativa simple**: el sistema de archivos del servidor. Para pocos archivos y un solo servidor, el disco local alcanza sin necesidad de blob storage externo.
+
+**Cómo verificar**: los archivos se sirven correctamente desde la URL del blob storage, y el almacenamiento escala sin afectar la base de datos ni el servidor de aplicaciones.
+
+**Cuándo NO usarla**: cuando los archivos son pequeños y pocos, o cuando necesitás consultas complejas sobre el contenido (ahí sigue siendo mejor una base de datos).
 
 ### Caché
 
@@ -212,7 +239,9 @@ Los índices ya están cubiertos en detalle en [Bases de datos](/gentle-ai-manua
 - Son la alternativa más simple antes de agregar caché.
 - No resuelven todos los problemas de performance.
 
-### Límites, costos y trade-offs
+#**Texto alternativo del diagrama**: Si el sistema es lento, revisá si CPU/RAM está al tope (→ escalar vertical) o si los mismos datos se leen muchas veces (→ agregar caché). Si el sistema falla seguido (→ agregar redundancia). Si no hay señal clara (→ medir primero).
+
+## Límites, costos y trade-offs
 
 | Técnica | Señal de uso | Costo | Alternativa simple |
 |---------|-------------|-------|--------------------|
@@ -304,10 +333,11 @@ flowchart LR
 
 **Qué estudiar después**:
 
-1. **Nivel 1**: esta lección y 01-fundamentos-tecnologicos/07-como-funciona-una-aplicacion-moderna.
-2. **Nivel 2**: "Designing Data-Intensive Applications" (Kleppmann) — capítulos 1 al 5.
-3. **Nivel 3**: patrones de sistemas distribuidos (Raft, Gossip, Consistent Hashing).
-4. **Nivel 4**: casos reales (cómo escala YouTube, Netflix, Twitter).
+1. **Fundamentos**: 01-fundamentos-tecnologicos/07-como-funciona-una-aplicacion-moderna (prerrequisito).
+2. **Esta lección**: conceptos de escala, caché y resiliencia.
+3. **Libro**: "Designing Data-Intensive Applications" (Kleppmann) — capítulos 1 al 5.
+4. **Patrones distribuidos**: Raft, Gossip, Consistent Hashing.
+5. **Casos reales**: cómo escala YouTube, Netflix, Twitter.
 
 ## Comprueba lo aprendido
 
@@ -355,3 +385,4 @@ flowchart LR
 - Hechos volátiles verificados: no contiene comandos, versiones ni rutas específicas
 - Fecha de verificación: 2026-07-22
 - Alcance de la comprobación: conceptos fundamentales de escalabilidad, disponibilidad y resiliencia en aplicaciones web. No cubre implementaciones específicas en cloud (AWS, GCP, Azure) ni patrones de sistemas distribuidos avanzados.
+- Prerrequisitos: 01-fundamentos-tecnologicos/07-como-funciona-una-aplicacion-moderna (vocabulario de red y componentes), 01-fundamentos-tecnologicos/05-bases-de-datos (persistencia e índices)

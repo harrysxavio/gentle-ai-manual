@@ -195,6 +195,21 @@ A partir de ahí, los datos viajan segmentados en paquetes TCP. Si un paquete se
 
 Sin HTTPS, cualquiera en la misma red WiFi podría leer las tareas que enviás (ataque man-in-the-middle).
 
+### Proxy y Reverse Proxy
+
+Un **proxy** es un intermediario entre el cliente y el servidor. El cliente le pide al proxy, y el proxy le pide al servidor.
+
+- **Forward proxy**: el cliente lo usa para ocultar su IP o saltar restricciones geográficas. El servidor ve la IP del proxy, no la del cliente.
+- **Reverse proxy**: el servidor lo usa para distribuir tráfico, terminar SSL, o cachear respuestas. El cliente ve la IP del reverse proxy, no la del servidor real.
+
+El reverse proxy (como Nginx, Caddy, HAProxy) suele ser el primer punto de contacto del servidor: recibe la petición HTTPS, la descifra, decide a qué servidor interno enviarla, y cachea respuestas estáticas. En el diagrama de esta lección, el "Servidor / Reverse Proxy" cumple ese rol.
+
+**Problema que resuelve**: el reverse proxy separa la preocupación de red (TLS, balanceo, caché) de la lógica de la aplicación.
+
+**Cuándo usarlo**: cuando tenés más de un servidor, necesitás terminar SSL, o querés cachear contenido estático sin tocar la API.
+
+**Cuándo evitarlo**: para un solo servidor en desarrollo, el reverse proxy agrega complejidad innecesaria. Alcanza con que la aplicación hable HTTPS directamente.
+
 ### Internet ≠ Web
 
 - **Internet**: la red física y lógica que conecta computadoras. Incluye cables, routers, protocolos como TCP/IP, DNS, etc.
@@ -295,7 +310,7 @@ Cada capa que agregás es un punto de fallo potencial. No las agregues sin medir
 <details>
 <summary>Respuestas</summary>
 
-1. **Orden**: 4 (DNS), 5 (Navegador envía HTTPS), 6 (Servidor recibe), 7 (API procesa y consulta BD), 8 (BD devuelve), 9 (API arma respuesta), 10 (Navegador renderiza). — Notá que el usuario hace clic (1) antes de que empiece el flujo técnico.
+1. **Orden**: 1 (Usuario hace clic), 2 (DNS resuelve dominio a IP), 3 (Navegador envía petición HTTPS), 4 (Servidor recibe la petición), 5 (API procesa y consulta BD), 6 (BD devuelve resultados), 7 (API arma respuesta JSON), 8 (Navegador renderiza).
 
 2. **Capa de fallo**: HTTPS/TLS. El certificado es parte del handshake TLS. El DNS funcionó (llegó al servidor), pero el servidor no pudo demostrar su identidad.
 

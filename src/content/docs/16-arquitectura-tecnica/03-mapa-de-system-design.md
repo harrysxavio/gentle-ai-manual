@@ -32,7 +32,7 @@ canonical_concepts:
   - resiliencia
   - fallo-unico
   - trade-off
-  - cap
+  - cap-theorem
 source_status: verified
 ---
 
