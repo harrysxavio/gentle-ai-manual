@@ -275,7 +275,10 @@ Cada capa que agregás es un punto de fallo potencial. No las agregues sin medir
 - **Síntoma**: "La conexión expiró".
 - **Causa probable**: el servidor no responde (caído, sobrecargado, firewall bloquea).
 - **Diagnóstico**: `ping` a la IP, `telnet` al puerto, revisá si el servidor está vivo.
-- **Corrección**: reiniciá el servidor o aumentá el timeout.
+- **Corrección** (según causa):
+  - Servidor caído → reinicialo.
+  - Firewall bloquea → abrí el puerto o revisá las reglas de red.
+  - Operación lenta conocida → aumentá el timeout del cliente o del balanceador.
 - **Verificación**: la página carga antes de los 30 segundos.
 
 ### Error 4: HTTP 500
