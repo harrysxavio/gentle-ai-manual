@@ -239,7 +239,7 @@ Los índices ya están cubiertos en detalle en [Bases de datos](/gentle-ai-manua
 - Son la alternativa más simple antes de agregar caché.
 - No resuelven todos los problemas de performance.
 
-#**Texto alternativo del diagrama**: Si el sistema es lento, revisá si CPU/RAM está al tope (→ escalar vertical) o si los mismos datos se leen muchas veces (→ agregar caché). Si el sistema falla seguido (→ agregar redundancia). Si no hay señal clara (→ medir primero).
+**Texto alternativo del diagrama**: Si el sistema es lento, revisá si CPU/RAM está al tope (→ escalar vertical) o si los mismos datos se leen muchas veces (→ agregar caché). Si el sistema falla seguido (→ agregar redundancia). Si no hay señal clara (→ medir primero).
 
 ## Límites, costos y trade-offs
 
