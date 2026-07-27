@@ -488,3 +488,37 @@ test("RED (PR 2.2): Mermaid validation passes for all pages", () => {
     assert.fail(`Mermaid validation failed:\n${e.stderr || e.message}`);
   }
 });
+
+test("RED (PR 2.2): legacy agents-orquestadores URL redirect exists and is correct", () => {
+  const redirectPath = path.resolve(__dirname, "..", "public", "03-fundamentos-de-ia", "04-agentes-orquestadores", "index.html");
+  const oldMarkdown = path.resolve(__dirname, "..", "src", "content", "docs", "03-fundamentos-de-ia", "04-agentes-orquestadores.md");
+  const distRedirect = path.resolve(__dirname, "..", "dist", "03-fundamentos-de-ia", "04-agentes-orquestadores", "index.html");
+  const canonicalDest = path.resolve(__dirname, "..", "dist", "03-fundamentos-de-ia", "04-de-modelo-a-agente", "index.html");
+
+  // 1. Redirect source file exists in public/
+  assert.ok(fs.existsSync(redirectPath), "Redirect file must exist in public/");
+
+  // 2. Old Markdown lesson is removed
+  assert.ok(!fs.existsSync(oldMarkdown), "Old agents-orquestadores.md must remain deleted");
+
+  // 3. The redirect href is relative (works under any base path)
+  const html = fs.readFileSync(redirectPath, "utf8");
+  assert.match(html, /url=\.\.\/04-de-modelo-a-agente\/"/, "meta refresh target must be relative");
+  assert.match(html, /window\.location\.replace\("\.\.\/04-de-modelo-a-agente\/"\)/, "JS redirect must use relative URL");
+
+  // 4. Canonical link points to the new page's full public URL
+  assert.match(html, /rel="canonical"/, "must have canonical link");
+  assert.match(html, /04-de-modelo-a-agente/, "canonical must reference the new page");
+  assert.match(html, /noindex/, "must have noindex");
+
+  // Only check dist/ after a build exists
+  if (fs.existsSync(distRedirect)) {
+    // 5. Built dist/ has the redirect
+    const builtHtml = fs.readFileSync(distRedirect, "utf8");
+    assert.match(builtHtml, /url=\.\.\/04-de-modelo-a-agente\//, "built redirect must contain correct target");
+    assert.match(builtHtml, /noindex/, "built redirect must have noindex");
+
+    // 6. The new canonical page exists in dist/
+    assert.ok(fs.existsSync(canonicalDest), "Canonical destination page must exist in dist/");
+  }
+});
