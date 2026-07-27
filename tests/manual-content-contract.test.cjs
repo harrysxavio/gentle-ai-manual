@@ -294,6 +294,7 @@ test("RED: Mermaid diagrams in new pages are valid", () => {
   const { execSync } = require("child_process");
   // Read all three pages and extract mermaid blocks
   const pages = [SD_PAGE_07, SD_PAGE_MAPA, SD_PAGE_DATOS].filter(f => fs.existsSync(f));
+  const failures = [];
   for (const page of pages) {
     const content = fs.readFileSync(page, "utf8");
     const mermaidBlocks = content.match(/\`\`\`mermaid\n[\s\S]*?\`\`\`/g);
@@ -303,13 +304,15 @@ test("RED: Mermaid diagrams in new pages are valid", () => {
       const tmpFile = path.join(os.tmpdir(), "mermaid-test-" + Date.now() + ".mmd");
       fs.writeFileSync(tmpFile, block.replace("\`\`\`mermaid\n", "").replace("\n\`\`\`", ""), "utf8");
       try {
-        const result = execSync(`node "${path.resolve(__dirname, "..", "scripts", "validate-mermaid.cjs")}" "${tmpFile}"`, { encoding: "utf8", timeout: 10000 });
-        // If it passes, good
-      } catch {
-        // If validation fails, that's expected for RED — just note it
+        execSync(`node "${path.resolve(__dirname, "..", "scripts", "validate-mermaid.cjs")}" "${tmpFile}"`, { encoding: "utf8", timeout: 10000, stdio: "pipe" });
+      } catch (e) {
+        failures.push(`Mermaid validation failed in ${path.basename(page)}:\n${e.stderr || e.message}`);
       }
       fs.rmSync(tmpFile, { force: true });
     }
+  }
+  if (failures.length > 0) {
+    assert.fail(failures.join("\n"));
   }
 });
 

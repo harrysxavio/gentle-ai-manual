@@ -147,9 +147,12 @@ Seguí paso a paso qué pasa cuando el usuario escribe "Pasear al perro" y apret
 1. **Clic en "Agregar"** → el navegador captura el texto del input.
 2. **Validación local** → el navegador verifica que el texto no esté vacío.
 3. **Petición HTTPS** → el navegador arma un POST a `https://miapp.com/api/tareas` con el cuerpo `{"titulo": "Pasear al perro"}`.
-4. **DNS lookup** → el navegador consulta al DNS qué IP corresponde a `miapp.com`.
-5. **Conexión TCP** → el navegador establece una conexión con el servidor en la IP obtenida (puerto 443 para HTTPS).
-6. **Handshake TLS** → navegador y servidor acuerdan cifrado. A partir de acá, todo viaja cifrado.
+
+   > **Nota**: los pasos 4 a 6 ocurren **al establecer una conexión nueva**. El navegador reusa resultados DNS en caché y conexiones HTTPS agrupadas (*connection pooling*) para peticiones repetidas. En HTTP/3 (QUIC), la conexión y el cifrado se negocian en un solo paso.
+
+4. **DNS lookup** (conexión nueva) → el navegador consulta al DNS qué IP corresponde a `miapp.com`.
+5. **Conexión TCP** (conexión nueva) → el navegador establece una conexión con el servidor en la IP obtenida (puerto 443 para HTTPS).
+6. **Handshake TLS** (conexión nueva) → navegador y servidor acuerdan cifrado. A partir de acá, todo viaja cifrado.
 7. **Llega al servidor** → el servidor (o un reverse proxy como Nginx) recibe la petición y la envía al proceso que maneja la API.
 8. **La API procesa** → valida los datos, asigna un ID, marca la fecha de creación.
 9. **Guarda en BD** → `INSERT INTO tareas (usuario_id, titulo, creada_en) VALUES (1, 'Pasear al perro', '2026-07-22');`
@@ -265,7 +268,7 @@ Cada capa que agregás es un punto de fallo potencial. No las agregues sin medir
 - **Causa probable**: el certificado SSL venció, no cubre el dominio, o es autofirmado.
 - **Diagnóstico**: revisá la fecha de vencimiento del certificado. Usá `curl -vI https://ejemplo.com` para ver los detalles.
 - **Corrección**: renová el certificado (Let's Encrypt ofrece gratuitos). Si es desarrollo local, aceptá la excepción temporal.
-- **Verificación**: el navegador muestra el candado verde.
+- **Verificación**: el navegador no muestra advertencia de certificado (indicador de conexión segura).
 
 ### Error 3: timeout
 
