@@ -44,9 +44,9 @@ async function check(name, fn) { try { await fn(); passed++; console.log('  \u27
     await glossaryEl.waitFor({ state: 'visible', timeout: 10000 });
 
     // 1. Initial state
-    await check('initial counter shows total (71)', async () => {
+    await check('initial counter shows total (84)', async () => {
       const text = await page.locator('#glossary-status').textContent();
-      assert.match(text, /71 de 71 t\u00e9rminos/);
+      assert.match(text, /96 de 96 t\u00e9rminos/);
     });
     await check('Todas button is active initially', async () => {
       const pressed = await page.locator('[data-cat="all"]').getAttribute('aria-pressed');
@@ -61,12 +61,12 @@ async function check(name, fn) { try { await fn(); passed++; console.log('  \u27
     await page.locator('#glossary-search').fill('mem');
     await page.waitForTimeout(200);
 
-    let searchCount = 71;
+    let searchCount = 96;
     await check('search narrows results', async () => {
       const text = await page.locator('#glossary-status').textContent();
-      assert.match(text, /^\d+ de 71 t\u00e9rminos$/);
+      assert.match(text, /^\d+ de 96 t\u00e9rminos$/);
       searchCount = parseInt(text.match(/^(\d+)/)[1], 10);
-      assert.ok(searchCount < 71, 'search should narrow below 71, got ' + searchCount);
+      assert.ok(searchCount < 96, 'search should narrow below 96, got ' + searchCount);
     });
 
     await page.locator('#glossary-search').fill('');
@@ -75,9 +75,9 @@ async function check(name, fn) { try { await fn(); passed++; console.log('  \u27
     await page.waitForTimeout(200);
     await check('Engram category narrows independently', async () => {
       const text = await page.locator('#glossary-status').textContent();
-      assert.match(text, /^\d+ de 71 t\u00e9rminos$/);
+      assert.match(text, /^\d+ de 96 t\u00e9rminos$/);
       const c = parseInt(text.match(/^(\d+)/)[1], 10);
-      assert.ok(c >= 10 && c < 71, 'Engram category should narrow (got ' + c + ')');
+      assert.ok(c >= 10 && c < 96, 'Engram category should narrow (got ' + c + ')');
     });
     await check('Engram button is active', async () => {
       const pressed = await page.locator('[data-cat="engram"]').getAttribute('aria-pressed');
@@ -103,7 +103,7 @@ async function check(name, fn) { try { await fn(); passed++; console.log('  \u27
     });
     await check('all terms visible after clear', async () => {
       const text = await page.locator('#glossary-status').textContent();
-      assert.match(text, /71 de 71 t\u00e9rminos/);
+      assert.match(text, /96 de 96 t\u00e9rminos/);
     });
     await check('search input focused after clear', async () => {
       const activeEl = await page.evaluate(() => document.activeElement?.id);

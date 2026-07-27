@@ -222,3 +222,128 @@ test("engram page: has accessible Mermaid diagram with alt text", () => {
     }
   }
 });
+
+// ─────────────────────────────────────────────
+// RED tests — System Design Foundations (phase 3)
+// These MUST fail before implementation.
+// ─────────────────────────────────────────────
+
+const SD_PAGE_07 = path.resolve(__dirname, "..", "src", "content", "docs", "01-fundamentos-tecnologicos", "07-como-funciona-una-aplicacion-moderna.md");
+const SD_PAGE_MAPA = path.resolve(__dirname, "..", "src", "content", "docs", "16-arquitectura-tecnica", "03-mapa-de-system-design.md");
+const SD_PAGE_DATOS = path.resolve(__dirname, "..", "src", "content", "docs", "16-arquitectura-tecnica", "04-datos-escala-y-resiliencia.md");
+
+test("RED: 07-como-funciona-una-aplicacion-moderna exists and has lesson-v1 frontmatter", () => {
+  assert.ok(fs.existsSync(SD_PAGE_07), "Page 07 does not exist yet — RED expected");
+  const content = fs.readFileSync(SD_PAGE_07, "utf8");
+  assert.match(content, /manual_contract:\s*lesson-v1/);
+  assert.match(content, /title:/);
+  assert.match(content, /learning_outcome:/);
+  assert.match(content, /estimated_minutes:/);
+});
+
+test("RED: 03-mapa-de-system-design exists and has reference-v1 frontmatter", () => {
+  assert.ok(fs.existsSync(SD_PAGE_MAPA), "Page 03-mapa does not exist yet — RED expected");
+  const content = fs.readFileSync(SD_PAGE_MAPA, "utf8");
+  assert.match(content, /manual_contract:\s*reference-v1/);
+  assert.match(content, /title:/);
+  assert.match(content, /description:/);
+});
+
+test("RED: 04-datos-escala-y-resiliencia exists and has lesson-v1 frontmatter", () => {
+  assert.ok(fs.existsSync(SD_PAGE_DATOS), "Page 04-datos does not exist yet — RED expected");
+  const content = fs.readFileSync(SD_PAGE_DATOS, "utf8");
+  assert.match(content, /manual_contract:\s*lesson-v1/);
+  assert.match(content, /title:/);
+  assert.match(content, /learning_outcome:/);
+  assert.match(content, /estimated_minutes:/);
+});
+
+test("RED: new lessons are registered in curriculum.mjs", () => {
+  const curriculumPath = path.resolve(__dirname, "..", "src", "data", "curriculum.mjs");
+  const content = fs.readFileSync(curriculumPath, "utf8");
+  assert.match(content, /07-como-funciona-una-aplicacion-moderna/);
+  assert.match(content, /03-mapa-de-system-design/);
+  assert.match(content, /04-datos-escala-y-resiliencia/);
+});
+
+test("RED: new terms exist in glossary.yml", () => {
+  const glossaryPath = path.resolve(__dirname, "..", "data", "terminology", "glossary.yml");
+  const content = fs.readFileSync(glossaryPath, "utf8");
+  const requiredTerms = [
+    "System Design",
+    "DNS",
+    "HTTPS",
+    "Caché",
+    "Latencia",
+    "Disponibilidad",
+    "Escalabilidad",
+    "Resiliencia",
+    "Cuello de botella",
+    "Trade-off",
+    "Frontend",
+    "Backend",
+    "Proxy / Reverse Proxy",
+    "Teorema CAP",
+  ];
+  for (const term of requiredTerms) {
+    assert.match(content, new RegExp(`\\n  - term: "${term}"`), `Missing glossary term: ${term}`);
+  }
+});
+
+test("RED: Mermaid diagrams in new pages are valid", () => {
+  const { execSync } = require("child_process");
+  // validate-mermaid.cjs always scans src/content/docs (ignores positional args),
+  // so run it once globally instead of per-block with wasted temp files
+  try {
+    execSync(`node "${path.resolve(__dirname, "..", "scripts", "validate-mermaid.cjs")}"`, { encoding: "utf8", timeout: 30000, stdio: "pipe" });
+  } catch (e) {
+    assert.fail(`Mermaid validation failed:\n${e.stderr || e.message}`);
+  }
+});
+
+// ─────────────────────────────────────────────
+// RED tests — Glossary canonical references
+// All new terms must point to a specific page (not a module directory),
+// and each referenced page must exist on disk.
+// ─────────────────────────────────────────────
+
+const YAML = require("js-yaml");
+
+// Terms added by this PR that must use page-level references
+const SD_NEW_TERMS = [
+  "System Design", "TCP/IP", "Proxy / Reverse Proxy",
+  "CDN", "Blob storage", "Índice", "Frontend", "Backend", "Costo",
+];
+
+test("RED: new System Design glossary terms have page-level references (not module dirs)", () => {
+  const glossaryPath = path.resolve(__dirname, "..", "data", "terminology", "glossary.yml");
+  const raw = fs.readFileSync(glossaryPath, "utf8");
+  const parsed = YAML.load(raw);
+  assert.ok(parsed && Array.isArray(parsed.terms), "glossary.yml must have a terms array");
+
+  const issues = [];
+  for (const entry of parsed.terms) {
+    if (!SD_NEW_TERMS.includes(entry.term)) continue;
+    if (!entry.reference) {
+      issues.push(`"${entry.term}" has no reference`);
+      continue;
+    }
+    // Page-level refs have 2+ segments after "content/"
+    const stripped = entry.reference.replace(/^content\//, "").replace(/\/$/, "");
+    const segments = stripped.split("/");
+    if (segments.length < 2) {
+      issues.push(`"${entry.term}" → ${entry.reference} (${segments.length} segment(s); need a specific page)`);
+    }
+    // Verify the target file exists
+    const mdPath = entry.reference
+      .replace(/^content\//, "src/content/docs/")
+      .replace(/\/$/, ".md");
+    if (!fs.existsSync(mdPath)) {
+      issues.push(`"${entry.term}" → ${entry.reference} — file not found at ${mdPath}`);
+    }
+  }
+
+  if (issues.length > 0) {
+    assert.fail(`New glossary term reference issues:\n${issues.map(i => "  " + i).join("\n")}`);
+  }
+});
