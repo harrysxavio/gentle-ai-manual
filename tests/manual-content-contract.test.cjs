@@ -347,3 +347,178 @@ test("RED: new System Design glossary terms have page-level references (not modu
     assert.fail(`New glossary term reference issues:\n${issues.map(i => "  " + i).join("\n")}`);
   }
 });
+
+// ─────────────────────────────────────────────
+// RED tests — Agent Theory Foundations (PR 2.2)
+// These MUST fail before implementation.
+// ─────────────────────────────────────────────
+
+const AGENT_PAGE_04 = path.resolve(__dirname, "..", "src", "content", "docs", "03-fundamentos-de-ia", "04-de-modelo-a-agente.md");
+const AGENT_PAGE_05 = path.resolve(__dirname, "..", "src", "content", "docs", "03-fundamentos-de-ia", "05-contexto-herramientas-y-memoria.md");
+const AGENT_PAGE_PATTERNS = path.resolve(__dirname, "..", "src", "content", "docs", "16-arquitectura-tecnica", "05-patrones-de-agentes-y-mcp.md");
+const AGENT_PAGE_TRUST = path.resolve(__dirname, "..", "src", "content", "docs", "17-gobierno", "02-confianza-verificable.md");
+
+const AGENT_NEW_PAGES = [
+  ["04-de-modelo-a-agente", AGENT_PAGE_04],
+  ["05-contexto-herramientas-y-memoria", AGENT_PAGE_05],
+  ["05-patrones-de-agentes-y-mcp", AGENT_PAGE_PATTERNS],
+  ["02-confianza-verificable", AGENT_PAGE_TRUST],
+];
+
+for (const [name, filePath] of AGENT_NEW_PAGES) {
+  test(`RED (PR 2.2): ${name} exists and has lesson-v1 frontmatter`, () => {
+    assert.ok(fs.existsSync(filePath), `Page ${name} does not exist yet — RED expected`);
+    const content = fs.readFileSync(filePath, "utf8");
+    assert.match(content, /manual_contract:\s*lesson-v1/);
+    assert.match(content, /title:/);
+    assert.match(content, /learning_outcome:/);
+    assert.match(content, /estimated_minutes:/);
+    assert.match(content, /canonical_concepts:/);
+    assert.match(content, /source_status:\s*verified/);
+  });
+}
+
+// Agent pages must have Fuentes y alcance with date
+for (const [name, filePath] of AGENT_NEW_PAGES) {
+  test(`RED (PR 2.2): ${name} has sources section`, () => {
+    const content = fs.readFileSync(filePath, "utf8");
+    assert.match(content, /## Fuentes y alcance/);
+  });
+}
+
+// Agent pages must have all 13 required sections (lesson-v1 contract)
+const AGENT_SECTIONS = [
+  "Resultado de aprendizaje",
+  "Respuesta simple",
+  "Modelo mental",
+  "Mapa o recorrido",
+  "Ejemplo continuo",
+  "Recorrido práctico",
+  "Cómo funciona internamente",
+  "Cuándo usarlo y cuándo evitarlo",
+  "Costos y trade-offs",
+  "Errores frecuentes",
+  "Comprueba lo aprendido",
+  "Resumen",
+  "Fuentes y alcance",
+];
+
+for (const [name, filePath] of AGENT_NEW_PAGES) {
+  test(`RED (PR 2.2): ${name} has all 13 required sections`, () => {
+    const content = fs.readFileSync(filePath, "utf8");
+    for (const section of AGENT_SECTIONS) {
+      const header = new RegExp(`^##\\s+${section}`, "m");
+      assert.match(content, header, `Missing section: ${section}`);
+    }
+  });
+}
+
+test("RED (PR 2.2): old 04-agentes-orquestadores is removed", () => {
+  const oldPath = path.resolve(__dirname, "..", "src", "content", "docs", "03-fundamentos-de-ia", "04-agentes-orquestadores.md");
+  assert.ok(!fs.existsSync(oldPath), "Old agents-orquestadores page should be removed");
+});
+
+test("RED (PR 2.2): new lessons are registered in curriculum.mjs", () => {
+  const curriculumPath = path.resolve(__dirname, "..", "src", "data", "curriculum.mjs");
+  const content = fs.readFileSync(curriculumPath, "utf8");
+  assert.match(content, /04-de-modelo-a-agente/);
+  assert.match(content, /05-contexto-herramientas-y-memoria/);
+  assert.match(content, /05-patrones-de-agentes-y-mcp/);
+  assert.match(content, /02-confianza-verificable/);
+  // Old slug must NOT be registered
+  assert.doesNotMatch(content, /04-agentes-orquestadores/);
+});
+
+test("RED (PR 2.2): forbidden phrases are rejected", () => {
+  // These 4 phrases must NOT appear in any PR 2.2 page
+  const forbidden = [
+    "el agente siempre recuerda",
+    "MCP almacena memoria",
+    "un check verde prueba producción",
+    "un reviewer y un implementador deben ser el mismo agente",
+  ];
+  const allPages = [AGENT_PAGE_04, AGENT_PAGE_05, AGENT_PAGE_PATTERNS, AGENT_PAGE_TRUST];
+  for (const filePath of allPages) {
+    const content = fs.readFileSync(filePath, "utf8");
+    for (const phrase of forbidden) {
+      // Match whole phrase, not substrings of longer phrases
+      assert.doesNotMatch(content, new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"),
+        `Forbidden phrase found in ${path.basename(filePath)}: "${phrase}"`);
+    }
+  }
+});
+
+test("RED (PR 2.2): glossary has new agent terms", () => {
+  const glossaryPath = path.resolve(__dirname, "..", "data", "terminology", "glossary.yml");
+  const content = fs.readFileSync(glossaryPath, "utf8");
+  const requiredTerms = [
+    "Agente",
+    "Modelo (de IA)",
+    "Contexto (de agente)",
+    "Herramienta (tool)",
+    "Skill",
+    "MCP (Model Context Protocol)",
+    "ReAct",
+    "Orquestación",
+    "Autonomía",
+    "Evidencia",
+    "Trazabilidad",
+    "Confianza verificable",
+  ];
+  for (const term of requiredTerms) {
+    assert.ok(content.includes(`  - term: "${term}"`), `Missing glossary term: ${term}`);
+  }
+});
+
+test("RED (PR 2.2): each page has at least one exercise", () => {
+  for (const [name, filePath] of AGENT_NEW_PAGES) {
+    const content = fs.readFileSync(filePath, "utf8");
+    assert.match(content, /## Comprueba lo aprendido/);
+    // Has at least one numbered exercise
+    const exercises = content.match(/^\d+\.\s/gm);
+    assert.ok(exercises && exercises.length >= 1, `${name}: needs at least 1 exercise item`);
+  }
+});
+
+test("RED (PR 2.2): Mermaid validation passes for all pages", () => {
+  const { execSync } = require("child_process");
+  try {
+    execSync(`node "${path.resolve(__dirname, "..", "scripts", "validate-mermaid.cjs")}"`, { encoding: "utf8", timeout: 30000, stdio: "pipe" });
+  } catch (e) {
+    assert.fail(`Mermaid validation failed:\n${e.stderr || e.message}`);
+  }
+});
+
+test("RED (PR 2.2): legacy agents-orquestadores URL redirect exists and is correct", () => {
+  const redirectPath = path.resolve(__dirname, "..", "public", "03-fundamentos-de-ia", "04-agentes-orquestadores", "index.html");
+  const oldMarkdown = path.resolve(__dirname, "..", "src", "content", "docs", "03-fundamentos-de-ia", "04-agentes-orquestadores.md");
+  const distRedirect = path.resolve(__dirname, "..", "dist", "03-fundamentos-de-ia", "04-agentes-orquestadores", "index.html");
+  const canonicalDest = path.resolve(__dirname, "..", "dist", "03-fundamentos-de-ia", "04-de-modelo-a-agente", "index.html");
+
+  // 1. Redirect source file exists in public/
+  assert.ok(fs.existsSync(redirectPath), "Redirect file must exist in public/");
+
+  // 2. Old Markdown lesson is removed
+  assert.ok(!fs.existsSync(oldMarkdown), "Old agents-orquestadores.md must remain deleted");
+
+  // 3. The redirect href is relative (works under any base path)
+  const html = fs.readFileSync(redirectPath, "utf8");
+  assert.match(html, /url=\.\.\/04-de-modelo-a-agente\/"/, "meta refresh target must be relative");
+  assert.match(html, /window\.location\.replace\("\.\.\/04-de-modelo-a-agente\/"\)/, "JS redirect must use relative URL");
+
+  // 4. Canonical link points to the new page's full public URL
+  assert.match(html, /rel="canonical"/, "must have canonical link");
+  assert.match(html, /04-de-modelo-a-agente/, "canonical must reference the new page");
+  assert.match(html, /noindex/, "must have noindex");
+
+  // Only check dist/ after a build exists
+  if (fs.existsSync(distRedirect)) {
+    // 5. Built dist/ has the redirect
+    const builtHtml = fs.readFileSync(distRedirect, "utf8");
+    assert.match(builtHtml, /url=\.\.\/04-de-modelo-a-agente\//, "built redirect must contain correct target");
+    assert.match(builtHtml, /noindex/, "built redirect must have noindex");
+
+    // 6. The new canonical page exists in dist/
+    assert.ok(fs.existsSync(canonicalDest), "Canonical destination page must exist in dist/");
+  }
+});

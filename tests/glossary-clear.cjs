@@ -20,6 +20,12 @@
 
 const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
+const fs = require('fs');
+const path = require('path');
+
+// Derive total from glossary YAML to avoid hardcoding
+const glossaryYaml = fs.readFileSync(path.resolve(__dirname, '..', 'data', 'terminology', 'glossary.yml'), 'utf8');
+const TERM_COUNT = (glossaryYaml.match(/\n  - term: "/g) || []).length;
 
 const BASE = process.env.TEST_BASE || '/gentle-ai-manual';
 const HOST = process.env.TEST_HOST || 'http://localhost:4321';
@@ -46,7 +52,7 @@ async function check(name, fn) { try { await fn(); passed++; console.log('  \u27
     // 1. Initial state
     await check('initial counter shows total (84)', async () => {
       const text = await page.locator('#glossary-status').textContent();
-      assert.match(text, /96 de 96 t\u00e9rminos/);
+      assert.match(text, new RegExp(TERM_COUNT + ' de ' + TERM_COUNT + ' t\u00e9rminos'));
     });
     await check('Todas button is active initially', async () => {
       const pressed = await page.locator('[data-cat="all"]').getAttribute('aria-pressed');
@@ -61,12 +67,12 @@ async function check(name, fn) { try { await fn(); passed++; console.log('  \u27
     await page.locator('#glossary-search').fill('mem');
     await page.waitForTimeout(200);
 
-    let searchCount = 96;
+    let searchCount = TERM_COUNT;
     await check('search narrows results', async () => {
       const text = await page.locator('#glossary-status').textContent();
-      assert.match(text, /^\d+ de 96 t\u00e9rminos$/);
+      assert.match(text, new RegExp('^\\d+ de ' + TERM_COUNT + ' términos$'));
       searchCount = parseInt(text.match(/^(\d+)/)[1], 10);
-      assert.ok(searchCount < 96, 'search should narrow below 96, got ' + searchCount);
+      assert.ok(searchCount < TERM_COUNT, 'search should narrow below ' + TERM_COUNT + ', got ' + searchCount);
     });
 
     await page.locator('#glossary-search').fill('');
@@ -75,9 +81,9 @@ async function check(name, fn) { try { await fn(); passed++; console.log('  \u27
     await page.waitForTimeout(200);
     await check('Engram category narrows independently', async () => {
       const text = await page.locator('#glossary-status').textContent();
-      assert.match(text, /^\d+ de 96 t\u00e9rminos$/);
+      assert.match(text, new RegExp('^\\d+ de ' + TERM_COUNT + ' términos$'));
       const c = parseInt(text.match(/^(\d+)/)[1], 10);
-      assert.ok(c >= 10 && c < 96, 'Engram category should narrow (got ' + c + ')');
+      assert.ok(c >= 10 && c < TERM_COUNT, 'Engram category should narrow (got ' + c + ')');
     });
     await check('Engram button is active', async () => {
       const pressed = await page.locator('[data-cat="engram"]').getAttribute('aria-pressed');
@@ -103,7 +109,7 @@ async function check(name, fn) { try { await fn(); passed++; console.log('  \u27
     });
     await check('all terms visible after clear', async () => {
       const text = await page.locator('#glossary-status').textContent();
-      assert.match(text, /96 de 96 t\u00e9rminos/);
+      assert.match(text, new RegExp(TERM_COUNT + ' de ' + TERM_COUNT + ' t\u00e9rminos'));
     });
     await check('search input focused after clear', async () => {
       const activeEl = await page.evaluate(() => document.activeElement?.id);

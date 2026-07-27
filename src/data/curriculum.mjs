@@ -36,7 +36,8 @@ const MODULES = [
       { slug: '03-fundamentos-de-ia/01-modelos-proveedores-agentes', title: 'Modelos, proveedores y agentes', level: 1, minutes: '35 min', outcome: 'Diferenciar producto, modelo, proveedor, cliente y agente' },
       { slug: '03-fundamentos-de-ia/02-tokens-contexto', title: 'Tokens y contexto', level: 1, minutes: '30 min', outcome: 'Explicar qué es un token y cómo se relaciona con el costo y la latencia' },
       { slug: '03-fundamentos-de-ia/03-mcp-y-tool-calling', title: 'MCP y tool calling', level: 1, minutes: '30 min', outcome: 'Explicar cómo funciona tool calling y la diferencia con generar texto' },
-      { slug: '03-fundamentos-de-ia/04-agentes-orquestadores', title: 'Agentes y orquestadores', level: 1, minutes: '35 min', outcome: 'Explicar qué es un agente como sistema' },
+      { slug: '03-fundamentos-de-ia/04-de-modelo-a-agente', title: 'De modelo a agente', level: 1, minutes: '30 min', outcome: 'Explicar la diferencia entre un modelo y un agente' },
+      { slug: '03-fundamentos-de-ia/05-contexto-herramientas-y-memoria', title: 'Contexto, herramientas y memoria', level: 2, minutes: '35 min', outcome: 'Distinguir contexto de conversación, herramientas y memoria persistente' },
     ],
   },
   {
@@ -147,6 +148,7 @@ const MODULES = [
       { slug: '16-arquitectura-tecnica/01-arquitectura-tecnica', title: 'Arquitectura técnica', level: 3, minutes: '60 min', outcome: 'Describir la estructura de paquetes Go de Gentle-AI' },
       { slug: '16-arquitectura-tecnica/03-mapa-de-system-design', title: 'Mapa de System Design', level: 1, minutes: '20 min', outcome: 'Agrupar los conceptos de system design por el problema que resuelven' },
       { slug: '16-arquitectura-tecnica/04-datos-escala-y-resiliencia', title: 'Datos, escala y resiliencia', level: 2, minutes: '35 min', outcome: 'Justificar cuándo agregar escalabilidad, caché o resiliencia según el problema real' },
+      { slug: '16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp', title: 'Patrones de agentes y MCP', level: 2, minutes: '40 min', outcome: 'Identificar y comparar patrones de orquestación de agentes y la arquitectura MCP' },
     ],
   },
   {
@@ -154,6 +156,7 @@ const MODULES = [
     summary: 'Un agente sin gobierno puede gastar USD 100 en una tarde, exponer secretos o aceptar código inseguro.',
     lessons: [
       { slug: '17-seguridad-costos-y-gobierno/01-seguridad-costos-y-gobierno', title: 'Seguridad, costos y gobierno', level: 2, minutes: '40 min', outcome: 'Configurar permisos de agente con allow/deny' },
+      { slug: '17-gobierno/02-confianza-verificable', title: 'Confianza verificable', level: 2, minutes: '35 min', outcome: 'Explicar por qué el reporte de un agente no es evidencia y cómo construir confianza verificable' },
     ],
   },
   {
