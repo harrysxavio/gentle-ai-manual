@@ -312,3 +312,50 @@ test("RED: Mermaid diagrams in new pages are valid", () => {
     }
   }
 });
+
+// ─────────────────────────────────────────────
+// RED tests — Glossary canonical references
+// All new terms must point to a specific page (not a module directory),
+// and each referenced page must exist on disk.
+// ─────────────────────────────────────────────
+
+const YAML = require("js-yaml");
+
+// Terms added by this PR that must use page-level references
+const SD_NEW_TERMS = [
+  "System Design", "TCP/IP", "Proxy / Reverse Proxy",
+  "CDN", "Blob storage", "Índice", "Frontend", "Backend", "Costo",
+];
+
+test("RED: new System Design glossary terms have page-level references (not module dirs)", () => {
+  const glossaryPath = path.resolve(__dirname, "..", "data", "terminology", "glossary.yml");
+  const raw = fs.readFileSync(glossaryPath, "utf8");
+  const parsed = YAML.load(raw);
+  assert.ok(parsed && Array.isArray(parsed.terms), "glossary.yml must have a terms array");
+
+  const issues = [];
+  for (const entry of parsed.terms) {
+    if (!SD_NEW_TERMS.includes(entry.term)) continue;
+    if (!entry.reference) {
+      issues.push(`"${entry.term}" has no reference`);
+      continue;
+    }
+    // Page-level refs have 2+ segments after "content/"
+    const stripped = entry.reference.replace(/^content\//, "").replace(/\/$/, "");
+    const segments = stripped.split("/");
+    if (segments.length < 2) {
+      issues.push(`"${entry.term}" → ${entry.reference} (${segments.length} segment(s); need a specific page)`);
+    }
+    // Verify the target file exists
+    const mdPath = entry.reference
+      .replace(/^content\//, "src/content/docs/")
+      .replace(/\/$/, ".md");
+    if (!fs.existsSync(mdPath)) {
+      issues.push(`"${entry.term}" → ${entry.reference} — file not found at ${mdPath}`);
+    }
+  }
+
+  if (issues.length > 0) {
+    assert.fail(`New glossary term reference issues:\n${issues.map(i => "  " + i).join("\n")}`);
+  }
+});

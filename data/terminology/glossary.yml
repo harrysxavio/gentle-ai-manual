@@ -359,7 +359,7 @@ terms:
 
   - term: "System Design"
     simple: "La disciplina de diseñar la arquitectura de un sistema: qué componentes tiene, cómo se comunican, cómo escalan y cómo manejan fallos."
-    reference: "content/16-arquitectura-tecnica/"
+    reference: "content/16-arquitectura-tecnica/03-mapa-de-system-design/"
     category: "arquitectura-tecnica"
 
   - term: "Cliente (contexto red)"
@@ -424,37 +424,37 @@ terms:
 
   - term: "TCP/IP"
     simple: "El conjunto de protocolos que define cómo los datos se fragmentan, envían y reensamblan a través de una red."
-    reference: "content/01-fundamentos-tecnologicos/"
+    reference: "content/01-fundamentos-tecnologicos/07-como-funciona-una-aplicacion-moderna/"
     category: "fundamentos-tecnologicos"
 
   - term: "Proxy / Reverse Proxy"
     simple: "Un intermediario entre el cliente y el servidor: el forward proxy oculta al cliente, el reverse proxy oculta al servidor y distribuye tráfico."
-    reference: "content/01-fundamentos-tecnologicos/"
+    reference: "content/01-fundamentos-tecnologicos/07-como-funciona-una-aplicacion-moderna/"
     category: "fundamentos-tecnologicos"
 
   - term: "CDN"
     simple: "Red de servidores distribuidos geográficamente que entregan contenido estático (imágenes, CSS, JS) desde el nodo más cercano al usuario."
-    reference: "content/16-arquitectura-tecnica/"
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
     category: "arquitectura-tecnica"
 
   - term: "Blob storage"
     simple: "Almacenamiento para archivos binarios grandes (imágenes, videos, backups) accesibles por clave o URL, optimizado para escala masiva."
-    reference: "content/16-arquitectura-tecnica/"
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
     category: "arquitectura-tecnica"
 
   - term: "Índice"
     simple: "Estructura de datos que acelera las búsquedas en una base de datos evitando escanear toda la tabla."
-    reference: "content/01-fundamentos-tecnologicos/"
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
     category: "fundamentos-tecnologicos"
 
   - term: "Frontend"
     simple: "La parte de una aplicación que corre en el cliente (navegador o app) y gestiona la interfaz de usuario."
-    reference: "content/01-fundamentos-tecnologicos/"
+    reference: "content/01-fundamentos-tecnologicos/07-como-funciona-una-aplicacion-moderna/"
     category: "fundamentos-tecnologicos"
 
   - term: "Backend"
     simple: "La parte de una aplicación que corre en el servidor y gestiona datos, lógica de negocio y autenticación."
-    reference: "content/01-fundamentos-tecnologicos/"
+    reference: "content/01-fundamentos-tecnologicos/07-como-funciona-una-aplicacion-moderna/"
     category: "fundamentos-tecnologicos"
 
   - term: "Single point of failure"
@@ -479,5 +479,5 @@ terms:
 
   - term: "Costo"
     simple: "El impacto económico de cada decisión técnica, incluyendo infraestructura, operación, mantenimiento y deuda técnica."
-    reference: "content/16-arquitectura-tecnica/"
+    reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
     category: "arquitectura-tecnica"
