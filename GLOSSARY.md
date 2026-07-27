@@ -21,6 +21,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Fase de SDD donde se escribe el código según las tareas planificadas.
 **Referencia**: `content/08-sdd/`
 
+### Autonomía
+**Simple**: La capacidad de un agente para ejecutar pasos sin intervención humana en cada decisión, limitada por condiciones de parada y permisos.
+**Referencia**: `content/03-fundamentos-de-ia/04-de-modelo-a-agente/`
+
 ---
 
 ## B
@@ -65,6 +69,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Red de servidores distribuidos geográficamente que entregan contenido estático (imágenes, CSS, JS) desde el nodo más cercano al usuario.
 **Referencia**: `content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/`
 
+### Ciclo de agente
+**Simple**: El bucle repetitivo en que un agente recibe entrada, consulta al modelo, decide si ejecuta una herramienta o responde, y repite hasta una condición de parada.
+**Referencia**: `content/03-fundamentos-de-ia/04-de-modelo-a-agente/`
+
 ### CLI (Command Line Interface)
 **Simple**: Una interfaz de texto donde se escriben comandos.
 **Referencia**: `content/15-terminal/`
@@ -85,9 +93,21 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Proceso de resumir el historial de una conversación cuando excede la ventana de contexto del modelo.
 **Referencia**: `content/03-fundamentos-de-ia/`
 
+### Condición de parada
+**Simple**: Regla que detiene la ejecución de un agente: límite de tokens, secuencia de parada, tope de herramientas llamadas, timeout o aprobación humana.
+**Referencia**: `content/03-fundamentos-de-ia/04-de-modelo-a-agente/`
+
+### Confianza verificable
+**Simple**: Sistema de verificación basado en artefactos externos y repetibles (commits, checks, deploys) en lugar de en el reporte subjetivo de un agente.
+**Referencia**: `content/17-gobierno/02-confianza-verificable/`
+
 ### Context window
 **Simple**: La cantidad máxima de tokens que un modelo puede procesar en una sola solicitud.
 **Referencia**: `content/03-fundamentos-de-ia/`
+
+### Contexto (de agente)
+**Simple**: Toda la información que un agente recibe para completar una tarea: historial de conversación, archivos, resultados de herramientas y memoria recuperada.
+**Referencia**: `content/03-fundamentos-de-ia/05-contexto-herramientas-y-memoria/`
 
 ### Costo
 **Simple**: El impacto económico de cada decisión técnica, incluyendo infraestructura, operación, mantenimiento y deuda técnica.
@@ -149,6 +169,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: La capacidad de un sistema para manejar más carga agregando recursos (vertical) o más máquinas (horizontal).
 **Referencia**: `content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/`
 
+### Evidencia
+**Simple**: Un artefacto verificable (SHA, log, check verde, artefacto construido) que respalda una afirmación, a diferencia del reporte del propio agente.
+**Referencia**: `content/17-gobierno/02-confianza-verificable/`
+
 ### Explore (sdd-explore)
 **Simple**: Fase de SDD para investigar ideas antes de comprometerse a un cambio.
 **Referencia**: `content/08-sdd/`
@@ -160,6 +184,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 ### Fallback
 **Simple**: Un modelo o estrategia de respaldo que se usa cuando el principal falla.
 **Referencia**: `content/14-modelos-y-enrutamiento/`
+
+### Fan-out
+**Simple**: Patrón que ejecuta múltiples agentes en paralelo sobre distintas partes de un problema y combina los resultados.
+**Referencia**: `content/16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp/`
 
 ### Frontend
 **Simple**: La parte de una aplicación que corre en el cliente (navegador o app) y gestiona la interfaz de usuario.
@@ -193,6 +221,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 
 ## H
 
+### Herramienta (tool)
+**Simple**: Una función o API que un agente puede invocar para leer, escribir, buscar o ejecutar acciones fuera del modelo.
+**Referencia**: `content/03-fundamentos-de-ia/05-contexto-herramientas-y-memoria/`
+
 ### Hook (Git)
 **Simple**: Un script que Git ejecuta automáticamente en respuesta a eventos como commit o push.
 **Referencia**: `content/02-git-y-github/`
@@ -220,6 +252,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 ### Init (sdd-init)
 **Simple**: Comando que inicializa el contexto SDD para un proyecto.
 **Referencia**: `content/08-sdd/`
+
+### Instrucciones (system prompt)
+**Simple**: El conjunto de reglas y directrices que definen el rol, tono y comportamiento de un agente, inyectadas al inicio del contexto.
+**Referencia**: `content/03-fundamentos-de-ia/04-de-modelo-a-agente/`
 
 ---
 
@@ -297,6 +333,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Formato de archivos para artefactos SDD (propuesta, especificación, diseño, tareas).
 **Referencia**: `content/08-sdd/`
 
+### Orquestación
+**Simple**: La coordinación de múltiples agentes o subagentes para completar un flujo de trabajo, decidiendo quién ejecuta cada paso y en qué orden.
+**Referencia**: `content/03-fundamentos-de-ia/04-de-modelo-a-agente/`
+
 ### Orquestador
 **Simple**: Un agente especial que distribuye trabajo a otros agentes y controla el flujo.
 **Referencia**: `content/03-fundamentos-de-ia/`
@@ -308,6 +348,14 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 ### Persona
 **Simple**: Una personalidad predefinida que el orquestador adopta al responder al usuario.
 **Referencia**: `content/07-gentle-ai/`
+
+### Pipeline (agentes)
+**Simple**: Patrón secuencial donde la salida de un agente es la entrada del siguiente, formando una cadena de procesamiento.
+**Referencia**: `content/16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp/`
+
+### Plan-and-Execute
+**Simple**: Patrón de agente que primero elabora un plan de varios pasos y luego ejecuta cada paso, verificando el resultado antes de continuar.
+**Referencia**: `content/16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp/`
 
 ### Plugin
 **Simple**: Extensión de código que agrega funcionalidad a OpenCode o Codex.
@@ -341,6 +389,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Control de cuánto 'piensa' un modelo antes de responder.
 **Referencia**: `content/14-modelos-y-enrutamiento/`
 
+### ReAct
+**Simple**: Patrón de agente que encadena razonamiento (Reasoning) y acción (Acting): el modelo piensa, ejecuta una herramienta, observa el resultado y decide el siguiente paso.
+**Referencia**: `content/16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp/`
+
 ### Receipt (recibo)
 **Simple**: Registro verificable de que una revisión de código se completó para un conjunto específico de cambios.
 **Referencia**: `content/11-calidad-y-revision/`
@@ -356,6 +408,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 ### Review
 **Simple**: Proceso de examinar código para encontrar errores, riesgos o mejoras.
 **Referencia**: `content/11-calidad-y-revision/`
+
+### Reviewer/refuter
+**Simple**: Patrón adversarial donde un agente produce resultados, otro los refuta, y un tercero (o el orquestador) resuelve la discrepancia.
+**Referencia**: `content/16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp/`
 
 ### Runtime
 **Simple**: El entorno donde se ejecuta un programa (Node.js, Go, navegador).
@@ -405,6 +461,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Un agente especializado, con instrucciones y herramientas limitadas, que recibe tareas del orquestador.
 **Referencia**: `content/03-fundamentos-de-ia/`
 
+### Supervisor/workers
+**Simple**: Patrón de orquestación donde un agente supervisor delega subtareas a agentes workers especializados y consolida los resultados.
+**Referencia**: `content/16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp/`
+
 ### System Design
 **Simple**: La disciplina de diseñar la arquitectura de un sistema: qué componentes tiene, cómo se comunican, cómo escalan y cómo manejan fallos.
 **Referencia**: `content/16-arquitectura-tecnica/03-mapa-de-system-design/`
@@ -452,6 +512,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 ### Trade-off
 **Simple**: La decisión de sacrificar un atributo (ej: consistencia) para ganar otro (ej: disponibilidad).
 **Referencia**: `content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/`
+
+### Trazabilidad
+**Simple**: La capacidad de rastrear cada decisión y artefacto hasta un commit, SHA o evento específico, permitiendo auditoría y reproducción.
+**Referencia**: `content/17-gobierno/02-confianza-verificable/`
 
 ### TUI (Text User Interface)
 **Simple**: Interfaz de usuario basada en texto con elementos visuales como paneles y menús.

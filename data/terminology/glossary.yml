@@ -481,3 +481,83 @@ terms:
     simple: "El impacto económico de cada decisión técnica, incluyendo infraestructura, operación, mantenimiento y deuda técnica."
     reference: "content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/"
     category: "arquitectura-tecnica"
+
+  - term: "Contexto (de agente)"
+    simple: "Toda la información que un agente recibe para completar una tarea: historial de conversación, archivos, resultados de herramientas y memoria recuperada."
+    reference: "content/03-fundamentos-de-ia/05-contexto-herramientas-y-memoria/"
+    category: "fundamentos-de-ia"
+
+  - term: "Herramienta (tool)"
+    simple: "Una función o API que un agente puede invocar para leer, escribir, buscar o ejecutar acciones fuera del modelo."
+    reference: "content/03-fundamentos-de-ia/05-contexto-herramientas-y-memoria/"
+    category: "fundamentos-de-ia"
+
+  - term: "Ciclo de agente"
+    simple: "El bucle repetitivo en que un agente recibe entrada, consulta al modelo, decide si ejecuta una herramienta o responde, y repite hasta una condición de parada."
+    reference: "content/03-fundamentos-de-ia/04-de-modelo-a-agente/"
+    category: "fundamentos-de-ia"
+
+  - term: "Condición de parada"
+    simple: "Regla que detiene la ejecución de un agente: límite de tokens, secuencia de parada, tope de herramientas llamadas, timeout o aprobación humana."
+    reference: "content/03-fundamentos-de-ia/04-de-modelo-a-agente/"
+    category: "fundamentos-de-ia"
+
+  - term: "Instrucciones (system prompt)"
+    simple: "El conjunto de reglas y directrices que definen el rol, tono y comportamiento de un agente, inyectadas al inicio del contexto."
+    reference: "content/03-fundamentos-de-ia/04-de-modelo-a-agente/"
+    category: "fundamentos-de-ia"
+
+  - term: "ReAct"
+    simple: "Patrón de agente que encadena razonamiento (Reasoning) y acción (Acting): el modelo piensa, ejecuta una herramienta, observa el resultado y decide el siguiente paso."
+    reference: "content/16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp/"
+    category: "arquitectura-tecnica"
+
+  - term: "Plan-and-Execute"
+    simple: "Patrón de agente que primero elabora un plan de varios pasos y luego ejecuta cada paso, verificando el resultado antes de continuar."
+    reference: "content/16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp/"
+    category: "arquitectura-tecnica"
+
+  - term: "Supervisor/workers"
+    simple: "Patrón de orquestación donde un agente supervisor delega subtareas a agentes workers especializados y consolida los resultados."
+    reference: "content/16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp/"
+    category: "arquitectura-tecnica"
+
+  - term: "Pipeline (agentes)"
+    simple: "Patrón secuencial donde la salida de un agente es la entrada del siguiente, formando una cadena de procesamiento."
+    reference: "content/16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp/"
+    category: "arquitectura-tecnica"
+
+  - term: "Fan-out"
+    simple: "Patrón que ejecuta múltiples agentes en paralelo sobre distintas partes de un problema y combina los resultados."
+    reference: "content/16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp/"
+    category: "arquitectura-tecnica"
+
+  - term: "Reviewer/refuter"
+    simple: "Patrón adversarial donde un agente produce resultados, otro los refuta, y un tercero (o el orquestador) resuelve la discrepancia."
+    reference: "content/16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp/"
+    category: "arquitectura-tecnica"
+
+  - term: "Orquestación"
+    simple: "La coordinación de múltiples agentes o subagentes para completar un flujo de trabajo, decidiendo quién ejecuta cada paso y en qué orden."
+    reference: "content/03-fundamentos-de-ia/04-de-modelo-a-agente/"
+    category: "fundamentos-de-ia"
+
+  - term: "Autonomía"
+    simple: "La capacidad de un agente para ejecutar pasos sin intervención humana en cada decisión, limitada por condiciones de parada y permisos."
+    reference: "content/03-fundamentos-de-ia/04-de-modelo-a-agente/"
+    category: "fundamentos-de-ia"
+
+  - term: "Evidencia"
+    simple: "Un artefacto verificable (SHA, log, check verde, artefacto construido) que respalda una afirmación, a diferencia del reporte del propio agente."
+    reference: "content/17-gobierno/02-confianza-verificable/"
+    category: "gobierno"
+
+  - term: "Trazabilidad"
+    simple: "La capacidad de rastrear cada decisión y artefacto hasta un commit, SHA o evento específico, permitiendo auditoría y reproducción."
+    reference: "content/17-gobierno/02-confianza-verificable/"
+    category: "gobierno"
+
+  - term: "Confianza verificable"
+    simple: "Sistema de verificación basado en artefactos externos y repetibles (commits, checks, deploys) en lugar de en el reporte subjetivo de un agente."
+    reference: "content/17-gobierno/02-confianza-verificable/"
+    category: "gobierno"
