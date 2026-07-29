@@ -522,3 +522,219 @@ test("RED (PR 2.2): legacy agents-orquestadores URL redirect exists and is corre
     assert.ok(fs.existsSync(canonicalDest), "Canonical destination page must exist in dist/");
   }
 });
+
+// ─────────────────────────────────────────────
+// RED tests — PR 3: Gentle ecosystem operations + Organic RDD
+// These MUST fail before implementation.
+// ─────────────────────────────────────────────
+
+const PR3_PAGES = [
+  ['07-gentle-ai/05-comandos-del-ecosistema', path.resolve(__dirname, '..', 'src', 'content', 'docs', '07-gentle-ai', '05-comandos-del-ecosistema.md')],
+  ['07-gentle-ai/06-actualizar-y-sincronizar', path.resolve(__dirname, '..', 'src', 'content', 'docs', '07-gentle-ai', '06-actualizar-y-sincronizar.md')],
+  ['07-gentle-ai/07-flujo-organico-y-rdd', path.resolve(__dirname, '..', 'src', 'content', 'docs', '07-gentle-ai', '07-flujo-organico-y-rdd.md')],
+  ['14-modelos-y-enrutamiento/02-asignar-modelos', path.resolve(__dirname, '..', 'src', 'content', 'docs', '14-modelos-y-enrutamiento', '02-asignar-modelos.md')],
+  ['16-arquitectura-tecnica/02-arquitectura-gentle-y-hosts', path.resolve(__dirname, '..', 'src', 'content', 'docs', '16-arquitectura-tecnica', '02-arquitectura-gentle-y-hosts.md')],
+];
+
+test("RED (PR 3): all 5 new pages exist", () => {
+  for (const [name, filePath] of PR3_PAGES) {
+    assert.ok(fs.existsSync(filePath), `Page ${name} does not exist yet — RED expected`);
+  }
+});
+
+test("RED (PR 3): curriculum has all 5 new lessons", () => {
+  const { modules } = require('../src/data/curriculum.mjs');
+  const slugs = new Set();
+  modules.forEach(m => m.lessons.forEach(l => slugs.add(l.slug)));
+  const expected = [
+    '07-gentle-ai/05-comandos-del-ecosistema',
+    '07-gentle-ai/06-actualizar-y-sincronizar',
+    '07-gentle-ai/07-flujo-organico-y-rdd',
+    '14-modelos-y-enrutamiento/02-asignar-modelos',
+    '16-arquitectura-tecnica/02-arquitectura-gentle-y-hosts',
+  ];
+  for (const slug of expected) {
+    assert.ok(slugs.has(slug), `Curriculum missing slug: ${slug}`);
+  }
+});
+
+test("RED (PR 3): profiles reference new lesson slugs", () => {
+  const { profiles } = require('../src/data/curriculum.mjs');
+  const allHrefs = profiles.flatMap(p => p.lessonHrefs);
+  const expected = [
+    '/07-gentle-ai/05-comandos-del-ecosistema/',
+    '/07-gentle-ai/06-actualizar-y-sincronizar/',
+    '/07-gentle-ai/07-flujo-organico-y-rdd/',
+    '/14-modelos-y-enrutamiento/02-asignar-modelos/',
+    '/16-arquitectura-tecnica/02-arquitectura-gentle-y-hosts/',
+  ];
+  for (const href of expected) {
+    assert.ok(allHrefs.includes(href), `No profile references ${href}`);
+  }
+});
+
+test("RED (PR 3): catalog parses", () => {
+  const YAML = require('js-yaml');
+  const catalogPath = path.resolve(__dirname, '..', 'data', 'evidence', 'gentle-command-catalog.yml');
+  const raw = fs.readFileSync(catalogPath, 'utf8');
+  const parsed = YAML.load(raw);
+  assert.ok(Array.isArray(parsed), 'Catalog must be an array');
+  assert.ok(parsed.length >= 40, `Expected 40+ entries, got ${parsed.length}`);
+  const ids = new Set();
+  for (const entry of parsed) {
+    assert.ok(!ids.has(entry.id), `Duplicate catalog id: ${entry.id}`);
+    ids.add(entry.id);
+  }
+});
+
+test("RED (PR 3): no internal phase listed as slash command", () => {
+  const YAML = require('js-yaml');
+  const catalogPath = path.resolve(__dirname, '..', 'data', 'evidence', 'gentle-command-catalog.yml');
+  const raw = fs.readFileSync(catalogPath, 'utf8');
+  const parsed = YAML.load(raw);
+  const internalSlash = parsed.filter(e => e.surface === 'slash-command' && e.status === 'internal');
+  assert.equal(internalSlash.length, 0, `Internal phases should not be slash commands: ${internalSlash.map(e => e.id).join(', ')}`);
+});
+
+test("RED (PR 3): review finalize --result is not a current command", () => {
+  const YAML = require('js-yaml');
+  const catalogPath = path.resolve(__dirname, '..', 'data', 'evidence', 'gentle-command-catalog.yml');
+  const raw = fs.readFileSync(catalogPath, 'utf8');
+  const parsed = YAML.load(raw);
+  const currentResult = parsed.filter(e =>
+    e.status === 'current' &&
+    e.syntax && e.syntax.includes('review finalize') &&
+    /\b--result\b(?!-)/.test(e.syntax)
+  );
+  assert.equal(currentResult.length, 0, 'review finalize --result must not be current');
+});
+
+test("RED (PR 3): sync not described as upgrade", () => {
+  const YAML = require('js-yaml');
+  const catalogPath = path.resolve(__dirname, '..', 'data', 'evidence', 'gentle-command-catalog.yml');
+  const raw = fs.readFileSync(catalogPath, 'utf8');
+  const parsed = YAML.load(raw);
+  const sync = parsed.find(e => e.id === 'cli-sync');
+  assert.ok(sync, 'cli-sync entry exists');
+  assert.doesNotMatch(sync.result || '', /upgrade|update.*binary|reinstall/i, 'sync result must not claim to upgrade binary');
+});
+
+test("RED (PR 3): doctor not described as repair", () => {
+  const YAML = require('js-yaml');
+  const catalogPath = path.resolve(__dirname, '..', 'data', 'evidence', 'gentle-command-catalog.yml');
+  const raw = fs.readFileSync(catalogPath, 'utf8');
+  const parsed = YAML.load(raw);
+  const doctor = parsed.find(e => e.id === 'cli-doctor');
+  assert.ok(doctor, 'cli-doctor entry exists');
+  assert.doesNotMatch(doctor.result || '', /repair|fix|recover|repara/i, 'doctor result must not claim to repair');
+});
+
+test("RED (PR 3): glossary has new PR 3 terms", () => {
+  const glossaryPath = path.resolve(__dirname, '..', 'data', 'terminology', 'glossary.yml');
+  const content = fs.readFileSync(glossaryPath, 'utf8');
+  const requiredTerms = [
+    'flujo orgánico',
+    'trabajo directo',
+    'delegación focalizada',
+    'SDD opcional',
+    'candidato',
+    'candidato congelado',
+    'bytes exactos',
+    'proyección',
+    'tier de revisión',
+    'lens',
+    'refuter',
+    'autoridad de review',
+    'lineage',
+    'receipt ligado al contenido',
+    'gate de entrega',
+    'review mode',
+    'kill switch',
+    'consentimiento por candidato',
+    'recovery',
+    'reconciliación',
+    'deferencia',
+    'configurador de ecosistema',
+    'host',
+    'runtime',
+    'asset administrado',
+    'install',
+    'update',
+    'upgrade',
+    'sync',
+    'state',
+    'backup',
+    'restore',
+    'doctor',
+    'catálogo de comandos',
+    'slash command',
+    'fase interna',
+    'perfil de modelos',
+    'fallback',
+    'degradación de capacidad',
+    'herencia de modelo',
+    'sync',
+    'upgrade',
+    'fallback',
+    'configurador de ecosistema',
+  ];
+  for (const term of [...new Set(requiredTerms)]) {
+    assert.ok(content.includes(`  - term: "${term}"`), `Missing glossary term: "${term}"`);
+  }
+});
+
+test("RED (PR 3): Go v2 uses /v2", () => {
+  const content0706 = path.resolve(__dirname, '..', 'src', 'content', 'docs', '07-gentle-ai', '06-actualizar-y-sincronizar.md');
+  if (fs.existsSync(content0706)) {
+    const text = fs.readFileSync(content0706, 'utf8');
+    assert.match(text, /\/v2\//, 'Go install path must use /v2');
+  }
+});
+
+test("RED (PR 3): 02-confianza-verificable links to new pages", () => {
+  const trustPage = path.resolve(__dirname, '..', 'src', 'content', 'docs', '17-gobierno', '02-confianza-verificable.md');
+  const content = fs.readFileSync(trustPage, 'utf8');
+  const expectedLinks = [
+    '/07-gentle-ai/05-comandos-del-ecosistema/',
+    '/07-gentle-ai/07-flujo-organico-y-rdd/',
+    '/16-arquitectura-tecnica/02-arquitectura-gentle-y-hosts/',
+    '/14-modelos-y-enrutamiento/02-asignar-modelos/',
+  ];
+  for (const link of expectedLinks) {
+    assert.match(content, new RegExp(link.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), `Missing link: ${link}`);
+  }
+});
+
+test("RED (PR 3): all glossary terms reference existent pages", () => {
+  const YAML = require('js-yaml');
+  const glossaryPath = path.resolve(__dirname, '..', 'data', 'terminology', 'glossary.yml');
+  const raw = fs.readFileSync(glossaryPath, 'utf8');
+  const parsed = YAML.load(raw);
+  const issues = [];
+  for (const entry of parsed.terms) {
+    if (!entry.reference) continue;
+    const mdPath = path.resolve(__dirname, '..', 'src', 'content', 'docs', entry.reference.replace(/^content\//, '').replace(/\/$/, '.md'));
+    if (!fs.existsSync(mdPath)) {
+      // Allow directory-level refs to existing dirs
+      const dirPath = path.resolve(__dirname, '..', 'src', 'content', 'docs', entry.reference.replace(/^content\//, '').replace(/\/$/, ''));
+      if (!fs.existsSync(dirPath)) {
+        issues.push(`"${entry.term}" → ${entry.reference} — not found at ${mdPath} or ${dirPath}`);
+      }
+    }
+  }
+  if (issues.length > 0) {
+    assert.fail(`Glossary reference issues:\n${issues.map(i => '  ' + i).join('\n')}`);
+  }
+});
+
+test("RED (PR 3): actualizar-y-sincronizar page does not present backup as CLI command", () => {
+  const pagePath = path.resolve(__dirname, '..', 'src', 'content', 'docs', '07-gentle-ai', '06-actualizar-y-sincronizar.md');
+  const content = fs.readFileSync(pagePath, 'utf8');
+  // "gentle-ai backup" may appear in explanatory text ("no existe comando...") but NOT as a runnable command example
+  const runnableBackup = content.match(/```[\s\S]*?```/g);
+  if (runnableBackup) {
+    for (const block of runnableBackup) {
+      assert.doesNotMatch(block, /gentle-ai backup\b/, 'gentle-ai backup must not appear in a code block as a runnable command');
+    }
+  }
+});

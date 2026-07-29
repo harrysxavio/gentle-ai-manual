@@ -21,9 +21,17 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Fase de SDD donde se escribe el código según las tareas planificadas.
 **Referencia**: `content/08-sdd/`
 
+### asset administrado
+**Simple**: Componente que Gentle-AI instala, actualiza o remueve en el host: skills, configuraciones, system prompts, hooks.
+**Referencia**: `content/16-arquitectura-tecnica/02-arquitectura-gentle-y-hosts/`
+
 ### Autonomía
 **Simple**: La capacidad de un agente para ejecutar pasos sin intervención humana en cada decisión, limitada por condiciones de parada y permisos.
 **Referencia**: `content/03-fundamentos-de-ia/04-de-modelo-a-agente/`
+
+### autoridad de review
+**Simple**: Conjunto completo de artefactos que documentan una revisión: lineage, receipts y gates.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
 
 ---
 
@@ -32,6 +40,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 ### Backend
 **Simple**: La parte de una aplicación que corre en el servidor y gestiona datos, lógica de negocio y autenticación.
 **Referencia**: `content/01-fundamentos-tecnologicos/07-como-funciona-una-aplicacion-moderna/`
+
+### backup
+**Simple**: Comando gentle-ai que crea un snapshot manual de la configuración actual (auto-snapshot comprimido en tar.gz).
+**Referencia**: `content/07-gentle-ai/06-actualizar-y-sincronizar/`
 
 ### Balanceador de carga
 **Simple**: Componente que distribuye las solicitudes entrantes entre múltiples servidores para evitar sobrecargar uno solo.
@@ -53,6 +65,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Una línea independiente de desarrollo en Git.
 **Referencia**: `content/02-git-y-github/`
 
+### bytes exactos
+**Simple**: Hash SHA del contenido del diff en el momento de congelar el candidato. Identifica unívocamente el cambio revisado.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
+
 ---
 
 ## C
@@ -61,9 +77,21 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Copia temporal de datos costosos o lentos de obtener. Acelera lecturas repetidas pero puede servir datos obsoletos.
 **Referencia**: `content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/`
 
+### candidato
+**Simple**: El conjunto de cambios propuestos para revisión, antes de ser congelado.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
+
+### candidato congelado
+**Simple**: Snapshot inmutable del cambio en el momento exacto de la revisión. No puede modificarse mientras se revisa.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
+
 ### capture_prompt
 **Simple**: Parámetro opcional de mem_save que desactiva la captura automática del prompt del usuario. Cuando es false, Engram no vincula el prompt actual a la observación guardada.
 **Referencia**: `content/09-engram/03-arquitectura-engram/`
+
+### catálogo de comandos
+**Simple**: Registro estructurado de todos los comandos del ecosistema Gentle con su superficie, estado, versión y fuente verificada.
+**Referencia**: `content/07-gentle-ai/05-comandos-del-ecosistema/`
 
 ### CDN
 **Simple**: Red de servidores distribuidos geográficamente que entregan contenido estático (imágenes, CSS, JS) desde el nodo más cercano al usuario.
@@ -101,6 +129,14 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Sistema de verificación basado en artefactos externos y repetibles (commits, checks, deploys) en lugar de en el reporte subjetivo de un agente.
 **Referencia**: `content/17-gobierno/02-confianza-verificable/`
 
+### configurador de ecosistema
+**Simple**: Rol de Gentle-AI: prepara el host (OpenCode, Codex) instalando componentes y sincronizando configuraciones. No ejecuta agentes ni modelos.
+**Referencia**: `content/16-arquitectura-tecnica/02-arquitectura-gentle-y-hosts/`
+
+### consentimiento por candidato
+**Simple**: Aceptación explícita del desarrollador para que un candidato sea revisado, expresada con la flag --consent.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
+
 ### Context window
 **Simple**: La cantidad máxima de tokens que un modelo puede procesar en una sola solicitud.
 **Referencia**: `content/03-fundamentos-de-ia/`
@@ -121,6 +157,18 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 
 ## D
 
+### deferencia
+**Simple**: Mecanismo por el cual un lens puede abstenerse de evaluar si no tiene suficiente información.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
+
+### degradación de capacidad
+**Simple**: Estado en que ningún modelo de la cadena de fallback está disponible y la fase SDD no puede continuar.
+**Referencia**: `content/14-modelos-y-enrutamiento/02-asignar-modelos/`
+
+### delegación focalizada
+**Simple**: Estrategia de implementación donde un agente delega partes específicas a subagentes sin pasar por SDD completo.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
+
 ### Dependencia
 **Simple**: Una biblioteca o módulo externo que un proyecto necesita para funcionar.
 **Referencia**: `content/01-fundamentos-tecnologicos/`
@@ -140,6 +188,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 ### DNS
 **Simple**: Sistema que traduce nombres de dominio legibles (ejemplo.com) a direcciones IP numéricas. Significa Domain Name System.
 **Referencia**: `content/01-fundamentos-tecnologicos/07-como-funciona-una-aplicacion-moderna/`
+
+### doctor
+**Simple**: Comando gentle-ai de solo lectura que ejecuta diagnóstico de salud del ecosistema. No repara, solo reporta.
+**Referencia**: `content/07-gentle-ai/05-comandos-del-ecosistema/`
 
 ---
 
@@ -185,9 +237,21 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Un modelo o estrategia de respaldo que se usa cuando el principal falla.
 **Referencia**: `content/14-modelos-y-enrutamiento/`
 
+### fallback
+**Simple**: Modelo o estrategia de respaldo que se usa cuando el principal falla (timeout, error, costo excesivo).
+**Referencia**: `content/14-modelos-y-enrutamiento/02-asignar-modelos/`
+
 ### Fan-out
 **Simple**: Patrón que ejecuta múltiples agentes en paralelo sobre distintas partes de un problema y combina los resultados.
 **Referencia**: `content/16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp/`
+
+### fase interna
+**Simple**: Paso que ejecuta el orquestador automáticamente como parte del flujo SDD (explore, design, apply). No es invocable por el usuario.
+**Referencia**: `content/07-gentle-ai/05-comandos-del-ecosistema/`
+
+### flujo orgánico
+**Simple**: Modelo de revisión donde el candidato se congela antes de evaluarse, produciendo receipts verificables ligados al contenido.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
 
 ### Frontend
 **Simple**: La parte de una aplicación que corre en el cliente (navegador o app) y gestiona la interfaz de usuario.
@@ -205,6 +269,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 
 ## G
 
+### gate de entrega
+**Simple**: Punto de control donde se valida un receipt antes de avanzar: post-apply, pre-commit, pre-push, pre-PR, release.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
+
 ### GGA (Gentleman Guardian Angel)
 **Simple**: Sistema de hooks de Git que ejecuta revisiones automáticas antes de commits y push.
 **Referencia**: `content/11-calidad-y-revision/`
@@ -221,6 +289,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 
 ## H
 
+### herencia de modelo
+**Simple**: Mecanismo donde un perfil de modelos hereda configuraciones de otro y solo sobrescribe las fases que necesita cambiar.
+**Referencia**: `content/14-modelos-y-enrutamiento/02-asignar-modelos/`
+
 ### Herramienta (tool)
 **Simple**: Una función o API que un agente puede invocar para leer, escribir, buscar o ejecutar acciones fuera del modelo.
 **Referencia**: `content/03-fundamentos-de-ia/05-contexto-herramientas-y-memoria/`
@@ -228,6 +300,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 ### Hook (Git)
 **Simple**: Un script que Git ejecuta automáticamente en respuesta a eventos como commit o push.
 **Referencia**: `content/02-git-y-github/`
+
+### host
+**Simple**: Asistente de código con IA que Gentle-AI configura (OpenCode, Codex, Claude Code). Cada host tiene capacidades distintas.
+**Referencia**: `content/16-arquitectura-tecnica/02-arquitectura-gentle-y-hosts/`
 
 ### HTTP (HyperText Transfer Protocol)
 **Simple**: Protocolo de comunicación usado por navegadores y servidores web.
@@ -253,6 +329,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Comando que inicializa el contexto SDD para un proyecto.
 **Referencia**: `content/08-sdd/`
 
+### install
+**Simple**: Comando gentle-ai que instala y configura componentes sobre el agente seleccionado.
+**Referencia**: `content/07-gentle-ai/05-comandos-del-ecosistema/`
+
 ### Instrucciones (system prompt)
 **Simple**: El conjunto de reglas y directrices que definen el rol, tono y comportamiento de un agente, inyectadas al inicio del contexto.
 **Referencia**: `content/03-fundamentos-de-ia/04-de-modelo-a-agente/`
@@ -267,11 +347,23 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 
 ---
 
+## K
+
+### kill switch
+**Simple**: Mecanismo que deshabilita todo el sistema de revisión nativa desde una sola fuente: review mode disable.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
+
+---
+
 ## L
 
 ### Latencia
 **Simple**: El tiempo que tarda una solicitud individual en completarse, generalmente medido en milisegundos.
 **Referencia**: `content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/`
+
+### lens
+**Simple**: Perspectiva especializada de revisión que examina el candidato desde un ángulo particular (riesgo, seguridad, legibilidad).
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
 
 ### Lens (lente de revisión)
 **Simple**: Una perspectiva especializada de revisión de código (riesgo, legibilidad, confiabilidad, resiliencia).
@@ -280,6 +372,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 ### Linaje
 **Simple**: Cadena de identidad criptográfica que conecta revisiones, correcciones y recibos.
 **Referencia**: `content/11-calidad-y-revision/`
+
+### lineage
+**Simple**: Cadena de identidad criptográfica que conecta revisiones, correcciones y receipts de un cambio.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
 
 ---
 
@@ -345,6 +441,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 
 ## P
 
+### perfil de modelos
+**Simple**: Asignación predefinida de modelos por fase SDD (económico, equilibrado, potente) para balancear costo, velocidad y calidad.
+**Referencia**: `content/14-modelos-y-enrutamiento/02-asignar-modelos/`
+
 ### Persona
 **Simple**: Una personalidad predefinida que el orquestador adopta al responder al usuario.
 **Referencia**: `content/07-gentle-ai/`
@@ -381,6 +481,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Un intermediario entre el cliente y el servidor: el forward proxy oculta al cliente, el reverse proxy oculta al servidor y distribuye tráfico.
 **Referencia**: `content/01-fundamentos-tecnologicos/07-como-funciona-una-aplicacion-moderna/`
 
+### proyección
+**Simple**: Define qué incluir en la revisión: staged (solo archivos en staging) o workspace (staging + cambios sin staging).
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
+
 ---
 
 ## R
@@ -397,17 +501,41 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Registro verificable de que una revisión de código se completó para un conjunto específico de cambios.
 **Referencia**: `content/11-calidad-y-revision/`
 
+### receipt ligado al contenido
+**Simple**: Receipt cuyo hash incluye el SHA del candidato congelado. Si el contenido cambia, el receipt se invalida.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
+
+### reconciliación
+**Simple**: Proceso de alinear el estado de la autoridad de revisión con el estado real del repositorio.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
+
+### recovery
+**Simple**: Reintento one-shot de una revisión que falló por error de infraestructura. Usa retry-final-verification.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
+
 ### Redundancia
 **Simple**: Tener copias de componentes críticos para que el sistema siga funcionando si uno falla.
 **Referencia**: `content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/`
+
+### refuter
+**Simple**: Resultado adversario de un lens: detecta un problema y rechaza el candidato, emitiendo evidencia del fallo.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
 
 ### Resiliencia
 **Simple**: La capacidad de un sistema de seguir funcionando (quizás degradado) cuando uno o más componentes fallan.
 **Referencia**: `content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/`
 
+### restore
+**Simple**: Comando gentle-ai que restaura una configuración desde un auto-snapshot.
+**Referencia**: `content/07-gentle-ai/06-actualizar-y-sincronizar/`
+
 ### Review
 **Simple**: Proceso de examinar código para encontrar errores, riesgos o mejoras.
 **Referencia**: `content/11-calidad-y-revision/`
+
+### review mode
+**Simple**: Estado del sistema de revisión nativa: habilitado o deshabilitado. Cuando está deshabilitado, nada se bloquea.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
 
 ### Reviewer/refuter
 **Simple**: Patrón adversarial donde un agente produce resultados, otro los refuta, y un tercero (o el orquestador) resuelve la discrepancia.
@@ -417,6 +545,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: El entorno donde se ejecuta un programa (Node.js, Go, navegador).
 **Referencia**: `content/01-fundamentos-tecnologicos/`
 
+### runtime
+**Simple**: Entorno donde se ejecuta un programa. El runtime del host (Node.js, Python) es distinto del runtime de un asset (Go, Bash).
+**Referencia**: `content/16-arquitectura-tecnica/02-arquitectura-gentle-y-hosts/`
+
 ---
 
 ## S
@@ -424,6 +556,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 ### SDD (Spec-Driven Development)
 **Simple**: Metodología de desarrollo donde se planifica y especifica antes de implementar.
 **Referencia**: `content/08-sdd/`
+
+### SDD opcional
+**Simple**: Modo donde SDD no es obligatorio: el agente puede trabajar directamente sin pasar por el ciclo completo de especificación y diseño.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
 
 ### Servidor (contexto red)
 **Simple**: La computadora o programa que recibe solicitudes de clientes, las procesa y devuelve respuestas.
@@ -441,6 +577,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Un archivo de conocimiento especializado que se carga cuando el contexto coincide.
 **Referencia**: `content/10-skills/`
 
+### slash command
+**Simple**: Comando que se escribe en el chat del asistente (/sdd-new, /model-config). No pasa por el binario gentle-ai.
+**Referencia**: `content/07-gentle-ai/05-comandos-del-ecosistema/`
+
 ### Spec (sdd-spec)
 **Simple**: Fase de SDD donde se escriben los requisitos detallados y escenarios.
 **Referencia**: `content/08-sdd/`
@@ -457,6 +597,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Área intermedia donde se preparan los archivos antes de hacer commit.
 **Referencia**: `content/02-git-y-github/`
 
+### state
+**Simple**: Archivo de estado (state.json) que Gentle-AI usa para saber qué componentes están instalados y su configuración.
+**Referencia**: `content/07-gentle-ai/05-comandos-del-ecosistema/`
+
 ### Subagente
 **Simple**: Un agente especializado, con instrucciones y herramientas limitadas, que recibe tareas del orquestador.
 **Referencia**: `content/03-fundamentos-de-ia/`
@@ -464,6 +608,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 ### Supervisor/workers
 **Simple**: Patrón de orquestación donde un agente supervisor delega subtareas a agentes workers especializados y consolida los resultados.
 **Referencia**: `content/16-arquitectura-tecnica/05-patrones-de-agentes-y-mcp/`
+
+### sync
+**Simple**: Comando gentle-ai idempotente que sincroniza configuraciones y skills entre componentes sin actualizar versiones.
+**Referencia**: `content/07-gentle-ai/05-comandos-del-ecosistema/`
 
 ### System Design
 **Simple**: La disciplina de diseñar la arquitectura de un sistema: qué componentes tiene, cómo se comunican, cómo escalan y cómo manejan fallos.
@@ -497,6 +645,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: La cantidad de solicitudes que un sistema puede procesar por unidad de tiempo (ej: requests por segundo).
 **Referencia**: `content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/`
 
+### tier de revisión
+**Simple**: Nivel de profundidad de revisión: full, fast, skip o no-review. Determina cuántos lenses se aplican al candidato.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
+
 ### Token
 **Simple**: La unidad mínima de texto que un modelo de IA procesa (aproximadamente ¾ de palabra en inglés).
 **Referencia**: `content/03-fundamentos-de-ia/`
@@ -509,6 +661,10 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 **Simple**: Clave estable para upserts en Engram. Cuando se usa el mismo topic_key en mem_save, Engram actualiza la observación existente en lugar de crear una nueva. Útil para temas evolutivos como architecture/database-choice.
 **Referencia**: `content/09-engram/02-memoria-y-mcp/`
 
+### trabajo directo
+**Simple**: Fase donde un agente produce código sin haber congelado un candidato de revisión. Ocurre antes de la revisión orgánica.
+**Referencia**: `content/07-gentle-ai/07-flujo-organico-y-rdd/`
+
 ### Trade-off
 **Simple**: La decisión de sacrificar un atributo (ej: consistencia) para ganar otro (ej: disponibilidad).
 **Referencia**: `content/16-arquitectura-tecnica/04-datos-escala-y-resiliencia/`
@@ -520,6 +676,18 @@ Cada término incluye su primera definición simple (Nivel 1) y una referencia a
 ### TUI (Text User Interface)
 **Simple**: Interfaz de usuario basada en texto con elementos visuales como paneles y menús.
 **Referencia**: `content/15-terminal/`
+
+---
+
+## U
+
+### update
+**Simple**: Comando gentle-ai de solo lectura que verifica si hay versiones nuevas de componentes. No aplica cambios.
+**Referencia**: `content/07-gentle-ai/05-comandos-del-ecosistema/`
+
+### upgrade
+**Simple**: Comando gentle-ai que aplica las actualizaciones disponibles de herramientas gestionadas.
+**Referencia**: `content/07-gentle-ai/05-comandos-del-ecosistema/`
 
 ---
 
