@@ -1,0 +1,14 @@
+# Fixture: all fields set to false should fail validation
+claims:
+  - id: false
+    component: false
+    claim: false
+    observed_version: false
+    observed_commit: false
+    verified_at: false
+    source: false
+    status: false
+    scope: false
+    platform: false
+    channel: false
+    canonical_page: false

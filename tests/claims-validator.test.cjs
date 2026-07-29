@@ -31,6 +31,8 @@ const TIER_LINES = path.join(FIXTURES, 'invalid-tier-by-lines.yml');
 const DEFER_APPROVAL = path.join(FIXTURES, 'invalid-defer-as-approval.yml');
 const SYNC_UPGRADE = path.join(FIXTURES, 'invalid-sync-as-upgrade.yml');
 const DOCTOR_REPAIR = path.join(FIXTURES, 'invalid-doctor-as-repair.yml');
+const EMPTY_CLAIMS = path.join(FIXTURES, 'invalid-empty-claims.yml');
+const FALSE_FIELDS = path.join(FIXTURES, 'invalid-false-fields.yml');
 
 /* ------------------------------------------------------------------ */
 /*  Tests 1—14: individual fixture checks                             */
@@ -133,4 +135,20 @@ test('15: full valid fixture passes', () => {
 test('16: main claims file passes', () => {
   const result = validator.validateFile(MAIN_CLAIMS);
   assert.strictEqual(result.errors.length, 0, 'Expected no errors for verified-claims.yml');
+});
+
+/* ------------------------------------------------------------------ */
+/*  Tests 17—18: regression — edge cases                              */
+/* ------------------------------------------------------------------ */
+
+test('17: empty claims array fails', () => {
+  const result = validator.validateFile(EMPTY_CLAIMS);
+  assert.ok(result.errors.length > 0, 'Expected errors but got none');
+  assert.ok(result.errors.some(e => e.includes('non-empty')), 'Expected error about empty claims');
+});
+
+test('18: all-false fields fail', () => {
+  const result = validator.validateFile(FALSE_FIELDS);
+  assert.ok(result.errors.length > 0, 'Expected errors but got none');
+  assert.ok(result.errors.some(e => e.includes('missing required field')), 'Expected error about missing fields');
 });

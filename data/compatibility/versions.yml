@@ -19,8 +19,8 @@ components:
       - "Git"
     dependencies:
       - name: "engram"
-        compatible_versions: ["1.18.x", "1.19.0", "1.20.0"]
-        relationship: "optional — memory system"
+        compatible_versions: ["1.18.x", "1.19.0"]
+        relationship: "optional — memory system (1.20.0 pending verification)"
       - name: "gga"
         compatible_versions: ["2.8.x", "2.9.x", "2.10.1"]
         relationship: "optional — git hooks"
@@ -96,8 +96,8 @@ components:
     requirements: ["Node.js >= 18"]
     dependencies:
       - name: "engram"
-        compatible_versions: ["1.18.x", "1.19.0", "1.20.0"]
-        relationship: "integrated plugin"
+        compatible_versions: ["1.18.x", "1.19.0"]
+        relationship: "integrated plugin (1.20.0 pending verification)"
     paths:
       config: "opencode.json or opencode.jsonc"
       skills: "%USERPROFILE%\\.config\\opencode\\skills\\"
@@ -115,7 +115,7 @@ components:
     requirements: ["Node.js >= 18"]
     dependencies:
       - name: "engram"
-        compatible_versions: ["1.18.x", "1.19.0", "1.20.0"]
+        compatible_versions: ["1.18.x", "1.19.0"]
         relationship: "MCP support"
     paths:
       config: "config.toml (project directory)"
@@ -141,7 +141,7 @@ components:
     version_verified: "N/A"
     installed: false
     role: "Build tool for gentle-ai, engram"
-    notes: "Not needed for normal usage. Only for development/builds from source"
+    notes: "Required for go install of gentle-ai (v2.2.0+). Not needed for OpenCode, Codex, or running gentle-ai after installation."
 
   - name: "gentleman-skills"
     version_verified: "No tagged release"
@@ -162,7 +162,7 @@ compatibility_matrix:
     status: "compatible"
     codex: "0.144.0"
     codex_status: "compatible"
-    engram: "1.20.0"
+    engram: "1.19.0"
     engram_status: "compatible"
     gga: "2.10.1"
     gga_status: "compatible"

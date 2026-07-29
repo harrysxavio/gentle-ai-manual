@@ -99,7 +99,7 @@ class ClaimsValidator {
       return { errors: this.errors, warnings: this.warnings };
     }
 
-    if (!data || !Array.isArray(data.claims)) {
+    if (!data || !Array.isArray(data.claims) || data.claims.length === 0) {
       this.errors.push('Root key "claims" must be a non-empty array');
       return { errors: this.errors, warnings: this.warnings };
     }
@@ -116,7 +116,7 @@ class ClaimsValidator {
 
     // 1. Required fields
     for (const field of REQUIRED_FIELDS) {
-      if (!claim[field] && claim[field] !== false) {
+      if (!claim[field] || claim[field] === false) {
         this.errors.push(`${prefix}: missing required field "${field}"`);
       }
     }

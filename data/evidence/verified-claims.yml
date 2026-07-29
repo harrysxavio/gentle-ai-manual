@@ -139,7 +139,7 @@ claims:
     channel: rdd
     canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
     test: claims:four-lenses-not-default
-    notes: "Full 4R only for tier 3 (hot path or >400 lines). Standard diffs use exactly one dominant-risk lens."
+    notes: "Full 4R only for tier 3 (hot path or high risk). Changes >400 lines are typically high risk, so 4R often applies. Standard diffs use exactly one dominant-risk lens."
 
   - id: review-finalize-result-retired
     component: gentle-ai
