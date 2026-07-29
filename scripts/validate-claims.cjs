@@ -60,7 +60,7 @@ const INTERNAL_PUBLIC_PATTERNS = [
 ];
 
 // Patterns that indicate deprecated anti-patterns
-const GO_V2_WITHOUT_SLASH = /(?:go\s+install|go\s+get|import\s+)\s+["']?github\.com\/gentleman-programming\/gentle-ai(?!\/v2)(?:@v2|\/v2[\s,;.])/i;
+const GO_V2_WITHOUT_SLASH = /(?:go\s+install|go\s+get|import\s+)\s+["']?github\.com\/gentleman-programming\/gentle-ai(?!\/v2)(?:\/[^\s"']*)?@v\d/i;
 const TIER_BY_LINES = /\b(tier|review\s+level|lens\s+selection)\s+(depends?\s+on|by|based\s+on)\s+(the\s+)?(number\s+of\s+)?(lines|changed\s+lines|size)/i;
 const DEFER_AS_APPROVAL = /\b(deference|defer|abstain)\s+(means?|is|equals?)\b(?:\s+(?!(?:not|no|n't)\b)\w+)*?\s+(approval|authorization|accepted|approved)\b/i;
 const SYNC_AS_UPGRADE = /\b(sync|synchronize)\s+(to\s+upgrade|upgrades?|is\s+an?\s+upgrade|as\s+an?\s+upgrade)\b/i;
@@ -114,9 +114,14 @@ class ClaimsValidator {
   validateClaim(claim, index) {
     const prefix = `Claim #${index + 1} (${claim.id || 'no-id'})`;
 
-    // 1. Required fields
+    // 1. Required fields — must be non-empty strings (or Date for verified_at)
     for (const field of REQUIRED_FIELDS) {
-      if (!claim[field] || claim[field] === false) {
+      const val = claim[field];
+      const valid =
+        field === 'verified_at'
+          ? (typeof val === 'string' || val instanceof Date) && val
+          : typeof val === 'string' && val;
+      if (!valid) {
         this.errors.push(`${prefix}: missing required field "${field}"`);
       }
     }

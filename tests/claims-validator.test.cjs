@@ -27,15 +27,17 @@ const PENDING_REC = path.join(FIXTURES, 'invalid-pending-as-recommendation.yml')
 const RETIRED_CURRENT = path.join(FIXTURES, 'invalid-retired-as-current.yml');
 const INTERNAL_PUBLIC = path.join(FIXTURES, 'invalid-internal-as-public.yml');
 const GO_V2_NOSLASH = path.join(FIXTURES, 'invalid-go-v2-without-slash.yml');
+const GO_V2_SUBPATH = path.join(FIXTURES, 'invalid-go-v2-subpath.yml');
 const TIER_LINES = path.join(FIXTURES, 'invalid-tier-by-lines.yml');
 const DEFER_APPROVAL = path.join(FIXTURES, 'invalid-defer-as-approval.yml');
 const SYNC_UPGRADE = path.join(FIXTURES, 'invalid-sync-as-upgrade.yml');
 const DOCTOR_REPAIR = path.join(FIXTURES, 'invalid-doctor-as-repair.yml');
 const EMPTY_CLAIMS = path.join(FIXTURES, 'invalid-empty-claims.yml');
 const FALSE_FIELDS = path.join(FIXTURES, 'invalid-false-fields.yml');
+const TRUE_FIELDS = path.join(FIXTURES, 'invalid-true-fields.yml');
 
 /* ------------------------------------------------------------------ */
-/*  Tests 1—14: individual fixture checks                             */
+/*  Tests 1—15: individual fixture checks                             */
 /* ------------------------------------------------------------------ */
 
 test('1: valid minimal claim passes', () => {
@@ -99,56 +101,68 @@ test('10: Go v2 path without /v2 fails', () => {
   assert.ok(result.errors.some(e => e.includes('Go v2 path missing /v2')), 'Expected error about missing /v2');
 });
 
-test('11: tier by lines fails', () => {
+test('11: Go v2 subpath without /v2 fails', () => {
+  const result = validator.validateFile(GO_V2_SUBPATH);
+  assert.ok(result.errors.length > 0, 'Expected errors but got none');
+  assert.ok(result.errors.some(e => e.includes('Go v2 path missing /v2')), 'Expected error about missing /v2');
+});
+
+test('12: tier by lines fails', () => {
   const result = validator.validateFile(TIER_LINES);
   assert.ok(result.errors.length > 0, 'Expected errors but got none');
   assert.ok(result.errors.some(e => e.includes('tier described by line count')), 'Expected error about tier-by-lines');
 });
 
-test('12: deference as approval fails', () => {
+test('13: deference as approval fails', () => {
   const result = validator.validateFile(DEFER_APPROVAL);
   assert.ok(result.errors.length > 0, 'Expected errors but got none');
   assert.ok(result.errors.some(e => e.includes('deference described as approval')), 'Expected error about defer-as-approval');
 });
 
-test('13: sync as upgrade fails', () => {
+test('14: sync as upgrade fails', () => {
   const result = validator.validateFile(SYNC_UPGRADE);
   assert.ok(result.errors.length > 0, 'Expected errors but got none');
   assert.ok(result.errors.some(e => e.includes('sync described as binary upgrade')), 'Expected error about sync-as-upgrade');
 });
 
-test('14: doctor as repair fails', () => {
+test('15: doctor as repair fails', () => {
   const result = validator.validateFile(DOCTOR_REPAIR);
   assert.ok(result.errors.length > 0, 'Expected errors but got none');
   assert.ok(result.errors.some(e => e.includes('doctor described as automatic repair')), 'Expected error about doctor-as-repair');
 });
 
 /* ------------------------------------------------------------------ */
-/*  Tests 15—16: valid / main pass                                    */
+/*  Tests 16—17: valid / main pass                                    */
 /* ------------------------------------------------------------------ */
 
-test('15: full valid fixture passes', () => {
+test('16: full valid fixture passes', () => {
   const result = validator.validateFile(VALID_FULL);
   assert.strictEqual(result.errors.length, 0, 'Expected no errors for valid-full');
 });
 
-test('16: main claims file passes', () => {
+test('17: main claims file passes', () => {
   const result = validator.validateFile(MAIN_CLAIMS);
   assert.strictEqual(result.errors.length, 0, 'Expected no errors for verified-claims.yml');
 });
 
 /* ------------------------------------------------------------------ */
-/*  Tests 17—18: regression — edge cases                              */
+/*  Tests 18—20: regression — edge cases                              */
 /* ------------------------------------------------------------------ */
 
-test('17: empty claims array fails', () => {
+test('18: empty claims array fails', () => {
   const result = validator.validateFile(EMPTY_CLAIMS);
   assert.ok(result.errors.length > 0, 'Expected errors but got none');
   assert.ok(result.errors.some(e => e.includes('non-empty')), 'Expected error about empty claims');
 });
 
-test('18: all-false fields fail', () => {
+test('19: all-false fields fail', () => {
   const result = validator.validateFile(FALSE_FIELDS);
+  assert.ok(result.errors.length > 0, 'Expected errors but got none');
+  assert.ok(result.errors.some(e => e.includes('missing required field')), 'Expected error about missing fields');
+});
+
+test('20: all-true fields fail (non-string type)', () => {
+  const result = validator.validateFile(TRUE_FIELDS);
   assert.ok(result.errors.length > 0, 'Expected errors but got none');
   assert.ok(result.errors.some(e => e.includes('missing required field')), 'Expected error about missing fields');
 });
