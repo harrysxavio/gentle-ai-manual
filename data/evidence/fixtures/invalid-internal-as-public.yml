@@ -1,0 +1,15 @@
+# Fixture inválido: internal presentado como interfaz pública
+claims:
+  - id: internal-public-001
+    component: gentle-ai
+    claim: "Configure direct_inline in your opencode.json"
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://example.com
+    status: internal
+    scope: architecture
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/05-comandos-del-ecosistema
+    test: fixture:internal-as-public

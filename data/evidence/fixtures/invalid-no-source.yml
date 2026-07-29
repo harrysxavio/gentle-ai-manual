@@ -1,0 +1,14 @@
+# Fixture inválido: falta source
+claims:
+  - id: no-source-001
+    component: gentle-ai
+    claim: "A claim without source"
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: ""
+    status: verified
+    scope: test
+    platform: all
+    channel: rdd
+    canonical_page: 20-referencia/03-versiones-y-compatibilidad
