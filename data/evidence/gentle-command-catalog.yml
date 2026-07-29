@@ -1,0 +1,948 @@
+# gentle-ai command catalog — verified against v2.2.0
+# Source: README, review-integration.md, organic-rdd.md, trigger-rules.md, quickstart.md, PR #1801
+# Schema: evidence command catalog (PR 3)
+# Last updated: 2026-07-28
+
+# =============================================================================
+# 1. CLI COMMANDS — current
+# =============================================================================
+
+- id: cli-install
+  surface: cli
+  category: maintenance
+  syntax: "gentle-ai install [flags]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Configures AI coding agents on this machine. Writes agent-scoped files to each selected agent's global config directory. Supports --dry-run, --yes, --scope=workspace."
+  verification: "gentle-ai install --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Requires Node.js 18+ and npm on every platform. Windows uses go install; official binary distribution temporarily unavailable."
+
+- id: cli-uninstall
+  surface: cli
+  category: maintenance
+  syntax: "gentle-ai uninstall [component] [flags]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Removes Gentle AI managed files from this machine. Optional component argument (e.g. opencode-plugin)."
+  verification: "gentle-ai uninstall --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: Confirm via --yes flag.
+
+- id: cli-sync
+  surface: cli
+  category: maintenance
+  syntax: "gentle-ai sync [flags]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Sync agent configs and skills to current version. Idempotent - projects canonical routing rules into every supported adapter. Supports --dry-run, --include-permissions, --agent, --profile, --profile-phase."
+  verification: "gentle-ai sync --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Run after upgrade. OpenCode SDD profiles created via --profile and --profile-phase. Agents selected during install become default scope."
+
+- id: cli-update
+  surface: cli
+  category: maintenance
+  syntax: "gentle-ai update"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "Check for available updates for managed tools (gentle-ai, engram, gga, community plugins). Does not apply updates."
+  verification: "gentle-ai update --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Can compare local package.json version with GitHub releases for registered community plugins."
+
+- id: cli-upgrade
+  surface: cli
+  category: maintenance
+  syntax: "gentle-ai upgrade [tool...] [--dry-run] [--no-backup]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Apply updates to managed tools. On macOS/Linux uses authenticated binary download with Minisign signature verification. On Windows uses go install verified against Go checksum database."
+  verification: "gentle-ai upgrade --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Windows self-upgrade fixed in v2.2.0. Verifies that go install wrote where the user actually executes from."
+
+- id: cli-restore
+  surface: cli
+  category: maintenance
+  syntax: "gentle-ai restore [flags]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Restore a config backup from auto-snapshots. Backups are compressed (tar.gz), deduplicated, and auto-pruned (keeps 5 most recent). Pin important backups via TUI (p key)."
+  verification: "gentle-ai restore --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Every install, sync, and upgrade auto-snapshots config files. See Backup & Rollback Guide."
+
+- id: cli-doctor
+  surface: cli
+  category: maintenance
+  syntax: "gentle-ai doctor"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "Run ecosystem health diagnostics. Verifies tool binaries, state.json validity, Engram MCP reachability, disk space. Each check reports pass/warn/fail with remedy hint."
+  verification: "gentle-ai doctor --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "v2.2.0 added typed diagnostics domain and hardened remedy metadata."
+
+- id: cli-version
+  surface: cli
+  category: maintenance
+  syntax: "gentle-ai version"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: Print installed gentle-ai version.
+  verification: "gentle-ai version"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "-"
+
+- id: cli-help
+  surface: cli
+  category: maintenance
+  syntax: "gentle-ai help"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: Show top-level help message.
+  verification: "gentle-ai help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "-"
+
+- id: cli-review
+  surface: cli
+  category: review
+  syntax: "gentle-ai review [subcommand] [flags]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Primary review orchestrator command. Parent for subcommands: start, finalize, validate, status, mode, capabilities, capture-result, bind-sdd, repair, retry-final-verification, schema, reopen-results."
+  verification: "gentle-ai review --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "v2.2.0 replaces the retired control-plane work-routing with organic RDD. Review happens after the candidate, not before the work."
+
+- id: cli-review-start
+  surface: cli
+  category: review
+  syntax: "gentle-ai review start [--cwd REPO] [--base-ref REF] [--focus LENS] [--projection staged|workspace] [--contract gentle-ai.review-integration/v1] [--consent relay|granted|declined]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: creates-receipt
+  result: "Freezes the candidate, classifies risk, selects lenses, creates review authority. Returns immutable candidate diff and changed-path manifest when negotiated. Never starts because a gate was invoked."
+  verification: "gentle-ai review start --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/architecture/organic-rdd.md
+  notes: "Only ordinary entry point that creates a review budget. New in v2.2.0: --projection staged, --consent relay/granted/declined, --contract for negotiated mode."
+
+- id: cli-review-finalize
+  surface: cli
+  category: review
+  syntax: "gentle-ai review finalize [--cwd REPO] [--lineage ID] [--result-artifact JSON] [--result-artifact-file PATH] [--captured-results] [--contract gentle-ai.review-integration/v1]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: creates-receipt
+  result: "Consumes captured reviewer results, verification evidence, then reaches a terminal receipt. Supports zero-lens low-risk finalization without external evidence in v2.2.0."
+  verification: "gentle-ai review finalize --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/architecture/organic-rdd.md
+  notes: "Legacy --result flag RETIRED in v2.2.0. Use --result-artifact (inline JSON), --result-artifact-file (file/stdin), or --captured-results instead. --result files remain byte-compatible but are not a durable cross-agent handoff."
+
+- id: cli-review-finalize-result-retired
+  surface: cli
+  category: review
+  syntax: "gentle-ai review finalize --result JSON"
+  status: retired
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: creates-receipt
+  result: "(Retired) Legacy --result flag for finalize. Replaced by --result-artifact, --result-artifact-file, and --captured-results in v2.2.0 without deprecation window."
+  verification: N/A - retired, no help entry
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/review-integration.md
+  notes: "REMOVED in v2.2.0 per PR #1801 organic RDD overhaul. Legacy path manifests remain byte-compatible but are not a durable cross-agent handoff."
+
+- id: cli-review-validate
+  surface: cli
+  category: review
+  syntax: "gentle-ai review validate [--gate GATE] [--cwd REPO] [--contract gentle-ai.review-integration/v1]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "Revalidates one existing content-bound receipt at a named lifecycle gate. Gates: post-apply, pre-commit, pre-push, pre-pr, release."
+  verification: "gentle-ai review validate --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/architecture/organic-rdd.md
+  notes: "Exactly five gates. Advisory preflight is not delivery authorization; native live gate result is authoritative."
+
+- id: cli-review-status
+  surface: cli
+  category: review
+  syntax: "gentle-ai review status [--cwd REPO] [--contract gentle-ai.review-integration/v1] [--next-transition] [--base-tree TREE] [--workspace-overlay]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "Read-only inventory of review authority state. Derives one immutable live Git snapshot, discovers authority inventory. With --next-transition, returns the exact next operation for negotiated consumers."
+  verification: "gentle-ai review status --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/architecture/organic-rdd.md
+  notes: "Does not repair, archive, invalidate, or rewrite authority. Supports --base-tree for restarted consumers."
+
+- id: cli-review-mode-status
+  surface: cli
+  category: review
+  syntax: "gentle-ai review mode status --cwd REPO"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "Reports global source, clone-local source, deciding source, and effective mode without mutation."
+  verification: "gentle-ai review mode --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/trigger-rules.md
+  notes: "Kill switch. Any disabled source wins."
+
+- id: cli-review-mode-disable
+  surface: cli
+  category: review
+  syntax: "gentle-ai review mode disable --cwd REPO [--scope clone]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Disable review-driven development globally (default) or for this clone (--scope clone). When disabled, nothing blocks, nothing gates, delivery falls to ordinary repository policy."
+  verification: "gentle-ai review mode --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/trigger-rules.md
+  notes: "A clone can opt out but cannot force review on. Never fabricates approval - disabled/unmanaged keeps allowed: false, exits 0."
+
+- id: cli-review-mode-enable
+  surface: cli
+  category: review
+  syntax: "gentle-ai review mode enable --cwd REPO [--scope clone]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Enable review mode globally for future candidates, or clear this clone's off-only override (--scope clone). Re-enabling re-validates from current state rather than resuming stale obligations."
+  verification: "gentle-ai review mode --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/trigger-rules.md
+  notes: "Unmanaged delivery windows stay recorded as unmanaged. Re-enabling requires one full fresh review."
+
+- id: cli-review-capabilities
+  surface: cli
+  category: review
+  syntax: "gentle-ai review capabilities --contract gentle-ai.review-integration/v1"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "Reports deterministic repository-independent provider surface: protocol version, package/build identity, executable SHA-256, operations, five gates, projections, schemas, mandatory/optional features, compatibility window."
+  verification: "gentle-ai review capabilities --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/review-integration.md
+  notes: "Protocol v1.4 in v2.2.0. Must be queried outside a repository. Executable digest is self-reported; compare with published release manifest before trusting."
+
+- id: cli-review-capture-result
+  surface: cli
+  category: review
+  syntax: "gentle-ai review capture-result [--repository-context HANDLE] [--expected-revision REV] [--lineage ID] [--target HASH] [--lens LENS] [--order N] [--input PATH]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Additive headless command that admits one reviewer result per lens. Emits a manifest with capability review.native_result_artifact and schema gentle-ai.review-result-artifact/v2. Accepts no --contract."
+  verification: "gentle-ai review capture-result --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/review-integration.md
+  notes: "Not a negotiated review-integration/v1 repository operation. Windows PowerShell 5.1 should use file transport."
+
+- id: cli-review-bind-sdd
+  surface: cli
+  category: review
+  syntax: "gentle-ai review bind-sdd --change CHANGE --lineage ID --expected-binding-revision REV [--cwd REPO] [--contract gentle-ai.review-integration/v1]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Binds an approved receipt to an SDD change. Creates SDD binding artifact."
+  verification: "gentle-ai review bind-sdd --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/review-integration.md
+  notes: "New in v2.2.0 organic RDD. Part of the negotiated contract surface."
+
+- id: cli-review-repair
+  surface: cli
+  category: review
+  syntax: "gentle-ai review repair [--preflight] [--cwd REPO]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Preflights the complete authority inventory and executes only the unique provider-classified historical alias repair with exact revision CAS and maintainer authorization. --preflight returns classification without mutation."
+  verification: "gentle-ai review repair --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/review-integration.md
+  notes: "Requires maintainer authorization (actor, reason, exact nine-line LF-only authorization string). Repair classification scoped to selected native target."
+
+- id: cli-review-retry-final-verification
+  surface: cli
+  category: review
+  syntax: "gentle-ai review retry-final-verification ..."
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: creates-receipt
+  result: "Provider-only one-shot retry across entire ancestry for an exact completed failed final-verification procedural/tooling incident. Creates successor lineage in validating state."
+  verification: "gentle-ai review retry-final-verification --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/review-integration.md
+  notes: "New in v2.2.0. Requires incident file (gentle-ai.review-final-verification-incident/v1) and maintainer authorization. One-shot - another failure escalates permanently."
+
+- id: cli-review-schema
+  surface: cli
+  category: review
+  syntax: "gentle-ai review schema [SCHEMA_NAME]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "Emits schema with working example for named schema (e.g. reviewer, final-verification-incident). Inspects contract shapes."
+  verification: "gentle-ai review schema --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/review-integration.md
+  notes: "Referenced in organic-rdd.md as gentle-ai review schema reviewer and gentle-ai review schema final-verification-incident."
+
+- id: cli-review-reopen-results
+  surface: cli
+  category: review
+  syntax: "gentle-ai review reopen-results [--prepare] [--quarantine-lens LENS] [--cwd REPO]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Quarantines admitted results for one or more lenses and reopens them over the same frozen candidate. Preserved result bytes in quarantine are named in the audit record."
+  verification: "gentle-ai review reopen-results --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/review-integration.md
+  notes: "New in v2.2.0. Requires maintainer authorization."
+
+- id: cli-skill-registry-refresh
+  surface: cli
+  category: ecosystem
+  syntax: "gentle-ai skill-registry refresh [--force] [--quiet] [--no-gitignore] [--cwd PATH]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Scans installed skills and project conventions, builds/refreshes .atl/skill-registry.md with cache-hit fast path."
+  verification: "gentle-ai skill-registry refresh --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "In v2.2.0, fixed to scan Antigravity skill installation paths and prefer Antigravity Desktop skills."
+
+- id: cli-skill-registry-list
+  surface: cli
+  category: ecosystem
+  syntax: "gentle-ai skill-registry list [--json] [--cwd PATH]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "List registered skills in human-readable or JSON format."
+  verification: "gentle-ai skill-registry list --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "JSON output for machine consumption."
+
+- id: cli-sdd-status
+  surface: cli
+  category: sdd
+  syntax: "gentle-ai sdd-status [change]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "Print native SDD phase status for orchestrators. Reports current phase, blockers, and review mode status for a change."
+  verification: "gentle-ai sdd-status --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Internal SDD orchestrator tool. When review disabled, reports disabled/unmanaged at exit 0."
+
+- id: cli-sdd-continue
+  surface: cli
+  category: sdd
+  syntax: "gentle-ai sdd-continue [change]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "Print native SDD dispatcher routing output. Routes continuations through native runtime authority."
+  verification: "gentle-ai sdd-continue --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Internal SDD orchestrator tool. Persists runtime attempts in native CAS ledger."
+
+- id: cli-codegraph
+  surface: cli
+  category: ecosystem
+  syntax: "gentle-ai codegraph [subcommand] [--cwd PATH]"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "CodeGraph intelligence tool that delegates to upstream CLI. Subcommands: init, status, query, explore, node, files, callers, callees, impact, affected."
+  verification: "gentle-ai codegraph --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "v2.2.0 fixed Antigravity CodeGraph command validation (rejects relative commands)."
+
+# =============================================================================
+# 2. CLI COMMANDS - advanced
+# =============================================================================
+
+- id: cli-review-bundle-export
+  surface: cli
+  category: review
+  syntax: "gentle-ai review-bundle-export --cwd REPO --lineage ID --out PATH"
+  status: advanced
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Export review transport bundle for offline or cross-machine review transfer."
+  verification: "gentle-ai review-bundle-export --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/review-integration.md
+  notes: "Advanced feature. Not for beginners. Still uses legacy v1 bundle transport."
+
+- id: cli-review-bundle-import
+  surface: cli
+  category: review
+  syntax: "gentle-ai review-bundle-import --cwd REPO --bundle PATH [--receipt PATH] [--request PATH]"
+  status: advanced
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Import review transport bundle from offline or cross-machine review."
+  verification: "gentle-ai review-bundle-import --help"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/review-integration.md
+  notes: "Advanced feature. Not for beginners."
+
+# =============================================================================
+# 3. CLI COMMANDS - retired (legacy v1 surface)
+# =============================================================================
+
+- id: cli-review-start-legacy
+  surface: cli
+  category: review
+  syntax: "gentle-ai review-start --cwd REPO --lineage ID --policy-file PATH"
+  status: retired
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "(Legacy) Legacy v1 review start surface. Read-only in v2.2.0 - rejects mutation."
+  verification: N/A - legacy, present in binary for compatibility
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Replaced by gentle-ai review start in v2.x. Maintained as read-only for compatibility."
+
+- id: cli-review-resume-legacy
+  surface: cli
+  category: review
+  syntax: "gentle-ai review-resume --cwd REPO --lineage ID"
+  status: retired
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "(Legacy) Read shipped v1 review authority without mutation. Read-only."
+  verification: N/A - legacy, present in binary for compatibility
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Replaced by gentle-ai review status in v2.x."
+
+- id: cli-review-step-legacy
+  surface: cli
+  category: review
+  syntax: "gentle-ai review-step --cwd REPO --lineage ID --operation OP --input JSON"
+  status: retired
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "(Legacy) Legacy v1 step execution. Read-only - rejects mutation."
+  verification: N/A - legacy, present in binary for compatibility
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Replaced by negotiated review operations in v2.x."
+
+- id: cli-review-validate-legacy
+  surface: cli
+  category: review
+  syntax: "gentle-ai review-validate --cwd REPO --receipt PATH (--request PATH | --lineage ID --gate GATE)"
+  status: retired
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "(Legacy) Validate legacy v1 review authority."
+  verification: N/A - legacy, present in binary for compatibility
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Replaced by gentle-ai review validate in v2.x."
+
+# =============================================================================
+# 4. TUI
+# =============================================================================
+
+- id: cli-tui
+  surface: tui
+  category: maintenance
+  syntax: "gentle-ai"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "Launch interactive TUI for agent management. Supports agent selection, SDD profile creation, backup pinning (p key)."
+  verification: "gentle-ai"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Opens TUI when invoked without subcommand. Use --yes to skip TUI and run install with defaults."
+
+# =============================================================================
+# 5. SLASH COMMANDS (host-level, not gentle-ai CLI)
+# =============================================================================
+
+- id: slash-sdd-init
+  surface: slash-command
+  category: sdd
+  syntax: "/sdd-init"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: opencode
+  mutability: mutates
+  result: "Detects project stack, testing capabilities, activates Strict TDD Mode if available. Creates SDD context in the project."
+  verification: "Run /sdd-init in OpenCode or Claude Code"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Host-level slash command, not a gentle-ai CLI command. Runs automatically if no context detected."
+
+- id: slash-sdd-new
+  surface: slash-command
+  category: sdd
+  syntax: "/sdd-new"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: opencode
+  mutability: mutates
+  result: "Start a new SDD change proposal."
+  verification: "Run /sdd-new in OpenCode"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Host-level slash command. Initiates SDD workflow for new changes."
+
+- id: slash-sdd-ff
+  surface: slash-command
+  category: sdd
+  syntax: "/sdd-ff"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: opencode
+  mutability: mutates
+  result: "Fast-forward SDD change through phases."
+  verification: "Run /sdd-ff in OpenCode"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Host-level slash command."
+
+- id: slash-sdd-continue
+  surface: slash-command
+  category: sdd
+  syntax: "/sdd-continue"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: opencode
+  mutability: readonly
+  result: "Continue SDD change from current phase."
+  verification: "Run /sdd-continue in OpenCode"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Host-level slash command. Different from cli gentle-ai sdd-continue."
+
+- id: slash-model-config
+  surface: slash-command
+  category: model
+  syntax: "/model-config"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: opencode
+  mutability: mutates
+  result: "Opens model configuration dashboard to assign models per SDD phase for OpenCode."
+  verification: "Run /model-config in OpenCode"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Host-level slash command for OpenCode SDD Profiles."
+
+# =============================================================================
+# 6. SDD INTERNAL PHASES (not user commands - orchestrator-internal)
+# =============================================================================
+
+- id: phase-sdd-explore
+  surface: internal-phase
+  category: sdd
+  syntax: "sdd-explore (internal phase)"
+  status: internal
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "SDD phase: explore ideas and clarify requirements before committing to a change."
+  verification: N/A - internal phase
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Not a user-invokable command. Part of the SDD orchestration workflow."
+
+- id: phase-sdd-propose
+  surface: internal-phase
+  category: sdd
+  syntax: "sdd-propose (internal phase)"
+  status: internal
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "SDD phase: create change proposal with intent, scope, and approach."
+  verification: N/A - internal phase
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Not a user-invokable command."
+
+- id: phase-sdd-spec
+  surface: internal-phase
+  category: sdd
+  syntax: "sdd-spec (internal phase)"
+  status: internal
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "SDD phase: write delta specs with requirements and scenarios."
+  verification: N/A - internal phase
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Not a user-invokable command."
+
+- id: phase-sdd-design
+  surface: internal-phase
+  category: sdd
+  syntax: "sdd-design (internal phase)"
+  status: internal
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "SDD phase: create technical design and architecture approach."
+  verification: N/A - internal phase
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Not a user-invokable command."
+
+- id: phase-sdd-tasks
+  surface: internal-phase
+  category: sdd
+  syntax: "sdd-tasks (internal phase)"
+  status: internal
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "SDD phase: break change into implementation tasks."
+  verification: N/A - internal phase
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Not a user-invokable command."
+
+- id: phase-sdd-apply
+  surface: internal-phase
+  category: sdd
+  syntax: "sdd-apply (internal phase)"
+  status: internal
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "SDD phase: implement tasks from specs and design. When Strict TDD active, works test-first."
+  verification: N/A - internal phase
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Not a user-invokable command. v2.2.0 hardened attempt budget preservation across continuations."
+
+- id: phase-sdd-verify
+  surface: internal-phase
+  category: sdd
+  syntax: "sdd-verify (internal phase)"
+  status: internal
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "SDD phase: verify implementation matches specs, design, and tasks. Audits RED/GREEN evidence."
+  verification: N/A - internal phase
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Not a user-invokable command. Known issue: pre-verify status path can still require review while review mode is disabled."
+
+- id: phase-sdd-archive
+  surface: internal-phase
+  category: sdd
+  syntax: "sdd-archive (internal phase)"
+  status: internal
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "SDD phase: archive completed change by syncing delta specs."
+  verification: N/A - internal phase
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Not a user-invokable command. Known issue: sdd-archive skill contract still requires reviewGate.result: allow, blocking where native no longer does."
+
+- id: phase-sdd-onboard
+  surface: internal-phase
+  category: sdd
+  syntax: "sdd-onboard (internal phase)"
+  status: internal
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: mutates
+  result: "SDD phase: walk users through SDD workflow on a real codebase."
+  verification: N/A - internal phase
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Not a user-invokable command."
+
+# =============================================================================
+# 7. PROVIDER OPERATIONS / INTERNAL ARCHITECTURE
+# =============================================================================
+
+- id: provider-review-integration-contract
+  surface: provider
+  category: review
+  syntax: "gentle-ai.review-integration/v1"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "Versioned provider contract for consumers that coordinate native bounded review lifecycle. Protocol v1.4 in v2.2.0. Specifies capabilities, operations, gates, projections, schemas."
+  verification: "gentle-ai review capabilities --contract gentle-ai.review-integration/v1"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/review-integration.md
+  notes: "Not a CLI command - a contract identifier. Pass as --contract flag. v1.4 adds one_shot_final_verification_retry and incident schema."
+
+- id: internal-direct-inline
+  surface: provider
+  category: ecosystem
+  syntax: "direct_inline"
+  status: internal
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "Internal implementation route name. Keeps bounded action inline when deciding/verifying requires 1-3 files or one mechanical change."
+  verification: N/A - internal architecture name
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/trigger-rules.md
+  notes: "Not a CLI command. Used in trigger-rules.md and agent routing manifest. Smallest implementation route."
+
+- id: internal-delegated-direct
+  surface: provider
+  category: ecosystem
+  syntax: "delegated_direct"
+  status: internal
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: all
+  mutability: readonly
+  result: "Internal implementation route name. Delegates narrow exploration and/or focused writer when 4+ files needed or 2+ non-trivial files changed."
+  verification: N/A - internal architecture name
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/trigger-rules.md
+  notes: "Not a CLI command. Used in trigger-rules.md. Creates no SDD artifacts or lifecycle."
+
+# =============================================================================
+# 8. SKILL SURFACE
+# =============================================================================
+
+- id: skill-writing-gentle-manual-content
+  surface: skill
+  category: skill
+  syntax: "writing-gentle-manual-content (skill)"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: opencode
+  mutability: mutates
+  result: "Loads the Gentle-AI manual content writing skill with lesson/design/route/exercise/evidence contracts."
+  verification: "Loaded via skill activation in opencode"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Not a gentle-ai CLI command - a skill loaded by the agent at runtime for manual content tasks."
+
+- id: skill-frontend-design
+  surface: skill
+  category: skill
+  syntax: "frontend-design (skill)"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: opencode
+  mutability: mutates
+  result: "Guidance for distinctive, intentional visual design when building new UI."
+  verification: "Loaded via skill activation in opencode"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Not a gentle-ai CLI command. Part of the installed skill ecosystem."
+
+- id: skill-impeccable
+  surface: skill
+  category: skill
+  syntax: "impeccable (skill)"
+  status: current
+  observed_version: v2.2.0
+  observed_commit: ee83e83d56f0d149c52f93fd13b3296858f5147f
+  verified_at: 2026-07-28
+  platform: all
+  host: opencode
+  mutability: mutates
+  result: "UI/UX design, redesign, critique, audit, polish, and refinement skill."
+  verification: "Loaded via skill activation in opencode"
+  source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+  notes: "Not a gentle-ai CLI command."

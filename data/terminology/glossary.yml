@@ -561,3 +561,203 @@ terms:
     simple: "Sistema de verificación basado en artefactos externos y repetibles (commits, checks, deploys) en lugar de en el reporte subjetivo de un agente."
     reference: "content/17-gobierno/02-confianza-verificable/"
     category: "gobierno"
+
+  - term: "flujo orgánico"
+    simple: "Modelo de revisión donde el candidato se congela antes de evaluarse, produciendo receipts verificables ligados al contenido."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "trabajo directo"
+    simple: "Fase donde un agente produce código sin haber congelado un candidato de revisión. Ocurre antes de la revisión orgánica."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "delegación focalizada"
+    simple: "Estrategia de implementación donde un agente delega partes específicas a subagentes sin pasar por SDD completo."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "SDD opcional"
+    simple: "Modo donde SDD no es obligatorio: el agente puede trabajar directamente sin pasar por el ciclo completo de especificación y diseño."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "candidato"
+    simple: "El conjunto de cambios propuestos para revisión, antes de ser congelado."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "candidato congelado"
+    simple: "Snapshot inmutable del cambio en el momento exacto de la revisión. No puede modificarse mientras se revisa."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "bytes exactos"
+    simple: "Hash SHA del contenido del diff en el momento de congelar el candidato. Identifica unívocamente el cambio revisado."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "proyección"
+    simple: "Define qué incluir en la revisión: staged (solo archivos en staging) o workspace (staging + cambios sin staging)."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "tier de revisión"
+    simple: "Nivel de profundidad de revisión: full, fast, skip o no-review. Determina cuántos lenses se aplican al candidato."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "lens"
+    simple: "Perspectiva especializada de revisión que examina el candidato desde un ángulo particular (riesgo, seguridad, legibilidad)."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "refuter"
+    simple: "Resultado adversario de un lens: detecta un problema y rechaza el candidato, emitiendo evidencia del fallo."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "autoridad de review"
+    simple: "Conjunto completo de artefactos que documentan una revisión: lineage, receipts y gates."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "lineage"
+    simple: "Cadena de identidad criptográfica que conecta revisiones, correcciones y receipts de un cambio."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "receipt ligado al contenido"
+    simple: "Receipt cuyo hash incluye el SHA del candidato congelado. Si el contenido cambia, el receipt se invalida."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "gate de entrega"
+    simple: "Punto de control donde se valida un receipt antes de avanzar: post-apply, pre-commit, pre-push, pre-PR, release."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "review mode"
+    simple: "Estado del sistema de revisión nativa: habilitado o deshabilitado. Cuando está deshabilitado, nada se bloquea."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "kill switch"
+    simple: "Mecanismo que deshabilita todo el sistema de revisión nativa desde una sola fuente: review mode disable."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "consentimiento por candidato"
+    simple: "Aceptación explícita del desarrollador para que un candidato sea revisado, expresada con la flag --consent."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "recovery"
+    simple: "Reintento one-shot de una revisión que falló por error de infraestructura. Usa retry-final-verification."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "reconciliación"
+    simple: "Proceso de alinear el estado de la autoridad de revisión con el estado real del repositorio."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "deferencia"
+    simple: "Mecanismo por el cual un lens puede abstenerse de evaluar si no tiene suficiente información."
+    reference: "content/07-gentle-ai/07-flujo-organico-y-rdd/"
+    category: "gentle-ai"
+
+  - term: "configurador de ecosistema"
+    simple: "Rol de Gentle-AI: prepara el host (OpenCode, Codex) instalando componentes y sincronizando configuraciones. No ejecuta agentes ni modelos."
+    reference: "content/16-arquitectura-tecnica/02-arquitectura-gentle-y-hosts/"
+    category: "gentle-ai"
+
+  - term: "host"
+    simple: "Asistente de código con IA que Gentle-AI configura (OpenCode, Codex, Claude Code). Cada host tiene capacidades distintas."
+    reference: "content/16-arquitectura-tecnica/02-arquitectura-gentle-y-hosts/"
+    category: "arquitectura-tecnica"
+
+  - term: "runtime"
+    simple: "Entorno donde se ejecuta un programa. El runtime del host (Node.js, Python) es distinto del runtime de un asset (Go, Bash)."
+    reference: "content/16-arquitectura-tecnica/02-arquitectura-gentle-y-hosts/"
+    category: "arquitectura-tecnica"
+
+  - term: "asset administrado"
+    simple: "Componente que Gentle-AI instala, actualiza o remueve en el host: skills, configuraciones, system prompts, hooks."
+    reference: "content/16-arquitectura-tecnica/02-arquitectura-gentle-y-hosts/"
+    category: "arquitectura-tecnica"
+
+  - term: "install"
+    simple: "Comando gentle-ai que instala y configura componentes sobre el agente seleccionado."
+    reference: "content/07-gentle-ai/05-comandos-del-ecosistema/"
+    category: "gentle-ai"
+
+  - term: "update"
+    simple: "Comando gentle-ai de solo lectura que verifica si hay versiones nuevas de componentes. No aplica cambios."
+    reference: "content/07-gentle-ai/05-comandos-del-ecosistema/"
+    category: "gentle-ai"
+
+  - term: "upgrade"
+    simple: "Comando gentle-ai que aplica las actualizaciones disponibles de herramientas gestionadas."
+    reference: "content/07-gentle-ai/05-comandos-del-ecosistema/"
+    category: "gentle-ai"
+
+  - term: "sync"
+    simple: "Comando gentle-ai idempotente que sincroniza configuraciones y skills entre componentes sin actualizar versiones."
+    reference: "content/07-gentle-ai/05-comandos-del-ecosistema/"
+    category: "gentle-ai"
+
+  - term: "state"
+    simple: "Archivo de estado (state.json) que Gentle-AI usa para saber qué componentes están instalados y su configuración."
+    reference: "content/07-gentle-ai/05-comandos-del-ecosistema/"
+    category: "gentle-ai"
+
+  - term: "backup"
+    simple: "Comando gentle-ai que crea un snapshot manual de la configuración actual (auto-snapshot comprimido en tar.gz)."
+    reference: "content/07-gentle-ai/06-actualizar-y-sincronizar/"
+    category: "gentle-ai"
+
+  - term: "restore"
+    simple: "Comando gentle-ai que restaura una configuración desde un auto-snapshot."
+    reference: "content/07-gentle-ai/06-actualizar-y-sincronizar/"
+    category: "gentle-ai"
+
+  - term: "doctor"
+    simple: "Comando gentle-ai de solo lectura que ejecuta diagnóstico de salud del ecosistema. No repara, solo reporta."
+    reference: "content/07-gentle-ai/05-comandos-del-ecosistema/"
+    category: "gentle-ai"
+
+  - term: "catálogo de comandos"
+    simple: "Registro estructurado de todos los comandos del ecosistema Gentle con su superficie, estado, versión y fuente verificada."
+    reference: "content/07-gentle-ai/05-comandos-del-ecosistema/"
+    category: "gentle-ai"
+
+  - term: "slash command"
+    simple: "Comando que se escribe en el chat del asistente (/sdd-new, /model-config). No pasa por el binario gentle-ai."
+    reference: "content/07-gentle-ai/05-comandos-del-ecosistema/"
+    category: "gentle-ai"
+
+  - term: "fase interna"
+    simple: "Paso que ejecuta el orquestador automáticamente como parte del flujo SDD (explore, design, apply). No es invocable por el usuario."
+    reference: "content/07-gentle-ai/05-comandos-del-ecosistema/"
+    category: "gentle-ai"
+
+  - term: "perfil de modelos"
+    simple: "Asignación predefinida de modelos por fase SDD (económico, equilibrado, potente) para balancear costo, velocidad y calidad."
+    reference: "content/14-modelos-y-enrutamiento/02-asignar-modelos/"
+    category: "modelos"
+
+  - term: "fallback"
+    simple: "Modelo o estrategia de respaldo que se usa cuando el principal falla (timeout, error, costo excesivo)."
+    reference: "content/14-modelos-y-enrutamiento/02-asignar-modelos/"
+    category: "modelos"
+
+  - term: "degradación de capacidad"
+    simple: "Estado en que ningún modelo de la cadena de fallback está disponible y la fase SDD no puede continuar."
+    reference: "content/14-modelos-y-enrutamiento/02-asignar-modelos/"
+    category: "modelos"
+
+  - term: "herencia de modelo"
+    simple: "Mecanismo donde un perfil de modelos hereda configuraciones de otro y solo sobrescribe las fases que necesita cambiar."
+    reference: "content/14-modelos-y-enrutamiento/02-asignar-modelos/"
+    category: "modelos"
