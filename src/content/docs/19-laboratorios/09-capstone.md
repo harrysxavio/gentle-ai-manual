@@ -338,7 +338,7 @@ Respondé estas 6 preguntas después de completar el capstone. Si respondés "no
 
 ## Errores frecuentes
 
-- **Empezar a codificar sin spec.** El spec es el contrato con el PM. Sin spec no sabés qué estás construyendo. El primer paso es `gentle-ai sdd init` seguido de `explore` y `spec`. Si ya escribiste código, parás y volvés al spec.
+- **Empezar a codificar sin spec.** El spec es el contrato con el PM. Sin spec no sabés qué estás construyendo. El primer paso es `/sdd-init` (slash command del host) seguido de `explore` y `spec`. Si ya escribiste código, parás y volvés al spec.
 - **No asignar modelos por tarea.** Usar el mismo modelo para todo es más fácil pero derrocha recursos. Las tareas repetitivas (init, archive) rinden con modelos económicos. Las tareas de diseño y verificación necesitan modelos potentes.
 - **Revisar después de archive.** El orden correcto es apply → review → archive. Si revisás después de archivar, los hallazgos no pueden modificar el cambio porque ya está cerrado.
 - **No probar sin internet.** Los tests offline son el único modo de garantizar que el CI no va a fallar por dependencias externas. Si el test de MCP intenta una conexión real, va a fallar en un entorno cerrado.
@@ -373,7 +373,7 @@ La solución completa está separada del enunciado para permitir la autoevaluaci
 
 ### Resumen del flujo
 
-1. **SDD Init:** `gentle-ai sdd init` — inicializa el directorio `.sdd/` y la estructura de cambios.
+1. **SDD Init:** `/sdd-init` — inicializa el contexto SDD del proyecto en el host.
 
 2. **SDD Explore → Propose:** Exploración del requerimiento y propuesta de enfoque. Definición del alcance del health-check y los componentes involucrados.
 
@@ -417,9 +417,9 @@ La solución completa está separada del enunciado para permitir la autoevaluaci
 ### Comandos clave
 
 ```bash
-# SDD Init (fase interna del orchestrator)
-# El orchestrador ejecuta sdd-init como sub-agent; no es un comando CLI directo
-# Ver: claim sdd-internal-phases
+# SDD Init — host-level slash command
+# /sdd-init inicializa el contexto SDD del proyecto (no es comando CLI)
+# Ver catálogo: slash-sdd-init, claim sdd-internal-phases
 
 # Planeamiento con meta-comandos del orchestrator
 # /sdd-new "Health-check CLI"   — explora y propone en un solo paso

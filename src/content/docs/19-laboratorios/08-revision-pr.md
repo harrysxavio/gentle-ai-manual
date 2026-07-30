@@ -177,23 +177,27 @@ Si querés ir más allá de los criterios de aceptación:
    - **WARNING**: requiere cambios pero no bloquea. Ejemplo: falta de test para caso borde.
    - **SUGGESTION**: mejora opcional. Ejemplo: nombre de variable poco descriptivo.
 
-6. **Finalizar la sesión de revisión.** Antes de validar, la review debe estar completa. Consultá el lifecycle hasta recibir la transición de validación:
+6. **Finalizar la sesión de revisión con `gentle-ai review finalize`.** Este comando cierra la sesión y genera el receipt firmado con el lineage completo de lentes, evidencia, y target. Sin finalize, no hay receipt que validar:
 
    ```bash
-   gentle-ai review status --contract gentle-ai.review-integration/v1 --next-transition
+   gentle-ai review finalize
    ```
 
-   El facade devuelve `review.validate` como próximo paso una vez que todos los lentes capturaron sus resultados. En la ruta directa, podés ejecutar:
+7. **Validar el receipt con `gentle-ai review validate`.** Antes de compartir la revisión, validá que el receipt esté firmado correctamente, que el lineage (cadena de lentes → evidencia) sea íntegro, y que el target (el commit o diff revisado) coincida con lo que se inspeccionó:
 
    ```bash
    gentle-ai review validate
    ```
 
-   Este comando verifica que el receipt está firmado correctamente, que el lineage (cadena de lentes → evidencia) es íntegro, y que el target (el commit o diff revisado) coincide con lo que se inspeccionó.
+   En la ruta negociada, consultá el lifecycle hasta recibir `review.validate` como próximo paso:
+
+   ```bash
+   gentle-ai review status --contract gentle-ai.review-integration/v1 --next-transition
+   ```
 
    Un receipt válido confirma que la revisión ocurrió con un proceso definido y trazable. Sin esta validación, el receipt no es evidencia.
 
-7. **Dejar la revisión en la PR.** Compartí los hallazgos como comentarios en los archivos relevantes de la PR, e incluí el receipt ID para trazabilidad:
+8. **Dejar la revisión en la PR.** Compartí los hallazgos como comentarios en los archivos relevantes de la PR, e incluí el receipt ID para trazabilidad:
 
    ```
    ## Revisión con native bounded review
@@ -210,12 +214,6 @@ Si querés ir más allá de los criterios de aceptación:
    | SUGGESTION | El parámetro `id` no se valida como UUID antes de la consulta | src/routes/profile.ts:12 | Si el parámetro no es numérico/UUID, la query igual se ejecuta. Agregar validación con `uuid.validate()` |
 
    Recomendación: **Request changes** — el hallazgo CRITICAL en el middleware de auth requiere corrección. Los WARNINGs y SUGGESTIONs pueden abordarse en PRs separadas.
-   ```
-
-8. **Finalizar la sesión:**
-
-   ```bash
-   gentle-ai review finalize
    ```
 
 ### Receipt: qué es y por qué importa

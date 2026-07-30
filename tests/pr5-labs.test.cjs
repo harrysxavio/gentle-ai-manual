@@ -299,27 +299,44 @@ if (fs.existsSync(CLAIMS)) {
   const existingIds = new Set((claimsData.claims || []).map(c => c.id));
   const capstonePath = path.join(LAB_DIR, '09-capstone.md');
   if (fs.existsSync(capstonePath)) {
-    const capstoneContent = fs.readFileSync(capstonePath, 'utf-8');
-    // Extract claim IDs from the claims reference table (backtick-wrapped IDs only)
-    const claimMatches = [...capstoneContent.matchAll(/^\| `([\w./-]+)` \|/gm)];
-    const expectedMinRows = 6;
-    try {
-      assert.ok(claimMatches.length >= expectedMinRows,
-        `Expected at least ${expectedMinRows} claim rows in table, found ${claimMatches.length}`);
-      console.log(`  PASS: capstone claims table has ${claimMatches.length} rows (≥ ${expectedMinRows})`);
-    } catch (e) {
-      console.log(`  FAIL: capstone claims table — ${e.message}`);
+    const lines = fs.readFileSync(capstonePath, 'utf-8').split('\n');
+    const tableIdx = lines.findIndex(l => /^\| (\*\*)?Claim ID(\*\*)? \|/.test(l.trim()));
+    if (tableIdx === -1) {
+      console.log('  FAIL: capstone claims reference table not found');
       process.exitCode = 1;
-    }
-    for (const match of claimMatches) {
-      const claimId = match[1];
-      const testName = `capstone claim "${claimId}" exists in verified-claims.yml`;
+    } else {
+      // Parse all data rows after header + separator
+      const rows = [];
+      for (let i = tableIdx + 2; i < lines.length; i++) {
+        const line = lines[i];
+        if (!line.startsWith('|')) break;
+        const parts = line.split('|').map(s => s.trim());
+        const firstCol = parts[1] || '';
+        rows.push({ firstCol, raw: line.trim() });
+      }
       try {
-        assert.ok(existingIds.has(claimId), `Claim "${claimId}" not found in verified-claims.yml`);
-        console.log(`  PASS: ${testName}`);
+        assert.ok(rows.length >= 1, 'Claims reference table has no data rows');
+        console.log(`  PASS: capstone claims table has ${rows.length} data rows`);
       } catch (e) {
-        console.log(`  FAIL: ${testName} — ${e.message}`);
+        console.log(`  FAIL: capstone claims table — ${e.message}`);
         process.exitCode = 1;
+      }
+      for (const row of rows) {
+        const btMatch = row.firstCol.match(/^`([\w./-]+)`$/);
+        if (!btMatch) {
+          console.log(`  FAIL: claim row missing backtick-wrapped ID — "${row.firstCol}" (${row.raw})`);
+          process.exitCode = 1;
+          continue;
+        }
+        const claimId = btMatch[1];
+        const testName = `capstone claim "${claimId}" exists in verified-claims.yml`;
+        try {
+          assert.ok(existingIds.has(claimId), `Claim "${claimId}" not found in verified-claims.yml`);
+          console.log(`  PASS: ${testName}`);
+        } catch (e) {
+          console.log(`  FAIL: ${testName} — ${e.message}`);
+          process.exitCode = 1;
+        }
       }
     }
   }
