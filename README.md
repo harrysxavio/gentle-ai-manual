@@ -10,7 +10,7 @@ El manual pedagógico, técnico e interactivo del ecosistema **Gentleman Program
 
 Un curso completo que te lleva desde **"no sé nada de programación"** hasta **"diseño, construyo, reviso y gobierno productos con agentes de IA"**.
 
-No es una referencia de comandos. Es un sistema de aprendizaje progresivo con 20 módulos, 49 capítulos, 8 laboratorios prácticos y 8 rutas de aprendizaje según tu perfil.
+No es una referencia de comandos. Es un sistema de aprendizaje progresivo con 20 módulos, 49 capítulos, 28 laboratorios prácticos y 8 rutas de aprendizaje según tu perfil.
 
 ---
 
@@ -35,7 +35,7 @@ Cada módulo declara sus **prerrequisitos**. No saltees módulos: el contenido e
 
 ### Paso 3 — Hacé los laboratorios
 
-El Módulo 19 contiene **8 laboratorios prácticos** (más un capstone integrador) con instrucciones paso a paso, resultado esperado y autodiagnóstico. Hacé cada lab al terminar su módulo correspondiente.
+El Módulo 19 contiene **20 laboratorios progresivos** integrados en el capítulo y **8 laboratorios de maestría** (incluye capstone integrador). Hacé cada lab al terminar su módulo correspondiente.
 
 ### Paso 4 — Construí algo real
 
@@ -66,14 +66,14 @@ El Módulo 18 te guía en la construcción de un producto completo con el ecosis
 | 16 | Arquitectura técnica | 3 | Paquetes Go, Bubbletea TUI, pipeline, contribución |
 | 17 | Seguridad, costos y gobierno | 2 | Permisos, presupuestos, auditoría, políticas |
 | 18 | Construcción de productos | 3 | Ciclo completo idea→deploy con el ecosistema |
-| 19 | Laboratorios | 2-3 | 8 laboratorios prácticos + capstone acumulativo |
+| 19 | Laboratorios | 2-3 | 20 ejercicios progresivos + 8 laboratorios de maestría |
 | 20 | Referencia | 3 | Comandos, [glosario](GLOSSARY.md), modelos, compatibilidad |
 
 ---
 
 ## 📋 Requisitos
 
-- **Node.js** >= 18.20.8 (ver [`package.json`](package.json))
+- **Node.js** 18.20.8+, ^20.3.0 o >=22.0.0 (ver [`package.json`](package.json))
 - **npm** >= 9.6.5 (incluido con Node.js)
 
 ## 🚀 Ejecutar localmente
