@@ -300,8 +300,17 @@ if (fs.existsSync(CLAIMS)) {
   const capstonePath = path.join(LAB_DIR, '09-capstone.md');
   if (fs.existsSync(capstonePath)) {
     const capstoneContent = fs.readFileSync(capstonePath, 'utf-8');
-    // Extract claim IDs from the claims reference table
-    const claimMatches = capstoneContent.matchAll(/^\| `([\w.-]+)` \|/gm);
+    // Extract claim IDs from the claims reference table (backtick-wrapped IDs only)
+    const claimMatches = [...capstoneContent.matchAll(/^\| `([\w./-]+)` \|/gm)];
+    const expectedMinRows = 6;
+    try {
+      assert.ok(claimMatches.length >= expectedMinRows,
+        `Expected at least ${expectedMinRows} claim rows in table, found ${claimMatches.length}`);
+      console.log(`  PASS: capstone claims table has ${claimMatches.length} rows (≥ ${expectedMinRows})`);
+    } catch (e) {
+      console.log(`  FAIL: capstone claims table — ${e.message}`);
+      process.exitCode = 1;
+    }
     for (const match of claimMatches) {
       const claimId = match[1];
       const testName = `capstone claim "${claimId}" exists in verified-claims.yml`;

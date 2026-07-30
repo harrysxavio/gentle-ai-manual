@@ -400,10 +400,12 @@ La solución completa está separada del enunciado para permitir la autoevaluaci
 
 | Claim ID | Comando / Flujo | Estado |
 |----------|-----------------|--------|
-| `snapshot-v2.2.0-release` | Release v2.2.0 que incluye todos los comandos SDD y review | ✅ Verificado (commit `719b0f6`) |
 | `review-starts-after-candidate` | `gentle-ai review start` | ✅ Verificado |
-| `review-gates-validated-only` | `gentle-ai review validate` | ✅ Verificado |
-| `sdd-meta-commands-orchestrator` | Meta-comandos SDD (`/sdd-new`, `/sdd-ff`, `/sdd-continue`) | ✅ Verificado |
+| `review-gates-validated-only` | `gentle-ai review validate` (gates validan receipt, no inician review) | ✅ Verificado |
+| `sdd-meta-commands-orchestrator` | Meta-comandos SDD (`/sdd-new`, `/sdd-ff`, `/sdd-continue`) manejados por el orchestrator | ✅ Verificado |
+| `sdd-internal-phases` | Fases SDD como `sdd-apply`, `sdd-archive` son fases internas del orchestrator, NO comandos CLI directos | ✅ Verificado |
+| `concept-stable-vs-observed` | La teoría separa concepto estable de implementación observada referenciando versiones y commits | ✅ Verificado |
+| `review-receipt-content-bound` | El receipt está vinculado al contenido exacto del candidato, no es un reporte narrativo | ✅ Verificado |
 
 10. **Lecciones en Engram:** Llamar `mem_save` con:
     - Título: "Capstone completado: health-check CLI con ciclo SDD completo"
@@ -415,25 +417,28 @@ La solución completa está separada del enunciado para permitir la autoevaluaci
 ### Comandos clave
 
 ```bash
-# Inicializar
-gentle-ai sdd init
+# SDD Init (fase interna del orchestrator)
+# El orchestrador ejecuta sdd-init como sub-agent; no es un comando CLI directo
+# Ver: claim sdd-internal-phases
 
 # Planeamiento con meta-comandos del orchestrator
 # /sdd-new "Health-check CLI"   — explora y propone en un solo paso
 # /sdd-ff "Health-check CLI"    — fast-forward: propuesta → spec → design → tasks
 # /sdd-continue                  — avanza a la siguiente fase lista
 
-# Implementación (cada commit)
-gentle-ai sdd apply
+# Implementación (cada batch, vía orchestrator)
+# El orchestrador delega sdd-apply como sub-agent en cada batch
+# Ver: claim sdd-internal-phases
 
-# Revisión (native bounded review)
+# Revisión (native bounded review — CLI directo)
 gentle-ai review start
 gentle-ai review validate
 
-# Archive
-gentle-ai sdd archive
+# SDD Archive (fase interna del orchestrator)
+# El orchestrador ejecuta sdd-archive como sub-agent al cerrar el cambio
+# Ver: claim sdd-internal-phases, limitation-sdd-archive-result
 
-# Engram
+# Engram — comandos del ecosistema, no de Gentle-AI CLI
 mem_save ...
 mem_session_summary
 ```

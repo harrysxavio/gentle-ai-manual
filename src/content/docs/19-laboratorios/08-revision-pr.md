@@ -144,7 +144,7 @@ Si querés ir más allá de los criterios de aceptación:
 
 2. **Simular una PR con un security issue deliberado.** Creá una versión de la PR que contenga una vulnerabilidad (por ejemplo, SQL injection por interpolación de strings, o exposición de datos sensibles en el mensaje de error de auth) y verificá que R1 lo detecta. Documentá si el lente encontró el issue y con qué severidad.
 
-3. **Automatizar la revisión en CI.** Implementá un workflow de GitHub Actions que ejecute el flujo no interactivo: `gentle-ai review status --next-transition` → ejecutar la transición devuelta → capturar resultados → validar receipt. La revisión debe fallar si hay hallazgos CRITICAL. El receipt debe publicarse como artifact del workflow.
+3. **Automatizar la revisión en CI.** Implementá un workflow de GitHub Actions que ejecute el flujo no interactivo en un loop: consultar `gentle-ai review status --next-transition` → ejecutar la transición devuelta (start, capture-result, finalize) → repetir hasta que `status` devuelva `review.validate` como próximo paso → ejecutar `review.validate`. El receipt debe publicarse como artifact del workflow. La revisión debe fallar si hay hallazgos CRITICAL en los resultados capturados.
 
 4. **Comparar resultados con Judgment Day.** Ejecutá Judgment Day sobre el mismo cambio y compará los hallazgos de los dos jueces independientes contra los hallazgos de tu revisión. ¿Coinciden? ¿Qué encontró uno que el otro no?
 
