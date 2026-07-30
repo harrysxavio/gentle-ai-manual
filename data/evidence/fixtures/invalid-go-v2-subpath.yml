@@ -1,0 +1,16 @@
+# Fixture: go install with missing /v2 before subpath
+claims:
+  - id: test-go-install-no-v2-subpath
+    component: gentle-ai
+    claim: "Instalar con go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@v2.2.0 es incorrecto — falta /v2"
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/go.mod
+    status: verified
+    scope: installation
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/06-actualizar-y-sincronizar
+    test: claims:test-go-install-no-v2-subpath
+    notes: "La ruta correcta incluye /v2: github.com/gentleman-programming/gentle-ai/v2/cmd/gentle-ai"

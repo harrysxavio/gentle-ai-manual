@@ -1,0 +1,88 @@
+# Fixture válido completo con todos los estados
+claims:
+  - id: test-verified-001
+    component: gentle-ai
+    claim: "A verified claim"
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://example.com/source
+    status: verified
+    scope: test
+    platform: all
+    channel: rdd
+    canonical_page: 20-referencia/03-versiones-y-compatibilidad
+    test: fixture:test-verified
+    notes: "Example verified claim"
+
+  - id: test-documented-001
+    component: engram
+    claim: "A documented claim"
+    observed_version: v1.20.0
+    observed_commit: abc123
+    verified_at: 2026-07-27
+    source: https://example.com/docs
+    status: documented
+    scope: test
+    platform: all
+    channel: stable
+    canonical_page: 09-engram/01-que-es-engram
+    test: fixture:test-documented
+
+  - id: test-experimental-001
+    component: gentle-ai
+    claim: "An experimental claim"
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://example.com/experimental
+    status: experimental
+    scope: test
+    platform: all
+    channel: rdd
+    canonical_page: 20-referencia/03-versiones-y-compatibilidad
+    test: fixture:test-experimental
+
+  - id: test-retired-001
+    component: gentle-ai
+    claim: "A retired command warning"
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://example.com/retired
+    status: retired
+    scope: cli
+    platform: all
+    channel: all
+    canonical_page: 07-gentle-ai/05-comandos-del-ecosistema
+    test: fixture:test-retired
+    notes: "Solo aparece como advertencia histórica de migración"
+
+  - id: test-internal-001
+    component: gentle-ai
+    claim: "An internal architecture name"
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://example.com/internal
+    status: internal
+    scope: architecture
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/05-comandos-del-ecosistema
+    test: fixture:test-internal
+
+  - id: test-pending-001
+    component: gentle-ai
+    claim: "A pending claim awaiting verification"
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://example.com/pending
+    status: pending
+    scope: test
+    platform: all
+    channel: rdd
+    canonical_page: 20-referencia/03-versiones-y-compatibilidad
+    test: fixture:test-pending
+    notes: "No se publica como recomendación hasta verificar"

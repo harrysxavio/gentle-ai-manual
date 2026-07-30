@@ -1,10 +1,90 @@
 ---
 title: Versiones y compatibilidad
-description: Matriz de compatibilidad del ecosistema Gentle-AI y comportamiento de degradación
+description: Matriz de compatibilidad del ecosistema Gentle-AI, snapshot de verdad técnica, y comportamiento de degradación
 level: 2
 ---
 
-Esta página documenta qué versiones de cada componente funcionan juntas, cómo se comportan cuando un prerrequisito falta, y cómo las feature flags de configuración afectan el comportamiento.
+Esta página documenta qué versiones de cada componente funcionan juntas, cómo se comportan cuando un prerrequisito falta, cómo las feature flags de configuración afectan el comportamiento, y cómo se estructura la verdad técnica versionada.
+
+## Snapshot actual: Gentle-AI v2.2.0 Organic RDD
+
+El snapshot de verdad técnica describe una release observada en una fecha, commit y tag específicos. No describe "la última versión" — eso requiere volver a verificar.
+
+| Atributo | Valor |
+|---|---|
+| Versión | `v2.2.0` |
+| Release | Organic RDD |
+| Commit | `719b0f6cd0178bd797c074236e7077be8d00dde7` |
+| Verificado | 2026-07-27 |
+| Estado | Experimental (línea RDD) |
+| Referencia estable | `v1.46.0` |
+| Fuente | [Release v2.2.0](https://github.com/Gentleman-Programming/gentle-ai/releases/tag/v2.2.0) |
+| Claims estructurados | `data/evidence/verified-claims.yml` |
+
+### Concepto estable versus versión observada
+
+Toda afirmación técnica tiene dos capas:
+
+- **Concepto estable**: cómo funciona el sistema, independientemente de la versión. Ej: "el candidato se congela antes de la revisión".
+- **Versión observada**: el comportamiento verificado en un snapshot concreto. Ej: "en v2.2.0, `review finalize --result` está retirado".
+
+Las afirmaciones volátiles (comandos, configuraciones, plataformas, límites) siempre llevan versión, commit y fecha.
+
+### Canales y etiquetas
+
+| Referencia | Significado |
+|---|---|
+| `@latest` | Release RDD publicada más reciente |
+| `@main` | Desarrollo no publicado. No se usa como recomendación normal |
+| `v1.46.0` | Referencia estable previa al inicio de la línea RDD |
+| `v2.2.0` | Release RDD en el canal experimental |
+
+### Módulos Go: v1 versus /v2
+
+Gentle-AI v2.x usa el módulo Go `github.com/gentleman-programming/gentle-ai/v2`. La ruta incluye `/v2` obligatoriamente:
+
+```bash
+# Correcto (v2.2.0)
+go install github.com/gentleman-programming/gentle-ai/v2/cmd/gentle-ai@v2.2.0
+
+# Incorrecto — falta /v2 en la ruta del módulo
+go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@v2.2.0
+```
+
+La semántica de módulos Go exige que la ruta del módulo coincida con el `go.mod`. `/v2` es parte de la ruta, no de la versión.
+
+### Cuándo volver a verificar
+
+Un snapshot deja de ser válido cuando:
+
+1. Se publica una nueva release del componente
+2. Cambia la plataforma objetivo (nuevo SO, nuevo runtime)
+3. Un comando documentado cambia de comportamiento
+4. Una limitación conocida se resuelve
+5. Pasan más de 90 días desde la verificación
+
+La fuente de verdad es el tag de la release, no la rama `main`.
+
+### Cómo leer verified-claims.yml
+
+Cada claim en `data/evidence/verified-claims.yml` incluye:
+
+- `id`: identificador único del claim
+- `component`: componente al que aplica
+- `claim`: afirmación textual
+- `observed_version` y `observed_commit`: snapshot exacto
+- `verified_at`: fecha de verificación
+- `source`: URL oficial
+- `status`: verified, documented, experimental, pending, retired, internal
+- `canonical_page`: página del manual que debe ser coherente con este claim
+
+Un claim `retired` solo aparece como advertencia histórica o migración. Un claim `internal` no se presenta como interfaz pública. Un claim `pending` no se publica como recomendación.
+
+### Diferencia entre evidencia, recomendación y compatibilidad
+
+- **Evidencia**: un claim verificado contra un tag, commit, o prueba reproducible
+- **Recomendación**: consejo editorial basado en evidencia, con fecha y alcance
+- **Compatibilidad**: matriz de versiones que funcionan juntas, verificada en un snapshot
 
 ## Matriz de compatibilidad
 

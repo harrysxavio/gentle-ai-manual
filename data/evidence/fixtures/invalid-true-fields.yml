@@ -1,0 +1,14 @@
+# Fixture: all fields set to YAML true should fail validation
+claims:
+  - id: true
+    component: true
+    claim: true
+    observed_version: true
+    observed_commit: true
+    verified_at: true
+    source: true
+    status: true
+    scope: true
+    platform: true
+    channel: true
+    canonical_page: true

@@ -4,26 +4,30 @@
 
 components:
   - name: "gentle-ai"
-    version_verified: "2.1.10"
+    version_verified: "2.2.0"
+    verified_commit: "719b0f6cd0178bd797c074236e7077be8d00dde7"
+    verified_date: "2026-07-27"
+    release_name: "Organic RDD"
+    status: "experimental"
+    stable_reference: "v1.46.0"
     installed: true
-    latest: "2.1.10"
+    latest: "2.2.0"
     runtime: "OpenCode 1.x (required), Codex (optional)"
-    install: "npm global or dedicated installer"
+    install: "go install github.com/gentleman-programming/gentle-ai/v2/cmd/gentle-ai@v2.2.0"
     requirements:
-      - "OpenCode >= 1.17.x"
+      - "Go 1.25.10+ (for go install)"
       - "Git"
-      - "Node.js >= 18"
     dependencies:
       - name: "engram"
-        compatible_versions: ["1.18.x", "1.19.0", "1.20.0"]
-        relationship: "optional — memory system"
+        compatible_versions: ["1.18.x", "1.19.0"]
+        relationship: "optional — memory system (1.20.0 pending verification)"
       - name: "gga"
         compatible_versions: ["2.8.x", "2.9.x", "2.10.1"]
         relationship: "optional — git hooks"
     paths:
       global_config: "~/.config/gentle-ai/ (Linux/macOS), %APPDATA%/gentle-ai/ (Windows)"
       workspace: "{project}/.gentle-ai/"
-    notes: "16 agents supported, 10 components, 10 SDD phases, 22 embedded skills"
+    notes: "v2.2.0 introduces Organic RDD. Go module path: github.com/gentleman-programming/gentle-ai/v2. Windows: official binary distribution and Scoop temporarily unavailable."
 
   - name: "engram"
     version_verified: "1.19.0"
@@ -92,8 +96,8 @@ components:
     requirements: ["Node.js >= 18"]
     dependencies:
       - name: "engram"
-        compatible_versions: ["1.18.x", "1.19.0", "1.20.0"]
-        relationship: "integrated plugin"
+        compatible_versions: ["1.18.x", "1.19.0"]
+        relationship: "integrated plugin (1.20.0 pending verification)"
     paths:
       config: "opencode.json or opencode.jsonc"
       skills: "%USERPROFILE%\\.config\\opencode\\skills\\"
@@ -111,7 +115,7 @@ components:
     requirements: ["Node.js >= 18"]
     dependencies:
       - name: "engram"
-        compatible_versions: ["1.18.x", "1.19.0", "1.20.0"]
+        compatible_versions: ["1.18.x", "1.19.0"]
         relationship: "MCP support"
     paths:
       config: "config.toml (project directory)"
@@ -137,7 +141,7 @@ components:
     version_verified: "N/A"
     installed: false
     role: "Build tool for gentle-ai, engram"
-    notes: "Not needed for normal usage. Only for development/builds from source"
+    notes: "Required for go install of gentle-ai (v2.2.0+). Not needed for OpenCode, Codex, or running gentle-ai after installation."
 
   - name: "gentleman-skills"
     version_verified: "No tagged release"
@@ -151,7 +155,9 @@ components:
     notes: "No releases, no tags — community-managed"
 
 compatibility_matrix:
-  - gentle_ai: "2.1.10"
+  - gentle_ai: "2.2.0"
+    gentle_ai_channel: "rdd"
+    gentle_ai_status: "experimental"
     opencode: "1.17.20"
     status: "compatible"
     codex: "0.144.0"

@@ -1,0 +1,492 @@
+# verified-claims.yml — structured technical truth snapshot
+# Schema: gentle-ai.verified-claims/v1
+# Source revision: v2.2.0 (719b0f6cd0178bd797c074236e7077be8d00dde7)
+# Verified at: 2026-07-27
+# Stable reference: v1.46.0
+# Platform: all (unless noted)
+# Channel: RDD (experimental)
+#
+# Each claim must have:
+#   id, component, claim, observed_version, observed_commit, verified_at,
+#   source, status, scope, platform, channel, canonical_page, test, notes
+#
+# Statuses: verified, documented, experimental, pending, retired, internal
+
+claims:
+  # ===========================================================================
+  # SNAPSHOT — Gentle-AI v2.2.0 Organic RDD
+  # ===========================================================================
+
+  - id: snapshot-v2.2.0-release
+    component: gentle-ai
+    claim: "v2.2.0 Organic RDD release published 2026-07-27 at commit 719b0f6cd0178bd797c074236e7077be8d00dde7"
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/releases/tag/v2.2.0
+    status: verified
+    scope: release
+    platform: all
+    channel: rdd
+    canonical_page: 20-referencia/03-versiones-y-compatibilidad
+    test: claims:snapshot-release
+    notes: "Release commit matches tag. Binario, guía y tag corresponden al mismo commit."
+
+  - id: snapshot-v2.2.0-stable-reference
+    component: gentle-ai
+    claim: "v1.46.0 is the stable reference prior to RDD. v2.2.0 is experimental."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+    status: verified
+    scope: versioning
+    platform: all
+    channel: rdd
+    canonical_page: 20-referencia/03-versiones-y-compatibilidad
+    test: claims:stable-reference
+    notes: "README del tag v2.2.0 declara que RDD comenzó en v1.47.0 y que v1.46.0 es la referencia estable."
+
+  - id: snapshot-go-v2-path
+    component: gentle-ai
+    claim: "Go module path includes /v2: github.com/gentleman-programming/gentle-ai/v2"
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/go.mod
+    status: verified
+    scope: installation
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/06-actualizar-y-sincronizar
+    test: claims:go-v2-path
+    notes: "Ejemplos v2.x sin /v2 son incompatibles con la semántica de módulos Go."
+
+  - id: snapshot-windows-no-scoop
+    component: gentle-ai
+    claim: "Windows: builds and tests supported. Scoop and official binary distribution temporarily unavailable. Requires Go 1.25.10+ for go install."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+    status: verified
+    scope: installation
+    platform: windows
+    channel: rdd
+    canonical_page: 07-gentle-ai/06-actualizar-y-sincronizar
+    test: claims:windows-scoop
+    notes: "Instrucciones antiguas de Scoop no aplican automáticamente a v2.2.0."
+
+  - id: snapshot-latest-vs-main
+    component: gentle-ai
+    claim: "@latest points to the most recent published RDD release. @main is unpublished development."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+    status: verified
+    scope: versioning
+    platform: all
+    channel: rdd
+    canonical_page: 20-referencia/03-versiones-y-compatibilidad
+    test: claims:latest-vs-main
+    notes: "@main es desarrollo no publicado. No usar @main como recomendación normal."
+
+  # ===========================================================================
+  # REVIEW LIFECYCLE
+  # ===========================================================================
+
+  - id: review-starts-after-candidate
+    component: gentle-ai
+    claim: "Review occurs AFTER the candidate is frozen. Not before or during implementation."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/architecture/organic-rdd.md
+    status: verified
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: claims:review-after-candidate
+    notes: "La autoridad avanza únicamente sobre la identidad exacta del candidato."
+
+  - id: review-tier-by-evidence
+    component: gentle-ai
+    claim: "Tier is determined by evidence and risk, NOT by line count."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/architecture/organic-rdd.md
+    status: verified
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: claims:tier-by-evidence
+    notes: "Un cambio documental grande puede ser tier 0. Un cambio pequeño de alto riesgo puede requerir review fuerte."
+
+  - id: review-not-four-by-default
+    component: gentle-ai
+    claim: "Not every change uses four reviewers. Lens selection is deterministic by risk tier."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/trigger-rules.md
+    status: verified
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: claims:four-lenses-not-default
+    notes: "Full 4R only for tier 3 (hot path or high risk). Changes >400 lines are typically high risk, so 4R often applies. Standard diffs use exactly one dominant-risk lens."
+
+  - id: review-finalize-result-retired
+    component: gentle-ai
+    claim: "review finalize --result is RETIRED in v2.2.0 without deprecation window."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/review-integration.md
+    status: retired
+    scope: cli
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/05-comandos-del-ecosistema
+    test: claims:review-finalize-result-retired
+    notes: "Reemplazado por --result-artifact, --result-artifact-file y --captured-results. Solo se menciona como advertencia de migración."
+
+  - id: review-kill-switch-not-approval
+    component: gentle-ai
+    claim: "Disabling review mode does NOT fabricate approval. It defers to normal repository policy."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/trigger-rules.md
+    status: verified
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: claims:kill-switch-not-approval
+    notes: "review mode disable --cwd . no fabrica aprobación. disabled/unmanaged mantiene allowed: false."
+
+  - id: review-defer-not-authorization
+    component: gentle-ai
+    claim: "Deference is NOT authorization. A lens can abstain if it lacks information."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/architecture/organic-rdd.md
+    status: verified
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: claims:defer-not-authorization
+    notes: "Deferencia no es aprobación. El receipt no se emite hasta finalize."
+
+  - id: review-decline-not-disable
+    component: gentle-ai
+    claim: "Declining consent for one candidate does NOT disable review mode."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/trigger-rules.md
+    status: verified
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: claims:decline-not-disable
+    notes: "El kill switch es review mode disable, no declinar --consent."
+
+  - id: review-receipt-content-bound
+    component: gentle-ai
+    claim: "The receipt is bound to the exact candidate content (bytes, paths, modes). It is not a narrative agent report."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/architecture/organic-rdd.md
+    status: verified
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: claims:receipt-content-bound
+    notes: "Si el contenido cambia, el receipt se invalida. No es un simple reporte narrativo."
+
+  - id: review-check-green-not-production-proof
+    component: gentle-ai
+    claim: "A green check validates the receipt against the gate, NOT production readiness."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/review-integration.md
+    status: verified
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: claims:check-green-not-production
+    notes: "Un check verde en pre-commit no prueba que el cambio esté listo para producción."
+
+  - id: review-mode-rdd-optional
+    component: gentle-ai
+    claim: "RDD is optional. When review mode is disabled, nothing blocks or gates."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/trigger-rules.md
+    status: verified
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: claims:rdd-optional
+    notes: "RDD no bloquea cuando está desactivado. No se debe describir como 'siempre obligatorio'."
+
+  - id: review-gates-validated-only
+    component: gentle-ai
+    claim: "Gates validate the existing receipt. They never start a reviewer or create a budget."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/trigger-rules.md
+    status: verified
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: claims:gates-validate-only
+    notes: "pre-commit, pre-push, pre-pr, release gates: validan, no inician review."
+
+  # ===========================================================================
+  # COMMANDS — sync, doctor, upgrade distinctions
+  # ===========================================================================
+
+  - id: cmd-sync-not-upgrade
+    component: gentle-ai
+    claim: "sync synchronizes agent configs and skills. It does NOT upgrade the binary."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+    status: verified
+    scope: cli
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/06-actualizar-y-sincronizar
+    test: claims:sync-not-upgrade
+    notes: "sync projects canonical routing rules. upgrade applies binary updates. Separación: upgrade = binario, sync = assets."
+
+  - id: cmd-doctor-not-repair
+    component: gentle-ai
+    claim: "doctor runs read-only ecosystem health diagnostics. It does NOT repair anything."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+    status: verified
+    scope: cli
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/05-comandos-del-ecosistema
+    test: claims:doctor-not-repair
+    notes: "Cada check reporta pass/warn/fail con remedy hint. v2.2.0 agregó typed diagnostics domain."
+
+  - id: cmd-update-readonly
+    component: gentle-ai
+    claim: "update checks for available updates. It does NOT apply them."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+    status: verified
+    scope: cli
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/05-comandos-del-ecosistema
+    test: claims:update-readonly
+    notes: "update es readonly. upgrade aplica los cambios."
+
+  # ===========================================================================
+  # SDD — internal phases vs slash commands
+  # ===========================================================================
+
+  - id: sdd-internal-phases
+    component: gentle-ai
+    claim: "SDD phases (explore, propose, spec, design, tasks, apply, verify, archive, onboard) are internal orchestrator phases, NOT user-facing CLI commands or slash commands."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+    status: verified
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/05-comandos-del-ecosistema
+    test: claims:sdd-internal-phases
+    notes: "No se invocan directamente. El orquestador las ejecuta según el estado del cambio SDD."
+
+  - id: sdd-meta-commands-orchestrator
+    component: gentle-ai
+    claim: "/sdd-new, /sdd-continue, /sdd-ff are orchestrator meta-commands handled by the orchestrator agent, not CLI commands."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+    status: verified
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/05-comandos-del-ecosistema
+    test: claims:sdd-meta-commands
+    notes: "No aparecen como slash commands en todos los hosts. Son manejados por el orchestrador, no por el CLI gentle-ai."
+
+  # ===========================================================================
+  # INTERNAL vs PUBLIC
+  # ===========================================================================
+
+  - id: internal-direct-inline
+    component: gentle-ai
+    claim: "direct_inline and delegated_direct are internal implementation route names, NOT user-facing commands or configuration keys."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/trigger-rules.md
+    status: internal
+    scope: architecture
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: claims:internal-direct-inline
+    notes: "Aparecen en trigger-rules.md y agent routing manifest. No son comandos ni configuración de usuario."
+
+  - id: internal-phase-names
+    component: gentle-ai
+    claim: "Subagent type names like sdd-apply, sdd-verify are agent routing names, not user commands."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+    status: internal
+    scope: architecture
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/05-comandos-del-ecosistema
+    test: claims:internal-phase-names
+    notes: "Aparecen en disponible_skills del orquestador. No deben presentarse como comandos de terminal."
+
+  # ===========================================================================
+  # VERSION LIMITATIONS — v2.2.0 known issues
+  # ===========================================================================
+
+  - id: limitation-sdd-verify-blocked
+    component: gentle-ai
+    claim: "SDD verify may still block when review is disabled (known v2.2.0 limitation)."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/architecture/organic-rdd.md
+    status: documented
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: claims:limitation-sdd-verify
+    notes: "Conocido. SDD verify puede seguir bloqueando con review desactivado en v2.2.0."
+
+  - id: limitation-sdd-archive-result
+    component: gentle-ai
+    claim: "SDD archive skill may still require reviewGate.result: allow, blocking where native no longer does (known v2.2.0 limitation)."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/architecture/organic-rdd.md
+    status: documented
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: claims:limitation-sdd-archive
+    notes: "Skill contract no actualizado para el cambio nativo en v2.2.0."
+
+  - id: limitation-reasoning-effort-codex
+    component: opencode
+    claim: "max is not a valid reasoning effort for Codex. Valid values: low, medium, high, xhigh."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/docs/architecture/organic-rdd.md
+    status: documented
+    scope: configuration
+    platform: all
+    channel: rdd
+    canonical_page: 14-modelos-y-enrutamiento/02-asignar-modelos
+    test: claims:reasoning-effort-codex
+    notes: "Limitación documentada de v2.2.0. max no es válido para Codex."
+
+  # ===========================================================================
+  # CONCEPT — stable vs observed
+  # ===========================================================================
+
+  - id: concept-stable-vs-observed
+    component: gentle-ai
+    claim: "Conceptual explanations must separate stable concept from observed implementation. Theory is stable, commands/versions are dated."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: revision/docs/implementation/next-roadmap/03-POLITICA-DE-FUENTES.md
+    status: verified
+    scope: editorial
+    platform: all
+    channel: all
+    canonical_page: 20-referencia/03-versiones-y-compatibilidad
+    test: claims:concept-stable-vs-observed
+    notes: "La teoría se redacta de forma estable. Comandos, versiones, plataformas deben declarar versión, fecha y fuente."
+
+  - id: concept-main-not-release
+    component: gentle-ai
+    claim: "main branch must NOT be described as a published release. Use the tag for release descriptions."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: revision/docs/implementation/next-roadmap/03-POLITICA-DE-FUENTES.md
+    status: verified
+    scope: editorial
+    platform: all
+    channel: all
+    canonical_page: 20-referencia/03-versiones-y-compatibilidad
+    test: claims:main-not-release
+    notes: "main representa desarrollo no publicado. Usar el tag de la release para describirla."
+
+  - id: concept-last-version-needs-snapshot
+    component: gentle-ai
+    claim: "latest, last, most recent must reference a specific snapshot with version, commit, and date."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: revision/docs/implementation/next-roadmap/03-POLITICA-DE-FUENTES.md
+    status: verified
+    scope: editorial
+    platform: all
+    channel: all
+    canonical_page: 20-referencia/03-versiones-y-compatibilidad
+    test: claims:last-version-needs-snapshot
+    notes: "No usar 'última versión' sin un snapshot fechado."
+
+  - id: concept-tool-count-not-fixed
+    component: gentle-ai
+    claim: "Tool count is NOT a fixed number. It varies by host, configuration, installed skills, and runtime state."
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.0/README.md
+    status: verified
+    scope: editorial
+    platform: all
+    channel: all
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: claims:tool-count-not-fixed
+    notes: "No afirmar un número fijo de tools sin fuente verificada del snapshot."

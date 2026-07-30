@@ -161,7 +161,7 @@ Cada candidato se clasifica en un **tier** que determina la profundidad de la re
 |------|-----------------|---------------|
 | **Ninguno** (trivial) | 0 lentes | Solo cambios en documentación, comentarios, formato o tipeos — cero cambios en código o configuración |
 | **Un lente** (estándar) | 1 lente según el riesgo dominante | La mayoría de cambios: features, refactors, bug fixes, configuraciones |
-| **4R** (riesgo alto) | 4 lentes: risk, resilience, readability, reliability | Cambios en rutas sensibles (auth, seguridad, pagos), o más de 400 líneas de código |
+| **4R** (riesgo alto) | 4 lentes: risk, resilience, readability, reliability | Cambios en rutas sensibles (auth, seguridad, pagos). Cambios grandes suelen implicar riesgo alto |
 
 El tier no se decide por la cantidad de líneas. Un cambio de mil líneas en documentación recibe 0 lentes. Dos líneas en autenticación reciben los 4. El clasificador nombra su propia razón, por lo que el costo nunca es inexplicado.
 

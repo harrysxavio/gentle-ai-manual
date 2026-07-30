@@ -1,0 +1,15 @@
+# Fixture inválido: sync descrito como upgrade del binario
+claims:
+  - id: sync-upgrade-001
+    component: gentle-ai
+    claim: "Use sync to upgrade the gentle-ai binary"
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://example.com
+    status: verified
+    scope: cli
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/06-actualizar-y-sincronizar
+    test: fixture:sync-as-upgrade

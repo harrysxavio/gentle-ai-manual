@@ -1,0 +1,16 @@
+# Fixture inválido: retired presentado como comando actual
+claims:
+  - id: retired-current-001
+    component: gentle-ai
+    claim: "Use review finalize --result to pass results"
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://example.com
+    status: retired
+    scope: cli
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/05-comandos-del-ecosistema
+    test: fixture:retired-as-current
+    notes: "retired solo aparece como advertencia de migración"

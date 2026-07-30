@@ -1,0 +1,15 @@
+# Fixture inválido: deferencia descrita como aprobación
+claims:
+  - id: defer-approval-001
+    component: gentle-ai
+    claim: "Deference means the review approved the change"
+    observed_version: v2.2.0
+    observed_commit: 719b0f6cd0178bd797c074236e7077be8d00dde7
+    verified_at: 2026-07-27
+    source: https://example.com
+    status: verified
+    scope: workflow
+    platform: all
+    channel: rdd
+    canonical_page: 07-gentle-ai/07-flujo-organico-y-rdd
+    test: fixture:defer-as-approval
