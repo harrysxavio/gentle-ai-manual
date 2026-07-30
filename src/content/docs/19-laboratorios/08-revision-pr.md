@@ -154,13 +154,17 @@ Si querés ir más allá de los criterios de aceptación:
 
 1. **Leer la PR y entender el cambio.** Antes de ejecutar cualquier comando, necesitás saber qué estás revisando. Leé la descripción de la PR, los archivos modificados, y el contexto del cambio. En este escenario: un endpoint nuevo que expone perfiles de usuario.
 
-2. **Ejecutar `gentle-ai review start`.** Este comando inicia una sesión de native bounded review. Podés dejar que el native facade seleccione los lentes automáticamente según el tipo de cambio, o forzar lentes específicos:
+2. **Ejecutar `gentle-ai review start`.** Este comando inicia una sesión de native bounded review. El native facade selecciona los lentes automáticamente según el tipo de cambio (risk: 0, uno o 4R). Podés sobrescribir con lentes específicos vía el flag `--lenses`:
 
    ```bash
+   # Ruta negociada (recomendada): el facade selecciona lentes y devuelve el siguiente paso
+   gentle-ai review status --contract gentle-ai.review-integration/v2 --next-transition
+
+   # Ruta directa (compatible): forzar lentes manualmente
    gentle-ai review start --lenses R1,R3
    ```
 
-   Si el sistema usa un envelope typed y pide consentimiento, revisá el contenido del envelope (describe qué lentes se van a ejecutar, qué alcance tienen, y qué datos van a inspeccionar). Aceptá solo si estás de acuerdo con lo que describe.
+   Si en la ruta negociada el sistema usa un envelope typed y pide consentimiento, revisá el contenido del envelope (describe qué lentes se van a ejecutar, qué alcance tienen, y qué datos van a inspeccionar). Aceptá solo si estás de acuerdo con lo que describe.
 
 3. **Dejar que los lentes ejecuten inspección sobre el diff del candidate.** Cada lente examina el código desde su perspectiva:
    - **R1 (Risk)**: busca riesgos de seguridad, exposición de datos, validación faltante, inyección.
@@ -173,7 +177,13 @@ Si querés ir más allá de los criterios de aceptación:
    - **WARNING**: requiere cambios pero no bloquea. Ejemplo: falta de test para caso borde.
    - **SUGGESTION**: mejora opcional. Ejemplo: nombre de variable poco descriptivo.
 
-6. **Validar el receipt:**
+6. **Finalizar la sesión de revisión.** Antes de validar, la review debe estar completa. Consultá el lifecycle hasta recibir la transición de validación:
+
+   ```bash
+   gentle-ai review status --contract gentle-ai.review-integration/v2 --next-transition
+   ```
+
+   El facade devuelve `review.validate` como próximo paso una vez que todos los lentes capturaron sus resultados. En la ruta directa, podés ejecutar:
 
    ```bash
    gentle-ai review validate

@@ -170,7 +170,7 @@ time curl -v -o /dev/null -w "\n\n=== TIMING ===\ntime_namelookup: %{time_namelo
 En PowerShell (Windows con curl nativo o con `curl.exe` para evitar el alias de `Invoke-WebRequest`):
 
 ```powershell
-Measure-Command { curl.exe -v -o $null -w "`n`n=== TIMING ===`ntime_namelookup: %{time_namelookup}s`ntime_connect: %{time_connect}s`ntime_appconnect: %{time_appconnect}s`ntime_starttransfer: %{time_starttransfer}s`ntime_total: %{time_total}s`n" https://httpbin.org/anything }
+Measure-Command { curl.exe -v -o NUL -w "`n`n=== TIMING ===`ntime_namelookup: %{time_namelookup}s`ntime_connect: %{time_connect}s`ntime_appconnect: %{time_appconnect}s`ntime_starttransfer: %{time_starttransfer}s`ntime_total: %{time_total}s`n" https://httpbin.org/anything }
 ```
 
 O usando `Invoke-WebRequest` para medir tiempo total (sin desglose por etapa):

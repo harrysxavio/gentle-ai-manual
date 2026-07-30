@@ -188,23 +188,28 @@ if (fs.existsSync(CURRICULUM)) {
 
 // 20. Each profile has at least one practice
 const PROFILE_PRACTICES = {
-  'principiante-total': ['19-laboratorios/02', '19-laboratorios/03'],
-  'programador': ['19-laboratorios/02', '19-laboratorios/03', '19-laboratorios/04', '19-laboratorios/08'],
-  'opencode': ['19-laboratorios/06', '19-laboratorios/07'],
-  'codex': ['19-laboratorios/06', '19-laboratorios/08'],
-  'engram': ['19-laboratorios/06'],
-  'modelos': ['19-laboratorios/06'],
-  'producto': ['19-laboratorios/09', '19-laboratorios/02', '19-laboratorios/03', '19-laboratorios/04', '19-laboratorios/05'],
-  'arquitectura': ['19-laboratorios/04', '19-laboratorios/05', '19-laboratorios/06', '19-laboratorios/07'],
+  'principiante-total': ['19-laboratorios/02-solicitud-web', '19-laboratorios/03-elegir-stack'],
+  'programador': ['19-laboratorios/02-solicitud-web', '19-laboratorios/03-elegir-stack', '19-laboratorios/04-escala-y-carga', '19-laboratorios/08-revision-pr'],
+  'opencode': ['19-laboratorios/06-roles-y-modelos', '19-laboratorios/07-flujo-organico-rdd'],
+  'codex': ['19-laboratorios/06-roles-y-modelos', '19-laboratorios/08-revision-pr'],
+  'engram': ['19-laboratorios/06-roles-y-modelos'],
+  'modelos': ['19-laboratorios/06-roles-y-modelos'],
+  'producto': ['19-laboratorios/09-capstone', '19-laboratorios/02-solicitud-web', '19-laboratorios/03-elegir-stack', '19-laboratorios/04-escala-y-carga', '19-laboratorios/05-arquitectura-agentes'],
+  'arquitectura': ['19-laboratorios/04-escala-y-carga', '19-laboratorios/05-arquitectura-agentes', '19-laboratorios/06-roles-y-modelos', '19-laboratorios/07-flujo-organico-rdd'],
 };
 
 if (fs.existsSync(CURRICULUM)) {
-  const curriculumRaw = fs.readFileSync(CURRICULUM, 'utf-8');
-  Object.entries(PROFILE_PRACTICES).forEach(([profile, labs]) => {
-    labs.forEach(labSlug => {
-      const testName = `profile "${profile}" includes ${labSlug}`;
+  // Import curriculum to check per-profile lessonHrefs, not global string search
+  const curriculumMod = require(CURRICULUM);
+  const profiles = (curriculumMod.profiles || (curriculumMod.default && curriculumMod.default.profiles) || []);
+  Object.entries(PROFILE_PRACTICES).forEach(([profileSlug, expectedLabs]) => {
+    const profile = profiles.find(p => p.slug === profileSlug);
+    assert.ok(profile, `Profile "${profileSlug}" not found in curriculum`);
+    expectedLabs.forEach(labSlug => {
+      const href = `/${labSlug}/`;
+      const testName = `profile "${profileSlug}" includes ${labSlug}`;
       try {
-        assert.ok(curriculumRaw.includes(labSlug), `Missing ${labSlug} in ${profile} lessonHrefs`);
+        assert.ok(profile.lessonHrefs.includes(href), `Missing ${labSlug} (href "${href}") in ${profileSlug} lessonHrefs`);
         console.log(`  PASS: ${testName}`);
       } catch (e) {
         console.log(`  FAIL: ${testName} — ${e.message}`);
@@ -258,7 +263,7 @@ if (fs.existsSync(DIST)) {
 // 23. No retired commands as instructions (content check)
 if (fs.existsSync(CATALOG)) {
   const catalog = yaml.load(fs.readFileSync(CATALOG, 'utf-8'));
-  const retiredCommands = (catalog.commands || []).filter(c => c.status === 'retired').map(c => c.name);
+  const retiredCommands = (Array.isArray(catalog) ? catalog : catalog.commands || []).filter(c => c.status === 'retired').map(c => c.name);
   REQUIRED_LABS.filter(l => l.filePath && fs.existsSync(l.filePath)).forEach(lab => {
     const content = fs.readFileSync(lab.filePath, 'utf-8');
     retiredCommands.forEach(cmd => {

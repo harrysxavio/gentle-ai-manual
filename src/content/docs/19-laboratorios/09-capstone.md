@@ -247,10 +247,10 @@ Cada commit es independiente y reversible.
 git revert HEAD~4..HEAD --no-edit
 git push origin main
 
-# Alternativa: reset a la tag pre-release
-git tag pre-health-check-1.0 HEAD
-git reset --hard HEAD~5
-git push --force-with-lease origin main
+# Alternativa: revertir solo los commits del feature
+# (preserva commits existentes no relacionados, como el seed del laboratorio)
+git revert HEAD~4..HEAD --no-edit
+git push origin main
 ```
 
 ### Rollback por commit
@@ -414,17 +414,15 @@ La solución completa está separada del enunciado para permitir la autoevaluaci
 # Inicializar
 gentle-ai sdd init
 
-# Especificación y diseño
-gentle-ai sdd explore --title "Health-check CLI"
-gentle-ai sdd propose --title "Health-check CLI approach"
-gentle-ai sdd spec --title "Health-check specification"
-gentle-ai sdd design --title "Health-check architecture"
-gentle-ai sdd tasks --title "Health-check implementation plan"
+# Planeamiento con meta-comandos del orchestrator
+# /sdd-new "Health-check CLI"   — explora y propone en un solo paso
+# /sdd-ff "Health-check CLI"    — fast-forward: propuesta → spec → design → tasks
+# /sdd-continue                  — avanza a la siguiente fase lista
 
 # Implementación (cada commit)
 gentle-ai sdd apply
 
-# Revisión
+# Revisión (native bounded review)
 gentle-ai review start
 gentle-ai review validate
 
