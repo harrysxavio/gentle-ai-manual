@@ -255,13 +255,17 @@ git push origin main
 
 ### Rollback por commit
 
+Usá `git log --oneline -4` para obtener los SHAs de los 4 commits del feature. Luego revertí en orden inverso (newest first) para evitar conflictos:
+
 ```bash
-# Revertir solo los tests
-git revert HEAD
-# Revertir solo el CLI wrapper
-git revert HEAD~1
-# Revertir solo el core engine
-git revert HEAD~2
+# Obtener los SHAs reales
+git log --oneline -4
+
+# Revertir en orden inverso usando SHAs fijos
+# (después de revertir HEAD, los rangos como HEAD~1 cambian)
+git revert <sha-tests> --no-edit
+git revert <sha-wrapper> --no-edit
+git revert <sha-core> --no-edit
 ```
 
 ### Post-rollback verification
@@ -394,12 +398,12 @@ La solución completa está separada del enunciado para permitir la autoevaluaci
 
 9. **Claims reference:** Mapeo de claims del `verified-claims.yml`:
 
-| Claim ID | Comando | Estado |
-|----------|---------|--------|
-| `gentle-ai-v2.2.0-commands` | `gentle-ai sdd init` | ✅ Verificado |
-| `gentle-ai-v2.2.0-commands` | `gentle-ai review start` | ✅ Verificado |
-| `gentle-ai-v2.2.0-commands` | `gentle-ai review validate` | ✅ Verificado |
-| `gentle-ai-review-workflow` | Native Review flow | ✅ Verificado |
+| Claim ID | Comando / Flujo | Estado |
+|----------|-----------------|--------|
+| `snapshot-v2.2.0-release` | Release v2.2.0 que incluye todos los comandos SDD y review | ✅ Verificado (commit `719b0f6`) |
+| `review-starts-after-candidate` | `gentle-ai review start` | ✅ Verificado |
+| `review-gates-validated-only` | `gentle-ai review validate` | ✅ Verificado |
+| `sdd-meta-commands-orchestrator` | Meta-comandos SDD (`/sdd-new`, `/sdd-ff`, `/sdd-continue`) | ✅ Verificado |
 
 10. **Lecciones en Engram:** Llamar `mem_save` con:
     - Título: "Capstone completado: health-check CLI con ciclo SDD completo"

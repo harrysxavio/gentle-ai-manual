@@ -293,6 +293,29 @@ if (fs.existsSync(CATALOG)) {
   });
 }
 
+// 24. Capstone claim IDs exist in verified-claims.yml
+if (fs.existsSync(CLAIMS)) {
+  const claimsData = yaml.load(fs.readFileSync(CLAIMS, 'utf-8'));
+  const existingIds = new Set((claimsData.claims || []).map(c => c.id));
+  const capstonePath = path.join(LAB_DIR, '09-capstone.md');
+  if (fs.existsSync(capstonePath)) {
+    const capstoneContent = fs.readFileSync(capstonePath, 'utf-8');
+    // Extract claim IDs from the claims reference table
+    const claimMatches = capstoneContent.matchAll(/^\| `([\w.-]+)` \|/gm);
+    for (const match of claimMatches) {
+      const claimId = match[1];
+      const testName = `capstone claim "${claimId}" exists in verified-claims.yml`;
+      try {
+        assert.ok(existingIds.has(claimId), `Claim "${claimId}" not found in verified-claims.yml`);
+        console.log(`  PASS: ${testName}`);
+      } catch (e) {
+        console.log(`  FAIL: ${testName} — ${e.message}`);
+        process.exitCode = 1;
+      }
+    }
+  }
+}
+
 console.log('\n---');
 console.log('RED phase complete. All FAILs expected until labs are implemented.');
 console.log('Run: node tests/pr5-labs.test.cjs 2>&1 | Select-String -Pattern "(PASS|FAIL)"');

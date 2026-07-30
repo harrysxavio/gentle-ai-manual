@@ -68,7 +68,7 @@ Tu trabajo es revisar esta PR usando el proceso nativo de Gentle-AI, no solo mir
 | `gentle-ai review capture-result` | Captura hallazgos de los lentes |
 | `gentle-ai review validate` | Valida el receipt de la revisión |
 | `gentle-ai review finalize` | Cierra la sesión de revisión |
-| `gentle-ai review --ci-mode` | Ejecuta revisión en modo CI (no interactivo) |
+| `gentle-ai review status --next-transition` | Obtiene el siguiente paso del lifecycle de revisión (ruta negociada) |
 
 ## Preguntas de decisión
 
@@ -76,7 +76,7 @@ Antes de ejecutar la revisión, respondé estas preguntas:
 
 1. **¿Qué lentes elegís para este tipo de cambio?** Un endpoint nuevo expone riesgos de seguridad (R1) y necesita confiabilidad (R3: manejo de errores, tests, parámetros). R2 (Readability) sería complementario si el código existente tiene problemas de legibilidad. La elección depende del perfil de riesgo del cambio.
 
-2. **¿Ejecutás la revisión local o en CI?** Local te da control interactivo y podés explorar hallazgos. CI (`--ci-mode`) automatiza pero no permite decisiones contextuales. Para este laboratorio, ejecutalo local para aprender el flujo interactivo. Como extensión, probá `--ci-mode`.
+2. **¿Ejecutás la revisión local o en CI?** Local te da control interactivo y podés explorar hallazgos. En CI, el flujo no interactivo usa `gentle-ai review status --next-transition` para avanzar el lifecycle automáticamente. Para este laboratorio, ejecutalo local para aprender el flujo interactivo. Como extensión, automatizá el flujo completo con la ruta negociada.
 
 3. **¿Compartís el receipt en la PR o solo los hallazgos?** El receipt contiene el lineage completo (qué lentes, qué evidencia, estado de validación). Compartir el receipt ID en la PR da transparencia. Los hallazgos individuales se comparten como comentarios de revisión en los archivos relevantes.
 
@@ -144,7 +144,7 @@ Si querés ir más allá de los criterios de aceptación:
 
 2. **Simular una PR con un security issue deliberado.** Creá una versión de la PR que contenga una vulnerabilidad (por ejemplo, SQL injection por interpolación de strings, o exposición de datos sensibles en el mensaje de error de auth) y verificá que R1 lo detecta. Documentá si el lente encontró el issue y con qué severidad.
 
-3. **Automatizar la revisión en CI.** Configurá `gentle-ai review --ci-mode` como step de GitHub Actions. La revisión debe ejecutarse automáticamente en cada PR y fallar si hay hallazgos CRITICAL. El receipt debe publicarse como artifact del workflow.
+3. **Automatizar la revisión en CI.** Implementá un workflow de GitHub Actions que ejecute el flujo no interactivo: `gentle-ai review status --next-transition` → ejecutar la transición devuelta → capturar resultados → validar receipt. La revisión debe fallar si hay hallazgos CRITICAL. El receipt debe publicarse como artifact del workflow.
 
 4. **Comparar resultados con Judgment Day.** Ejecutá Judgment Day sobre el mismo cambio y compará los hallazgos de los dos jueces independientes contra los hallazgos de tu revisión. ¿Coinciden? ¿Qué encontró uno que el otro no?
 
@@ -158,7 +158,7 @@ Si querés ir más allá de los criterios de aceptación:
 
    ```bash
    # Ruta negociada (recomendada): el facade selecciona lentes y devuelve el siguiente paso
-   gentle-ai review status --contract gentle-ai.review-integration/v2 --next-transition
+   gentle-ai review status --contract gentle-ai.review-integration/v1 --next-transition
 
    # Ruta directa (compatible): forzar lentes manualmente
    gentle-ai review start --lenses R1,R3
@@ -180,7 +180,7 @@ Si querés ir más allá de los criterios de aceptación:
 6. **Finalizar la sesión de revisión.** Antes de validar, la review debe estar completa. Consultá el lifecycle hasta recibir la transición de validación:
 
    ```bash
-   gentle-ai review status --contract gentle-ai.review-integration/v2 --next-transition
+   gentle-ai review status --contract gentle-ai.review-integration/v1 --next-transition
    ```
 
    El facade devuelve `review.validate` como próximo paso una vez que todos los lentes capturaron sus resultados. En la ruta directa, podés ejecutar:
