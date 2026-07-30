@@ -117,6 +117,11 @@ test("allows 'coming soon' inside a code fence (legitimate documentation)", () =
   assert.equal(result.status, 0);
 });
 
+test("allows 'coming soon' inside inline code (legitimate documentation)", () => {
+  const result = runFixture(validLesson + "\nAvoid `Coming soon` as a label on buttons.");
+  assert.equal(result.status, 0);
+});
+
 // Engram-specific RED tests — full lesson-v1 contract for 01-que-es-engram.md
 const ENGRAM_PAGE = path.resolve(__dirname, "..", "src", "content", "docs", "09-engram", "01-que-es-engram.md");
 

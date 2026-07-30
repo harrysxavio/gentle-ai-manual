@@ -119,11 +119,12 @@ function validateFile(file) {
   const errors = [];
 
   // Block placeholders in published content (visible prose only)
-  // Strip frontmatter, code fences, and HTML comments before checking
+  // Strip frontmatter, code fences, inline code, and HTML comments before checking
   const visibleText = text
-    .replace(/---[\s\S]*?---/, "")       // strip frontmatter
-    .replace(/```[\s\S]*?```/g, "")      // strip code fences
-    .replace(/<!--[\s\S]*?-->/g, "");    // strip HTML comments
+    .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "")   // strip frontmatter (anchored to start)
+    .replace(/```[\s\S]*?```/g, "")                     // strip code fences
+    .replace(/`[^`\n]+`/g, "")                          // strip inline code
+    .replace(/<!--[\s\S]*?-->/g, "");                   // strip HTML comments
   if (/\b(próximamente|proximamente|coming soon)\b/i.test(visibleText)) {
     errors.push(`${relative}: placeholder 'próximamente' or 'coming soon' found in published content`);
   }
