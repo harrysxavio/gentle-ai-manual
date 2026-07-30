@@ -293,14 +293,14 @@ La tag apunta al commit `HEAD~4` (el commit anterior al primer cambio del health
 
 ## Entregables
 
-| # | Artefacto | Formato | Ubicación |
-|---|-----------|---------|-----------|
-| 1 | Spec SDD | `.sdd/changes/change_001/spec.md` | Proyecto |
-| 2 | Diseño SDD | `.sdd/changes/change_001/design.md` | Proyecto |
-| 3 | Plan de tareas | `.sdd/changes/change_001/tasks.md` | Proyecto |
+| # | Artefacto | Formato / Persistencia | Ubicación |
+|---|-----------|------------------------|-----------|
+| 1 | Spec SDD | `openspec/changes/{cambio}/spec.md` (OpenSpec) o topic key `sdd/{change}/spec` (Engram) | Proyecto |
+| 2 | Diseño SDD | `openspec/changes/{cambio}/design.md` (OpenSpec) o topic key `sdd/{change}/design` (Engram) | Proyecto |
+| 3 | Plan de tareas | `openspec/changes/{cambio}/tasks.md` (OpenSpec) o topic key `sdd/{change}/tasks` (Engram) | Proyecto |
 | 4 | Implementación | `src/health-check/` | Proyecto |
 | 5 | Tests | `test/health-check/` | Proyecto |
-| 6 | Receipt de revisión | `.sdd/changes/change_001/receipt.md` | Proyecto |
+| 6 | Receipt de revisión | receipt firmado en sesión nativa (consultar `review status`) | Proyecto |
 | 7 | Claims evidence | `capstone-evidencia.md` (sección claims) | Raíz del proyecto |
 | 8 | Lecciones en Engram | Verificable con `mem_context` | Engram |
 

@@ -188,7 +188,7 @@ Cada comando del spec debe cotejarse contra `gentle-command-catalog.yml`. Verifi
 | `gentle-ai sdd-status` | `cli-sdd-status` | current |
 | `gentle-ai doctor` | `cli-doctor` | current |
 
-Usar `--result-artifact-file` en `finalize`, NO `--result` (retirado, ver `cli-review-finalize-result-retired` en el catálogo).
+Usar `--captured-results` en `finalize`, NO `--result` (retirado, ver `cli-review-finalize-result-retired` en el catálogo).
 
 #### Paso 3: Aplicar el cambio
 
@@ -217,8 +217,8 @@ Elegí los lentes según el riesgo. Para un comando de diagnóstico, `reliabilit
 # Capturar los resultados de los lentes antes de finalizar
 gentle-ai review capture-result
 
-# Finalizar la sesión y generar el receipt
-gentle-ai review finalize --result-artifact-file rdd-receipt.json
+# Finalizar con captured-results y generar el receipt
+gentle-ai review finalize --captured-results
 gentle-ai review validate --gate post-apply
 ```
 

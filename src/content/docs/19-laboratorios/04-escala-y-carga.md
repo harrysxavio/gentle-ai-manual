@@ -139,11 +139,11 @@ Si querés ir más allá del plan:
    - Distribución de tiempos (P50, P95, P99)
    Usá `ab` (Apache Bench), `wrk` o `httperf` como alternativa.
 
-2. **Capturar las 5 queries más lentas.** Configurá `pg_stat_statements` en PostgreSQL y escribí un comando que muestre las 5 queries con mayor tiempo total acumulado:
+2. **Capturar las 5 queries más lentas.** Configurá `pg_stat_statements` en PostgreSQL (13+) y escribí un comando que muestre las 5 queries con mayor tiempo total acumulado. Notá que desde PG 13 las columnas de tiempo se renombraron: `total_time` → `total_exec_time`, `mean_time` → `mean_exec_time`:
    ```sql
-   SELECT query, calls, total_time, mean_time, rows
+   SELECT query, calls, total_exec_time, mean_exec_time, rows
    FROM pg_stat_statements
-   ORDER BY total_time DESC
+   ORDER BY total_exec_time DESC
    LIMIT 5;
    ```
 
