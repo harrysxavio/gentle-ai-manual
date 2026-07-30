@@ -87,11 +87,7 @@ npm run build       # compila a dist/
 npm run validate    # lint + mermaid + modelos + claims + tests + build
 ```
 
-> **Nota sobre el base path**: El sitio se despliega bajo `/gentle-ai-manual/` en GitHub Pages. Los enlaces internos del contenido usan este prefijo. En desarrollo local (`npm run dev`) los enlaces no resuelven porque el dev server sirve en `/`. Para probar localmente con el base path correcto usá:
->
-> ```bash
-> npm run dev -- --base /gentle-ai-manual/
-> ```
+> **Nota sobre el base path**: El sitio se despliega bajo `/gentle-ai-manual/` en GitHub Pages. `astro.config.mjs` ya configura `base: '/gentle-ai-manual/'`, por lo que `npm run dev` sirve el sitio bajo ese prefijo. Visitá [http://localhost:4321/gentle-ai-manual/](http://localhost:4321/gentle-ai-manual/) durante desarrollo.
 
 ---
 

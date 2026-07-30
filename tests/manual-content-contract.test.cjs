@@ -106,6 +106,12 @@ test("rejects standalone 'Coming soon' without parentheses", () => {
   assert.match(result.stderr, /placeholder/);
 });
 
+test("rejects unaccented 'Proximamente' (ASCII o)", () => {
+  const result = runFixture(validLesson + "\nProximamente");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
 // Engram-specific RED tests — full lesson-v1 contract for 01-que-es-engram.md
 const ENGRAM_PAGE = path.resolve(__dirname, "..", "src", "content", "docs", "09-engram", "01-que-es-engram.md");
 

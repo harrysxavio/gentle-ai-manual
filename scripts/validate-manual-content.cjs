@@ -120,7 +120,7 @@ function validateFile(file) {
 
   // Block placeholders in published content
   // Match standalone words (with or without surrounding punctuation)
-  if (/\b(próximamente|coming soon)\b/i.test(text)) {
+  if (/\b(próximamente|proximamente|coming soon)\b/i.test(text)) {
     errors.push(`${relative}: placeholder 'próximamente' or 'coming soon' found in published content`);
   }
 
