@@ -1,6 +1,6 @@
 ---
 title: Laboratorios
-description: "20 laboratorios prácticos: ejercicios acumulativos para ganar confianza real con el ecosistema."
+description: "28 laboratorios prácticos: 20 ejercicios progresivos + 8 laboratorios de maestría con escenarios, rúbricas y solución separada."
 level: 2-3
 estimatedTime: 120 min
 tags:
@@ -9,13 +9,17 @@ tags:
   - ejercicios
   - diagnóstico
   - verificación
+  - maestría
+  - escenarios
 prerequisites:
   - Variable según laboratorio
-verifiedVersion: "Gentle-AI 2.1.10, OpenCode 1.17.20, Codex 0.144.0, GGA 2.10.1"
+verifiedVersion: "Gentle-AI 2.2.0, OpenCode 1.17.20, Codex 0.144.0"
 learningOutcomes:
-  - Completar 20 laboratorios progresivos que cubren todo el ecosistema
+  - Completar 28 laboratorios progresivos que cubren todo el ecosistema
   - Diagnosticar y corregir errores comunes en cada herramienta
   - Demostrar competencia práctica en terminal, Git, agentes, revisión y modelos
+  - Resolver escenarios reales con rúbrica de autoevaluación
+  - Integrar trazabilidad, RDD, revisión verificable y capstone completo
   - Saber contribuir nuevos laboratorios al repositorio
 ---
 
@@ -714,6 +718,39 @@ Los comandos se muestran en formato neutral. Donde haya diferencias entre PowerS
 - GGA revisó y aprobó todos los commits.
 - Native Bounded Review produjo un receipt válido.
 - Engram tiene observaciones del proyecto.
+
+### Laboratorios de maestría (nivel avanzado)
+
+Además de los 20 laboratorios progresivos, el módulo incluye **8 laboratorios de maestría** con escenarios reales, rúbrica de autoevaluación y solución separada. Estos laboratorios no son paso-a-paso: recibís un escenario con restricciones y artefactos esperados, y decidís vos cómo resolverlo.
+
+Cada laboratorio de maestría sigue este contrato:
+1. **Contexto** — el problema real
+2. **Objetivo observable** — qué demostrás al terminarlo
+3. **Escenario** — situación concreta
+4. **Restricciones** — límites que respetar
+5. **Información disponible** — documentación y comandos disponibles
+6. **Preguntas de decisión** — tradeoffs que resolver
+7. **Artefacto esperado** — qué entregar
+8. **Criterios de aceptación** — condiciones para considerar completo
+9. **Rúbrica** — autoevaluación en 4 niveles
+10. **Autoevaluación** — preguntas de verificación
+11. **Errores frecuentes** — qué evitar
+12. **Extensión avanzada** — si querés ir más allá
+13. **Solución** — respuesta del experto (separada)
+14. **Fuentes** — referencias verificadas
+
+Elegí según tu perfil:
+
+| Laboratorio | Slug | Nivel | Perfiles |
+|------------|------|-------|----------|
+| [Trazar una solicitud web](/gentle-ai-manual/19-laboratorios/02-solicitud-web/) | `02-solicitud-web` | 2 | principiante-total, programador, producto |
+| [Elegir un stack tecnológico](/gentle-ai-manual/19-laboratorios/03-elegir-stack/) | `03-elegir-stack` | 2 | principiante-total, programador, producto |
+| [Evolucionar un sistema bajo carga](/gentle-ai-manual/19-laboratorios/04-escala-y-carga/) | `04-escala-y-carga` | 3 | programador, producto, arquitectura |
+| [Diseñar una arquitectura de agentes](/gentle-ai-manual/19-laboratorios/05-arquitectura-agentes/) | `05-arquitectura-agentes` | 3 | producto, arquitectura |
+| [Asignar roles y modelos con fallback](/gentle-ai-manual/19-laboratorios/06-roles-y-modelos/) | `06-roles-y-modelos` | 3 | opencode, codex, engram, modelos, arquitectura |
+| [Ejecutar un flujo orgánico y RDD](/gentle-ai-manual/19-laboratorios/07-flujo-organico-rdd/) | `07-flujo-organico-rdd` | 3 | opencode, arquitectura |
+| [Revisar una PR con confianza verificable](/gentle-ai-manual/19-laboratorios/08-revision-pr/) | `08-revision-pr` | 2-3 | programador, codex |
+| [Capstone completo](/gentle-ai-manual/19-laboratorios/09-capstone/) | `09-capstone` | 3 | producto |
 
 ### Cómo diagnosticar fallos en los laboratorios
 
