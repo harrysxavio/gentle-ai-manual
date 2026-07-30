@@ -10,7 +10,7 @@ El manual pedagógico, técnico e interactivo del ecosistema **Gentleman Program
 
 Un curso completo que te lleva desde **"no sé nada de programación"** hasta **"diseño, construyo, reviso y gobierno productos con agentes de IA"**.
 
-No es una referencia de comandos. Es un sistema de aprendizaje progresivo con 20 módulos, 49 capítulos, 20 laboratorios prácticos y 8 rutas de aprendizaje según tu perfil.
+No es una referencia de comandos. Es un sistema de aprendizaje progresivo con 20 módulos, 49 capítulos, 8 laboratorios prácticos y 8 rutas de aprendizaje según tu perfil.
 
 ---
 
@@ -35,7 +35,7 @@ Cada módulo declara sus **prerrequisitos**. No saltees módulos: el contenido e
 
 ### Paso 3 — Hacé los laboratorios
 
-El Módulo 19 contiene **20 laboratorios prácticos** con instrucciones paso a paso, resultado esperado y autodiagnóstico. Hacé cada lab al terminar su módulo correspondiente.
+El Módulo 19 contiene **8 laboratorios prácticos** (más un capstone integrador) con instrucciones paso a paso, resultado esperado y autodiagnóstico. Hacé cada lab al terminar su módulo correspondiente.
 
 ### Paso 4 — Construí algo real
 
@@ -66,21 +66,42 @@ El Módulo 18 te guía en la construcción de un producto completo con el ecosis
 | 16 | Arquitectura técnica | 3 | Paquetes Go, Bubbletea TUI, pipeline, contribución |
 | 17 | Seguridad, costos y gobierno | 2 | Permisos, presupuestos, auditoría, políticas |
 | 18 | Construcción de productos | 3 | Ciclo completo idea→deploy con el ecosistema |
-| 19 | Laboratorios | 2-3 | 20 ejercicios prácticos acumulativos |
-| 20 | Referencia | 3 | Comandos, glosario, modelos, compatibilidad |
+| 19 | Laboratorios | 2-3 | 8 laboratorios prácticos + capstone acumulativo |
+| 20 | Referencia | 3 | Comandos, [glosario](GLOSSARY.md), modelos, compatibilidad |
 
 ---
+
+## 📋 Requisitos
+
+- **Node.js** >= 18 (ver [`package.json`](package.json))
+- **npm** (incluido con Node.js)
 
 ## 🚀 Ejecutar localmente
 
 ```bash
 git clone https://github.com/harrysxavio/gentle-ai-manual.git
 cd gentle-ai-manual
-npm install
-npm run dev        # http://localhost:4321
-npm run build      # compila a dist/
-npm run validate   # lint + mermaid + modelos + tests + build
+npm ci              # instala dependencias exactas (usa package-lock.json)
+npm run dev         # http://localhost:4321
+npm run build       # compila a dist/
+npm run validate    # lint + mermaid + modelos + claims + tests + build
 ```
+
+> **Nota sobre el base path**: El sitio se despliega bajo `/gentle-ai-manual/` en GitHub Pages. Los enlaces internos del contenido usan este prefijo. En desarrollo local (`npm run dev`) los enlaces no resuelven porque el dev server sirve en `/`. Para probar localmente con el base path correcto usá:
+>
+> ```bash
+> npm run dev -- --base /gentle-ai-manual/
+> ```
+
+---
+
+## 📖 Glosario
+
+El manual incluye un [glosario con 152 términos](GLOSSARY.md) generado desde [`data/terminology/glossary.yml`](data/terminology/glossary.yml). Cada término enlaza a su página canónica y está disponible online en [/gentle-ai-manual/20-referencia/02-glosario/](https://harrysxavio.github.io/gentle-ai-manual/20-referencia/02-glosario/).
+
+## ✅ Afirmaciones verificadas (evidence & claims)
+
+Toda afirmación técnica volátil del manual está registrada en [`data/evidence/verified-claims.yml`](data/evidence/verified-claims.yml) con su fuente, fecha de verificación y estado (verified / experimental / retired / internal). Los comandos publicados se documentan en [`data/evidence/gentle-command-catalog.yml`](data/evidence/gentle-command-catalog.yml). Ambos se verifican automáticamente con `npm run validate`.
 
 ---
 
@@ -92,6 +113,7 @@ npm run validate   # lint + mermaid + modelos + tests + build
 | `npm run lint` | Markdownlint en todo el contenido |
 | `npm run check-mermaid` | Sintaxis de diagramas Mermaid |
 | `npm run check-models` | Catálogo de 34 modelos |
+| `npm run check-claims` | Afirmaciones técnicas verificadas (30 claims) |
 | `npm test` | Integridad de archivos, caracteres, frontmatter |
 | `npm run build` | Build Astro + Pagefind + validación de enlaces |
 | `npm run check-links` | Enlaces rotos en el sitio generado |

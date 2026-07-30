@@ -115,12 +115,20 @@ function validateFile(file) {
   const meta = frontmatter(text);
   const contract = meta.manual_contract;
 
-  if (!contract) return [];
-  if (!VALID_CONTRACTS.has(contract)) {
-    return [`${relative}: unknown manual_contract '${contract}'`];
+  // Global checks applied to all files regardless of contract
+  const errors = [];
+
+  // Block placeholders in published content
+  if (/\(próximamente\)|\(coming soon\)/i.test(text)) {
+    errors.push(`${relative}: placeholder '(próximamente)' or '(coming soon)' found in published content`);
   }
 
-  const errors = [];
+  if (!contract) return errors;
+  if (!VALID_CONTRACTS.has(contract)) {
+    errors.push(`${relative}: unknown manual_contract '${contract}'`);
+    return errors;
+  }
+
   const foundHeadings = headings(text);
 
   if (contract === "lesson-v1") {

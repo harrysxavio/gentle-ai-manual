@@ -391,7 +391,7 @@ Las alertas de presupuesto pueden configurarse para notificar por:
 
 - **Terminal**: mensaje en la TUI o en el output del asistente cuando se alcanza el umbral
 - **Archivo de log**: registro con timestamp
-- **Webhook** (próximamente): POST a una URL configurable cuando se supera un umbral
+<!-- Webhook está en desarrollo, no en la versión actual. Omitido para no publicar placeholders. -->
 
 Los caps pueden ser:
 
