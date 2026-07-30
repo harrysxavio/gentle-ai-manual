@@ -97,7 +97,7 @@ El manual incluye un [glosario con 152 términos](GLOSSARY.md) generado desde [`
 
 ## ✅ Afirmaciones verificadas (evidence & claims)
 
-Toda afirmación técnica volátil del manual está registrada en [`data/evidence/verified-claims.yml`](data/evidence/verified-claims.yml) con su fuente, fecha de verificación y estado (verified / experimental / retired / internal). Los comandos publicados se documentan en [`data/evidence/gentle-command-catalog.yml`](data/evidence/gentle-command-catalog.yml). Ambos se verifican automáticamente con `npm run validate`.
+Las afirmaciones técnicas registradas en [`data/evidence/verified-claims.yml`](data/evidence/verified-claims.yml) incluyen fuente, fecha de verificación y estado (verified / experimental / retired / internal). Los comandos publicados se documentan en [`data/evidence/gentle-command-catalog.yml`](data/evidence/gentle-command-catalog.yml). Ambos archivos se verifican automáticamente con `npm run validate`.
 
 ---
 

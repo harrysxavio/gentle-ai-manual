@@ -112,6 +112,11 @@ test("rejects unaccented 'Proximamente' (ASCII o)", () => {
   assert.match(result.stderr, /placeholder/);
 });
 
+test("allows 'coming soon' inside a code fence (legitimate documentation)", () => {
+  const result = runFixture(validLesson + "\n```\n# Don't use 'Coming soon' on buttons\n```");
+  assert.equal(result.status, 0);
+});
+
 // Engram-specific RED tests — full lesson-v1 contract for 01-que-es-engram.md
 const ENGRAM_PAGE = path.resolve(__dirname, "..", "src", "content", "docs", "09-engram", "01-que-es-engram.md");
 

@@ -118,9 +118,13 @@ function validateFile(file) {
   // Global checks applied to all files regardless of contract
   const errors = [];
 
-  // Block placeholders in published content
-  // Match standalone words (with or without surrounding punctuation)
-  if (/\b(próximamente|proximamente|coming soon)\b/i.test(text)) {
+  // Block placeholders in published content (visible prose only)
+  // Strip frontmatter, code fences, and HTML comments before checking
+  const visibleText = text
+    .replace(/---[\s\S]*?---/, "")       // strip frontmatter
+    .replace(/```[\s\S]*?```/g, "")      // strip code fences
+    .replace(/<!--[\s\S]*?-->/g, "");    // strip HTML comments
+  if (/\b(próximamente|proximamente|coming soon)\b/i.test(visibleText)) {
     errors.push(`${relative}: placeholder 'próximamente' or 'coming soon' found in published content`);
   }
 
