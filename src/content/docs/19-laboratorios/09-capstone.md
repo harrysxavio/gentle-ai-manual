@@ -83,7 +83,7 @@ Tu tarea es:
 - `verified-claims.yml` — archivo de claims verificadas en la raíz del proyecto Gentle-AI.
 - `gentle-command-catalog.yml` — catálogo de comandos disponibles.
 - Documentación de Node.js: `process.versions`, `http.get`, `child_process.execFileSync`.
-- Comandos del catálogo: `gentle-ai sdd init`, `gentle-ai review start`, `gentle-ai review validate`, `gentle-ai doctor`.
+- Comandos del catálogo: `gentle-ai review start`, `gentle-ai review validate`, `gentle-ai doctor`.
 - Gentle-AI v2.2.0 source (commit `719b0f6`).
 - Módulo 14 (Modelos y enrutamiento): asignación de modelos por agente.
 - Módulo 11 (Calidad y revisión): GGA, Native Review, Receipt, Judgment Day.
@@ -98,7 +98,7 @@ Cada pregunta tiene implicaciones arquitectónicas, de seguridad y de testabilid
 - **¿La verificación MCP es mockeable?** MCP se conecta via stdio o TCP. Si tu checker abre una conexión real, ¿cómo escribís tests sin un servidor MCP corriendo? ¿Usás dependency injection, un wrapper mockeable, o un flag de entorno?
 - **¿El reporte sigue un schema conocido?** ¿Definís un schema JSON formal (con `$schema`) desde el principio, o lo dejás implícito? Un schema conocido permite validación automática y evolución controlada. ¿Vale la pena el overhead inicial?
 - **¿Cuándo ejecutás native review?** La revisión debe ocurrir después de apply y antes de archive. ¿Por qué? ¿Qué pasa si revisás antes de tener implementación o después de archivar?
-- **¿Qué claims verifican que los comandos existen?** Revisá `verified-claims.yml`. ¿Hay claims que cubran `gentle-ai sdd init`, `gentle-ai review start`, `gentle-ai doctor`? Si no existen, ¿las creás como parte del lab o referenciás las existentes?
+- **¿Qué claims verifican que los comandos existen?** Revisá `verified-claims.yml`. ¿Hay claims que cubran `/sdd-init`, `gentle-ai review start`, `gentle-ai doctor`? Si no existen, ¿las creás como parte del lab o referenciás las existentes?
 
 ## Artefacto esperado
 
@@ -263,6 +263,7 @@ git log --oneline -4
 
 # Revertir en orden inverso usando SHAs fijos
 # (después de revertir HEAD, los rangos como HEAD~1 cambian)
+git revert <sha-chore-gga> --no-edit
 git revert <sha-tests> --no-edit
 git revert <sha-wrapper> --no-edit
 git revert <sha-core> --no-edit
@@ -284,11 +285,11 @@ npm test  # debe pasar sin referencias al health-check
 ### Tag pre-release
 
 ```bash
-git tag -a v1.0.0-rc.1 -m "Pre-release: health-check feature"
+git tag -a v1.0.0-rc.1 -m "Pre-release checkpoint: pre-health-change state" HEAD~4
 git push origin v1.0.0-rc.1
 ```
 
-La tag permite volver al estado pre-cambio instantáneamente y sirve como punto de control para la revisión.
+La tag apunta al commit `HEAD~4` (el commit anterior al primer cambio del health-check), lo que permite volver al estado pre-cambio instantáneamente mediante `git checkout v1.0.0-rc.1`. Sirve como punto de control para la revisión y rollback.
 
 ## Entregables
 
@@ -392,9 +393,9 @@ La solución completa está separada del enunciado para permitir la autoevaluaci
 
 6. **SDD Apply:** Implementación de cada tarea usando los modelos asignados. Commits convencionales con GGA.
 
-7. **Native Review:** Ejecutar `gentle-ai review start` con lentes `Risk` y `Resilience`. Documentar hallazgos y corregir. `gentle-ai review validate`.
+7. **Native Review:** Ejecutar `gentle-ai review start --focus Risk --focus Resilience`. Capturar resultados con `gentle-ai review capture-result`. Finalizar con `gentle-ai review finalize`. Validar receipt con `gentle-ai review validate`. Documentar hallazgos y corregir.
 
-8. **SDD Archive:** `gentle-ai sdd archive` — cierra el cambio y genera el changelog.
+8. **SDD Archive:** El orchestrator ejecuta `sdd-archive` como fase interna (claim `sdd-internal-phases`). Cierra el cambio y genera el changelog.
 
 9. **Claims reference:** Mapeo de claims del `verified-claims.yml`:
 
@@ -431,7 +432,10 @@ La solución completa está separada del enunciado para permitir la autoevaluaci
 # Ver: claim sdd-internal-phases
 
 # Revisión (native bounded review — CLI directo)
-gentle-ai review start
+# El capstone requiere Risk + Resilience (al menos 2 lentes)
+gentle-ai review start --focus Risk --focus Resilience
+gentle-ai review capture-result
+gentle-ai review finalize
 gentle-ai review validate
 
 # SDD Archive (fase interna del orchestrator)

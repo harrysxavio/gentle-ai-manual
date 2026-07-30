@@ -214,6 +214,10 @@ Elegí los lentes según el riesgo. Para un comando de diagnóstico, `reliabilit
 #### Paso 5: Finalizar y validar el receipt
 
 ```bash
+# Capturar los resultados de los lentes antes de finalizar
+gentle-ai review capture-result
+
+# Finalizar la sesión y generar el receipt
 gentle-ai review finalize --result-artifact-file rdd-receipt.json
 gentle-ai review validate --gate post-apply
 ```
