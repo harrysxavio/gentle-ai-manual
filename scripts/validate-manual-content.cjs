@@ -119,8 +119,9 @@ function validateFile(file) {
   const errors = [];
 
   // Block placeholders in published content
-  if (/\(próximamente\)|\(coming soon\)/i.test(text)) {
-    errors.push(`${relative}: placeholder '(próximamente)' or '(coming soon)' found in published content`);
+  // Match standalone words (with or without surrounding punctuation)
+  if (/\b(próximamente|coming soon)\b/i.test(text)) {
+    errors.push(`${relative}: placeholder 'próximamente' or 'coming soon' found in published content`);
   }
 
   if (!contract) return errors;

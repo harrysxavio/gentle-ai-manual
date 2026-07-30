@@ -88,6 +88,24 @@ test("rejects unlabeled command blocks", () => {
   assert.match(result.stderr, /labeled bash or powershell/);
 });
 
+test("rejects placeholder '(proximamente)' with parentheses", () => {
+  const result = runFixture(validLesson + "\n(próximamente)");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects standalone 'Proximamente' without parentheses", () => {
+  const result = runFixture(validLesson + "\n## Próximamente");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects standalone 'Coming soon' without parentheses", () => {
+  const result = runFixture(validLesson + "\nComing soon");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
 // Engram-specific RED tests — full lesson-v1 contract for 01-que-es-engram.md
 const ENGRAM_PAGE = path.resolve(__dirname, "..", "src", "content", "docs", "09-engram", "01-que-es-engram.md");
 
