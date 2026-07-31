@@ -73,8 +73,8 @@ El Módulo 18 te guía en la construcción de un producto completo con el ecosis
 
 ## 📋 Requisitos
 
-- **Node.js** `18.20.8`, `^20.3.0` o `>=22.0.0` — ver [`package.json`](package.json)
-- **npm** >= 9.6.5 (incluido con Node.js)
+- **Node.js** `^20.19.5` o `>=22.0.0` — ver [`package.json`](package.json)
+- **npm** >= 10.8.2 (incluido con Node.js)
 
 ## 🚀 Ejecutar localmente
 
