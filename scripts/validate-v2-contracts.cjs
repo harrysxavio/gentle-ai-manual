@@ -74,15 +74,19 @@ const REQUIRED_FIELDS = [
   "title",
   "manual_contract",
   "description",
+  "content_level",
   "estimated_minutes",
   "learning_outcome",
   "canonical_concepts",
   "lesson_terms",
   "persona",
   "learning_resources",
+  "snapshot",
   "faq_mode",
   "practice_mode",
   "diagram_mode",
+  "level",
+  "estimatedTime",
 ];
 
 function validateFile(file) {
@@ -159,9 +163,23 @@ function validateFile(file) {
   return errors;
 }
 
+function walk(dir) {
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const full = path.join(dir, entry.name);
+    return entry.isDirectory() ? walk(full) : [full];
+  });
+}
+
 function main() {
-  const files = process.argv.slice(2).map((file) => path.resolve(ROOT, file));
-  const mdFiles = files.filter((file) => /\.md$/i.test(file) && fs.existsSync(file));
+  const args = process.argv.slice(2);
+  let files;
+  if (args.length) {
+    files = args.map((file) => path.resolve(ROOT, file));
+  } else {
+    files = walk(path.join(ROOT, "src", "content", "docs"));
+  }
+  const mdFiles = files.filter((file) => /\.(md|mdx)$/i.test(file) && fs.existsSync(file));
   const errors = mdFiles.flatMap(validateFile);
 
   if (errors.length) {

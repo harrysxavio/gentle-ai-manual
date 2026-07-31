@@ -83,9 +83,10 @@ function validateFile(file) {
   const lines = visibleText.split(/\r?\n/);
 
   for (let i = 0; i < lines.length; i += 1) {
-    const line = lines[i];
-    // Skip lines that are pure headings, code, or tables — short context check
-    if (/^\s*#/.test(line) || /^\s*\|/.test(line) || /^\s*>/.test(line)) continue;
+    let line = lines[i];
+    // Strip Markdown delimiters from headings and tables to check visible text
+    line = line.replace(/^#{1,6}\s*/, "").replace(/\|/g, " ").replace(/\*{1,2}([^*]+)\*{1,2}/g, "$1");
+    if (/^\s*$/.test(line)) continue;
 
     for (const stem of VOSEO_STEMS) {
       // Ambiguous stems like "vas" need extra context
@@ -102,9 +103,23 @@ function validateFile(file) {
   return errors;
 }
 
+function walk(dir) {
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const full = path.join(dir, entry.name);
+    return entry.isDirectory() ? walk(full) : [full];
+  });
+}
+
 function main() {
-  const files = process.argv.slice(2).map((file) => path.resolve(ROOT, file));
-  const mdFiles = files.filter((file) => /\.md$/i.test(file) && fs.existsSync(file));
+  const args = process.argv.slice(2);
+  let files;
+  if (args.length) {
+    files = args.map((file) => path.resolve(ROOT, file));
+  } else {
+    files = walk(path.join(ROOT, "src", "content", "docs"));
+  }
+  const mdFiles = files.filter((file) => /\.(md|mdx)$/i.test(file) && fs.existsSync(file));
   const errors = mdFiles.flatMap(validateFile);
 
   if (errors.length) {

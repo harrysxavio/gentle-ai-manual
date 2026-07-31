@@ -7,7 +7,7 @@ const cp = require("node:child_process");
 
 const ROOT = process.cwd();
 const DOC_ROOT = path.join(ROOT, "src", "content", "docs");
-const VALID_CONTRACTS = new Set(["lesson-v1", "reference-v1", "lab-v1"]);
+const VALID_CONTRACTS = new Set(["lesson-v1", "lesson-v2", "reference-v1", "lab-v1"]);
 const REQUIRED_LESSON_GROUPS = [
   ["Resultado de aprendizaje"],
   ["Respuesta simple", "En pocas palabras"],
@@ -154,8 +154,10 @@ function validateFile(file) {
     }
   }
 
-  if (!hasHeadingGroup(foundHeadings, ["Fuentes y alcance"])) {
-    errors.push(`${relative}: missing 'Fuentes y alcance'`);
+  if (contract === "lesson-v1" || contract === "reference-v1" || contract === "lab-v1") {
+    if (!hasHeadingGroup(foundHeadings, ["Fuentes y alcance"])) {
+      errors.push(`${relative}: missing 'Fuentes y alcance'`);
+    }
   }
 
   if (text.includes("@ts-nocheck")) {
