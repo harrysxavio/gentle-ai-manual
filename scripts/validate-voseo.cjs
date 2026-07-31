@@ -77,6 +77,22 @@ const VOSEO_STEMS = [
   "terminás", "terminá",
 ];
 
+// Enclitic voseo imperative forms (stem + lo/la/los/las)
+// Build from stems that end with accented vowel (imperative forms)
+const VOSEO_ENCLITIC_STEMS = (() => {
+  const enclitic = [];
+  const stems = new Set(VOSEO_STEMS.filter((s) => /[áéíóú]$/.test(s)));
+  for (const stem of stems) {
+    for (const suffix of ["lo", "la", "los", "las"]) {
+      enclitic.push(stem.replace(/[áéíóú]$/, (match) => {
+        const map = { á: "a", é: "e", í: "i", ó: "o", ú: "u" };
+        return map[match] + suffix;
+      }));
+    }
+  }
+  return enclitic;
+})();
+
 // Build a pattern that matches the stem as a standalone word.
 // The prefix boundary accepts whitespace, punctuation, or start-of-line.
 // The suffix boundary accepts whitespace, punctuation, or end-of-line.
@@ -132,7 +148,7 @@ function validateFile(file) {
     line = line.replace(/^#{1,6}\s*/, "").replace(/\|/g, " ").replace(/\*{1,2}([^*]+)\*{1,2}/g, "$1");
     if (/^\s*$/.test(line)) continue;
 
-    for (const stem of VOSEO_STEMS) {
+    for (const stem of [...VOSEO_STEMS, ...VOSEO_ENCLITIC_STEMS]) {
       // Ambiguous stems like "vas" need extra context
       if (AMBIGUOUS_STEMS.has(stem)) continue;
       const pattern = buildPattern(stem);

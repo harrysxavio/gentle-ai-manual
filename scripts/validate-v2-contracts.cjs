@@ -141,6 +141,29 @@ function validateFile(file) {
     }
   }
 
+  // Validate types of required fields
+  if (meta.estimated_minutes !== undefined && (typeof meta.estimated_minutes !== "number" || !Number.isInteger(meta.estimated_minutes))) {
+    errors.push(`${relative}: 'estimated_minutes' must be an integer`);
+  }
+  if (meta.level !== undefined && (typeof meta.level !== "number" || !Number.isInteger(meta.level))) {
+    errors.push(`${relative}: 'level' must be an integer`);
+  }
+  if (meta.learning_outcome !== undefined && typeof meta.learning_outcome !== "string") {
+    errors.push(`${relative}: 'learning_outcome' must be a string`);
+  }
+  if (meta.estimatedTime !== undefined && typeof meta.estimatedTime !== "string") {
+    errors.push(`${relative}: 'estimatedTime' must be a string`);
+  }
+  if (meta.canonical_concepts !== undefined && !Array.isArray(meta.canonical_concepts)) {
+    errors.push(`${relative}: 'canonical_concepts' must be an array`);
+  }
+  if (meta.lesson_terms !== undefined && !Array.isArray(meta.lesson_terms)) {
+    errors.push(`${relative}: 'lesson_terms' must be an array`);
+  }
+  if (meta.learning_resources !== undefined && !Array.isArray(meta.learning_resources)) {
+    errors.push(`${relative}: 'learning_resources' must be an array`);
+  }
+
   // Validate mode enums
   for (const [field, valid] of Object.entries(VALID_MODES)) {
     if (meta[field] && !valid.has(meta[field])) {
