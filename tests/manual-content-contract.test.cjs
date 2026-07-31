@@ -139,6 +139,24 @@ test("allows 'Coming **soon**' inside inline code (legitimate documentation)", (
   assert.equal(result.status, 0);
 });
 
+test("rejects 'Coming\\nsoon' split across a soft line break (renders visible text)", () => {
+  const result = runFixture(validLesson + "\nComing\nsoon");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects 'Coming<br />soon' with an HTML line break (renders visible text)", () => {
+  const result = runFixture(validLesson + "\nComing<br />soon");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects 'Coming **soon**' split across a soft line break (markup + newline)", () => {
+  const result = runFixture(validLesson + "\n## Coming **soon**\ntext");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
 // Engram-specific RED tests — full lesson-v1 contract for 01-que-es-engram.md
 const ENGRAM_PAGE = path.resolve(__dirname, "..", "src", "content", "docs", "09-engram", "01-que-es-engram.md");
 

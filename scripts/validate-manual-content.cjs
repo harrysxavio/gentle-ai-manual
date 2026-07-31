@@ -109,20 +109,23 @@ function validateCodeFences(text, relative) {
   return errors;
 }
 
-// Collapse inline Markdown/HTML delimiters so visible text like `Coming **soon**`
-// or `<strong>próximamente</strong>` still matches the placeholder check.
-// Must run AFTER code fences, inline code, and comments are stripped.
+// Collapse inline Markdown/HTML delimiters so visible text like `Coming **soon**`,
+// `<strong>próximamente</strong>`, `Coming<br />soon`, or a soft line break still
+// matches the placeholder check. Must run AFTER code fences, inline code, and
+// comments are stripped.
 function normalizeInlineMarkup(text) {
   return text
     .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1") // images -> alt text
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")   // links -> label text
-    .replace(/<[^>]+>/g, "")                   // HTML tags
+    .replace(/<br\s*\/?>/gi, " ")              // HTML line break -> space
+    .replace(/<[^>]+>/g, "")                   // other HTML tags
     .replace(/\*\*([^*]+)\*\*/g, "$1")         // bold
     .replace(/__([^_]+)__/g, "$1")             // bold (alt)
     .replace(/\*([^*\n]+)\*/g, "$1")           // italic
     .replace(/_([^_\n]+)_/g, "$1")             // italic (alt)
     .replace(/~~([^~]+)~~/g, "$1")             // strikethrough
-    .replace(/`[^`\n]+`/g, "");                // stray inline code
+    .replace(/`[^`\n]+`/g, "")                 // stray inline code
+    .replace(/\s+/g, " ");                     // rendered separators -> single space
 }
 
 function validateFile(file) {
@@ -144,7 +147,7 @@ function validateFile(file) {
       .replace(/`[^`\n]+`/g, "")                          // strip inline code
       .replace(/<!--[\s\S]*?-->/g, ""),                   // strip HTML comments
   );
-  if (/\b(próximamente|proximamente|coming soon)\b/i.test(visibleText)) {
+  if (/\b(próximamente|proximamente|coming\s+soon)\b/i.test(visibleText)) {
     errors.push(`${relative}: placeholder 'próximamente' or 'coming soon' found in published content`);
   }
 
