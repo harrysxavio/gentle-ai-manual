@@ -89,8 +89,8 @@
 | Node.js | 22.17.0 | 🟢 Verificado | |
 | OpenCode | 1.17.20 | 🟢 Verificado | npm global |
 | Codex CLI | 0.144.0 | 🟢 Verificado | npm global |
-| Gentle-AI CLI | 2.1.10 | 🟢 Verificado | `C:\Users\...\Local\gentle-ai\bin\gentle-ai.exe` |
-| Engram | 1.19.0 (1.20.0 disponible) | 🟢 Verificado | `C:\Users\...\Local\engram\bin\engram.exe` |
+| Gentle-AI CLI | 2.1.10 | 🟢 Verificado | Ruta de instalación por defecto en Windows |
+| Engram | 1.19.0 (1.20.0 disponible) | 🟢 Verificado | Ruta de instalación por defecto en Windows |
 | GGA | 2.10.1 | 🟢 Verificado contra código | No instalado localmente |
 | Sistema operativo | Windows 10/11 (win32) | 🟢 Verificado | |
 | Shell | PowerShell 5.1 | 🟢 Verificado | |

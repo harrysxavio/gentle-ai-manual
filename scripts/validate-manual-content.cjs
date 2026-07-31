@@ -109,18 +109,72 @@ function validateCodeFences(text, relative) {
   return errors;
 }
 
+// Collapse inline Markdown/HTML delimiters so visible text like `Coming **soon**`,
+// `<strong>próximamente</strong>`, `Coming<br />soon`, `Coming&nbsp;soon`,
+// `<input placeholder="Coming soon" />`, or a soft line break still matches the
+// placeholder check. Must run AFTER code fences, inline code, and comments are
+// stripped.
+function normalizeInlineMarkup(text) {
+  return text
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1") // images -> alt text
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")   // links -> label text
+    // Preserve ALL visible text carried by HTML attributes before tags are
+    // dropped (e.g. `<input title="Search" placeholder="Coming soon" />`
+    // or single-quoted `<input placeholder='Coming soon' />`).
+    .replace(/<([a-zA-Z][a-zA-Z0-9-]*)([^>]*)>/g, (match, tag, attrs) => {
+      const values = [...attrs.matchAll(/\b(placeholder|title|alt|aria-label)\s*=\s*(["'])([^"']*)\2/gi)].map((m) => m[3]);
+      return values.length ? ` ${values.join(" ")} ` : match;
+    })
+    .replace(/<br\s*\/?>/gi, " ")              // HTML line break -> space
+    .replace(/<[^>]+>/g, "")                   // other HTML tags
+    .replace(/&nbsp;/gi, " ")                  // non-breaking space -> space
+    .replace(/&#160;/gi, " ")                  // numeric non-breaking space -> space
+    .replace(/&#32;/gi, " ")                   // numeric space -> space
+    .replace(/&amp;/gi, "&")                   // ampersand
+    .replace(/&lt;/gi, "<")                    // less-than
+    .replace(/&gt;/gi, ">")                    // greater-than
+    .replace(/&quot;/gi, "\"")                 // double quote
+    .replace(/&#39;/gi, "'")                   // apostrophe
+    .replace(/\*\*([^*]+)\*\*/g, "$1")         // bold
+    .replace(/__([^_]+)__/g, "$1")             // bold (alt)
+    .replace(/\*([^*\n]+)\*/g, "$1")           // italic
+    .replace(/_([^_\n]+)_/g, "$1")             // italic (alt)
+    .replace(/~~([^~]+)~~/g, "$1")             // strikethrough
+    .replace(/`[^`\n]+`/g, "")                 // stray inline code
+    .replace(/\s+/g, " ");                     // rendered separators -> single space
+}
+
 function validateFile(file) {
   const relative = path.relative(ROOT, file).replaceAll(path.sep, "/");
   const text = fs.readFileSync(file, "utf8");
   const meta = frontmatter(text);
   const contract = meta.manual_contract;
 
-  if (!contract) return [];
-  if (!VALID_CONTRACTS.has(contract)) {
-    return [`${relative}: unknown manual_contract '${contract}'`];
+  // Global checks applied to all files regardless of contract
+  const errors = [];
+
+  // Block placeholders in published content (visible prose only)
+  // Strip frontmatter, code fences, inline code, and HTML comments first,
+  // then normalize inline markup so formatted placeholders still match.
+  const visibleText = normalizeInlineMarkup(
+    text
+      .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "")   // strip frontmatter (anchored to start)
+      .replace(/```[\s\S]*?```/g, "")                     // strip backtick code fences
+      .replace(/~~~[\s\S]*?~~~/g, "")                     // strip tilde code fences
+      .replace(/`[^`\n]+`/g, "")                          // strip inline code
+      .replace(/<!--[\s\S]*?-->/g, "")                    // strip HTML comments
+      .replace(/\{\/\*[\s\S]*?\*\/\}/g, ""),              // strip JSX comments (MDX)
+  );
+  if (/\b(próximamente|proximamente|coming\s+soon)\b/i.test(visibleText)) {
+    errors.push(`${relative}: placeholder 'próximamente' or 'coming soon' found in published content`);
   }
 
-  const errors = [];
+  if (!contract) return errors;
+  if (!VALID_CONTRACTS.has(contract)) {
+    errors.push(`${relative}: unknown manual_contract '${contract}'`);
+    return errors;
+  }
+
   const foundHeadings = headings(text);
 
   if (contract === "lesson-v1") {

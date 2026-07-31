@@ -88,6 +88,120 @@ test("rejects unlabeled command blocks", () => {
   assert.match(result.stderr, /labeled bash or powershell/);
 });
 
+test("rejects placeholder '(proximamente)' with parentheses", () => {
+  const result = runFixture(validLesson + "\n(próximamente)");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects standalone 'Proximamente' without parentheses", () => {
+  const result = runFixture(validLesson + "\n## Próximamente");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects standalone 'Coming soon' without parentheses", () => {
+  const result = runFixture(validLesson + "\nComing soon");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects unaccented 'Proximamente' (ASCII o)", () => {
+  const result = runFixture(validLesson + "\nProximamente");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("allows 'coming soon' inside a code fence (legitimate documentation)", () => {
+  const result = runFixture(validLesson + "\n```\n# Don't use 'Coming soon' on buttons\n```");
+  assert.equal(result.status, 0);
+});
+
+test("allows 'coming soon' inside inline code (legitimate documentation)", () => {
+  const result = runFixture(validLesson + "\nAvoid `Coming soon` as a label on buttons.");
+  assert.equal(result.status, 0);
+});
+
+test("rejects 'Coming **soon**' with bold markup (renders visible text)", () => {
+  const result = runFixture(validLesson + "\n## Coming **soon**");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects '<strong>Próximamente</strong>' with HTML markup (renders visible text)", () => {
+  const result = runFixture(validLesson + "\n## <strong>Próximamente</strong>");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("allows 'Coming **soon**' inside inline code (legitimate documentation)", () => {
+  const result = runFixture(validLesson + "\nAvoid `Coming **soon**` as a label on buttons.");
+  assert.equal(result.status, 0);
+});
+
+test("rejects 'Coming\\nsoon' split across a soft line break (renders visible text)", () => {
+  const result = runFixture(validLesson + "\nComing\nsoon");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects 'Coming<br />soon' with an HTML line break (renders visible text)", () => {
+  const result = runFixture(validLesson + "\nComing<br />soon");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects 'Coming **soon**' split across a soft line break (markup + newline)", () => {
+  const result = runFixture(validLesson + "\n## Coming **soon**\ntext");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects '<input placeholder=\"Coming soon\" />' (visible HTML attribute)", () => {
+  const result = runFixture(validLesson + '\n<input type="text" placeholder="Coming soon" />');
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects '<input title=\"Search\" placeholder=\"Coming soon\" />' (every visible attribute preserved)", () => {
+  const result = runFixture(validLesson + '\n<input type="text" title="Search" placeholder="Coming soon" />');
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects '<input placeholder=''Coming soon'' />' (single-quoted attribute)", () => {
+  const result = runFixture(validLesson + "\n<input type='text' placeholder='Coming soon' />");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("allows 'Coming soon' inside a JSX comment (legitimate documentation)", () => {
+  const result = runFixture(validLesson + "\n{/* Do not use Coming soon here */}");
+  assert.equal(result.status, 0);
+});
+
+test("rejects 'Coming&nbsp;soon' (HTML entity separator)", () => {
+  const result = runFixture(validLesson + "\nComing&nbsp;soon");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects 'Coming&#32;soon' (numeric entity separator)", () => {
+  const result = runFixture(validLesson + "\nComing&#32;soon");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("allows 'coming soon' inside a tilde fence (legitimate documentation)", () => {
+  const result = runFixture(validLesson + "\n~~~\n# Don't use 'Coming soon' on buttons\n~~~");
+  assert.equal(result.status, 0);
+});
+
+test("allows 'Coming&nbsp;soon' inside inline code (legitimate documentation)", () => {
+  const result = runFixture(validLesson + "\nAvoid `Coming&nbsp;soon` as a label on buttons.");
+  assert.equal(result.status, 0);
+});
+
 // Engram-specific RED tests — full lesson-v1 contract for 01-que-es-engram.md
 const ENGRAM_PAGE = path.resolve(__dirname, "..", "src", "content", "docs", "09-engram", "01-que-es-engram.md");
 
