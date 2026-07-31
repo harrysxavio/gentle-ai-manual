@@ -4,16 +4,16 @@
 
 components:
   - name: "gentle-ai"
-    version_verified: "2.2.3"
-    verified_commit: "919ea3daf2afd8287bb42d86f8d979a9741b4b9e"
-    verified_date: "2026-07-31"
+    version_verified: "2.2.0"
+    verified_commit: "719b0f6cd0178bd797c074236e7077be8d00dde7"
+    verified_date: "2026-07-27"
     release_name: "Organic RDD"
-    status: "compatible"
+    status: "experimental"
     stable_reference: "v1.46.0"
     installed: true
-    latest: "2.2.3"
+    latest: "2.2.0"
     runtime: "OpenCode 1.x (required), Codex (optional)"
-    install: "go install github.com/gentleman-programming/gentle-ai/v2/cmd/gentle-ai@v2.2.3"
+    install: "go install github.com/gentleman-programming/gentle-ai/v2/cmd/gentle-ai@v2.2.0"
     requirements:
       - "Go 1.25.10+ (for go install)"
       - "Git"

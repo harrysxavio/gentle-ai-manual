@@ -21,7 +21,7 @@
     "check-site": "node scripts/validate-built-site.cjs --base /gentle-ai-manual/ dist",
     "test": "node tests/run.cjs && node --test",
     "test:visual": "node tests/curriculum-visual.cjs && node tests/glossary-clear.cjs",
-    "validate": "npm run check && npm run lint && npm run check-mermaid && npm run check-models && npm run check-claims && npm run validate:curriculum && npm run validate:manual-content && npm run test && npm run build && npm run check-site"
+    "validate": "npm run check && npm run lint && npm run check-mermaid && npm run check-models && npm run check-claims && npm run validate:curriculum && npm run validate:manual-content && npm run validate:voseo && npm run validate:v2-contracts && npm run test && npm run build && npm run check-site"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.0",

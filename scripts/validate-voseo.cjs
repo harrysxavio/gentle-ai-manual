@@ -39,10 +39,11 @@ const VOSEO_STEMS = [
   "conocés", "conocé",
 ];
 
-// Build a pattern that matches the stem as a standalone word,
-// handling accented characters that JavaScript \b doesn't recognize.
+// Build a pattern that matches the stem as a standalone word.
+// The prefix boundary accepts whitespace, punctuation, or start-of-line.
+// The suffix boundary accepts whitespace, punctuation, or end-of-line.
 function buildPattern(stem) {
-  return new RegExp(`(?:^|\\s)${stem}(?:$|\\s|[.,;:!?])`, "i");
+  return new RegExp(`(?:^|[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])${stem}(?:$|[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])`, "i");
 }
 
 // Separate stems that are ambiguous with neutral Spanish (rare single-syllable forms)
