@@ -163,6 +163,12 @@ test("rejects '<input placeholder=\"Coming soon\" />' (visible HTML attribute)",
   assert.match(result.stderr, /placeholder/);
 });
 
+test("rejects '<input title=\"Search\" placeholder=\"Coming soon\" />' (every visible attribute preserved)", () => {
+  const result = runFixture(validLesson + '\n<input type="text" title="Search" placeholder="Coming soon" />');
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
 test("rejects 'Coming&nbsp;soon' (HTML entity separator)", () => {
   const result = runFixture(validLesson + "\nComing&nbsp;soon");
   assert.notEqual(result.status, 0);

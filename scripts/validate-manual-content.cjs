@@ -118,8 +118,12 @@ function normalizeInlineMarkup(text) {
   return text
     .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1") // images -> alt text
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")   // links -> label text
-    // Preserve visible text carried by HTML attributes before tags are dropped.
-    .replace(/<([a-zA-Z][a-zA-Z0-9-]*)\s[^>]*?\b(placeholder|title|alt|aria-label)\s*=\s*"([^"]*)"[^>]*>/gi, (match, tag, attr, value) => " " + value + " ")
+    // Preserve ALL visible text carried by HTML attributes before tags are
+    // dropped (e.g. `<input title="Search" placeholder="Coming soon" />`).
+    .replace(/<([a-zA-Z][a-zA-Z0-9-]*)([^>]*)>/g, (match, tag, attrs) => {
+      const values = [...attrs.matchAll(/\b(placeholder|title|alt|aria-label)\s*=\s*"([^"]*)"/gi)].map((m) => m[2]);
+      return values.length ? ` ${values.join(" ")} ` : match;
+    })
     .replace(/<br\s*\/?>/gi, " ")              // HTML line break -> space
     .replace(/<[^>]+>/g, "")                   // other HTML tags
     .replace(/&nbsp;/gi, " ")                  // non-breaking space -> space
