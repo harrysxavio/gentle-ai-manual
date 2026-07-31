@@ -42,6 +42,19 @@ Antes de escribir, leer:
 8. `data/resources/learning-resources.yml` — recursos educativos.
 9. `scripts/validate-manual-content.cjs` — contrato de validación actual.
 
+Además, leer los contratos editoriales hermanos del skill (obligatorios según el tipo de contenido):
+
+10. `lesson-contract.md` — contrato de frontmatter y secciones V1/V2.
+11. `audience-levels.md` — vocabulario canónico de niveles (`beginner`, `operator`, `architect`).
+12. `design-and-ux.md` — accesibilidad, diseño e interfaz.
+13. `images-and-attribution.md` — procedencia de imágenes y atribución.
+14. `quality-rubric.md` — rúbrica de calidad, hard failures y puntuación.
+15. `source-and-evidence-policy.md` — política de fuentes y evidencia.
+16. `diagrams-and-examples.md` — diagramas y ejemplos.
+17. `exercises-and-labs.md` — ejercicios y laboratorios.
+18. `reference-lesson.md` — páginas de referencia.
+19. `route-continuity.md` — continuidad de rutas de aprendizaje.
+
 ## Workflow obligatorio
 
 ### 1. Inventario

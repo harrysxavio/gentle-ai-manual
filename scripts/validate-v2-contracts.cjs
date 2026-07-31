@@ -104,6 +104,9 @@ const VALID_MODES = {
   faq_mode: new Set(["faq", "none"]),
 };
 
+// Canonical level vocabulary (see .opencode/skills/writing-gentle-manual-content/audience-levels.md)
+const VALID_CONTENT_LEVELS = new Set(["beginner", "operator", "architect"]);
+
 const REQUIRED_FIELDS = [
   "title",
   "manual_contract",
@@ -207,6 +210,20 @@ function validateFile(file) {
     const val = meta[field];
     if (Array.isArray(val) && val.length === 0) {
       errors.push(`${relative}: required list field '${field}' must not be empty`);
+    }
+  }
+
+  // Each content_level entry must be a non-empty string from the canonical vocabulary
+  if (Array.isArray(meta.content_level)) {
+    for (const entry of meta.content_level) {
+      if (typeof entry !== "string" || entry.trim() === "") {
+        errors.push(`${relative}: 'content_level' entries must be non-empty strings`);
+      } else if (!VALID_CONTENT_LEVELS.has(entry)) {
+        errors.push(
+          `${relative}: 'content_level' entry '${entry}' is not in the canonical vocabulary ` +
+          `(${[...VALID_CONTENT_LEVELS].join(", ")})`
+        );
+      }
     }
   }
 

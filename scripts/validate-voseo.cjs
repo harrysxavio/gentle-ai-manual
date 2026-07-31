@@ -77,13 +77,14 @@ const VOSEO_STEMS = [
   "terminás", "terminá",
 ];
 
-// Enclitic voseo imperative forms (stem + lo/la/los/las)
-// Build from stems that end with accented vowel (imperative forms)
+// Enclitic voseo imperative forms (stem + pronoun)
+// Build from stems that end with accented vowel (imperative forms).
+// Covers the full enclitic pronoun set: me, te, se, nos, le, les, lo, la, los, las.
 const VOSEO_ENCLITIC_STEMS = (() => {
   const enclitic = [];
   const stems = new Set(VOSEO_STEMS.filter((s) => /[áéíóú]$/.test(s)));
   for (const stem of stems) {
-    for (const suffix of ["lo", "la", "los", "las"]) {
+    for (const suffix of ["me", "te", "se", "nos", "le", "les", "lo", "la", "los", "las"]) {
       enclitic.push(stem.replace(/[áéíóú]$/, (match) => {
         const map = { á: "a", é: "e", í: "i", ó: "o", ú: "u" };
         return map[match] + suffix;

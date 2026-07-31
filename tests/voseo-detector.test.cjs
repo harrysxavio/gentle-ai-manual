@@ -25,7 +25,7 @@ const validLessonV2 = `---
 title: "API para principiantes"
 manual_contract: lesson-v2
 description: "Qué es una API"
-content_level: ["principiante"]
+content_level: ["beginner"]
 estimated_minutes: 15
 learning_outcome: "Explicar qué es una API"
 canonical_concepts: ["api"]
@@ -135,4 +135,31 @@ test("RED: accepts neutral Spanish in reader-visible frontmatter", () => {
     .replace('description: "Qué es una API"', 'description: "Puedes continuar con la guía"');
   const result = runValidator(content);
   assert.equal(result.status, 0, "Should accept neutral frontmatter");
+});
+
+// P2: enclitic voseo forms with me/te pronouns
+
+test("RED: rejects enclitic voseo 'guardate' (me)", () => {
+  const result = runValidator(validLessonV2 + "\nGuardate una copia del archivo.\n");
+  assert.notEqual(result.status, 0, "Should reject enclitic voseo 'guardate'");
+});
+
+test("RED: rejects enclitic voseo 'poneme' (me)", () => {
+  const result = runValidator(validLessonV2 + "\nPoneme un ejemplo concreto.\n");
+  assert.notEqual(result.status, 0, "Should reject enclitic voseo 'poneme'");
+});
+
+test("RED: rejects enclitic voseo 'decime' (me)", () => {
+  const result = runValidator(validLessonV2 + "\nDecime qué paso sigue.\n");
+  assert.notEqual(result.status, 0, "Should reject enclitic voseo 'decime'");
+});
+
+test("RED: rejects enclitic voseo 'seguime' (me)", () => {
+  const result = runValidator(validLessonV2 + "\nSeguime en este recorrido.\n");
+  assert.notEqual(result.status, 0, "Should reject enclitic voseo 'seguime'");
+});
+
+test("RED: rejects enclitic voseo 'mostrame' (me)", () => {
+  const result = runValidator(validLessonV2 + "\nMostrame el resultado.\n");
+  assert.notEqual(result.status, 0, "Should reject enclitic voseo 'mostrame'");
 });

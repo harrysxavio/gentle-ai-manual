@@ -25,7 +25,7 @@ const validV2 = `---
 title: "API para principiantes"
 manual_contract: lesson-v2
 description: "Qué es una API"
-content_level: ["principiante"]
+content_level: ["beginner"]
 estimated_minutes: 15
 learning_outcome: "Explicar qué es una API con un ejemplo"
 canonical_concepts: ["api"]
@@ -135,17 +135,44 @@ test("RED: rejects empty learning_resources array", () => {
 });
 
 test("RED: rejects empty content_level array", () => {
-  const bad = validV2.replace('content_level: ["principiante"]', "content_level: []");
+  const bad = validV2.replace('content_level: ["beginner"]', "content_level: []");
   const result = runValidator(bad);
   assert.notEqual(result.status, 0, "Should reject empty content_level array");
   assert.match(result.stderr, /content_level/i);
 });
 
 test("RED: rejects scalar content_level (must be a list)", () => {
-  const bad = validV2.replace('content_level: ["principiante"]', "content_level: principiante");
+  const bad = validV2.replace('content_level: ["beginner"]', "content_level: principiante");
   const result = runValidator(bad);
   assert.notEqual(result.status, 0, "Should reject scalar content_level");
   assert.match(result.stderr, /content_level/i);
+});
+
+test("RED: rejects non-string entries inside content_level", () => {
+  const bad = validV2.replace('content_level: ["beginner"]', "content_level: [false]");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject non-string content_level entries");
+  assert.match(result.stderr, /content_level/i);
+});
+
+test("RED: rejects empty-string entries inside content_level", () => {
+  const bad = validV2.replace('content_level: ["beginner"]', 'content_level: [""]');
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject empty-string content_level entries");
+  assert.match(result.stderr, /content_level/i);
+});
+
+test("RED: rejects content_level entries outside the canonical vocabulary", () => {
+  const bad = validV2.replace('content_level: ["beginner"]', 'content_level: ["superexperto"]');
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject unknown level vocabulary");
+  assert.match(result.stderr, /content_level/i);
+});
+
+test("RED: accepts canonical content_level vocabulary (beginner/operator/architect)", () => {
+  const content = validV2.replace('content_level: ["beginner"]', 'content_level: ["beginner", "operator"]');
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Should accept canonical level vocabulary");
 });
 
 // P2: snapshot must be validated against the canonical compatibility registry
