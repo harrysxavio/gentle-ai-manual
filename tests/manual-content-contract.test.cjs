@@ -169,6 +169,17 @@ test("rejects '<input title=\"Search\" placeholder=\"Coming soon\" />' (every vi
   assert.match(result.stderr, /placeholder/);
 });
 
+test("rejects '<input placeholder=''Coming soon'' />' (single-quoted attribute)", () => {
+  const result = runFixture(validLesson + "\n<input type='text' placeholder='Coming soon' />");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("allows 'Coming soon' inside a JSX comment (legitimate documentation)", () => {
+  const result = runFixture(validLesson + "\n{/* Do not use Coming soon here */}");
+  assert.equal(result.status, 0);
+});
+
 test("rejects 'Coming&nbsp;soon' (HTML entity separator)", () => {
   const result = runFixture(validLesson + "\nComing&nbsp;soon");
   assert.notEqual(result.status, 0);

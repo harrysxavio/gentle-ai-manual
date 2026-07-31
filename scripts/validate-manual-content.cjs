@@ -119,9 +119,10 @@ function normalizeInlineMarkup(text) {
     .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1") // images -> alt text
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")   // links -> label text
     // Preserve ALL visible text carried by HTML attributes before tags are
-    // dropped (e.g. `<input title="Search" placeholder="Coming soon" />`).
+    // dropped (e.g. `<input title="Search" placeholder="Coming soon" />`
+    // or single-quoted `<input placeholder='Coming soon' />`).
     .replace(/<([a-zA-Z][a-zA-Z0-9-]*)([^>]*)>/g, (match, tag, attrs) => {
-      const values = [...attrs.matchAll(/\b(placeholder|title|alt|aria-label)\s*=\s*"([^"]*)"/gi)].map((m) => m[2]);
+      const values = [...attrs.matchAll(/\b(placeholder|title|alt|aria-label)\s*=\s*(["'])([^"']*)\2/gi)].map((m) => m[3]);
       return values.length ? ` ${values.join(" ")} ` : match;
     })
     .replace(/<br\s*\/?>/gi, " ")              // HTML line break -> space
@@ -161,7 +162,8 @@ function validateFile(file) {
       .replace(/```[\s\S]*?```/g, "")                     // strip backtick code fences
       .replace(/~~~[\s\S]*?~~~/g, "")                     // strip tilde code fences
       .replace(/`[^`\n]+`/g, "")                          // strip inline code
-      .replace(/<!--[\s\S]*?-->/g, ""),                   // strip HTML comments
+      .replace(/<!--[\s\S]*?-->/g, "")                    // strip HTML comments
+      .replace(/\{\/\*[\s\S]*?\*\/\}/g, ""),              // strip JSX comments (MDX)
   );
   if (/\b(próximamente|proximamente|coming\s+soon)\b/i.test(visibleText)) {
     errors.push(`${relative}: placeholder 'próximamente' or 'coming soon' found in published content`);
