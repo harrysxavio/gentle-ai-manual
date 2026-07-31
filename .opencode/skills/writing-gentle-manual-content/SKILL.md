@@ -1,73 +1,193 @@
 ---
 name: writing-gentle-manual-content
-description: Use when creating, rewriting, reviewing, or expanding lessons, glossary entries, diagrams, examples, exercises, tool comparisons, screenshots, or technical explanations in the Gentle-AI manual.
+description: Use when creating, rewriting, reviewing, or expanding lessons, glossary entries, diagrams, examples, exercises, tool comparisons, screenshots, or technical explanations in the Gentle-AI manual. Covers V1 and V2 content.
 license: MIT
 compatibility: opencode
 metadata:
   project: gentle-ai-manual
   language: es
   content-system: astro-starlight
+  version: 2.0.0
 ---
+# Writing Gentle Manual Content V2
 
-# Writing Gentle Manual Content
+## Propósito
 
-## Core principle
+Escribe una explicación amable y continua que una persona principiante pueda comprender, una persona operadora pueda aplicar y una persona arquitecta pueda cuestionar.
 
-Write one progressive explanation that a beginner can enter, an operator can apply, and an architect can interrogate. Every claim must be understandable, useful, and verifiable.
+## Idioma y voz
 
-## Required workflow
+- Castellano neutral: puedes, elige, necesitas, comienza, haz, comprueba.
+- Evitar voseo: podés, elegí, necesitás, comenzá, hacé, comprobá.
+- Tono de profesor paciente y cercano, sin relleno corporativo.
+- No exagerar capacidades ni usar superlativos.
+- Conservar precisión técnica sin mostrarla como sección repetitiva.
+- Párrafos fluidos de 3 a 6 oraciones; evitar frases telegráficas encadenadas.
 
-1. Read the canonical curriculum entry and neighboring lessons.
-2. Build a concept inventory: existing page, canonical page, source, audience and test.
-3. Read:
-   - `lesson-contract.md`
-   - `audience-levels.md`
-   - `source-and-evidence-policy.md`
-   - `design-and-ux.md`
-   - `route-continuity.md`
-   - `diagrams-and-examples.md`
-   - `exercises-and-labs.md`
-   - `images-and-attribution.md`
-   - `quality-rubric.md`
-4. Write a failing content or built-site test before the lesson.
-5. Draft the lesson using progressive depth.
-6. Update curriculum, glossary and route membership from the single source.
-7. Run the editorial validator and full site validation.
-8. Score the page. A score below 90/100 blocks the PR.
-9. Review as beginner, operator and architect.
-10. Use the same PR repair loop until CI and review are green.
+## Unidad de trabajo
 
-## Page contract
+Máximo una reescritura completa por ejecución. Dos páginas solo si son cortas, vecinas y comparten el mismo ejemplo.
 
-Every lesson marked `manual_contract: lesson-v1` includes:
+## Archivos obligatorios
 
-- observable learning outcome;
-- simple answer;
-- mental model with limits;
-- useful diagram or explicit reason why none is needed;
-- one continuous example;
-- practical walkthrough;
-- internal technical explanation;
-- use/avoid/trade-offs;
-- common failures and diagnosis;
-- verification or exercise;
-- concise summary;
-- sources and scope.
+Antes de escribir, leer:
 
-## Presentation contract
+1. `src/data/curriculum.mjs` — entrada canónica y lecciones vecinas.
+2. `.opencode/skills/writing-gentle-manual-content/SKILL.md` — este skill.
+3. `data/evidence/verified-claims.yml` — claims volátiles.
+4. `data/evidence/gentle-command-catalog.yml` — comandos actuales.
+5. `data/terminology/glossary.yml` — glosario canónico.
+6. `data/compatibility/versions.yml` — versiones verificadas.
+7. `data/resources/personas.yml` — personas del banco.
+8. `data/resources/learning-resources.yml` — recursos educativos.
+9. `scripts/validate-manual-content.cjs` — contrato de validación actual.
 
-Use Starlight components before custom UI. Preserve readable width, keyboard navigation, light/dark themes and a 390px mobile viewport. Never use color as the only signal.
+## Workflow obligatorio
 
-## Evidence contract
+### 1. Inventario
 
-Video and books may organize or teach concepts. Current commands, versions, paths, capabilities and product behavior require first-party evidence.
+Reportar: URL, archivo, objetivo, audiencia, conceptos canónicos, términos nuevos, persona del ejemplo, claims volátiles, recursos candidatos, duplicidades, observaciones, tests existentes.
+
+### 2. Matriz de fuentes
+
+Separar fuente conceptual, evidencia primaria, recurso de aprendizaje, claim volátil y test.
+
+### 3. RED
+
+Escribir primero una prueba que falle para la brecha demostrada.
+
+### 4. Esqueleto pedagógico
+
+Proponer: por qué importa → explicación simple → analogía (con límite explícito) → ejemplo real continuo → uso → mecanismo → decisiones → errores frecuentes (FAQ) → resumen → términos → recursos.
+
+### 5. Borrador
+
+- Una idea central por párrafo.
+- Conectar causa, ejemplo y consecuencia.
+- Definir antes de usar.
+- Máximo cinco términos nuevos antes de recapitular.
+- Aclarar qué hace el usuario, el agente, el modelo y la herramienta.
+- No asumir que el lector sabe leer código.
+- No convertir listas en sustituto de explicación.
+
+### 6. Ejemplo continuo
+
+Elegir una persona del banco (`data/resources/personas.yml`). Mantener el mismo caso desde la explicación simple hasta los trade-offs. No presentar cinco ejemplos desconectados.
+
+### 7. Términos
+
+- Declarar `lesson_terms` en el frontmatter.
+- Marcar con `*` los usos contextuales definidos al final.
+- No duplicar definiciones completas.
+- Enlazar al glosario canónico.
+
+### 8. Práctica
+
+Solo cuando demuestra una capacidad real. Si no corresponde, declarar `practice_mode: none` en el frontmatter. No crear preguntas de control ni quiz.
+
+### 9. Errores frecuentes (FAQ)
+
+Usar el patrón:
+
+```text
+Qué observas → Qué significa → Cómo comprobar → Cómo resolver → Cómo confirmar
+```
+
+Si la lección no tiene errores frecuentes aplicables, declarar `faq_mode: none`.
+
+### 10. Recursos
+
+Mostrar recursos gratuitos desde `data/resources/learning-resources.yml` por ID. No presentar videos como prueba de comportamiento actual. No usar YouTube como fuente verificable de comandos o versiones.
+
+### 11. Revisión triple
+
+Simular principiante, operador y arquitecto. Verificar: comprensión, aplicación, diagnóstico, límites y alternativas.
+
+### 12. GREEN
+
+Ejecutar `npm run validate`, `npm run test:visual`, `npm run build`, `npm run check-site`. Corregir en la misma rama y PR.
+
+### 13. Puntaje
+
+>= 90/100, cero hard failures.
+
+### 14. Review loop
+
+Misma rama, misma PR, prueba de regresión, nuevo HEAD, nuevo CI, nueva revisión de Codex.
+
+## Contratos V1 y V2
+
+### Páginas V1 (`manual_contract: lesson-v1`)
+
+Campos requeridos en frontmatter:
+- `manual_contract`, `title`, `description`, `content_level`
+- `estimated_minutes`, `learning_outcome`, `canonical_concepts`
+- `source_status`, `level`, `estimatedTime`
+
+Secciones requeridas en el cuerpo: 13 headings (ver `scripts/validate-manual-content.cjs`).
+
+Estas páginas se mantienen. No se migran en PR 7. La migración ocurre en fases posteriores módulo por módulo.
+
+### Páginas V2 (`manual_contract: lesson-v2`)
+
+Campos requeridos en frontmatter:
+- `manual_contract: lesson-v2`
+- `title`, `description`, `content_level`
+- `estimated_minutes`, `learning_outcome`
+- `canonical_concepts`, `lesson_terms`
+- `persona` (ID del banco de personas o `none`)
+- `learning_resources` (lista de IDs)
+- `snapshot` (versión o `none`)
+- `practice_mode` (`guided` o `none`)
+- `diagram_mode` (`mermaid` o `none`)
+- `faq_mode` (`faq` o `none`)
+- `source_status`, `level`, `estimatedTime`
+
+Secciones editoriales recomendadas (no obligatorias uniformemente):
+1. Propósito
+2. Respuesta simple
+3. Analogía (con límite explícito, opcional)
+4. Ejemplo continuo
+5. Explicación progresiva
+6. Aplicación práctica
+7. Funcionamiento técnico (opcional)
+8. Decisiones, alternativas y límites
+9. FAQ de errores (solo si `faq_mode: faq`)
+10. Resumen
+11. Términos de esta lección
+12. Para seguir aprendiendo
+
+El validador comprueba frontmatter, no uniformidad de headings.
+
+## Reglas para Gentle-AI
+
+- Gentle-AI configura; el host ejecuta.
+- El usuario normalmente abre OpenCode, Codex, Claude u otro agente.
+- No enseñar cada paso interno como comando manual si el orquestador lo realiza.
+- Toda versión, comando, ruta o capacidad requiere fuente oficial y snapshot (`data/compatibility/versions.yml`).
+- Revalidar la versión al editar.
+- Diferenciar release, `@latest` y `@main`.
+
+## Reglas de PowerShell
+
+- PowerShell es la pestaña inicial para comandos.
+- Bash/macOS/Linux aparecen cuando existe una diferencia real.
+- Los comandos se etiquetan por shell.
+- Bash no se presupone instalado en Windows.
 
 ## Stop conditions
 
-Stop instead of guessing when:
+Detenerse cuando:
 
-- a command or configuration cannot be verified;
-- the canonical page is ambiguous;
-- an external image lacks clear provenance;
-- a change requires moving an existing URL;
-- a test fails or a review comment remains current.
+- Falta evidencia primaria.
+- La versión no está confirmada en `data/compatibility/versions.yml`.
+- La URL canónica es ambigua.
+- Una imagen no tiene permiso.
+- El cambio exige mover una URL existente.
+- Un test falla.
+- Un hilo de Codex sigue vigente.
+- El contenido supera el alcance de la PR.
+
+## Salida final
+
+Reportar: archivo, observaciones cubiertas, tests RED, tests GREEN, claims, recursos, términos, score, hard failures, capturas, limitaciones.

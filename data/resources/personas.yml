@@ -1,0 +1,81 @@
+# Personas recurrentes del manual
+# Cada lección V2 declara la persona del ejemplo continuo mediante el campo "persona".
+# Las personas son herramientas pedagógicas; no representan personas reales.
+
+personas:
+  - id: administracion
+    nombre: Camila
+    perfil: administrativa
+    contexto: gestiona tareas, documentos, cronogramas y comunicaciones internas en una organización mediana.
+    problemas_tipicos:
+      - organizar grandes volúmenes de información dispersa
+      - redactar documentos a partir de notas desordenadas
+      - preparar informes combinando datos de varias fuentes
+    restricciones:
+      - no programa
+      - usa Windows y Microsoft 365
+      - tiempo limitado para aprender herramientas nuevas
+    herramientas: [Windows, Excel, Word, Outlook, navegador web]
+    nivel_tecnico: principiante
+
+  - id: analisis
+    nombre: Diego
+    perfil: analista
+    contexto: revisa tablas, métricas, reportes y decisiones en una empresa de servicios.
+    problemas_tipicos:
+      - interpretar datos sin documentación clara
+      - automatizar tareas repetitivas de análisis
+      - validar información antes de presentarla
+    restricciones:
+      - sabe usar Excel avanzado pero no programa
+      - macOS
+      - necesita resultados auditables
+    herramientas: [Excel, Google Sheets, Power BI, SQL básico, macOS]
+    nivel_tecnico: intermedio
+
+  - id: operaciones
+    nombre: Laura
+    perfil: operadora
+    contexto: diagnostica incidencias y coordina mejoras de procesos en una empresa de logística.
+    problemas_tipicos:
+      - diagnosticar fallos sin acceso al código
+      - documentar procedimientos para el equipo
+      - evaluar si un cambio de herramienta resuelve un problema recurrente
+    restricciones:
+      - usa Windows y servicios en la nube
+      - acceso limitado a configuración del sistema
+      - necesita instrucciones paso a paso
+    herramientas: [Windows, PowerShell básico, navegador web, herramientas de monitoreo]
+    nivel_tecnico: intermedio
+
+  - id: marketing
+    nombre: Valentina
+    perfil: marketing
+    contexto: prepara campañas, contenido y seguimiento de audiencia para una marca digital.
+    problemas_tipicos:
+      - generar contenido atractivo sin bloqueos creativos
+      - segmentar audiencias con datos limitados
+      - medir el impacto de campañas en múltiples canales
+    restricciones:
+      - usa macOS y herramientas de diseño
+      - no programa pero entiende lógica condicional básica
+      - plazos ajustados
+    herramientas: [macOS, Canva, Google Analytics, redes sociales, CRM]
+    nivel_tecnico: principiante
+
+  - id: producto
+    nombre: Martín
+    perfil: producto/tecnología
+    contexto: convierte necesidades de negocio en funcionalidades de una aplicación web.
+    problemas_tipicos:
+      - priorizar funcionalidades con recursos limitados
+      - comunicar requerimientos técnicos al equipo de desarrollo
+      - validar que una solución resuelve el problema real
+    restricciones:
+      - programa ocasionalmente (JavaScript, Python)
+      - usa Windows con WSL
+      - necesita justificar decisiones ante stakeholders
+    herramientas: [Windows, WSL, VS Code, Git, Figma, Jira]
+    nivel_tecnico: avanzado
+
+schema_version: 1.0.0

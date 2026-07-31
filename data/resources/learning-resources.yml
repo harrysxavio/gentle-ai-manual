@@ -1,0 +1,158 @@
+# Recursos educativos del manual
+# Registro central de recursos gratuitos recomendados a lectores.
+# Cada lección V2 referencia recursos por ID en el campo "learning_resources".
+# Estos recursos son para APRENDIZAJE, no son evidencia técnica de comportamiento actual.
+# La evidencia técnica vive en data/evidence/verified-claims.yml
+
+resources:
+  - id: mdn-web-docs
+    title: MDN Web Docs
+    url: https://developer.mozilla.org/es/
+    type: documentacion
+    language: es
+    access: gratuito
+    provider: Mozilla
+    topics: [html, css, javascript, web, api]
+    level: [principiante, intermedio, avanzado]
+    purpose: referencia técnica autorizada de tecnologías web
+    verified_at: "2026-07-31"
+    status: activo
+    notes: Traducción parcial al español; la versión en inglés está más completa.
+    scope: learning
+
+  - id: the-odin-project
+    title: The Odin Project
+    url: https://www.theodinproject.com/
+    type: curso
+    language: en
+    access: gratuito
+    provider: The Odin Project (comunidad open-source)
+    topics: [html, css, javascript, nodejs, git, web]
+    level: [principiante, intermedio]
+    purpose: currículo completo de desarrollo web full-stack con proyectos
+    verified_at: "2026-07-31"
+    status: activo
+    notes: Curso en inglés. Basado en proyectos. Requiere cuenta gratuita.
+    scope: learning
+
+  - id: freecodecamp
+    title: freeCodeCamp
+    url: https://www.freecodecamp.org/espanol/
+    type: curso
+    language: es
+    access: gratuito
+    provider: freeCodeCamp
+    topics: [html, css, javascript, python, bases-de-datos, algoritmos]
+    level: [principiante, intermedio]
+    purpose: certificaciones gratuitas con ejercicios interactivos
+    verified_at: "2026-07-31"
+    status: activo
+    notes: Versión en español disponible. Progreso guardado con cuenta gratuita.
+    scope: learning
+
+  - id: git-scm-docs
+    title: Git — Documentation
+    url: https://git-scm.com/doc
+    type: documentacion
+    language: en
+    access: gratuito
+    provider: Git SCM
+    topics: [git, control-de-versiones]
+    level: [principiante, intermedio, avanzado]
+    purpose: documentación oficial y libro Pro Git gratuito
+    verified_at: "2026-07-31"
+    status: activo
+    notes: El libro Pro Git está disponible en español.
+    scope: learning
+
+  - id: microsoft-learn-powershell
+    title: Microsoft Learn — PowerShell
+    url: https://learn.microsoft.com/es-es/training/powershell/
+    type: curso
+    language: es
+    access: gratuito
+    provider: Microsoft
+    topics: [powershell, windows, automatizacion]
+    level: [principiante, intermedio]
+    purpose: rutas de aprendizaje oficiales de PowerShell
+    verified_at: "2026-07-31"
+    status: activo
+    notes: Contenido oficial de Microsoft. Requiere cuenta gratuita.
+    scope: learning
+
+  - id: nodejs-docs
+    title: Node.js Documentation
+    url: https://nodejs.org/docs/latest/api/
+    type: documentacion
+    language: en
+    access: gratuito
+    provider: OpenJS Foundation
+    topics: [nodejs, javascript, api]
+    level: [intermedio, avanzado]
+    purpose: documentación oficial de la API de Node.js
+    verified_at: "2026-07-31"
+    status: activo
+    notes: Documentación en inglés.
+    scope: learning
+
+  - id: astro-docs
+    title: Astro Documentation
+    url: https://docs.astro.build/
+    type: documentacion
+    language: en
+    access: gratuito
+    provider: Astro
+    topics: [astro, web, static-site, mdx]
+    level: [intermedio]
+    purpose: documentación oficial del framework Astro
+    verified_at: "2026-07-31"
+    status: activo
+    notes: Documentación en inglés. Guía de inicio rápido disponible.
+    scope: learning
+
+  - id: starlight-docs
+    title: Starlight Documentation
+    url: https://starlight.astro.build/
+    type: documentacion
+    language: en
+    access: gratuito
+    provider: Astro
+    topics: [starlight, documentacion, astro]
+    level: [intermedio]
+    purpose: documentación oficial del theme de documentación Starlight
+    verified_at: "2026-07-31"
+    status: activo
+    notes: Documentación en inglés.
+    scope: learning
+
+  - id: khan-academy-computing
+    title: Khan Academy — Computación
+    url: https://es.khanacademy.org/computing
+    type: curso
+    language: es
+    access: gratuito
+    provider: Khan Academy
+    topics: [programacion, algoritmos, computacion]
+    level: [principiante]
+    purpose: introducción visual y amable a la programación
+    verified_at: "2026-07-31"
+    status: activo
+    notes: Excelente para principiantes absolutos. Ejercicios interactivos.
+    scope: learning
+
+  - id: github-docs
+    title: GitHub Documentation
+    url: https://docs.github.com/es
+    type: documentacion
+    language: es
+    access: gratuito
+    provider: GitHub
+    topics: [github, git, colaboracion, ci-cd]
+    level: [principiante, intermedio, avanzado]
+    purpose: documentación oficial de GitHub
+    verified_at: "2026-07-31"
+    status: activo
+    notes: Amplia cobertura en español.
+    scope: learning
+
+schema_version: 1.0.0

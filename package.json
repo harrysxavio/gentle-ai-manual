@@ -16,6 +16,8 @@
     "check-claims": "node scripts/validate-claims.cjs",
     "validate:curriculum": "node tests/curriculum-contract.test.cjs",
     "validate:manual-content": "node scripts/validate-manual-content.cjs --all",
+    "validate:voseo": "node scripts/validate-voseo.cjs",
+    "validate:v2-contracts": "node scripts/validate-v2-contracts.cjs",
     "check-site": "node scripts/validate-built-site.cjs --base /gentle-ai-manual/ dist",
     "test": "node tests/run.cjs && node --test",
     "test:visual": "node tests/curriculum-visual.cjs && node tests/glossary-clear.cjs",

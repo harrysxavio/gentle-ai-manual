@@ -1,0 +1,176 @@
+#!/usr/bin/env node
+"use strict";
+
+const fs = require("node:fs");
+const path = require("node:path");
+const yaml = require("js-yaml");
+
+const ROOT = process.cwd();
+
+// Load canonical data sources once
+const PERSONAS_PATH = path.join(ROOT, "data", "resources", "personas.yml");
+const RESOURCES_PATH = path.join(ROOT, "data", "resources", "learning-resources.yml");
+const GLOSSARY_PATH = path.join(ROOT, "data", "terminology", "glossary.yml");
+
+let personaIds = null;
+let resourceIds = null;
+let glossaryTerms = null;
+
+function getPersonaIds() {
+  if (personaIds) return personaIds;
+  if (!fs.existsSync(PERSONAS_PATH)) {
+    console.error("Warning: personas file not found at", PERSONAS_PATH);
+    personaIds = new Set();
+    return personaIds;
+  }
+  const raw = yaml.load(fs.readFileSync(PERSONAS_PATH, "utf8"));
+  personaIds = new Set((raw.personas || []).map((p) => p.id));
+  return personaIds;
+}
+
+function getResourceIds() {
+  if (resourceIds) return resourceIds;
+  if (!fs.existsSync(RESOURCES_PATH)) {
+    console.error("Warning: resources file not found at", RESOURCES_PATH);
+    resourceIds = new Set();
+    return resourceIds;
+  }
+  const raw = yaml.load(fs.readFileSync(RESOURCES_PATH, "utf8"));
+  resourceIds = new Set((raw.resources || []).map((r) => r.id));
+  return resourceIds;
+}
+
+function getGlossaryTerms() {
+  if (glossaryTerms) return glossaryTerms;
+  if (!fs.existsSync(GLOSSARY_PATH)) {
+    console.error("Warning: glossary file not found at", GLOSSARY_PATH);
+    glossaryTerms = new Set();
+    return glossaryTerms;
+  }
+  const raw = yaml.load(fs.readFileSync(GLOSSARY_PATH, "utf8"));
+  glossaryTerms = new Set((raw.terms || []).map((t) => t.term));
+  return glossaryTerms;
+}
+
+function parseFrontmatter(text) {
+  if (!text.startsWith("---\n") && !text.startsWith("---\r\n")) return null;
+  const end = text.indexOf("\n---", 4);
+  if (end < 0) return null;
+  const block = text.slice(4, end);
+  try {
+    return yaml.load(block) || {};
+  } catch (_e) {
+    return null;
+  }
+}
+
+const VALID_MODES = {
+  practice_mode: new Set(["guided", "none"]),
+  diagram_mode: new Set(["mermaid", "none"]),
+  faq_mode: new Set(["faq", "none"]),
+};
+
+const REQUIRED_FIELDS = [
+  "title",
+  "manual_contract",
+  "description",
+  "estimated_minutes",
+  "learning_outcome",
+  "canonical_concepts",
+  "lesson_terms",
+  "persona",
+  "learning_resources",
+  "faq_mode",
+  "practice_mode",
+  "diagram_mode",
+];
+
+function validateFile(file) {
+  const relative = path.relative(ROOT, file).replaceAll(path.sep, "/");
+  const text = fs.readFileSync(file, "utf8");
+  const meta = parseFrontmatter(text);
+
+  if (!meta) return [];
+  if (meta.manual_contract !== "lesson-v2") return [];
+
+  const errors = [];
+  const personas = getPersonaIds();
+  const resources = getResourceIds();
+  const glossary = getGlossaryTerms();
+
+  // Required fields
+  for (const field of REQUIRED_FIELDS) {
+    if (meta[field] === undefined || meta[field] === null) {
+      errors.push(`${relative}: missing required field '${field}'`);
+    }
+  }
+
+  // source_status is also required
+  if (!meta.source_status) {
+    errors.push(`${relative}: missing required field 'source_status'`);
+  }
+
+  // Validate persona
+  if (meta.persona && meta.persona !== "none" && !personas.has(meta.persona)) {
+    errors.push(`${relative}: persona '${meta.persona}' not found in data/resources/personas.yml`);
+  }
+
+  // Validate learning resources
+  let resourcesList = meta.learning_resources;
+  if (resourcesList && Array.isArray(resourcesList)) {
+    for (const rid of resourcesList) {
+      if (!resources.has(rid)) {
+        errors.push(`${relative}: learning resource '${rid}' not found in data/resources/learning-resources.yml`);
+      }
+    }
+  }
+
+  // Validate lesson_terms against glossary
+  if (meta.lesson_terms && Array.isArray(meta.lesson_terms)) {
+    for (const term of meta.lesson_terms) {
+      if (!glossary.has(term)) {
+        errors.push(`${relative}: lesson term '${term}' not found in data/terminology/glossary.yml`);
+      }
+    }
+  }
+
+  // Validate mode enums
+  for (const [field, valid] of Object.entries(VALID_MODES)) {
+    if (meta[field] && !valid.has(meta[field])) {
+      errors.push(`${relative}: '${field}' must be one of ${[...valid].join(", ")}, got '${meta[field]}'`);
+    }
+  }
+
+  // Validate canonical_concepts is an array
+  if (meta.canonical_concepts && !Array.isArray(meta.canonical_concepts)) {
+    errors.push(`${relative}: 'canonical_concepts' must be an array`);
+  }
+
+  // Validate lesson_terms is an array
+  if (meta.lesson_terms && !Array.isArray(meta.lesson_terms)) {
+    errors.push(`${relative}: 'lesson_terms' must be an array`);
+  }
+
+  // Validate learning_resources is an array
+  if (meta.learning_resources && !Array.isArray(meta.learning_resources)) {
+    errors.push(`${relative}: 'learning_resources' must be an array`);
+  }
+
+  return errors;
+}
+
+function main() {
+  const files = process.argv.slice(2).map((file) => path.resolve(ROOT, file));
+  const mdFiles = files.filter((file) => /\.md$/i.test(file) && fs.existsSync(file));
+  const errors = mdFiles.flatMap(validateFile);
+
+  if (errors.length) {
+    console.error("V2 contract validation failed:\n");
+    for (const error of errors) console.error(`- ${error}`);
+    process.exit(1);
+  }
+
+  console.log(`V2 contract validation passed for ${mdFiles.length} file(s).`);
+}
+
+main();
