@@ -58,6 +58,23 @@ const VOSEO_STEMS = [
   "encontrás", "encontrá",
   "recordás", "recordá",
   "pensás", "pensá",
+  // Additional common tutorial imperatives
+  "seleccionás", "seleccioná",
+  "agregás", "agregá",
+  "activás", "activá",
+  "desactivás", "desactivá",
+  "arrastrás", "arrastrá",
+  "completás", "completá",
+  "revisás", "revisá",
+  "aceptás", "aceptá",
+  "cancelás", "cancelá",
+  "enviás", "enviá",
+  "recibís", "recibí",
+  "mostrás", "mostrá",
+  "ocultás", "ocultá",
+  "volvés", "volvé",
+  "empezás", "empezá",
+  "terminás", "terminá",
 ];
 
 // Build a pattern that matches the stem as a standalone word.
@@ -92,23 +109,19 @@ function validateFile(file) {
   // Only validate lesson-v2 pages
   if (meta.manual_contract !== "lesson-v2") return [];
 
-  // Strip frontmatter and code fences before checking
-  const visibleText = text
-    .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "")
-    .replace(/```[\s\S]*?```/g, "")
-    .replace(/~~~[\s\S]*?~~~/g, "")
-    .replace(/`[^`\n]+`/g, "")
-    .replace(/<!--[\s\S]*?-->/g, "")
-    .replace(/\{\/\*[\s\S]*?\*\/\}/g, "");
-
-  // Calculate frontmatter offset for accurate line numbers
-  let fmOffset = 0;
-  const fmEnd = text.indexOf("\n---", 4);
-  if (text.startsWith("---\n") || text.startsWith("---\r\n")) {
-    if (fmEnd >= 0) {
-      fmOffset = text.slice(0, fmEnd + 4).split(/\r?\n/).length;
-    }
+  // Strip frontmatter and code fences while preserving line count for accurate diagnostics.
+  // Replace each removed multiline block with the same number of newlines.
+  function preserveLines(match) {
+    const count = (match.match(/\r?\n/g) || []).length;
+    return "\n".repeat(count);
   }
+  const visibleText = text
+    .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, preserveLines)
+    .replace(/```[\s\S]*?```/g, preserveLines)
+    .replace(/~~~[\s\S]*?~~~/g, preserveLines)
+    .replace(/`[^`\n]+`/g, "")
+    .replace(/<!--[\s\S]*?-->/g, preserveLines)
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, preserveLines);
 
   const errors = [];
   const lines = visibleText.split(/\r?\n/);
@@ -125,7 +138,7 @@ function validateFile(file) {
       const pattern = buildPattern(stem);
       if (pattern.test(line)) {
         const match = line.match(pattern);
-        errors.push(`${relative}:${fmOffset + i + 1}: voseo '${match[0].trim()}' — use neutral Spanish instead`);
+        errors.push(`${relative}:${i + 1}: voseo '${match[0].trim()}' — use neutral Spanish instead`);
         break; // one error per line
       }
     }
