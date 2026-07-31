@@ -110,15 +110,26 @@ function validateCodeFences(text, relative) {
 }
 
 // Collapse inline Markdown/HTML delimiters so visible text like `Coming **soon**`,
-// `<strong>próximamente</strong>`, `Coming<br />soon`, or a soft line break still
-// matches the placeholder check. Must run AFTER code fences, inline code, and
-// comments are stripped.
+// `<strong>próximamente</strong>`, `Coming<br />soon`, `Coming&nbsp;soon`,
+// `<input placeholder="Coming soon" />`, or a soft line break still matches the
+// placeholder check. Must run AFTER code fences, inline code, and comments are
+// stripped.
 function normalizeInlineMarkup(text) {
   return text
     .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1") // images -> alt text
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")   // links -> label text
+    // Preserve visible text carried by HTML attributes before tags are dropped.
+    .replace(/<([a-zA-Z][a-zA-Z0-9-]*)\s[^>]*?\b(placeholder|title|alt|aria-label)\s*=\s*"([^"]*)"[^>]*>/gi, (match, tag, attr, value) => " " + value + " ")
     .replace(/<br\s*\/?>/gi, " ")              // HTML line break -> space
     .replace(/<[^>]+>/g, "")                   // other HTML tags
+    .replace(/&nbsp;/gi, " ")                  // non-breaking space -> space
+    .replace(/&#160;/gi, " ")                  // numeric non-breaking space -> space
+    .replace(/&#32;/gi, " ")                   // numeric space -> space
+    .replace(/&amp;/gi, "&")                   // ampersand
+    .replace(/&lt;/gi, "<")                    // less-than
+    .replace(/&gt;/gi, ">")                    // greater-than
+    .replace(/&quot;/gi, "\"")                 // double quote
+    .replace(/&#39;/gi, "'")                   // apostrophe
     .replace(/\*\*([^*]+)\*\*/g, "$1")         // bold
     .replace(/__([^_]+)__/g, "$1")             // bold (alt)
     .replace(/\*([^*\n]+)\*/g, "$1")           // italic
@@ -143,7 +154,8 @@ function validateFile(file) {
   const visibleText = normalizeInlineMarkup(
     text
       .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "")   // strip frontmatter (anchored to start)
-      .replace(/```[\s\S]*?```/g, "")                     // strip code fences
+      .replace(/```[\s\S]*?```/g, "")                     // strip backtick code fences
+      .replace(/~~~[\s\S]*?~~~/g, "")                     // strip tilde code fences
       .replace(/`[^`\n]+`/g, "")                          // strip inline code
       .replace(/<!--[\s\S]*?-->/g, ""),                   // strip HTML comments
   );

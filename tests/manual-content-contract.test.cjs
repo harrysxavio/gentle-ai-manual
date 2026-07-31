@@ -157,6 +157,34 @@ test("rejects 'Coming **soon**' split across a soft line break (markup + newline
   assert.match(result.stderr, /placeholder/);
 });
 
+test("rejects '<input placeholder=\"Coming soon\" />' (visible HTML attribute)", () => {
+  const result = runFixture(validLesson + '\n<input type="text" placeholder="Coming soon" />');
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects 'Coming&nbsp;soon' (HTML entity separator)", () => {
+  const result = runFixture(validLesson + "\nComing&nbsp;soon");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects 'Coming&#32;soon' (numeric entity separator)", () => {
+  const result = runFixture(validLesson + "\nComing&#32;soon");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("allows 'coming soon' inside a tilde fence (legitimate documentation)", () => {
+  const result = runFixture(validLesson + "\n~~~\n# Don't use 'Coming soon' on buttons\n~~~");
+  assert.equal(result.status, 0);
+});
+
+test("allows 'Coming&nbsp;soon' inside inline code (legitimate documentation)", () => {
+  const result = runFixture(validLesson + "\nAvoid `Coming&nbsp;soon` as a label on buttons.");
+  assert.equal(result.status, 0);
+});
+
 // Engram-specific RED tests — full lesson-v1 contract for 01-que-es-engram.md
 const ENGRAM_PAGE = path.resolve(__dirname, "..", "src", "content", "docs", "09-engram", "01-que-es-engram.md");
 
