@@ -11,10 +11,20 @@ const ROOT = process.cwd();
 const PERSONAS_PATH = path.join(ROOT, "data", "resources", "personas.yml");
 const RESOURCES_PATH = path.join(ROOT, "data", "resources", "learning-resources.yml");
 const GLOSSARY_PATH = path.join(ROOT, "data", "terminology", "glossary.yml");
+const VERSIONS_PATH = path.join(ROOT, "data", "compatibility", "versions.yml");
 
 let personaIds = null;
 let resourceIds = null;
 let glossaryTerms = null;
+let gentleAiVersions = null;
+
+// Normalize a snapshot value to the canonical version format (X.Y.Z without
+// leading "v"). "v2.2.3" and "2.2.3" are the same canonical version.
+function normalizeVersion(value) {
+  if (typeof value !== "string") return null;
+  const normalized = value.replace(/^v/i, "").trim();
+  return /^\d+\.\d+\.\d+$/.test(normalized) ? normalized : null;
+}
 
 function getPersonaIds() {
   if (personaIds) return personaIds;
@@ -50,6 +60,30 @@ function getGlossaryTerms() {
   const raw = yaml.load(fs.readFileSync(GLOSSARY_PATH, "utf8"));
   glossaryTerms = new Set((raw.terms || []).map((t) => t.term));
   return glossaryTerms;
+}
+
+// Admitted Gentle-AI versions come from the canonical compatibility registry.
+// Both `version_verified` entries in components and `gentle_ai` rows in the
+// compatibility matrix are accepted, so historical snapshots keep validating.
+function getGentleAiVersions() {
+  if (gentleAiVersions) return gentleAiVersions;
+  if (!fs.existsSync(VERSIONS_PATH)) {
+    console.error("Warning: versions file not found at", VERSIONS_PATH);
+    gentleAiVersions = new Set();
+    return gentleAiVersions;
+  }
+  const raw = yaml.load(fs.readFileSync(VERSIONS_PATH, "utf8"));
+  const versions = new Set();
+  for (const component of raw.components || []) {
+    if (component.name !== "gentle-ai") continue;
+    if (component.version_verified) versions.add(component.version_verified);
+    if (component.latest) versions.add(component.latest);
+  }
+  for (const row of raw.compatibility_matrix || []) {
+    if (row.gentle_ai) versions.add(row.gentle_ai);
+  }
+  gentleAiVersions = versions;
+  return gentleAiVersions;
 }
 
 function parseFrontmatter(text) {
@@ -162,6 +196,28 @@ function validateFile(file) {
   }
   if (meta.learning_resources !== undefined && !Array.isArray(meta.learning_resources)) {
     errors.push(`${relative}: 'learning_resources' must be an array`);
+  }
+
+  // Required list fields must be non-empty (type AND length, not truthiness)
+  const requiredListFields = ["content_level", "canonical_concepts", "lesson_terms", "learning_resources"];
+  for (const field of requiredListFields) {
+    const val = meta[field];
+    if (Array.isArray(val) && val.length === 0) {
+      errors.push(`${relative}: required list field '${field}' must not be empty`);
+    }
+  }
+
+  // Snapshot must be `none` or a version admitted by the canonical registry
+  if (meta.snapshot !== undefined && meta.snapshot !== null && meta.snapshot !== "none") {
+    const normalized = normalizeVersion(meta.snapshot);
+    const admitted = getGentleAiVersions();
+    if (!normalized || !admitted.has(normalized)) {
+      const admittedList = [...admitted].sort().join(", ") || "(registry empty or missing)";
+      errors.push(
+        `${relative}: snapshot '${meta.snapshot}' is not a verified Gentle-AI version — ` +
+        `admitted versions: ${admittedList} (canonical file: data/compatibility/versions.yml)`
+      );
+    }
   }
 
   // Validate mode enums

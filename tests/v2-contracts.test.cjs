@@ -110,3 +110,65 @@ test("RED: skips V1 pages (only validates lesson-v2)", () => {
   const result = runValidator(v1);
   assert.equal(result.status, 0, "Should not validate V1 pages");
 });
+
+// P2: required list fields must reject empty arrays
+
+test("RED: rejects empty canonical_concepts array", () => {
+  const bad = validV2.replace('canonical_concepts: ["api"]', "canonical_concepts: []");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject empty canonical_concepts array");
+  assert.match(result.stderr, /canonical_concepts/i);
+});
+
+test("RED: rejects empty lesson_terms array", () => {
+  const bad = validV2.replace('lesson_terms: ["API"]', "lesson_terms: []");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject empty lesson_terms array");
+  assert.match(result.stderr, /lesson_terms/i);
+});
+
+test("RED: rejects empty learning_resources array", () => {
+  const bad = validV2.replace('learning_resources: ["mdn-web-docs"]', "learning_resources: []");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject empty learning_resources array");
+  assert.match(result.stderr, /learning_resources/i);
+});
+
+test("RED: rejects empty content_level array", () => {
+  const bad = validV2.replace("content_level: principiante", "content_level: []");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject empty content_level array");
+  assert.match(result.stderr, /content_level/i);
+});
+
+// P2: snapshot must be validated against the canonical compatibility registry
+
+test("RED: rejects unknown snapshot version v999.0.0", () => {
+  const bad = validV2.replace("snapshot: none", "snapshot: v999.0.0");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject snapshot not present in versions.yml");
+  assert.match(result.stderr, /snapshot/i);
+});
+
+test("RED: accepts snapshot version present in the compatibility registry", () => {
+  const content = validV2.replace("snapshot: none", "snapshot: 2.2.0");
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Should accept snapshot 2.2.0 from versions.yml");
+});
+
+test("RED: accepts snapshot version with 'v' prefix from the compatibility registry", () => {
+  const content = validV2.replace("snapshot: none", "snapshot: v2.2.0");
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Should accept normalized snapshot v2.2.0");
+});
+
+test("RED: accepts canonical snapshot 2.2.3 from the compatibility registry", () => {
+  const content = validV2.replace("snapshot: none", "snapshot: 2.2.3");
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Should accept canonical snapshot 2.2.3");
+});
+
+test("RED: still accepts snapshot: none as intentional opt-out", () => {
+  const result = runValidator(validV2);
+  assert.equal(result.status, 0, "Should accept snapshot: none");
+});

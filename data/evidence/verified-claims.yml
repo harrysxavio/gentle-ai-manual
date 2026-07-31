@@ -1,7 +1,8 @@
 # verified-claims.yml — structured technical truth snapshot
 # Schema: gentle-ai.verified-claims/v1
-# Source revision: v2.2.0 (719b0f6cd0178bd797c074236e7077be8d00dde7)
-# Verified at: 2026-07-27
+# Canonical revision: v2.2.3 (919ea3daf2afd8287bb42d86f8d979a9741b4b9e)
+# Verified at: 2026-07-31
+# Historical revision: v2.2.0 (719b0f6cd0178bd797c074236e7077be8d00dde7, verified 2026-07-27)
 # Stable reference: v1.46.0
 # Platform: all (unless noted)
 # Channel: RDD (experimental)
@@ -14,7 +15,41 @@
 
 claims:
   # ===========================================================================
-  # SNAPSHOT — Gentle-AI v2.2.0 Organic RDD
+  # SNAPSHOT — Gentle-AI v2.2.3 (canonical current)
+  # ===========================================================================
+
+  - id: snapshot-v2.2.3-release
+    component: gentle-ai
+    claim: "v2.2.3 release published 2026-07-31 at commit 919ea3daf2afd8287bb42d86f8d979a9741b4b9e (tag v2.2.3)"
+    observed_version: v2.2.3
+    observed_commit: 919ea3daf2afd8287bb42d86f8d979a9741b4b9e
+    verified_at: 2026-07-31
+    source: https://github.com/Gentleman-Programming/gentle-ai/releases/tag/v2.2.3
+    status: verified
+    scope: release
+    platform: all
+    channel: rdd
+    canonical_page: 20-referencia/03-versiones-y-compatibilidad
+    test: claims:snapshot-release
+    notes: "Tag v2.2.3 apunta al commit 919ea3d. Canonical snapshot de la tanda PR 7. v2.2.0 (Organic RDD) queda como snapshot histórico."
+
+  - id: snapshot-v2.2.3-stable-reference
+    component: gentle-ai
+    claim: "v1.46.0 is the stable reference prior to RDD. v2.2.3 is experimental."
+    observed_version: v2.2.3
+    observed_commit: 919ea3daf2afd8287bb42d86f8d979a9741b4b9e
+    verified_at: 2026-07-31
+    source: https://github.com/Gentleman-Programming/gentle-ai/blob/v2.2.3/README.md
+    status: verified
+    scope: versioning
+    platform: all
+    channel: rdd
+    canonical_page: 20-referencia/03-versiones-y-compatibilidad
+    test: claims:stable-reference
+    notes: "README del tag v2.2.3 declara que RDD comenzó en v1.47.0 y que v1.46.0 es la referencia estable."
+
+  # ===========================================================================
+  # SNAPSHOT HISTÓRICO — Gentle-AI v2.2.0 Organic RDD (tanda anterior)
   # ===========================================================================
 
   - id: snapshot-v2.2.0-release
@@ -30,7 +65,7 @@ claims:
     channel: rdd
     canonical_page: 20-referencia/03-versiones-y-compatibilidad
     test: claims:snapshot-release
-    notes: "Release commit matches tag. Binario, guía y tag corresponden al mismo commit."
+    notes: "Snapshot histórico de la tanda previa. Reemplazado por v2.2.3 como snapshot canónico (2026-07-31)."
 
   - id: snapshot-v2.2.0-stable-reference
     component: gentle-ai

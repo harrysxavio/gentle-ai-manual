@@ -137,7 +137,7 @@ Campos requeridos en frontmatter:
 - `canonical_concepts`, `lesson_terms`
 - `persona` (ID del banco de personas o `none`)
 - `learning_resources` (lista de IDs)
-- `snapshot` (versión o `none`)
+- `snapshot` (versión o `none`; formato canónico `X.Y.Z`, se normaliza el prefijo `v`)
 - `practice_mode` (`guided` o `none`)
 - `diagram_mode` (`mermaid` o `none`)
 - `faq_mode` (`faq` o `none`)

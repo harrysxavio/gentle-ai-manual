@@ -105,3 +105,34 @@ test("RED: skips V1 pages (only validates lesson-v2)", () => {
   const result = runValidator(v1Content);
   assert.equal(result.status, 0, "Should not validate voseo on V1 pages");
 });
+
+// P2: reader-visible frontmatter must be scanned for voseo before being stripped
+
+test("RED: rejects voseo in reader-visible frontmatter 'title'", () => {
+  const content = validLessonV2.replace('title: "API para principiantes"', 'title: "Elegí una opción"');
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "Should reject voseo in frontmatter title");
+  assert.match(result.stderr, /title/i);
+});
+
+test("RED: rejects voseo in reader-visible frontmatter 'description'", () => {
+  const content = validLessonV2.replace('description: "Qué es una API"', 'description: "Podés continuar con la guía"');
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "Should reject voseo in frontmatter description");
+  assert.match(result.stderr, /description/i);
+});
+
+test("RED: rejects voseo in reader-visible frontmatter 'learning_outcome'", () => {
+  const content = validLessonV2.replace('learning_outcome: "Explicar qué es una API"', 'learning_outcome: "Configurá la herramienta"');
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "Should reject voseo in frontmatter learning_outcome");
+  assert.match(result.stderr, /learning_outcome/i);
+});
+
+test("RED: accepts neutral Spanish in reader-visible frontmatter", () => {
+  const content = validLessonV2
+    .replace('title: "API para principiantes"', 'title: "Cómo elegir una opción"')
+    .replace('description: "Qué es una API"', 'description: "Puedes continuar con la guía"');
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Should accept neutral frontmatter");
+});

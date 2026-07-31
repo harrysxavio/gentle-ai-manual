@@ -125,6 +125,26 @@ function validateFile(file) {
   // Only validate lesson-v2 pages
   if (meta.manual_contract !== "lesson-v2") return [];
 
+  const errors = [];
+
+  // Reader-visible frontmatter fields (rendered by Starlight) must be scanned
+  // BEFORE the frontmatter block is stripped. Technical fields such as IDs or
+  // slugs are not scanned to avoid false positives.
+  const visibleFields = ["title", "description", "learning_outcome"];
+  for (const field of visibleFields) {
+    const value = meta[field];
+    if (!value || typeof value !== "string") continue;
+    for (const stem of [...VOSEO_STEMS, ...VOSEO_ENCLITIC_STEMS]) {
+      if (AMBIGUOUS_STEMS.has(stem)) continue;
+      const pattern = buildPattern(stem);
+      if (pattern.test(value)) {
+        const match = value.match(pattern);
+        errors.push(`${relative}: frontmatter '${field}' contains voseo '${match[0].trim()}' — use neutral Spanish instead`);
+        break; // one error per field
+      }
+    }
+  }
+
   // Strip frontmatter and code fences while preserving line count for accurate diagnostics.
   // Replace each removed multiline block with the same number of newlines.
   function preserveLines(match) {
@@ -139,7 +159,6 @@ function validateFile(file) {
     .replace(/<!--[\s\S]*?-->/g, preserveLines)
     .replace(/\{\/\*[\s\S]*?\*\/\}/g, preserveLines);
 
-  const errors = [];
   const lines = visibleText.split(/\r?\n/);
 
   for (let i = 0; i < lines.length; i += 1) {
