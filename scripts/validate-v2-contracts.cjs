@@ -105,12 +105,10 @@ function validateFile(file) {
   // Required fields
   for (const field of REQUIRED_FIELDS) {
     const val = meta[field];
-    if (val === undefined || val === null || val === "") {
-      if (val === "") {
-        errors.push(`${relative}: required field '${field}' is empty`);
-      } else {
-        errors.push(`${relative}: missing required field '${field}'`);
-      }
+    if (val === undefined || val === null || val === false || val === 0) {
+      errors.push(`${relative}: missing required field '${field}'`);
+    } else if (val === "" || (typeof val === "string" && val.trim() === "")) {
+      errors.push(`${relative}: required field '${field}' is empty`);
     }
   }
 

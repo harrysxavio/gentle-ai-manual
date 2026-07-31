@@ -19,8 +19,7 @@ const VOSEO_STEMS = [
   "querés", "queré",
   "decís", "decí",
   "sabés", "sabé",
-  "vas", // "vas a" is Rioplatense; flagged in conjunction
-  "andás", "andá",
+  "vas", "andás", "andá",
   "seguís", "seguí",
   "mirás", "mirá",
   "entendés", "entendé",
@@ -37,6 +36,28 @@ const VOSEO_STEMS = [
   "corrés", "corré",
   "pedís", "pedí",
   "conocés", "conocé",
+  // Technical imperatives commonly used in tutorials
+  "configurás", "configurá",
+  "ejecutás", "ejecutá",
+  "guardás", "guardá",
+  "instalás", "instalá",
+  "creás", "creá",
+  "buscás", "buscá",
+  "modificás", "modificá",
+  "eliminás", "eliminá",
+  "copiás", "copiá",
+  "pegás", "pegá",
+  "descargás", "descargá",
+  "actualizás", "actualizá",
+  "probás", "probá",
+  "verificás", "verificá",
+  "subís", "subí",
+  "bajás", "bajá",
+  "movés", "mové",
+  "cambiás", "cambiá",
+  "encontrás", "encontrá",
+  "recordás", "recordá",
+  "pensás", "pensá",
 ];
 
 // Build a pattern that matches the stem as a standalone word.
@@ -80,6 +101,15 @@ function validateFile(file) {
     .replace(/<!--[\s\S]*?-->/g, "")
     .replace(/\{\/\*[\s\S]*?\*\/\}/g, "");
 
+  // Calculate frontmatter offset for accurate line numbers
+  let fmOffset = 0;
+  const fmEnd = text.indexOf("\n---", 4);
+  if (text.startsWith("---\n") || text.startsWith("---\r\n")) {
+    if (fmEnd >= 0) {
+      fmOffset = text.slice(0, fmEnd + 4).split(/\r?\n/).length;
+    }
+  }
+
   const errors = [];
   const lines = visibleText.split(/\r?\n/);
 
@@ -95,7 +125,7 @@ function validateFile(file) {
       const pattern = buildPattern(stem);
       if (pattern.test(line)) {
         const match = line.match(pattern);
-        errors.push(`${relative}:${i + 1}: voseo '${match[0].trim()}' — use neutral Spanish instead`);
+        errors.push(`${relative}:${fmOffset + i + 1}: voseo '${match[0].trim()}' — use neutral Spanish instead`);
         break; // one error per line
       }
     }
