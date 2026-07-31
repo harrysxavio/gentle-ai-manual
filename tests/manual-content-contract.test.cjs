@@ -122,6 +122,23 @@ test("allows 'coming soon' inside inline code (legitimate documentation)", () =>
   assert.equal(result.status, 0);
 });
 
+test("rejects 'Coming **soon**' with bold markup (renders visible text)", () => {
+  const result = runFixture(validLesson + "\n## Coming **soon**");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("rejects '<strong>Próximamente</strong>' with HTML markup (renders visible text)", () => {
+  const result = runFixture(validLesson + "\n## <strong>Próximamente</strong>");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /placeholder/);
+});
+
+test("allows 'Coming **soon**' inside inline code (legitimate documentation)", () => {
+  const result = runFixture(validLesson + "\nAvoid `Coming **soon**` as a label on buttons.");
+  assert.equal(result.status, 0);
+});
+
 // Engram-specific RED tests — full lesson-v1 contract for 01-que-es-engram.md
 const ENGRAM_PAGE = path.resolve(__dirname, "..", "src", "content", "docs", "09-engram", "01-que-es-engram.md");
 

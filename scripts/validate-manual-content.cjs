@@ -109,6 +109,22 @@ function validateCodeFences(text, relative) {
   return errors;
 }
 
+// Collapse inline Markdown/HTML delimiters so visible text like `Coming **soon**`
+// or `<strong>próximamente</strong>` still matches the placeholder check.
+// Must run AFTER code fences, inline code, and comments are stripped.
+function normalizeInlineMarkup(text) {
+  return text
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1") // images -> alt text
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")   // links -> label text
+    .replace(/<[^>]+>/g, "")                   // HTML tags
+    .replace(/\*\*([^*]+)\*\*/g, "$1")         // bold
+    .replace(/__([^_]+)__/g, "$1")             // bold (alt)
+    .replace(/\*([^*\n]+)\*/g, "$1")           // italic
+    .replace(/_([^_\n]+)_/g, "$1")             // italic (alt)
+    .replace(/~~([^~]+)~~/g, "$1")             // strikethrough
+    .replace(/`[^`\n]+`/g, "");                // stray inline code
+}
+
 function validateFile(file) {
   const relative = path.relative(ROOT, file).replaceAll(path.sep, "/");
   const text = fs.readFileSync(file, "utf8");
@@ -119,12 +135,15 @@ function validateFile(file) {
   const errors = [];
 
   // Block placeholders in published content (visible prose only)
-  // Strip frontmatter, code fences, inline code, and HTML comments before checking
-  const visibleText = text
-    .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "")   // strip frontmatter (anchored to start)
-    .replace(/```[\s\S]*?```/g, "")                     // strip code fences
-    .replace(/`[^`\n]+`/g, "")                          // strip inline code
-    .replace(/<!--[\s\S]*?-->/g, "");                   // strip HTML comments
+  // Strip frontmatter, code fences, inline code, and HTML comments first,
+  // then normalize inline markup so formatted placeholders still match.
+  const visibleText = normalizeInlineMarkup(
+    text
+      .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, "")   // strip frontmatter (anchored to start)
+      .replace(/```[\s\S]*?```/g, "")                     // strip code fences
+      .replace(/`[^`\n]+`/g, "")                          // strip inline code
+      .replace(/<!--[\s\S]*?-->/g, ""),                   // strip HTML comments
+  );
   if (/\b(próximamente|proximamente|coming soon)\b/i.test(visibleText)) {
     errors.push(`${relative}: placeholder 'próximamente' or 'coming soon' found in published content`);
   }
