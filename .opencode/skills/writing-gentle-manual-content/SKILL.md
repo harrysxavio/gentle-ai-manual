@@ -132,7 +132,7 @@ Estas páginas se mantienen. No se migran en PR 7. La migración ocurre en fases
 
 Campos requeridos en frontmatter:
 - `manual_contract: lesson-v2`
-- `title`, `description`, `content_level`
+- `title`, `description`, `content_level` (lista de niveles)
 - `estimated_minutes`, `learning_outcome`
 - `canonical_concepts`, `lesson_terms`
 - `persona` (ID del banco de personas o `none`)

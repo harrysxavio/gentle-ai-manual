@@ -197,6 +197,9 @@ function validateFile(file) {
   if (meta.learning_resources !== undefined && !Array.isArray(meta.learning_resources)) {
     errors.push(`${relative}: 'learning_resources' must be an array`);
   }
+  if (meta.content_level !== undefined && !Array.isArray(meta.content_level)) {
+    errors.push(`${relative}: 'content_level' must be an array of levels`);
+  }
 
   // Required list fields must be non-empty (type AND length, not truthiness)
   const requiredListFields = ["content_level", "canonical_concepts", "lesson_terms", "learning_resources"];

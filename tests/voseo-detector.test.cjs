@@ -25,7 +25,7 @@ const validLessonV2 = `---
 title: "API para principiantes"
 manual_contract: lesson-v2
 description: "Qué es una API"
-content_level: principiante
+content_level: ["principiante"]
 estimated_minutes: 15
 learning_outcome: "Explicar qué es una API"
 canonical_concepts: ["api"]
