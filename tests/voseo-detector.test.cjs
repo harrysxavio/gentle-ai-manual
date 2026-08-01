@@ -249,6 +249,21 @@ test("RED: accepts 'vosotros' and 'devos' as non-pronoun words", () => {
   assert.equal(result.status, 0, "Boundary-aware 'vos' must not match vosotros/devos");
 });
 
+// P2: every occurrence of a stem must be scanned, and optional commas after
+// introductory adverbs stay inside the clause
+
+test("RED: rejects a later-clause imperative after an exempted preterite occurrence", () => {
+  const content = validLessonV2 + "\nAyer elegí la primera opción; elegí la correcta para continuar.\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "The second 'elegí' is a voseo imperative despite the first being a preterite");
+});
+
+test("RED: accepts a preterite with an optional comma after the marker", () => {
+  const content = validLessonV2 + "\nAyer, elegí la primera opción.\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Optional comma after the marker must not split the clause");
+});
+
 // P2: first-person preterites are not voseo imperatives. Accented -í forms such
 // as "elegí", "abrí" or "escribí" are also valid neutral first-person
 // preterites ("Ayer elegí la primera opción"). Contextual markers before the

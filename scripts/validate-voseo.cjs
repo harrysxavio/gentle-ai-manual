@@ -152,9 +152,12 @@ const PRETERITE_AMBIGUOUS_STEMS = new Set([
 // over accepting ambiguous narration.
 const PRETERITE_CONTEXT_MARKERS = /\b(yo|ayer|anoche|ya|nunca|jamás|recién)\b/i;
 
-// Split points between clauses: sentence punctuation, semicolons, commas and
-// newlines. The marker check only looks at the clause containing the verb.
-const CLAUSE_BOUNDARY = /[;,.!?\n]/g;
+// Split points between clauses: sentence punctuation, semicolons and
+// newlines. The comma is deliberately NOT a boundary: it frequently separates
+// an introductory adverb from the verb ("Ayer, elegí la primera opción") and
+// the validator prioritizes not blocking neutral prose over catching every
+// imperative. Strong boundaries (;, ., !, ?) still isolate clauses.
+const CLAUSE_BOUNDARY = /[;.!?\n]/g;
 
 function isPreteriteContext(text, matchIndex) {
   const boundary = new RegExp(CLAUSE_BOUNDARY.source, "g");
@@ -206,10 +209,17 @@ function validateFile(file) {
     if (!value || typeof value !== "string") continue;
     for (const stem of ALL_VOSEO_STEMS) {
       if (AMBIGUOUS_STEMS.has(stem)) continue;
-      const pattern = buildPattern(stem);
-      const match = pattern.exec(value);
-      if (match) {
-        if (PRETERITE_AMBIGUOUS_STEMS.has(stem) && isPreteriteContext(value, match.index)) continue;
+      const pattern = new RegExp(buildPattern(stem).source, "ig");
+      let exempted = true; // every occurrence resolved to a preterite context
+      let match;
+      while ((match = pattern.exec(value)) !== null) {
+        if (PRETERITE_AMBIGUOUS_STEMS.has(stem) && isPreteriteContext(value, match.index)) {
+          continue; // this occurrence is a first-person preterite
+        }
+        exempted = false;
+        break;
+      }
+      if (!exempted) {
         errors.push(`${relative}: frontmatter '${field}' contains voseo '${match[0].trim()}' — use neutral Spanish instead`);
         break; // one error per field
       }
@@ -241,12 +251,22 @@ function validateFile(file) {
     for (const stem of ALL_VOSEO_STEMS) {
       // Ambiguous stems like "vas" need extra context
       if (AMBIGUOUS_STEMS.has(stem)) continue;
-      const pattern = buildPattern(stem);
-      const match = pattern.exec(line);
-      if (match) {
+      const pattern = new RegExp(buildPattern(stem).source, "ig");
+      // Scan EVERY occurrence: exempting a stem after one preterite match
+      // would let a genuine imperative later in the same line pass
+      // ("Ayer elegí la primera opción; elegí la correcta").
+      let exempted = true;
+      let match;
+      while ((match = pattern.exec(line)) !== null) {
         // Accented -í forms with a past-time/first-person marker in the SAME
         // clause are neutral first-person preterites, not voseo imperatives.
-        if (PRETERITE_AMBIGUOUS_STEMS.has(stem) && isPreteriteContext(line, match.index)) continue;
+        if (PRETERITE_AMBIGUOUS_STEMS.has(stem) && isPreteriteContext(line, match.index)) {
+          continue; // check the next occurrence
+        }
+        exempted = false;
+        break;
+      }
+      if (!exempted) {
         errors.push(`${relative}:${i + 1}: voseo '${match[0].trim()}' — use neutral Spanish instead`);
         break; // one error per line
       }

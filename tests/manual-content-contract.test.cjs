@@ -76,6 +76,13 @@ test("rejects remote hotlinked images", () => {
   assert.match(result.stderr, /hotlink/);
 });
 
+test("rejects hotlinked images on a page with a quoted YAML contract key", () => {
+  const content = validLesson.replace('manual_contract: lesson-v1', '"manual_contract": lesson-v1') + "\n![Tool](https://example.com/tool.png)\n";
+  const result = runFixture(content);
+  assert.notEqual(result.status, 0, "Quoted YAML keys must not let general rules be skipped");
+  assert.match(result.stderr, /hotlink/);
+});
+
 test("rejects empty image alt text", () => {
   const result = runFixture(validLesson + "\n![](/images/tool.webp)\n");
   assert.notEqual(result.status, 0);
