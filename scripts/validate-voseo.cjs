@@ -159,17 +159,35 @@ const PRETERITE_CONTEXT_MARKERS = /\b(yo|ayer|anoche|ya|nunca|jamás|recién)\b/
 // imperative. Strong boundaries (;, ., !, ?) still isolate clauses.
 const CLAUSE_BOUNDARY = /[;.!?\n]/g;
 
+// Subordinating conjunctions that separate a verb from a LATER marker. If a
+// marker appears after the verb and one of these words sits between them, the
+// marker belongs to a subordinate clause and cannot retroactively classify
+// the verb as a preterite: "Elegí una opción que ya conozcas" is a voseo
+// imperative. Without a conjunction, a later past-time adverb keeps the
+// preterite reading: "Recibí tu mensaje anoche". The list is deliberately
+// short and deterministic (no general grammar parsing).
+const SUBORDINATING_CONJUNCTIONS = /\b(que|cuando|como|porque|si|donde|mientras|aunque)\b/i;
+
 function isPreteriteContext(text, matchIndex) {
   const boundary = new RegExp(CLAUSE_BOUNDARY.source, "g");
   let clauseStart = 0;
+  let clauseEnd = text.length;
   let m;
   while ((m = boundary.exec(text)) !== null) {
     if (matchIndex < m.index) {
-      return PRETERITE_CONTEXT_MARKERS.test(text.slice(clauseStart, m.index));
+      clauseEnd = m.index;
+      break;
     }
     clauseStart = m.index + 1;
   }
-  return PRETERITE_CONTEXT_MARKERS.test(text.slice(clauseStart));
+  const clause = text.slice(clauseStart, clauseEnd);
+  // Markers BEFORE the verb always establish the preterite reading.
+  if (PRETERITE_CONTEXT_MARKERS.test(clause.slice(0, matchIndex - clauseStart))) return true;
+  // Markers AFTER the verb only count when no subordinating conjunction
+  // intervenes (see SUBORDINATING_CONJUNCTIONS).
+  const after = clause.slice(matchIndex - clauseStart);
+  const cut = after.search(SUBORDINATING_CONJUNCTIONS);
+  return PRETERITE_CONTEXT_MARKERS.test(cut >= 0 ? after.slice(0, cut) : after);
 }
 
 // YAML-aware frontmatter parser. A line-based parser would silently skip V2
@@ -246,6 +264,9 @@ function validateFile(file) {
     let line = lines[i];
     // Strip Markdown delimiters from headings and tables to check visible text
     line = line.replace(/^#{1,6}\s*/, "").replace(/\|/g, " ").replace(/\*{1,2}([^*]+)\*{1,2}/g, "$1");
+    // Keep the link LABEL (reader-visible) but drop the URL destination:
+    // a scanned stem inside a destination (".../vos/...") is not prose.
+    line = line.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1");
     if (/^\s*$/.test(line)) continue;
 
     for (const stem of ALL_VOSEO_STEMS) {

@@ -303,3 +303,32 @@ test("RED: rejects voseo imperative even with a sequencing marker 'Después, abr
   const result = runValidator(content);
   assert.notEqual(result.status, 0, "Sequencing markers do not establish a preterite reading");
 });
+
+// P2: markers AFTER the verb must not exempt it when a subordinating
+// conjunction separates verb and marker ("Elegí una opción que ya conozcas").
+
+test("RED: rejects imperative with a later marker inside a subordinate clause", () => {
+  const content = validLessonV2 + "\nElegí una opción que ya conozcas.\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "A later 'ya' in a 'que' clause must not classify 'elegí' as preterite");
+});
+
+test("RED: accepts a preterite with a later marker in the same clause", () => {
+  const content = validLessonV2 + "\nRecibí tu mensaje anoche.\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "A later past-time adverb without a conjunction keeps the preterite reading");
+});
+
+// P2: Markdown link destinations must not be scanned as visible prose.
+
+test("RED: accepts a link whose URL contains a scanned stem", () => {
+  const content = validLessonV2 + "\nConsulta [la guía](https://example.test/vos/inicio).\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "The URL destination is not reader-visible text");
+});
+
+test("RED: still rejects voseo inside a link label", () => {
+  const content = validLessonV2 + "\nConsulta [Podés verla](https://example.test/guia).\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "The link label IS reader-visible text");
+});
