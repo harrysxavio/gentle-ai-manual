@@ -116,6 +116,11 @@ const VALID_MODES = {
 // Canonical level vocabulary (see .opencode/skills/writing-gentle-manual-content/audience-levels.md)
 const VALID_CONTENT_LEVELS = new Set(["beginner", "operator", "architect"]);
 
+// Canonical source-status vocabulary. `verified` is the only value currently
+// used across the manual (V1 and V2); extend here when a new status is
+// documented in the editorial policy.
+const VALID_SOURCE_STATUS = new Set(["verified"]);
+
 const REQUIRED_FIELDS = [
   "title",
   "manual_contract",
@@ -158,9 +163,17 @@ function validateFile(file) {
     }
   }
 
-  // source_status is also required
-  if (!meta.source_status) {
+  // source_status is also required: non-empty scalar from the canonical
+  // vocabulary (truthiness alone would admit [], {} or whitespace strings)
+  if (meta.source_status === undefined || meta.source_status === null) {
     errors.push(`${relative}: missing required field 'source_status'`);
+  } else if (typeof meta.source_status !== "string" || meta.source_status.trim() === "") {
+    errors.push(`${relative}: 'source_status' must be a non-empty string`);
+  } else if (!VALID_SOURCE_STATUS.has(meta.source_status)) {
+    errors.push(
+      `${relative}: 'source_status' value '${meta.source_status}' is not in the canonical vocabulary ` +
+        `(${[...VALID_SOURCE_STATUS].join(", ")})`
+    );
   }
 
   // Validate persona

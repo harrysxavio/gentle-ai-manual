@@ -118,8 +118,9 @@ const VOSEO_COMPOUND_ENCLITIC_STEMS = (() => {
 })();
 
 // All stems used for scanning: bare conjugations + single-pronoun enclitics +
-// compound enclitics.
-const ALL_VOSEO_STEMS = [...VOSEO_STEMS, ...VOSEO_ENCLITIC_STEMS, ...VOSEO_COMPOUND_ENCLITIC_STEMS];
+// compound enclitics + the standalone voseo pronoun "vos". The pronoun is
+// boundary-aware like every stem, so "vosotros" or "devos" never match.
+const ALL_VOSEO_STEMS = [...VOSEO_STEMS, ...VOSEO_ENCLITIC_STEMS, ...VOSEO_COMPOUND_ENCLITIC_STEMS, "vos"];
 
 // Build a pattern that matches the stem as a standalone word.
 // The prefix boundary accepts whitespace, punctuation, or start-of-line.
@@ -144,13 +145,28 @@ const PRETERITE_AMBIGUOUS_STEMS = new Set([
 // subject pronoun "yo", past-time adverbs ("ayer", "anoche", "ya", "nunca",
 // "jamás", "recién"). Sequencing connectors such as "antes", "después",
 // "luego" or "mientras" are NOT sufficient — "Antes de continuar, elegí una
-// opción" is a voseo instruction, not a preterite. The trade-off is
-// documented: the validator prioritizes detecting instructions over
-// accepting ambiguous narration.
+// opción" is a voseo instruction, not a preterite. The marker must appear in
+// the SAME clause as the verb: "Yo terminé mi parte; elegí la opción" is a
+// voseo imperative because the "yo" belongs to the earlier clause. The
+// trade-off is documented: the validator prioritizes detecting instructions
+// over accepting ambiguous narration.
 const PRETERITE_CONTEXT_MARKERS = /\b(yo|ayer|anoche|ya|nunca|jamás|recién)\b/i;
 
-function isPreteriteContext(text) {
-  return PRETERITE_CONTEXT_MARKERS.test(text);
+// Split points between clauses: sentence punctuation, semicolons, commas and
+// newlines. The marker check only looks at the clause containing the verb.
+const CLAUSE_BOUNDARY = /[;,.!?\n]/g;
+
+function isPreteriteContext(text, matchIndex) {
+  const boundary = new RegExp(CLAUSE_BOUNDARY.source, "g");
+  let clauseStart = 0;
+  let m;
+  while ((m = boundary.exec(text)) !== null) {
+    if (matchIndex < m.index) {
+      return PRETERITE_CONTEXT_MARKERS.test(text.slice(clauseStart, m.index));
+    }
+    clauseStart = m.index + 1;
+  }
+  return PRETERITE_CONTEXT_MARKERS.test(text.slice(clauseStart));
 }
 
 // YAML-aware frontmatter parser. A line-based parser would silently skip V2
@@ -193,7 +209,7 @@ function validateFile(file) {
       const pattern = buildPattern(stem);
       const match = pattern.exec(value);
       if (match) {
-        if (PRETERITE_AMBIGUOUS_STEMS.has(stem) && isPreteriteContext(value)) continue;
+        if (PRETERITE_AMBIGUOUS_STEMS.has(stem) && isPreteriteContext(value, match.index)) continue;
         errors.push(`${relative}: frontmatter '${field}' contains voseo '${match[0].trim()}' — use neutral Spanish instead`);
         break; // one error per field
       }
@@ -228,9 +244,9 @@ function validateFile(file) {
       const pattern = buildPattern(stem);
       const match = pattern.exec(line);
       if (match) {
-        // Accented -í forms with a past-time/first-person marker in the line
-        // are neutral first-person preterites, not voseo imperatives.
-        if (PRETERITE_AMBIGUOUS_STEMS.has(stem) && isPreteriteContext(line)) continue;
+        // Accented -í forms with a past-time/first-person marker in the SAME
+        // clause are neutral first-person preterites, not voseo imperatives.
+        if (PRETERITE_AMBIGUOUS_STEMS.has(stem) && isPreteriteContext(line, match.index)) continue;
         errors.push(`${relative}:${i + 1}: voseo '${match[0].trim()}' — use neutral Spanish instead`);
         break; // one error per line
       }

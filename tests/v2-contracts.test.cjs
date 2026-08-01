@@ -296,3 +296,33 @@ test("RED: rejects zero estimated_minutes", () => {
   assert.notEqual(result.status, 0, "Should reject estimated_minutes: 0");
   assert.match(result.stderr, /estimated_minutes/i);
 });
+
+// P2: source_status must be a non-empty scalar from the supported vocabulary
+
+test("RED: rejects empty-list source_status", () => {
+  const bad = validV2.replace("source_status: verified", "source_status: []");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject source_status: []");
+  assert.match(result.stderr, /source_status/i);
+});
+
+test("RED: rejects empty-object source_status", () => {
+  const bad = validV2.replace("source_status: verified", "source_status: {}");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject source_status: {}");
+  assert.match(result.stderr, /source_status/i);
+});
+
+test("RED: rejects whitespace-only source_status", () => {
+  const bad = validV2.replace("source_status: verified", 'source_status: " "');
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject whitespace-only source_status");
+  assert.match(result.stderr, /source_status/i);
+});
+
+test("RED: rejects unknown source_status vocabulary", () => {
+  const bad = validV2.replace("source_status: verified", "source_status: pendiente");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject non-canonical source_status");
+  assert.match(result.stderr, /source_status/i);
+});

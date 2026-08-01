@@ -220,6 +220,35 @@ test("RED: detects voseo on a V2 page with a quoted YAML key", () => {
   assert.notEqual(result.status, 0, "Should detect voseo even when manual_contract uses a quoted YAML key");
 });
 
+// P2: preterite markers must be scoped to the clause containing the verb
+
+test("RED: rejects voseo imperative in a later clause 'Yo terminé mi parte; elegí la opción correcta'", () => {
+  const content = validLessonV2 + "\nYo terminé mi parte; elegí la opción correcta.\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "A marker in an earlier clause must not suppress a voseo imperative");
+});
+
+test("RED: accepts first-person preterite when the marker is in the same clause 'Cuando llegué, yo abrí el archivo'", () => {
+  const content = validLessonV2 + "\nCuando llegué, yo abrí el archivo.\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Marker in the same clause as the verb is a preterite");
+});
+
+// P2: the standalone voseo pronoun must be detected
+
+test("RED: rejects standalone voseo pronoun 'vos'", () => {
+  const content = validLessonV2 + "\nSi vos quieres, puedes continuar.\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "Should reject standalone voseo pronoun 'vos'");
+  assert.match(result.stderr, /vos/i);
+});
+
+test("RED: accepts 'vosotros' and 'devos' as non-pronoun words", () => {
+  const content = validLessonV2 + "\nVosotros usáis otra variante. Devos el mérito.\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Boundary-aware 'vos' must not match vosotros/devos");
+});
+
 // P2: first-person preterites are not voseo imperatives. Accented -í forms such
 // as "elegí", "abrí" or "escribí" are also valid neutral first-person
 // preterites ("Ayer elegí la primera opción"). Contextual markers before the
