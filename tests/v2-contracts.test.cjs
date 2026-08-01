@@ -326,3 +326,49 @@ test("RED: rejects unknown source_status vocabulary", () => {
   assert.notEqual(result.status, 0, "Should reject non-canonical source_status");
   assert.match(result.stderr, /source_status/i);
 });
+
+// P2: learning-resources.yml records must be complete and unique. The catalog
+// loader reduces every record to its ID; a malformed record (missing required
+// fields) or a duplicate ID must fail the aggregate check.
+
+function runCatalogFixture(catalogContent) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "v2-catalog-"));
+  const file = path.join(dir, "lesson.md");
+  fs.writeFileSync(file, validV2, "utf8");
+  const catalog = path.join(dir, "learning-resources.yml");
+  fs.writeFileSync(catalog, catalogContent, "utf8");
+  const result = cp.spawnSync(process.execPath, [validator, "--resources", catalog, file], {
+    cwd: path.resolve(__dirname, ".."),
+    encoding: "utf8",
+  });
+  fs.rmSync(dir, { recursive: true, force: true });
+  return result;
+}
+
+const completeCatalog = [
+  "resources:",
+  "  - id: mdn-web-docs",
+  "    title: MDN Web Docs",
+  "    url: https://developer.mozilla.org/",
+  '    verified_at: "2026-07-31"',
+  "    status: activo",
+].join("\n");
+
+test("RED: accepts a complete learning-resources catalog", () => {
+  const result = runCatalogFixture(completeCatalog);
+  assert.equal(result.status, 0, "Should accept a complete catalog");
+});
+
+test("RED: rejects a catalog record missing required fields", () => {
+  const bad = ["resources:", "  - id: mdn-web-docs", "    url: https://example.com/"].join("\n");
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "Missing title/verified_at/status must fail");
+  assert.match(result.stderr, /missing required field/);
+});
+
+test("RED: rejects duplicate resource ids", () => {
+  const dup = [completeCatalog, "  - id: mdn-web-docs", "    title: Otro", "    url: https://otro.example/", '    verified_at: "2026-07-31"', "    status: activo"].join("\n");
+  const result = runCatalogFixture(dup);
+  assert.notEqual(result.status, 0, "Duplicate ids must fail");
+  assert.match(result.stderr, /duplicate resource id/);
+});

@@ -332,3 +332,26 @@ test("RED: still rejects voseo inside a link label", () => {
   const result = runValidator(content);
   assert.notEqual(result.status, 0, "The link label IS reader-visible text");
 });
+
+// P2: markers inside a preceding subordinate clause must not exempt a later
+// imperative ("Si ya terminaste, elegí una opción").
+
+test("RED: rejects imperative with a marker in a preceding conditional clause", () => {
+  const content = validLessonV2 + "\nSi ya terminaste, elegí una opción.\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "The 'ya' belongs to the 'si' premise, not to 'elegí'");
+});
+
+// P2: reference-style link definitions are invisible; only the label is text.
+
+test("RED: accepts a reference-style link whose definition URL contains a scanned stem", () => {
+  const content = validLessonV2 + "\nConsulta [la guía][manual]\n\n[manual]: https://example.test/vos/inicio\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Reference definitions are not reader-visible text");
+});
+
+test("RED: still rejects voseo inside a reference-style link label", () => {
+  const content = validLessonV2 + "\nConsulta [Podés verla][manual]\n\n[manual]: https://example.test/guia\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "The reference label IS reader-visible text");
+});

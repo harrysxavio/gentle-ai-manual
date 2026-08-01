@@ -17,6 +17,8 @@ let personaIds = null;
 let resourceIds = null;
 let glossaryTerms = null;
 let gentleAiVersions = null;
+let resourcesPathOverride = null;
+let catalogErrors = null;
 
 // Normalize a snapshot value to the canonical version format (X.Y.Z without
 // leading "v"). "v2.2.3" and "2.2.3" are the same canonical version.
@@ -38,15 +40,41 @@ function getPersonaIds() {
   return personaIds;
 }
 
+// Required fields for every learning-resource record (documented in the
+// migration workflow). A record that loses its title, URL, verification date
+// or status would silently degrade the catalog; the aggregate check must fail.
+const RESOURCE_REQUIRED_FIELDS = ["title", "url", "verified_at", "status"];
+
 function getResourceIds() {
   if (resourceIds) return resourceIds;
-  if (!fs.existsSync(RESOURCES_PATH)) {
-    console.error("Warning: resources file not found at", RESOURCES_PATH);
+  const resourcesPath = resourcesPathOverride || RESOURCES_PATH;
+  if (!fs.existsSync(resourcesPath)) {
+    console.error("Warning: resources file not found at", resourcesPath);
     resourceIds = new Set();
     return resourceIds;
   }
-  const raw = yaml.load(fs.readFileSync(RESOURCES_PATH, "utf8"));
-  resourceIds = new Set((raw.resources || []).map((r) => r.id));
+  const raw = yaml.load(fs.readFileSync(resourcesPath, "utf8"));
+  const records = raw.resources || [];
+  const ids = new Set();
+  catalogErrors = [];
+  for (const record of records) {
+    const id = record && record.id;
+    if (typeof id !== "string" || id.trim() === "") {
+      catalogErrors.push("learning-resources.yml: every resource record must have a non-empty string 'id'");
+      continue;
+    }
+    if (ids.has(id)) {
+      catalogErrors.push(`learning-resources.yml: duplicate resource id '${id}'`);
+    }
+    ids.add(id);
+    for (const field of RESOURCE_REQUIRED_FIELDS) {
+      const value = record[field];
+      if (typeof value !== "string" || value.trim() === "") {
+        catalogErrors.push(`learning-resources.yml: resource '${id}' missing required field '${field}'`);
+      }
+    }
+  }
+  resourceIds = ids;
   return resourceIds;
 }
 
@@ -309,13 +337,23 @@ function walk(dir) {
 function main() {
   const args = process.argv.slice(2);
   let files;
-  if (args.length) {
-    files = args.map((file) => path.resolve(ROOT, file));
+  const positional = [];
+  for (let i = 0; i < args.length; i += 1) {
+    if (args[i] === "--resources" && args[i + 1]) {
+      resourcesPathOverride = path.resolve(ROOT, args[i + 1]);
+      i += 1;
+    } else {
+      positional.push(args[i]);
+    }
+  }
+  if (positional.length) {
+    files = positional.map((file) => path.resolve(ROOT, file));
   } else {
     files = walk(path.join(ROOT, "src", "content", "docs"));
   }
   const mdFiles = files.filter((file) => /\.(md|mdx)$/i.test(file) && fs.existsSync(file));
   const errors = mdFiles.flatMap(validateFile);
+  if (catalogErrors) errors.push(...catalogErrors);
 
   if (errors.length) {
     console.error("V2 contract validation failed:\n");

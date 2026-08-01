@@ -181,8 +181,17 @@ function isPreteriteContext(text, matchIndex) {
     clauseStart = m.index + 1;
   }
   const clause = text.slice(clauseStart, clauseEnd);
-  // Markers BEFORE the verb always establish the preterite reading.
-  if (PRETERITE_CONTEXT_MARKERS.test(clause.slice(0, matchIndex - clauseStart))) return true;
+  const before = clause.slice(0, matchIndex - clauseStart);
+  // A marker BEFORE the verb establishes the preterite reading unless it sits
+  // inside a preceding subordinate clause ("Si ya terminaste, elegí una
+  // opción" is an imperative: the 'ya' belongs to the 'si' premise). The
+  // subject pronoun "yo" is the exception: it is the subject of the main
+  // clause, never a subordinate marker ("Cuando llegué, yo abrí el archivo").
+  const marker = PRETERITE_CONTEXT_MARKERS.exec(before);
+  if (marker) {
+    const conjunctionBefore = SUBORDINATING_CONJUNCTIONS.test(before.slice(0, marker.index));
+    if (marker[0].toLowerCase() === "yo" || !conjunctionBefore) return true;
+  }
   // Markers AFTER the verb only count when no subordinating conjunction
   // intervenes (see SUBORDINATING_CONJUNCTIONS).
   const after = clause.slice(matchIndex - clauseStart);
@@ -264,9 +273,11 @@ function validateFile(file) {
     let line = lines[i];
     // Strip Markdown delimiters from headings and tables to check visible text
     line = line.replace(/^#{1,6}\s*/, "").replace(/\|/g, " ").replace(/\*{1,2}([^*]+)\*{1,2}/g, "$1");
-    // Keep the link LABEL (reader-visible) but drop the URL destination:
-    // a scanned stem inside a destination (".../vos/...") is not prose.
-    line = line.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1");
+    // Keep link LABELS (reader-visible) but drop destinations and reference
+    // markers: a scanned stem inside a URL or reference id is not prose.
+    line = line.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replace(/\[([^\]]+)\]\[[^\]]*\]/g, "$1");
+    // Reference definitions ("[manual]: https://...") are not rendered text.
+    if (/^\s*\[[^\]]+\]:\s*\S/.test(line)) continue;
     if (/^\s*$/.test(line)) continue;
 
     for (const stem of ALL_VOSEO_STEMS) {
