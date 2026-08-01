@@ -211,6 +211,15 @@ test("RED: accepts neutral imperfect subjunctive 'pensase' (not voseo)", () => {
   assert.equal(result.status, 0, "Should accept neutral 'pensase' as imperfect subjunctive");
 });
 
+// P2: the frontmatter parser must be YAML-aware so legal YAML formatting
+// (quoted keys, indentation) does not make the validator skip a V2 page
+
+test("RED: detects voseo on a V2 page with a quoted YAML key", () => {
+  const content = validLessonV2.replace("manual_contract: lesson-v2", '"manual_contract": lesson-v2') + "\nPodés usar la herramienta desde PowerShell.\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "Should detect voseo even when manual_contract uses a quoted YAML key");
+});
+
 // P2: first-person preterites are not voseo imperatives. Accented -í forms such
 // as "elegí", "abrí" or "escribí" are also valid neutral first-person
 // preterites ("Ayer elegí la primera opción"). Contextual markers before the

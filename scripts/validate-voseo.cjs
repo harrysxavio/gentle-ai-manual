@@ -3,6 +3,7 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
+const yaml = require("js-yaml");
 
 const ROOT = process.cwd();
 
@@ -152,18 +153,22 @@ function isPreteriteContext(text) {
   return PRETERITE_CONTEXT_MARKERS.test(text);
 }
 
+// YAML-aware frontmatter parser. A line-based parser would silently skip V2
+// pages whose frontmatter uses legal YAML formatting (quoted keys,
+// indentation), letting voseo pass the aggregate CI check. Reuse the same
+// parser family as validate-v2-contracts.cjs so both validators agree on
+// whether a page is lesson-v2.
 function frontmatter(text) {
   if (!text.startsWith("---\n") && !text.startsWith("---\r\n")) return {};
   const end = text.indexOf("\n---", 4);
   if (end < 0) return {};
   const block = text.slice(4, end);
-  const data = {};
-  for (const line of block.split(/\r?\n/)) {
-    const match = /^([a-zA-Z0-9_-]+):\s*(.*)$/.exec(line);
-    if (!match) continue;
-    data[match[1]] = match[2].replace(/^["']|["']$/g, "").trim();
+  try {
+    const data = yaml.load(block);
+    return data && typeof data === "object" && !Array.isArray(data) ? data : {};
+  } catch {
+    return {};
   }
-  return data;
 }
 
 function validateFile(file) {
