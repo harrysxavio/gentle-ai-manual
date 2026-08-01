@@ -352,6 +352,10 @@ function main() {
     files = walk(path.join(ROOT, "src", "content", "docs"));
   }
   const mdFiles = files.filter((file) => /\.(md|mdx)$/i.test(file) && fs.existsSync(file));
+  // Load the catalog eagerly: catalog records must be validated even when the
+  // repository has no lesson-v2 pages yet (validateFile only loads them when
+  // a V2 page is found).
+  getResourceIds();
   const errors = mdFiles.flatMap(validateFile);
   if (catalogErrors) errors.push(...catalogErrors);
 

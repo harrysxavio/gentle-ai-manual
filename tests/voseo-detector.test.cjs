@@ -355,3 +355,30 @@ test("RED: still rejects voseo inside a reference-style link label", () => {
   const result = runValidator(content);
   assert.notEqual(result.status, 0, "The reference label IS reader-visible text");
 });
+
+// P2: all preceding markers must be scanned, not just the first one, and the
+// documented 'continuá' forms must be detected.
+
+test("RED: accepts first-person narration with a subordinate marker before the subject", () => {
+  const content = validLessonV2 + "\nSi ya había terminado, yo abrí el archivo.\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "The main-clause 'yo' must win over the subordinate 'ya'");
+});
+
+test("RED: rejects voseo 'continuá' imperative", () => {
+  const content = validLessonV2 + "\nContinuá con el siguiente paso.\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "'continuá' is listed as voseo to avoid in the editorial skill");
+});
+
+test("RED: rejects voseo 'continuás' present form", () => {
+  const content = validLessonV2 + "\nContinuás con el siguiente paso.\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "'continuás' is the voseo present form");
+});
+
+test("RED: accepts neutral 'continúa' form", () => {
+  const content = validLessonV2 + "\nContinúa con el siguiente paso.\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "'continúa' is neutral Spanish");
+});

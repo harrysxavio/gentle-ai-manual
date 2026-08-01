@@ -77,6 +77,8 @@ const VOSEO_STEMS = [
   "empezás", "empezá",
   "terminás", "terminá",
   "quedás", "quedá",
+  // Documented in the editorial skill's avoid list
+  "continuás", "continuá",
 ];
 
 // Enclitic voseo imperative forms (stem + pronoun)
@@ -182,13 +184,16 @@ function isPreteriteContext(text, matchIndex) {
   }
   const clause = text.slice(clauseStart, clauseEnd);
   const before = clause.slice(0, matchIndex - clauseStart);
-  // A marker BEFORE the verb establishes the preterite reading unless it sits
+  // Markers BEFORE the verb establish the preterite reading unless they sit
   // inside a preceding subordinate clause ("Si ya terminaste, elegí una
   // opción" is an imperative: the 'ya' belongs to the 'si' premise). The
   // subject pronoun "yo" is the exception: it is the subject of the main
   // clause, never a subordinate marker ("Cuando llegué, yo abrí el archivo").
-  const marker = PRETERITE_CONTEXT_MARKERS.exec(before);
-  if (marker) {
+  // Every preceding marker is examined, so a main-clause "yo" wins even when
+  // an earlier subordinate marker exists ("Si ya había terminado, yo abrí").
+  const markerPattern = new RegExp(PRETERITE_CONTEXT_MARKERS.source, PRETERITE_CONTEXT_MARKERS.flags + "g");
+  let marker;
+  while ((marker = markerPattern.exec(before)) !== null) {
     const conjunctionBefore = SUBORDINATING_CONJUNCTIONS.test(before.slice(0, marker.index));
     if (marker[0].toLowerCase() === "yo" || !conjunctionBefore) return true;
   }

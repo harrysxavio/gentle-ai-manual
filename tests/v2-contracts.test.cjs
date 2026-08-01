@@ -372,3 +372,27 @@ test("RED: rejects duplicate resource ids", () => {
   assert.notEqual(result.status, 0, "Duplicate ids must fail");
   assert.match(result.stderr, /duplicate resource id/);
 });
+
+// P2: the catalog must be validated eagerly, even when the repository has no
+// lesson-v2 pages yet (currently none exist).
+
+function runCatalogOnlyFixture(catalogContent) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "v2-catalog-only-"));
+  const file = path.join(dir, "reference.md");
+  fs.writeFileSync(file, "# Referencia sin contrato V2\n", "utf8");
+  const catalog = path.join(dir, "learning-resources.yml");
+  fs.writeFileSync(catalog, catalogContent, "utf8");
+  const result = cp.spawnSync(process.execPath, [validator, "--resources", catalog, file], {
+    cwd: path.resolve(__dirname, ".."),
+    encoding: "utf8",
+  });
+  fs.rmSync(dir, { recursive: true, force: true });
+  return result;
+}
+
+test("RED: rejects a malformed catalog even without lesson-v2 pages", () => {
+  const bad = ["resources:", "  - id: mdn-web-docs", "    url: https://example.com/"].join("\n");
+  const result = runCatalogOnlyFixture(bad);
+  assert.notEqual(result.status, 0, "Catalog errors must not depend on lesson-v2 migration");
+  assert.match(result.stderr, /missing required field/);
+});
