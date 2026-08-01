@@ -163,3 +163,50 @@ test("RED: rejects enclitic voseo 'mostrame' (me)", () => {
   const result = runValidator(validLessonV2 + "\nMostrame el resultado.\n");
   assert.notEqual(result.status, 0, "Should reject enclitic voseo 'mostrame'");
 });
+
+// P2: compound enclitic voseo forms (two-pronoun -melo/-telo/-selo forms)
+
+test("RED: rejects compound enclitic voseo 'guardátelo' (te+lo)", () => {
+  const result = runValidator(validLessonV2 + "\nGuardátelo en la carpeta de respaldo.\n");
+  assert.notEqual(result.status, 0, "Should reject compound enclitic voseo 'guardátelo'");
+});
+
+test("RED: rejects compound enclitic voseo 'copiámelo' (me+lo)", () => {
+  const result = runValidator(validLessonV2 + "\nCopiámelo al portapapeles.\n");
+  assert.notEqual(result.status, 0, "Should reject compound enclitic voseo 'copiámelo'");
+});
+
+test("RED: rejects compound enclitic voseo 'decímelo' (me+lo)", () => {
+  const result = runValidator(validLessonV2 + "\nDecímelo cuando termines.\n");
+  assert.notEqual(result.status, 0, "Should reject compound enclitic voseo 'decímelo'");
+});
+
+test("RED: rejects compound enclitic voseo 'hacételo' (te+lo)", () => {
+  const result = runValidator(validLessonV2 + "\nHacételo vos mismo.\n");
+  assert.notEqual(result.status, 0, "Should reject compound enclitic voseo 'hacételo'");
+});
+
+test("RED: rejects compound enclitic voseo 'quedátelo' (te+lo)", () => {
+  const result = runValidator(validLessonV2 + "\nQuedátelo si te sirve.\n");
+  assert.notEqual(result.status, 0, "Should reject compound enclitic voseo 'quedátelo'");
+});
+
+// P2: -se single-pronoun forms are ambiguous with the imperfect subjunctive
+
+test("RED: accepts neutral imperfect subjunctive 'usase' (not voseo)", () => {
+  const content = validLessonV2 + "\nEste enfoque sería útil si se usase con cautela.\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Should accept neutral 'usase' as imperfect subjunctive");
+});
+
+test("RED: accepts neutral imperfect subjunctive 'dejase' (not voseo)", () => {
+  const content = validLessonV2 + "\nSi lo dejase así, el sistema perdería datos.\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Should accept neutral 'dejase' as imperfect subjunctive");
+});
+
+test("RED: accepts neutral imperfect subjunctive 'pensase' (not voseo)", () => {
+  const content = validLessonV2 + "\nAunque se pensase lo contrario.\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Should accept neutral 'pensase' as imperfect subjunctive");
+});

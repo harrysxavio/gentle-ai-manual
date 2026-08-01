@@ -75,16 +75,19 @@ const VOSEO_STEMS = [
   "volvés", "volvé",
   "empezás", "empezá",
   "terminás", "terminá",
+  "quedás", "quedá",
 ];
 
 // Enclitic voseo imperative forms (stem + pronoun)
 // Build from stems that end with accented vowel (imperative forms).
-// Covers the full enclitic pronoun set: me, te, se, nos, le, les, lo, la, los, las.
+// `se` is EXCLUDED from single-pronoun forms: "usase", "dejase", "crease" and
+// "pensase" are also neutral imperfect subjunctives, so those forms would
+// produce false positives in ordinary prose.
 const VOSEO_ENCLITIC_STEMS = (() => {
   const enclitic = [];
   const stems = new Set(VOSEO_STEMS.filter((s) => /[áéíóú]$/.test(s)));
   for (const stem of stems) {
-    for (const suffix of ["me", "te", "se", "nos", "le", "les", "lo", "la", "los", "las"]) {
+    for (const suffix of ["me", "te", "nos", "le", "les", "lo", "la", "los", "las"]) {
       enclitic.push(stem.replace(/[áéíóú]$/, (match) => {
         const map = { á: "a", é: "e", í: "i", ó: "o", ú: "u" };
         return map[match] + suffix;
@@ -93,6 +96,29 @@ const VOSEO_ENCLITIC_STEMS = (() => {
   }
   return enclitic;
 })();
+
+// Compound enclitic voseo forms (stem + pronoun + pronoun): "guardátelo",
+// "copiámelo", "decímelo". Unlike single-pronoun forms, the stem KEEPS its
+// written accent because the resulting word is esdrújula. Dativo first
+// (me/te/se/nos/le/les), acusativo second (lo/la/los/las).
+const VOSEO_COMPOUND_ENCLITIC_STEMS = (() => {
+  const compounds = [];
+  const stems = new Set(VOSEO_STEMS.filter((s) => /[áéíóú]$/.test(s)));
+  const first = ["me", "te", "se", "nos", "le", "les"];
+  const second = ["lo", "la", "los", "las"];
+  for (const stem of stems) {
+    for (const a of first) {
+      for (const b of second) {
+        compounds.push(stem + a + b);
+      }
+    }
+  }
+  return compounds;
+})();
+
+// All stems used for scanning: bare conjugations + single-pronoun enclitics +
+// compound enclitics.
+const ALL_VOSEO_STEMS = [...VOSEO_STEMS, ...VOSEO_ENCLITIC_STEMS, ...VOSEO_COMPOUND_ENCLITIC_STEMS];
 
 // Build a pattern that matches the stem as a standalone word.
 // The prefix boundary accepts whitespace, punctuation, or start-of-line.
@@ -135,7 +161,7 @@ function validateFile(file) {
   for (const field of visibleFields) {
     const value = meta[field];
     if (!value || typeof value !== "string") continue;
-    for (const stem of [...VOSEO_STEMS, ...VOSEO_ENCLITIC_STEMS]) {
+    for (const stem of ALL_VOSEO_STEMS) {
       if (AMBIGUOUS_STEMS.has(stem)) continue;
       const pattern = buildPattern(stem);
       if (pattern.test(value)) {
@@ -168,7 +194,7 @@ function validateFile(file) {
     line = line.replace(/^#{1,6}\s*/, "").replace(/\|/g, " ").replace(/\*{1,2}([^*]+)\*{1,2}/g, "$1");
     if (/^\s*$/.test(line)) continue;
 
-    for (const stem of [...VOSEO_STEMS, ...VOSEO_ENCLITIC_STEMS]) {
+    for (const stem of ALL_VOSEO_STEMS) {
       // Ambiguous stems like "vas" need extra context
       if (AMBIGUOUS_STEMS.has(stem)) continue;
       const pattern = buildPattern(stem);

@@ -18,7 +18,7 @@ Y debe incluir los campos obligatorios del contrato V2 (ver `.opencode/skills/wr
 
 1. Leer el skill V2 completo.
 2. Cambiar `manual_contract` a `lesson-v2`.
-3. Agregar los nuevos campos requeridos: `lesson_terms`, `persona`, `learning_resources`, `faq_mode`, `practice_mode`, `diagram_mode`, `snapshot` (versión verificada de `data/compatibility/versions.yml`, formato canónico `X.Y.Z`, o `none`).
+3. Agregar todos los campos obligatorios del contrato V2 que la página aún no tenga: `content_level` (lista: `beginner`, `operator`, `architect`), `estimated_minutes` (entero), `learning_outcome`, `canonical_concepts`, `lesson_terms`, `persona`, `learning_resources`, `faq_mode`, `practice_mode`, `diagram_mode`, `snapshot` (versión verificada de `data/compatibility/versions.yml`, formato canónico `X.Y.Z`, o `none`), `level` (entero 1–3, nivel de profundidad de la lección) y `estimatedTime` (texto, ej. `"15 min"`). La lista completa está en `REQUIRED_FIELDS` de `scripts/validate-v2-contracts.cjs`; `npm run validate` rechaza cualquier campo faltante.
 4. Elegir una persona del banco (`data/resources/personas.yml`).
 5. Registrar los términos de la lección (deben existir en `data/terminology/glossary.yml`).
 6. Referenciar recursos por ID (`data/resources/learning-resources.yml`).

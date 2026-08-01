@@ -62,10 +62,12 @@ function getGlossaryTerms() {
   return glossaryTerms;
 }
 
-// Admitted Gentle-AI versions come from the canonical compatibility registry.
-// Both `version_verified` entries in components and `gentle_ai` rows in the
-// compatibility matrix are accepted, so historical snapshots keep validating.
-function getGentleAiVersions() {
+// Admitted versions come from the canonical compatibility registry.
+// Every registered component's `version_verified`/`latest` and every
+// version-valued column in the compatibility matrix are accepted, so lessons
+// may snapshot any component they document (Gentle-AI, OpenCode, Codex,
+// Engram, GGA, Node.js, ...) with a registry-backed version.
+function getAdmittedVersions() {
   if (gentleAiVersions) return gentleAiVersions;
   if (!fs.existsSync(VERSIONS_PATH)) {
     console.error("Warning: versions file not found at", VERSIONS_PATH);
@@ -75,12 +77,19 @@ function getGentleAiVersions() {
   const raw = yaml.load(fs.readFileSync(VERSIONS_PATH, "utf8"));
   const versions = new Set();
   for (const component of raw.components || []) {
-    if (component.name !== "gentle-ai") continue;
-    if (component.version_verified) versions.add(component.version_verified);
-    if (component.latest) versions.add(component.latest);
+    if (component.version_verified && normalizeVersion(component.version_verified)) {
+      versions.add(normalizeVersion(component.version_verified));
+    }
+    if (component.latest && normalizeVersion(component.latest)) {
+      versions.add(normalizeVersion(component.latest));
+    }
   }
   for (const row of raw.compatibility_matrix || []) {
-    if (row.gentle_ai) versions.add(row.gentle_ai);
+    for (const value of Object.values(row)) {
+      if (typeof value === "string" && normalizeVersion(value)) {
+        versions.add(normalizeVersion(value));
+      }
+    }
   }
   gentleAiVersions = versions;
   return gentleAiVersions;
@@ -227,14 +236,23 @@ function validateFile(file) {
     }
   }
 
+  // Each canonical_concepts entry must be a non-empty string (usable concept identifier)
+  if (Array.isArray(meta.canonical_concepts)) {
+    for (const entry of meta.canonical_concepts) {
+      if (typeof entry !== "string" || entry.trim() === "") {
+        errors.push(`${relative}: 'canonical_concepts' entries must be non-empty strings`);
+      }
+    }
+  }
+
   // Snapshot must be `none` or a version admitted by the canonical registry
   if (meta.snapshot !== undefined && meta.snapshot !== null && meta.snapshot !== "none") {
     const normalized = normalizeVersion(meta.snapshot);
-    const admitted = getGentleAiVersions();
+    const admitted = getAdmittedVersions();
     if (!normalized || !admitted.has(normalized)) {
       const admittedList = [...admitted].sort().join(", ") || "(registry empty or missing)";
       errors.push(
-        `${relative}: snapshot '${meta.snapshot}' is not a verified Gentle-AI version — ` +
+        `${relative}: snapshot '${meta.snapshot}' is not a verified version — ` +
         `admitted versions: ${admittedList} (canonical file: data/compatibility/versions.yml)`
       );
     }

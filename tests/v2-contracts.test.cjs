@@ -206,3 +206,46 @@ test("RED: still accepts snapshot: none as intentional opt-out", () => {
   const result = runValidator(validV2);
   assert.equal(result.status, 0, "Should accept snapshot: none");
 });
+
+// P2: canonical_concepts entries must be non-empty strings
+
+test("RED: rejects non-string entries inside canonical_concepts", () => {
+  const bad = validV2.replace('canonical_concepts: ["api"]', "canonical_concepts: [false]");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject non-string canonical_concepts entries");
+  assert.match(result.stderr, /canonical_concepts/i);
+});
+
+test("RED: rejects empty-string entries inside canonical_concepts", () => {
+  const bad = validV2.replace('canonical_concepts: ["api"]', 'canonical_concepts: [""]');
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject empty-string canonical_concepts entries");
+  assert.match(result.stderr, /canonical_concepts/i);
+});
+
+test("RED: rejects object entries inside canonical_concepts", () => {
+  const bad = validV2.replace('canonical_concepts: ["api"]', "canonical_concepts: [{id: 1}]");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject object canonical_concepts entries");
+  assert.match(result.stderr, /canonical_concepts/i);
+});
+
+// P2: snapshots for every registered component
+
+test("RED: accepts OpenCode snapshot version from the registry", () => {
+  const content = validV2.replace("snapshot: none", "snapshot: 1.17.20");
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Should accept OpenCode 1.17.20 from versions.yml");
+});
+
+test("RED: accepts Codex snapshot version from the registry", () => {
+  const content = validV2.replace("snapshot: none", "snapshot: 0.144.0");
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Should accept Codex 0.144.0 from versions.yml");
+});
+
+test("RED: accepts Engram snapshot version from the registry", () => {
+  const content = validV2.replace("snapshot: none", "snapshot: 1.19.0");
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Should accept Engram 1.19.0 from versions.yml");
+});
