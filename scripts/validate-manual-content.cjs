@@ -58,8 +58,8 @@ function changedFiles(baseRef) {
 
 // YAML-aware frontmatter parser. A line-based parser would silently skip
 // general content rules (hotlinked images, command fences, @ts-nocheck) when
-// legal YAML formatting such as quoted keys is used, while the V2 and voseo
-// validators recognize the page. Reuse the same parser family as
+// legal YAML formatting such as quoted keys is used, while the V2 validator
+// recognizes the page. Reuse the same parser family as
 // validate-v2-contracts.cjs so all validators agree on the contract.
 function frontmatter(text) {
   if (!text.startsWith("---\n") && !text.startsWith("---\r\n")) return {};

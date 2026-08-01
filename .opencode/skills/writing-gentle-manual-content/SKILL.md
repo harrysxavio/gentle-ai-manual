@@ -17,14 +17,33 @@ Escribe una explicación amable y continua que una persona principiante pueda co
 
 ## Idioma y voz
 
-- Escribir DIRECTAMENTE en castellano neutral. No usar el flujo español → inglés → español.
+- Escribir DIRECTAMENTE en castellano neutral con tuteo. No usar el flujo español → inglés → español.
 - Usar preferentemente: puedes, necesitas, quieres, sabes, elige, configura, ejecuta, guarda, selecciona, agrega, activa, abre, continúa.
 - Evitar: vos, podés, necesitás, querés, sabés, elegí, configurá, ejecutá, guardá, seleccioná, agregá, activá, abrí, continuá.
 - Tono de profesor paciente y cercano, sin relleno corporativo.
 - No exagerar capacidades ni usar superlativos.
 - Conservar precisión técnica sin mostrarla como sección repetitiva.
 - Párrafos fluidos de 3 a 6 oraciones; evitar frases telegráficas encadenadas.
-- La segunda lectura editorial (paso 11) neutraliza cualquier regionalismo residual; el validador solo refuerza formas inequívocas.
+
+## Normalización dialectal mediante IA
+
+El castellano neutral NO se valida con scripts. No existe un gate automático de
+voseo ni un validador de dialecto. La normalización y su revisión las realiza un
+modelo de IA en dos pasadas, exclusivamente sobre las páginas modificadas en la
+PR (no sobre todo el manual en cada validación).
+
+Reglas del flujo:
+
+- No usar scripts para dialecto.
+- No crear parsers lingüísticos (de conjugaciones, de Markdown o de MDX).
+- No crear listas exhaustivas de conjugaciones ni reglas de tiempos verbales.
+- No traducir a inglés.
+- Conservar literalmente: comandos, código, nombres de archivos, rutas, enlaces,
+  versiones, nombres de herramientas, identificadores, citas textuales.
+- Procesar una página completa o dos páginas cortas por ejecución.
+- Registrar evidencia editorial solo en `revision/evidence/manual-v3-editorial-review/`
+  (nunca versionarla).
+- La calidad lingüística la revisan el modelo y el propietario.
 
 ## Unidad de trabajo
 
@@ -114,15 +133,51 @@ Si la lección no tiene errores frecuentes aplicables, declarar `faq_mode: none`
 
 Mostrar recursos gratuitos desde `data/resources/learning-resources.yml` por ID. No presentar videos como prueba de comportamiento actual. No usar YouTube como fuente verificable de comandos o versiones.
 
-### 11. Segunda lectura editorial
+### 11. Normalización dialectal con IA
 
-Aplicar solo a las páginas MODIFICADAS en esta ejecución (no a todo el manual). Leer el borrador completo una segunda vez con lente exclusivamente editorial:
+Aplicar solo a las páginas MODIFICADAS en esta ejecución (no a todo el manual).
 
-- Neutralizar regionalismos residuales (voseo, localismos).
-- Mejorar fluidez: unir frases telegráficas, ajustar transiciones.
-- Conservar el hilo pedagógico y la persona del ejemplo.
-- NO cambiar comandos, código, rutas, enlaces ni versiones (verificarlos y dejarlos intactos).
-- Confirmar que los campos visibles del frontmatter (`title`, `description`, `learning_outcome`) están en castellano neutral.
+Primera pasada (normalización) — instrucción canónica:
+
+> Revisa únicamente el texto visible para el lector y normalízalo a castellano
+> neutral con tuteo.
+>
+> Sustituye regionalismos rioplatenses como vos, podés, necesitás, querés,
+> sabés, elegí, configurá, ejecutá, guardá, seleccioná, agregá, activá, abrí y
+> continuá por equivalentes neutrales como tú, puedes, necesitas, quieres,
+> sabes, elige, configura, ejecuta, guarda, selecciona, agrega, activa, abre y
+> continúa.
+>
+> No cambies: significado; precisión técnica; comandos; código; nombres de
+> archivos; rutas; enlaces; versiones; nombres de herramientas;
+> identificadores; citas textuales; estructura pedagógica.
+>
+> No traduzcas al inglés. No agregues información. No resumas. Devuelve el
+> texto completo corregido.
+
+Segunda pasada (revisión de fidelidad):
+
+> Compara la versión original con la normalizada.
+>
+> Confirma: que no quede voseo ni regionalismo rioplatense evidente; que el
+> significado técnico sea idéntico; que no hayan cambiado comandos, rutas,
+> código, enlaces o versiones; que el castellano sea natural y no parezca una
+> traducción literal.
+>
+> Corrige únicamente las diferencias necesarias.
+
+Evidencia local por página (solo en `revision/evidence/manual-v3-editorial-review/`):
+
+```text
+Página:
+Modelo redactor:
+Modelo normalizador:
+Modelo revisor:
+Regionalismos corregidos:
+Elementos técnicos conservados:
+Resultado:
+Aprobado: sí/no
+```
 
 ### 12. Revisión triple
 
