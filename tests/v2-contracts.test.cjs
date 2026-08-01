@@ -350,8 +350,16 @@ const completeCatalog = [
   "  - id: mdn-web-docs",
   "    title: MDN Web Docs",
   "    url: https://developer.mozilla.org/",
+  "    type: documentacion",
+  "    language: es",
+  "    access: gratuito",
+  "    provider: Mozilla",
+  "    topics: [html, css, javascript, web, api]",
+  "    level: [principiante, intermedio, avanzado]",
+  "    purpose: referencia tecnica autorizada",
   '    verified_at: "2026-07-31"',
   "    status: activo",
+  "    scope: learning",
 ].join("\n");
 
 test("RED: accepts a complete learning-resources catalog", () => {
@@ -394,5 +402,35 @@ test("RED: rejects a malformed catalog even without lesson-v2 pages", () => {
   const bad = ["resources:", "  - id: mdn-web-docs", "    url: https://example.com/"].join("\n");
   const result = runCatalogOnlyFixture(bad);
   assert.notEqual(result.status, 0, "Catalog errors must not depend on lesson-v2 migration");
+  assert.match(result.stderr, /missing required field/);
+});
+
+// P2: a missing catalog is a validation error, and the complete documented
+// record schema (MIGRATION.md) must be enforced.
+
+test("RED: rejects a missing resource catalog", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "v2-catalog-missing-"));
+  const file = path.join(dir, "reference.md");
+  fs.writeFileSync(file, "# Referencia sin contrato V2\n", "utf8");
+  const missing = path.join(dir, "no-such-catalog.yml");
+  const result = cp.spawnSync(process.execPath, [validator, "--resources", missing, file], {
+    cwd: path.resolve(__dirname, ".."),
+    encoding: "utf8",
+  });
+  fs.rmSync(dir, { recursive: true, force: true });
+  assert.notEqual(result.status, 0, "A missing mandatory catalog must fail, not warn");
+});
+
+test("RED: rejects a catalog record missing documented schema fields", () => {
+  const partial = [
+    "resources:",
+    "  - id: mdn-web-docs",
+    "    title: MDN Web Docs",
+    "    url: https://developer.mozilla.org/",
+    '    verified_at: "2026-07-31"',
+    "    status: activo",
+  ].join("\n");
+  const result = runCatalogOnlyFixture(partial);
+  assert.notEqual(result.status, 0, "type/language/access/provider/topics/level/purpose/scope are documented as required");
   assert.match(result.stderr, /missing required field/);
 });

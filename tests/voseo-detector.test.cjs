@@ -382,3 +382,24 @@ test("RED: accepts neutral 'continúa' form", () => {
   const result = runValidator(content);
   assert.equal(result.status, 0, "'continúa' is neutral Spanish");
 });
+
+// P2: HTML/MDX anchor destinations are invisible, and a subordinate-clause
+// "yo" must not exempt a later imperative.
+
+test("RED: accepts an HTML anchor whose href contains a scanned stem", () => {
+  const content = validLessonV2 + '\n<a href="https://example.test/vos/inicio">la guía</a>\n';
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "The href attribute is not reader-visible text");
+});
+
+test("RED: still rejects voseo inside an HTML anchor label", () => {
+  const content = validLessonV2 + '\n<a href="https://example.test/guia">Podés verla</a>\n';
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "The anchor label IS reader-visible text");
+});
+
+test("RED: rejects imperative with a subordinate-clause 'yo' before it", () => {
+  const content = validLessonV2 + "\nAunque yo terminé mi parte, elegí una opción.\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "The 'yo' belongs to the 'Aunque' clause, not to 'elegí'");
+});

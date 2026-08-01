@@ -194,8 +194,16 @@ function isPreteriteContext(text, matchIndex) {
   const markerPattern = new RegExp(PRETERITE_CONTEXT_MARKERS.source, PRETERITE_CONTEXT_MARKERS.flags + "g");
   let marker;
   while ((marker = markerPattern.exec(before)) !== null) {
-    const conjunctionBefore = SUBORDINATING_CONJUNCTIONS.test(before.slice(0, marker.index));
-    if (marker[0].toLowerCase() === "yo" || !conjunctionBefore) return true;
+    if (marker[0].toLowerCase() === "yo") {
+      // "yo" must belong to the MAIN clause: it must appear after the last
+      // comma of the preceding text ("Si ya había terminado, yo abrí ...").
+      // A "yo" inside a preceding subordinate clause cannot exempt a later
+      // imperative ("Aunque yo terminé mi parte, elegí una opción").
+      if (before.lastIndexOf(",") < marker.index) return true;
+    } else {
+      const conjunctionBefore = SUBORDINATING_CONJUNCTIONS.test(before.slice(0, marker.index));
+      if (!conjunctionBefore) return true;
+    }
   }
   // Markers AFTER the verb only count when no subordinating conjunction
   // intervenes (see SUBORDINATING_CONJUNCTIONS).
@@ -281,6 +289,8 @@ function validateFile(file) {
     // Keep link LABELS (reader-visible) but drop destinations and reference
     // markers: a scanned stem inside a URL or reference id is not prose.
     line = line.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replace(/\[([^\]]+)\]\[[^\]]*\]/g, "$1");
+    // HTML/MDX anchors: keep the label, drop the href attribute value.
+    line = line.replace(/<a\s+[^>]*href=["'][^"']*["'][^>]*>(.*?)<\/a>/gi, "$1");
     // Reference definitions ("[manual]: https://...") are not rendered text.
     if (/^\s*\[[^\]]+\]:\s*\S/.test(line)) continue;
     if (/^\s*$/.test(line)) continue;

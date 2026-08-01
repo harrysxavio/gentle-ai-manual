@@ -40,16 +40,25 @@ function getPersonaIds() {
   return personaIds;
 }
 
-// Required fields for every learning-resource record (documented in the
-// migration workflow). A record that loses its title, URL, verification date
-// or status would silently degrade the catalog; the aggregate check must fail.
-const RESOURCE_REQUIRED_FIELDS = ["title", "url", "verified_at", "status"];
+// Required fields for every learning-resource record. MIGRATION.md documents
+// the complete schema: id, title, url, type, language, access, provider,
+// topics, level, purpose, verified_at, status, scope. Scalar fields must be
+// non-empty strings; topics and level are non-empty string lists. A record
+// that loses any documented field would silently degrade the catalog.
+const RESOURCE_SCALAR_FIELDS = [
+  "title", "url", "type", "language", "access", "provider",
+  "purpose", "verified_at", "status", "scope",
+];
+const RESOURCE_LIST_FIELDS = ["topics", "level"];
 
 function getResourceIds() {
   if (resourceIds) return resourceIds;
   const resourcesPath = resourcesPathOverride || RESOURCES_PATH;
   if (!fs.existsSync(resourcesPath)) {
-    console.error("Warning: resources file not found at", resourcesPath);
+    // The catalog is mandatory: its complete loss must fail the aggregate
+    // check, not degrade to a warning (the repository currently has no
+    // lesson-v2 pages, so lesson validation alone would not catch it).
+    catalogErrors = [`learning-resources.yml: mandatory catalog not found at ${resourcesPath}`];
     resourceIds = new Set();
     return resourceIds;
   }
@@ -67,9 +76,15 @@ function getResourceIds() {
       catalogErrors.push(`learning-resources.yml: duplicate resource id '${id}'`);
     }
     ids.add(id);
-    for (const field of RESOURCE_REQUIRED_FIELDS) {
+    for (const field of RESOURCE_SCALAR_FIELDS) {
       const value = record[field];
       if (typeof value !== "string" || value.trim() === "") {
+        catalogErrors.push(`learning-resources.yml: resource '${id}' missing required field '${field}'`);
+      }
+    }
+    for (const field of RESOURCE_LIST_FIELDS) {
+      const value = record[field];
+      if (!Array.isArray(value) || value.length === 0 || value.some((e) => typeof e !== "string" || e.trim() === "")) {
         catalogErrors.push(`learning-resources.yml: resource '${id}' missing required field '${field}'`);
       }
     }
