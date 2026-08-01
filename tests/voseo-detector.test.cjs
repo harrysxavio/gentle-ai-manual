@@ -480,3 +480,86 @@ test("RED: reports voseo at the label line of a multi-line anchor", () => {
   assert.notEqual(result.status, 0, "The label is visible");
   assert.ok(result.stderr.includes(`:${labelLine}:`), `Expected error at line ${labelLine}, got:\n${result.stderr}`);
 });
+
+// P2: the standalone voseo form "sos" must be detected as a full lowercase
+// word, while "SOS" (acronym), substrings and identifiers stay allowed.
+
+test("RED: rejects visible lowercase 'sos'", () => {
+  const content = validLessonV2 + "\nSos responsable de revisar el resultado.\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "Lowercase 'sos' is voseo");
+});
+
+test("RED: accepts uppercase 'SOS' acronym", () => {
+  const content = validLessonV2 + "\nEnvía una señal de SOS en la terminal.\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Uppercase 'SOS' is not voseo");
+});
+
+test("RED: accepts 'sos' inside a longer word or identifier", () => {
+  const content = validLessonV2 + "\nEl comando `costos` y la clase `EsosValores` son parte del proyecto.\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Substring 'sos' is not voseo");
+});
+
+// P2: MDX module declarations (import/export) are invisible; they must be
+// stripped while preserving newlines so line numbers stay accurate.
+
+test("RED: accepts an MDX single-line import whose path contains 'vos'", () => {
+  const content = validLessonV2 + "\nimport Card from '../../components/vos/Card.astro';\n\nPodés verla.\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "Visible prose after the import IS scanned");
+});
+
+test("RED: accepts an MDX single-line import with a scanned path", () => {
+  const content = validLessonV2 + "\nimport Card from '../../components/vos/Card.astro';\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Import path is not reader-visible text");
+});
+
+test("RED: accepts a multi-line MDX import with a scanned path", () => {
+  const content = validLessonV2 + "\nimport {\n  Card,\n  Tabs\n} from '../../components/vos/index.js';\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Multi-line import path is not reader-visible text");
+});
+
+test("RED: accepts an MDX export with a scanned path", () => {
+  const content = validLessonV2 + "\nexport { Card } from '../../components/vos/Card.astro';\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Export path is not reader-visible text");
+});
+
+test("RED: keeps line numbers accurate after a stripped import", () => {
+  const content = validLessonV2 + "\nimport Card from '../../components/vos/Card.astro';\n\nPodés verla.\n";
+  const labelLine = content.split("\n").findIndex((l) => l.trim() === "Podés verla.") + 1;
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "Visible prose is scanned");
+  assert.ok(result.stderr.includes(`:${labelLine}:`), `Expected error at line ${labelLine}, got:\n${result.stderr}`);
+});
+
+// P2: namespaced MDX components (<UI.Card>, <Tooltip.Root>) must be stripped
+// the same way as plain components.
+
+test("RED: accepts a namespaced MDX component with an invisible href", () => {
+  const content = validLessonV2 + "\n<UI.Card href={routes.vos}>la guía</UI.Card>\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Namespaced component attributes are not reader-visible text");
+});
+
+test("RED: still rejects voseo inside a namespaced component label", () => {
+  const content = validLessonV2 + "\n<UI.Card href={routes.guia}>Podés verla</UI.Card>\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "Namespaced component children ARE reader-visible text");
+});
+
+test("RED: accepts a namespaced self-closing MDX component", () => {
+  const content = validLessonV2 + "\n<UI.Card href={routes.vos} />\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Namespaced self-closing attributes are not reader-visible text");
+});
+
+test("RED: strips a multi-line namespaced component and keeps its visible text", () => {
+  const content = validLessonV2 + "\n<Tooltip.Root>\n  Contenido visible\n</Tooltip.Root>\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Namespaced component body without voseo is fine");
+});

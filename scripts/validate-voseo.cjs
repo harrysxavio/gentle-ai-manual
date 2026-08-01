@@ -134,6 +134,15 @@ function buildPattern(stem) {
 // Separate stems that are ambiguous with neutral Spanish (rare single-syllable forms)
 const AMBIGUOUS_STEMS = new Set(["vas"]);
 
+// The standalone voseo form "sos" (second person of "ser") is detected ONLY
+// as a full word. The pattern is case-sensitive on purpose: the uppercase
+// "SOS" acronym ("sistema SOS", "señal de SOS") and any longer word or
+// identifier that merely contains those letters ("costos", "EsosValores")
+// must stay allowed. The explicit alternation accepts the sentence-initial
+// capitalization "Sos" — the exact form Codex flagged — while "SOS" remains
+// exempt. No general rules about the verb "ser" are added.
+const SOS_PATTERN = /(?:^|[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])(?:sos|Sos)(?:$|[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ])/;
+
 // Accented -í imperative stems that are ALSO valid neutral first-person
 // preterites of regular -ir verbs ("elegí", "abrí", "escribí", "seguí",
 // "salí", "pedí", "subí", "recibí"). "vení" and "decí" are excluded because
@@ -247,6 +256,10 @@ function validateFile(file) {
   for (const field of visibleFields) {
     const value = meta[field];
     if (!value || typeof value !== "string") continue;
+    if (SOS_PATTERN.test(value)) {
+      errors.push(`${relative}: frontmatter '${field}' contains voseo 'sos' — use neutral Spanish instead`);
+      continue;
+    }
     for (const stem of ALL_VOSEO_STEMS) {
       if (AMBIGUOUS_STEMS.has(stem)) continue;
       const pattern = new RegExp(buildPattern(stem).source, "ig");
@@ -279,6 +292,10 @@ function validateFile(file) {
     .replace(/`[^`\n]+`/g, "")
     .replace(/<!--[\s\S]*?-->/g, preserveLines)
     .replace(/\{\/\*[\s\S]*?\*\/\}/g, preserveLines)
+    // MDX module declarations (import/export) are invisible; strip them
+    // entirely but keep their newlines so error line numbers stay accurate.
+    // Single-line, multi-line and re-export forms all end with ';'.
+    .replace(/^(?:import|export)\b[\s\S]*?;\s*$/gm, preserveLines)
     // HTML/MDX anchors and components: keep the rendered children, drop tag
     // attributes entirely. Anchor-specific handling covers quoted literals,
     // JSX expressions (literal and nonliteral) and multi-line tags; the
@@ -293,9 +310,9 @@ function validateFile(file) {
     })
     // Self-closing JSX/MDX tags such as `<Card href={routes.vos} />` render
     // no text; drop the whole tag but keep its newlines so line numbers stay
-    // accurate.
-    .replace(/<([A-Za-z][A-Za-z0-9]*)(?:\s+[^>]*)?\/>/g, (match) => "\n".repeat((match.match(/\r?\n/g) || []).length))
-    .replace(/(<([A-Za-z][A-Za-z0-9]*)(?:\s+[^>]*)?>)([\s\S]*?)(<\/\2>)/g, (match, open, name, label, close) => {
+    // accurate. Namespaced names (`<UI.Card />`) are accepted too.
+    .replace(/<([A-Za-z][A-Za-z0-9]*(?:\.[A-Za-z][A-Za-z0-9]*)*)(?:\s+[^>]*)?\/>/g, (match) => "\n".repeat((match.match(/\r?\n/g) || []).length))
+    .replace(/(<([A-Za-z][A-Za-z0-9]*(?:\.[A-Za-z][A-Za-z0-9]*)*)(?:\s+[^>]*)?>)([\s\S]*?)(<\/\2>)/g, (match, open, name, label, close) => {
       const openLines = (open.match(/\r?\n/g) || []).length;
       const closeLines = (close.match(/\r?\n/g) || []).length;
       return "\n".repeat(openLines) + label + "\n".repeat(closeLines);
@@ -313,6 +330,11 @@ function validateFile(file) {
     // Reference definitions ("[manual]: https://...") are not rendered text.
     if (/^\s*\[[^\]]+\]:\s*\S/.test(line)) continue;
     if (/^\s*$/.test(line)) continue;
+
+    if (SOS_PATTERN.test(line)) {
+      errors.push(`${relative}:${i + 1}: voseo 'sos' — use neutral Spanish instead`);
+      continue;
+    }
 
     for (const stem of ALL_VOSEO_STEMS) {
       // Ambiguous stems like "vas" need extra context
