@@ -188,8 +188,8 @@ function validateFile(file) {
   }
 
   // Validate types of required fields
-  if (meta.estimated_minutes !== undefined && (typeof meta.estimated_minutes !== "number" || !Number.isInteger(meta.estimated_minutes))) {
-    errors.push(`${relative}: 'estimated_minutes' must be an integer`);
+  if (meta.estimated_minutes !== undefined && (typeof meta.estimated_minutes !== "number" || !Number.isInteger(meta.estimated_minutes) || meta.estimated_minutes <= 0)) {
+    errors.push(`${relative}: 'estimated_minutes' must be a positive integer`);
   }
   if (meta.level !== undefined && (typeof meta.level !== "number" || !Number.isInteger(meta.level))) {
     errors.push(`${relative}: 'level' must be an integer between 1 and 3`);

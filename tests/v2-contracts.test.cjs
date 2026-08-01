@@ -280,3 +280,19 @@ test("RED: rejects unverified latest version as snapshot (engram 1.20.0)", () =>
   assert.notEqual(result.status, 0, "Should reject 1.20.0: latest but not yet verified");
   assert.match(result.stderr, /snapshot/i);
 });
+
+// P2: estimated_minutes must be a positive integer
+
+test("RED: rejects negative estimated_minutes", () => {
+  const bad = validV2.replace("estimated_minutes: 15", "estimated_minutes: -1");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject estimated_minutes: -1");
+  assert.match(result.stderr, /estimated_minutes/i);
+});
+
+test("RED: rejects zero estimated_minutes", () => {
+  const bad = validV2.replace("estimated_minutes: 15", "estimated_minutes: 0");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject estimated_minutes: 0");
+  assert.match(result.stderr, /estimated_minutes/i);
+});

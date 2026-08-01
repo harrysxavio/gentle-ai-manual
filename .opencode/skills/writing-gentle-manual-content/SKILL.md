@@ -17,12 +17,14 @@ Escribe una explicación amable y continua que una persona principiante pueda co
 
 ## Idioma y voz
 
-- Castellano neutral: puedes, elige, necesitas, comienza, haz, comprueba.
-- Evitar voseo: podés, elegí, necesitás, comenzá, hacé, comprobá.
+- Escribir DIRECTAMENTE en castellano neutral. No usar el flujo español → inglés → español.
+- Usar preferentemente: puedes, necesitas, quieres, sabes, elige, configura, ejecuta, guarda, selecciona, agrega, activa, abre, continúa.
+- Evitar: vos, podés, necesitás, querés, sabés, elegí, configurá, ejecutá, guardá, seleccioná, agregá, activá, abrí, continuá.
 - Tono de profesor paciente y cercano, sin relleno corporativo.
 - No exagerar capacidades ni usar superlativos.
 - Conservar precisión técnica sin mostrarla como sección repetitiva.
 - Párrafos fluidos de 3 a 6 oraciones; evitar frases telegráficas encadenadas.
+- La segunda lectura editorial (paso 11) neutraliza cualquier regionalismo residual; el validador solo refuerza formas inequívocas.
 
 ## Unidad de trabajo
 
@@ -112,19 +114,29 @@ Si la lección no tiene errores frecuentes aplicables, declarar `faq_mode: none`
 
 Mostrar recursos gratuitos desde `data/resources/learning-resources.yml` por ID. No presentar videos como prueba de comportamiento actual. No usar YouTube como fuente verificable de comandos o versiones.
 
-### 11. Revisión triple
+### 11. Segunda lectura editorial
+
+Aplicar solo a las páginas MODIFICADAS en esta ejecución (no a todo el manual). Leer el borrador completo una segunda vez con lente exclusivamente editorial:
+
+- Neutralizar regionalismos residuales (voseo, localismos).
+- Mejorar fluidez: unir frases telegráficas, ajustar transiciones.
+- Conservar el hilo pedagógico y la persona del ejemplo.
+- NO cambiar comandos, código, rutas, enlaces ni versiones (verificarlos y dejarlos intactos).
+- Confirmar que los campos visibles del frontmatter (`title`, `description`, `learning_outcome`) están en castellano neutral.
+
+### 12. Revisión triple
 
 Simular principiante, operador y arquitecto. Verificar: comprensión, aplicación, diagnóstico, límites y alternativas.
 
-### 12. GREEN
+### 13. GREEN
 
 Ejecutar `npm run validate`, `npm run test:visual`, `npm run build`, `npm run check-site`. Corregir en la misma rama y PR.
 
-### 13. Puntaje
+### 14. Puntaje
 
 >= 90/100, cero hard failures.
 
-### 14. Review loop
+### 15. Review loop
 
 Misma rama, misma PR, prueba de regresión, nuevo HEAD, nuevo CI, nueva revisión de Codex.
 
@@ -135,7 +147,9 @@ Misma rama, misma PR, prueba de regresión, nuevo HEAD, nuevo CI, nueva revisió
 Campos requeridos en frontmatter:
 - `manual_contract`, `title`, `description`, `content_level`
 - `estimated_minutes`, `learning_outcome`, `canonical_concepts`
-- `source_status`, `level`, `estimatedTime`
+- `source_status`
+
+`level` y `estimatedTime` NO son requeridos en V1: `validate-manual-content.cjs` no los exige y las páginas V1 los omiten. Las páginas V1 se mantienen sin cambios; esos campos pertenecen al contrato V2.
 
 Secciones requeridas en el cuerpo: 13 headings (ver `scripts/validate-manual-content.cjs`).
 
