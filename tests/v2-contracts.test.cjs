@@ -271,3 +271,12 @@ test("RED: accepts level at the boundaries 1 and 3", () => {
   const result = runValidator(low);
   assert.equal(result.status, 0, "Should accept level: 3 (upper boundary)");
 });
+
+// P2: unverified "latest" versions must not be admitted as snapshots
+
+test("RED: rejects unverified latest version as snapshot (engram 1.20.0)", () => {
+  const content = validV2.replace("snapshot: none", "snapshot: 1.20.0");
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "Should reject 1.20.0: latest but not yet verified");
+  assert.match(result.stderr, /snapshot/i);
+});

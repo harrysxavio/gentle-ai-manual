@@ -139,11 +139,14 @@ const PRETERITE_AMBIGUOUS_STEMS = new Set([
 ]);
 
 // Past-time / first-person markers that disambiguate the preterite reading.
-// When one appears in the same line as an accented -í form, the form is a
-// neutral first-person preterite ("Ayer elegí la primera opción", "Yo abrí el
-// archivo") rather than a voseo imperative. The trade-off is documented: an
-// instruction that also carries such a marker is rarer than neutral narration.
-const PRETERITE_CONTEXT_MARKERS = /\b(yo|ayer|anoche|ya|nunca|jamás|recién|después|luego|antes|mientras)\b/i;
+// Only markers that establish a first-person PAST reading are accepted:
+// subject pronoun "yo", past-time adverbs ("ayer", "anoche", "ya", "nunca",
+// "jamás", "recién"). Sequencing connectors such as "antes", "después",
+// "luego" or "mientras" are NOT sufficient — "Antes de continuar, elegí una
+// opción" is a voseo instruction, not a preterite. The trade-off is
+// documented: the validator prioritizes detecting instructions over
+// accepting ambiguous narration.
+const PRETERITE_CONTEXT_MARKERS = /\b(yo|ayer|anoche|ya|nunca|jamás|recién)\b/i;
 
 function isPreteriteContext(text) {
   return PRETERITE_CONTEXT_MARKERS.test(text);

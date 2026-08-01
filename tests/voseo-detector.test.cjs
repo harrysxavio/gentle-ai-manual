@@ -228,13 +228,25 @@ test("RED: accepts first-person preterite 'Yo abrí el archivo' (not voseo)", ()
   assert.equal(result.status, 0, "Should accept 'Yo abrí' as first-person preterite");
 });
 
-test("RED: accepts first-person preterite 'Escribí una nota antes de continuar' (not voseo)", () => {
-  const content = validLessonV2 + "\nEscribí una nota antes de continuar.\n";
+test("RED: accepts first-person preterite 'Yo escribí una nota antes de continuar' (not voseo)", () => {
+  const content = validLessonV2 + "\nYo escribí una nota antes de continuar.\n";
   const result = runValidator(content);
-  assert.equal(result.status, 0, "Should accept 'Escribí' with past-time marker as preterite");
+  assert.equal(result.status, 0, "Should accept 'Yo escribí' with first-person subject as preterite");
 });
 
 test("RED: still rejects instruction 'Elegí la opción correcta' (voseo imperative)", () => {
   const result = runValidator(validLessonV2 + "\nElegí la opción correcta.\n");
   assert.notEqual(result.status, 0, "Should keep rejecting voseo imperative without preterite context");
+});
+
+test("RED: rejects voseo imperative even with a sequencing marker 'Antes de continuar, elegí una opción'", () => {
+  const content = validLessonV2 + "\nAntes de continuar, elegí una opción.\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "Sequencing markers do not establish a preterite reading");
+});
+
+test("RED: rejects voseo imperative even with a sequencing marker 'Después, abrí el archivo'", () => {
+  const content = validLessonV2 + "\nDespués, abrí el archivo.\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "Sequencing markers do not establish a preterite reading");
 });

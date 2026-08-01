@@ -63,10 +63,13 @@ function getGlossaryTerms() {
 }
 
 // Admitted versions come from the canonical compatibility registry.
-// Every registered component's `version_verified`/`latest` and every
-// version-valued column in the compatibility matrix are accepted, so lessons
-// may snapshot any component they document (Gentle-AI, OpenCode, Codex,
-// Engram, GGA, Node.js, ...) with a registry-backed version.
+// Only EXPLICITLY VERIFIED versions are accepted: each registered component's
+// `version_verified` and every version-valued column in the compatibility
+// matrix. `latest` is deliberately NOT admitted — an unverified update (for
+// example engram 1.20.0) must not become a valid lesson snapshot, otherwise
+// the validator would contradict the V2 contract's verified-snapshot
+// guarantee. Lessons may snapshot any component they document (Gentle-AI,
+// OpenCode, Codex, Engram, GGA, Node.js, ...) with a registry-backed version.
 function getAdmittedVersions() {
   if (gentleAiVersions) return gentleAiVersions;
   if (!fs.existsSync(VERSIONS_PATH)) {
@@ -79,9 +82,6 @@ function getAdmittedVersions() {
   for (const component of raw.components || []) {
     if (component.version_verified && normalizeVersion(component.version_verified)) {
       versions.add(normalizeVersion(component.version_verified));
-    }
-    if (component.latest && normalizeVersion(component.latest)) {
-      versions.add(normalizeVersion(component.latest));
     }
   }
   for (const row of raw.compatibility_matrix || []) {
