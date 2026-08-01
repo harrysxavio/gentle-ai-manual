@@ -192,7 +192,9 @@ function validateFile(file) {
     errors.push(`${relative}: 'estimated_minutes' must be an integer`);
   }
   if (meta.level !== undefined && (typeof meta.level !== "number" || !Number.isInteger(meta.level))) {
-    errors.push(`${relative}: 'level' must be an integer`);
+    errors.push(`${relative}: 'level' must be an integer between 1 and 3`);
+  } else if (meta.level !== undefined && (meta.level < 1 || meta.level > 3)) {
+    errors.push(`${relative}: 'level' must be between 1 and 3 (documented range in MIGRATION.md)`);
   }
   if (meta.learning_outcome !== undefined && typeof meta.learning_outcome !== "string") {
     errors.push(`${relative}: 'learning_outcome' must be a string`);

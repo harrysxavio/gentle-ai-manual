@@ -249,3 +249,25 @@ test("RED: accepts Engram snapshot version from the registry", () => {
   const result = runValidator(content);
   assert.equal(result.status, 0, "Should accept Engram 1.19.0 from versions.yml");
 });
+
+// P2: lesson level must be an integer between 1 and 3 (see MIGRATION.md)
+
+test("RED: rejects level below the documented range", () => {
+  const bad = validV2.replace("level: 1", "level: -1");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject level: -1 (documented range is 1-3)");
+  assert.match(result.stderr, /level/i);
+});
+
+test("RED: rejects level above the documented range", () => {
+  const bad = validV2.replace("level: 1", "level: 99");
+  const result = runValidator(bad);
+  assert.notEqual(result.status, 0, "Should reject level: 99 (documented range is 1-3)");
+  assert.match(result.stderr, /level/i);
+});
+
+test("RED: accepts level at the boundaries 1 and 3", () => {
+  const low = validV2.replace("level: 1", "level: 3");
+  const result = runValidator(low);
+  assert.equal(result.status, 0, "Should accept level: 3 (upper boundary)");
+});

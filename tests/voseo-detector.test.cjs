@@ -210,3 +210,31 @@ test("RED: accepts neutral imperfect subjunctive 'pensase' (not voseo)", () => {
   const result = runValidator(content);
   assert.equal(result.status, 0, "Should accept neutral 'pensase' as imperfect subjunctive");
 });
+
+// P2: first-person preterites are not voseo imperatives. Accented -í forms such
+// as "elegí", "abrí" or "escribí" are also valid neutral first-person
+// preterites ("Ayer elegí la primera opción"). Contextual markers before the
+// form (subject pronoun "yo" or past-time adverbs) disambiguate the preterite.
+
+test("RED: accepts first-person preterite 'Ayer elegí la primera opción' (not voseo)", () => {
+  const content = validLessonV2 + "\nAyer elegí la primera opción.\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Should accept 'Ayer elegí' as first-person preterite");
+});
+
+test("RED: accepts first-person preterite 'Yo abrí el archivo' (not voseo)", () => {
+  const content = validLessonV2 + "\nYo abrí el archivo y revisé el contenido.\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Should accept 'Yo abrí' as first-person preterite");
+});
+
+test("RED: accepts first-person preterite 'Escribí una nota antes de continuar' (not voseo)", () => {
+  const content = validLessonV2 + "\nEscribí una nota antes de continuar.\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Should accept 'Escribí' with past-time marker as preterite");
+});
+
+test("RED: still rejects instruction 'Elegí la opción correcta' (voseo imperative)", () => {
+  const result = runValidator(validLessonV2 + "\nElegí la opción correcta.\n");
+  assert.notEqual(result.status, 0, "Should keep rejecting voseo imperative without preterite context");
+});

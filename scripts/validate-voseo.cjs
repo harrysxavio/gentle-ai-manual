@@ -130,6 +130,25 @@ function buildPattern(stem) {
 // Separate stems that are ambiguous with neutral Spanish (rare single-syllable forms)
 const AMBIGUOUS_STEMS = new Set(["vas"]);
 
+// Accented -í imperative stems that are ALSO valid neutral first-person
+// preterites of regular -ir verbs ("elegí", "abrí", "escribí", "seguí",
+// "salí", "pedí", "subí", "recibí"). "vení" and "decí" are excluded because
+// their preterites are irregular ("vine", "dije") and never collide.
+const PRETERITE_AMBIGUOUS_STEMS = new Set([
+  "elegí", "abrí", "escribí", "seguí", "salí", "pedí", "subí", "recibí",
+]);
+
+// Past-time / first-person markers that disambiguate the preterite reading.
+// When one appears in the same line as an accented -í form, the form is a
+// neutral first-person preterite ("Ayer elegí la primera opción", "Yo abrí el
+// archivo") rather than a voseo imperative. The trade-off is documented: an
+// instruction that also carries such a marker is rarer than neutral narration.
+const PRETERITE_CONTEXT_MARKERS = /\b(yo|ayer|anoche|ya|nunca|jamás|recién|después|luego|antes|mientras)\b/i;
+
+function isPreteriteContext(text) {
+  return PRETERITE_CONTEXT_MARKERS.test(text);
+}
+
 function frontmatter(text) {
   if (!text.startsWith("---\n") && !text.startsWith("---\r\n")) return {};
   const end = text.indexOf("\n---", 4);
@@ -164,8 +183,9 @@ function validateFile(file) {
     for (const stem of ALL_VOSEO_STEMS) {
       if (AMBIGUOUS_STEMS.has(stem)) continue;
       const pattern = buildPattern(stem);
-      if (pattern.test(value)) {
-        const match = value.match(pattern);
+      const match = pattern.exec(value);
+      if (match) {
+        if (PRETERITE_AMBIGUOUS_STEMS.has(stem) && isPreteriteContext(value)) continue;
         errors.push(`${relative}: frontmatter '${field}' contains voseo '${match[0].trim()}' — use neutral Spanish instead`);
         break; // one error per field
       }
@@ -198,8 +218,11 @@ function validateFile(file) {
       // Ambiguous stems like "vas" need extra context
       if (AMBIGUOUS_STEMS.has(stem)) continue;
       const pattern = buildPattern(stem);
-      if (pattern.test(line)) {
-        const match = line.match(pattern);
+      const match = pattern.exec(line);
+      if (match) {
+        // Accented -í forms with a past-time/first-person marker in the line
+        // are neutral first-person preterites, not voseo imperatives.
+        if (PRETERITE_AMBIGUOUS_STEMS.has(stem) && isPreteriteContext(line)) continue;
         errors.push(`${relative}:${i + 1}: voseo '${match[0].trim()}' — use neutral Spanish instead`);
         break; // one error per line
       }
