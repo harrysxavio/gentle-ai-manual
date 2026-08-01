@@ -278,7 +278,16 @@ function validateFile(file) {
     .replace(/~~~[\s\S]*?~~~/g, preserveLines)
     .replace(/`[^`\n]+`/g, "")
     .replace(/<!--[\s\S]*?-->/g, preserveLines)
-    .replace(/\{\/\*[\s\S]*?\*\/\}/g, preserveLines);
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, preserveLines)
+    // HTML/MDX anchors: keep the rendered label, drop the href attribute value
+    // entirely. Covers quoted literals, JSX expressions (literal and
+    // nonliteral) and multi-line anchors. The label keeps its own newlines and
+    // any remaining lines are padded so error line numbers stay accurate.
+    .replace(/<a\s+[^>]*href=(?:"[^"]*"|'[^']*'|\{[^}]*\})[^>]*>([\s\S]*?)<\/a>/gi, (match, label) => {
+      const removed = (match.match(/\r?\n/g) || []).length;
+      const kept = (label.match(/\r?\n/g) || []).length;
+      return label + "\n".repeat(Math.max(0, removed - kept));
+    });
 
   const lines = visibleText.split(/\r?\n/);
 
@@ -289,10 +298,6 @@ function validateFile(file) {
     // Keep link LABELS (reader-visible) but drop destinations and reference
     // markers: a scanned stem inside a URL or reference id is not prose.
     line = line.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replace(/\[([^\]]+)\]\[[^\]]*\]/g, "$1");
-    // HTML/MDX anchors: keep the label, drop the href attribute value. Both
-    // plain ("href=\"...\"") and JSX expression-valued (href={"..."/{'...'})
-    // destinations are excluded from the scanned prose.
-    line = line.replace(/<a\s+[^>]*href=(?:["'][^"']*["']|\{["'][^"']*["']\})[^>]*>(.*?)<\/a>/gi, "$1");
     // Reference definitions ("[manual]: https://...") are not rendered text.
     if (/^\s*\[[^\]]+\]:\s*\S/.test(line)) continue;
     if (/^\s*$/.test(line)) continue;

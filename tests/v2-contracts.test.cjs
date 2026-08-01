@@ -497,3 +497,17 @@ test("RED: rejects a missing personas catalog", () => {
   fs.rmSync(dir, { recursive: true, force: true });
   assert.notEqual(result.status, 0, "A missing mandatory personas catalog must fail, not warn");
 });
+
+// P2: an empty mandatory catalog must fail like a missing one.
+
+test("RED: rejects an empty personas catalog", () => {
+  const result = runPersonasFixture("personas: []\n");
+  assert.notEqual(result.status, 0, "An empty persona bank bypasses the missing-catalog protection");
+  assert.match(result.stderr, /empty/);
+});
+
+test("RED: rejects an empty learning-resources catalog", () => {
+  const result = runCatalogOnlyFixture("resources: []\n");
+  assert.notEqual(result.status, 0, "An empty resource catalog bypasses the missing-catalog protection");
+  assert.match(result.stderr, /empty/);
+});

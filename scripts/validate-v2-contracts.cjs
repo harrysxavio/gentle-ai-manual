@@ -48,6 +48,9 @@ function getPersonaIds() {
   const records = raw.personas || [];
   const ids = new Set();
   personaErrors = [];
+  if (records.length === 0) {
+    personaErrors.push("personas.yml: mandatory persona catalog is empty");
+  }
   for (const record of records) {
     const id = record && record.id;
     if (typeof id !== "string" || id.trim() === "") {
@@ -101,6 +104,9 @@ function getResourceIds() {
   const records = raw.resources || [];
   const ids = new Set();
   catalogErrors = [];
+  if (records.length === 0) {
+    catalogErrors.push("learning-resources.yml: mandatory resource catalog is empty");
+  }
   for (const record of records) {
     const id = record && record.id;
     if (typeof id !== "string" || id.trim() === "") {

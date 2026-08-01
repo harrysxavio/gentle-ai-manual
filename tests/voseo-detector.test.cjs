@@ -417,3 +417,24 @@ test("RED: still rejects voseo inside an MDX anchor label", () => {
   const result = runValidator(content);
   assert.notEqual(result.status, 0, "The MDX anchor label IS reader-visible text");
 });
+
+// P2: nonliteral JSX href expressions and multi-line anchors must be stripped
+// before scanning; only the rendered label remains.
+
+test("RED: accepts an MDX anchor with a nonliteral href expression", () => {
+  const content = validLessonV2 + "\n<a href={routes.vos}>la guía</a>\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "The nonliteral JSX href is not reader-visible text");
+});
+
+test("RED: accepts a multi-line MDX anchor with an href destination", () => {
+  const content = validLessonV2 + '\n<a\n  href="https://example.test/vos/inicio"\n>\n  la guía\n</a>\n';
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Multi-line anchors keep only their visible label");
+});
+
+test("RED: still rejects voseo inside a multi-line anchor label", () => {
+  const content = validLessonV2 + '\n<a\n  href="https://example.test/guia"\n>\n  Podés verla\n</a>\n';
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "The rendered label of a multi-line anchor IS visible text");
+});
