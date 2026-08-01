@@ -291,6 +291,10 @@ function validateFile(file) {
       const closeLines = (close.match(/\r?\n/g) || []).length;
       return "\n".repeat(openLines) + label + "\n".repeat(closeLines);
     })
+    // Self-closing JSX/MDX tags such as `<Card href={routes.vos} />` render
+    // no text; drop the whole tag but keep its newlines so line numbers stay
+    // accurate.
+    .replace(/<([A-Za-z][A-Za-z0-9]*)(?:\s+[^>]*)?\/>/g, (match) => "\n".repeat((match.match(/\r?\n/g) || []).length))
     .replace(/(<([A-Za-z][A-Za-z0-9]*)(?:\s+[^>]*)?>)([\s\S]*?)(<\/\2>)/g, (match, open, name, label, close) => {
       const openLines = (open.match(/\r?\n/g) || []).length;
       const closeLines = (close.match(/\r?\n/g) || []).length;

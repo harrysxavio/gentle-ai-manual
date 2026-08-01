@@ -454,6 +454,20 @@ test("RED: still rejects voseo inside an MDX component label", () => {
   assert.notEqual(result.status, 0, "The component children ARE reader-visible text");
 });
 
+// P2: self-closing JSX/MDX components carry invisible attributes.
+
+test("RED: accepts a self-closing MDX component with an invisible href", () => {
+  const content = validLessonV2 + "\n<Card href={routes.vos} />\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Self-closing component attributes are not reader-visible text");
+});
+
+test("RED: still rejects voseo in prose following a self-closing component", () => {
+  const content = validLessonV2 + "\n<Card href={routes.guia} />\nPodés verla ahora.\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "Prose after the component IS reader-visible text");
+});
+
 // P3: line numbers must stay accurate when an anchor's opening tag spans
 // lines before its label.
 
