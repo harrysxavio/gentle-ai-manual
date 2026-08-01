@@ -438,3 +438,31 @@ test("RED: still rejects voseo inside a multi-line anchor label", () => {
   const result = runValidator(content);
   assert.notEqual(result.status, 0, "The rendered label of a multi-line anchor IS visible text");
 });
+
+// P2: non-anchor MDX components pass invisible attributes through; only their
+// children are reader-visible.
+
+test("RED: accepts an MDX component with an invisible href attribute", () => {
+  const content = validLessonV2 + "\n<Card href={routes.vos}>la guía</Card>\n";
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "Component attributes are not reader-visible text");
+});
+
+test("RED: still rejects voseo inside an MDX component label", () => {
+  const content = validLessonV2 + "\n<Card href={routes.guia}>Podés verla</Card>\n";
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "The component children ARE reader-visible text");
+});
+
+// P3: line numbers must stay accurate when an anchor's opening tag spans
+// lines before its label.
+
+test("RED: reports voseo at the label line of a multi-line anchor", () => {
+  const prefix = validLessonV2 + '\n<a\n  href="https://example.test/guia"\n>';
+  const label = "Podés verla";
+  const content = prefix + "\n" + label + "\n</a>\n";
+  const labelLine = content.split("\n").findIndex((l) => l === label) + 1;
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "The label is visible");
+  assert.ok(result.stderr.includes(`:${labelLine}:`), `Expected error at line ${labelLine}, got:\n${result.stderr}`);
+});

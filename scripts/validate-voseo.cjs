@@ -279,14 +279,22 @@ function validateFile(file) {
     .replace(/`[^`\n]+`/g, "")
     .replace(/<!--[\s\S]*?-->/g, preserveLines)
     .replace(/\{\/\*[\s\S]*?\*\/\}/g, preserveLines)
-    // HTML/MDX anchors: keep the rendered label, drop the href attribute value
-    // entirely. Covers quoted literals, JSX expressions (literal and
-    // nonliteral) and multi-line anchors. The label keeps its own newlines and
-    // any remaining lines are padded so error line numbers stay accurate.
-    .replace(/<a\s+[^>]*href=(?:"[^"]*"|'[^']*'|\{[^}]*\})[^>]*>([\s\S]*?)<\/a>/gi, (match, label) => {
-      const removed = (match.match(/\r?\n/g) || []).length;
-      const kept = (label.match(/\r?\n/g) || []).length;
-      return label + "\n".repeat(Math.max(0, removed - kept));
+    // HTML/MDX anchors and components: keep the rendered children, drop tag
+    // attributes entirely. Anchor-specific handling covers quoted literals,
+    // JSX expressions (literal and nonliteral) and multi-line tags; the
+    // generic component rule covers non-anchor tags such as
+    // `<Card href={routes.vos}>label</Card>`. Newlines from the removed
+    // opening tag are padded BEFORE the label and newlines from the closing
+    // tag AFTER it, so error line numbers stay accurate.
+    .replace(/(<a\s+[^>]*href=(?:"[^"]*"|'[^']*'|\{[^}]*\})[^>]*>)([\s\S]*?)(<\/a>)/gi, (match, open, label, close) => {
+      const openLines = (open.match(/\r?\n/g) || []).length;
+      const closeLines = (close.match(/\r?\n/g) || []).length;
+      return "\n".repeat(openLines) + label + "\n".repeat(closeLines);
+    })
+    .replace(/(<([A-Za-z][A-Za-z0-9]*)(?:\s+[^>]*)?>)([\s\S]*?)(<\/\2>)/g, (match, open, name, label, close) => {
+      const openLines = (open.match(/\r?\n/g) || []).length;
+      const closeLines = (close.match(/\r?\n/g) || []).length;
+      return "\n".repeat(openLines) + label + "\n".repeat(closeLines);
     });
 
   const lines = visibleText.split(/\r?\n/);
