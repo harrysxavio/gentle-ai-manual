@@ -403,3 +403,17 @@ test("RED: rejects imperative with a subordinate-clause 'yo' before it", () => {
   const result = runValidator(content);
   assert.notEqual(result.status, 0, "The 'yo' belongs to the 'Aunque' clause, not to 'elegí'");
 });
+
+// P2: MDX expression-valued anchor destinations are invisible.
+
+test("RED: accepts an MDX anchor with an expression-valued href", () => {
+  const content = validLessonV2 + '\n<a href={"https://example.test/vos/inicio"}>la guía</a>\n';
+  const result = runValidator(content);
+  assert.equal(result.status, 0, "The JSX expression href is not reader-visible text");
+});
+
+test("RED: still rejects voseo inside an MDX anchor label", () => {
+  const content = validLessonV2 + '\n<a href={"https://example.test/guia"}>Podés verla</a>\n';
+  const result = runValidator(content);
+  assert.notEqual(result.status, 0, "The MDX anchor label IS reader-visible text");
+});

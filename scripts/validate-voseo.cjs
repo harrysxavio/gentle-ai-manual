@@ -289,8 +289,10 @@ function validateFile(file) {
     // Keep link LABELS (reader-visible) but drop destinations and reference
     // markers: a scanned stem inside a URL or reference id is not prose.
     line = line.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replace(/\[([^\]]+)\]\[[^\]]*\]/g, "$1");
-    // HTML/MDX anchors: keep the label, drop the href attribute value.
-    line = line.replace(/<a\s+[^>]*href=["'][^"']*["'][^>]*>(.*?)<\/a>/gi, "$1");
+    // HTML/MDX anchors: keep the label, drop the href attribute value. Both
+    // plain ("href=\"...\"") and JSX expression-valued (href={"..."/{'...'})
+    // destinations are excluded from the scanned prose.
+    line = line.replace(/<a\s+[^>]*href=(?:["'][^"']*["']|\{["'][^"']*["']\})[^>]*>(.*?)<\/a>/gi, "$1");
     // Reference definitions ("[manual]: https://...") are not rendered text.
     if (/^\s*\[[^\]]+\]:\s*\S/.test(line)) continue;
     if (/^\s*$/.test(line)) continue;

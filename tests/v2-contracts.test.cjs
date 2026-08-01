@@ -434,3 +434,66 @@ test("RED: rejects a catalog record missing documented schema fields", () => {
   assert.notEqual(result.status, 0, "type/language/access/provider/topics/level/purpose/scope are documented as required");
   assert.match(result.stderr, /missing required field/);
 });
+
+// P2: personas.yml records must follow the documented schema (MIGRATION.md)
+// with unique ids, and the catalog must be validated eagerly.
+
+const completePersonas = [
+  "personas:",
+  "  - id: administracion",
+  "    nombre: Camila",
+  "    perfil: administrativa",
+  "    contexto: gestiona tareas",
+  "    problemas_tipicos:",
+  "      - organizar informacion",
+  "    restricciones:",
+  "      - no programa",
+  "    herramientas: [Windows, Excel]",
+  "    nivel_tecnico: principiante",
+].join("\n");
+
+function runPersonasFixture(personasContent) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "v2-personas-"));
+  const file = path.join(dir, "reference.md");
+  fs.writeFileSync(file, "# Referencia sin contrato V2\n", "utf8");
+  const personas = path.join(dir, "personas.yml");
+  fs.writeFileSync(personas, personasContent, "utf8");
+  const result = cp.spawnSync(process.execPath, [validator, "--personas", personas, file], {
+    cwd: path.resolve(__dirname, ".."),
+    encoding: "utf8",
+  });
+  fs.rmSync(dir, { recursive: true, force: true });
+  return result;
+}
+
+test("RED: accepts a complete personas catalog", () => {
+  const result = runPersonasFixture(completePersonas);
+  assert.equal(result.status, 0, "Should accept a complete personas catalog");
+});
+
+test("RED: rejects a persona missing documented fields", () => {
+  const bad = ["personas:", "  - id: administracion", "    nombre: Camila"].join("\n");
+  const result = runPersonasFixture(bad);
+  assert.notEqual(result.status, 0, "perfil/contexto/problemas_tipicos/restricciones/herramientas/nivel_tecnico are required");
+  assert.match(result.stderr, /missing required field/);
+});
+
+test("RED: rejects duplicate persona ids", () => {
+  const dup = [completePersonas, "  - id: administracion", "    nombre: Otra", "    perfil: tecnica", "    contexto: otro", "    problemas_tipicos:", "      - x", "    restricciones:", "      - y", "    herramientas: [VSCode]", "    nivel_tecnico: avanzado"].join("\n");
+  const result = runPersonasFixture(dup);
+  assert.notEqual(result.status, 0, "Duplicate persona ids must fail");
+  assert.match(result.stderr, /duplicate persona id/);
+});
+
+test("RED: rejects a missing personas catalog", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "v2-personas-missing-"));
+  const file = path.join(dir, "reference.md");
+  fs.writeFileSync(file, "# Referencia sin contrato V2\n", "utf8");
+  const missing = path.join(dir, "no-such-personas.yml");
+  const result = cp.spawnSync(process.execPath, [validator, "--personas", missing, file], {
+    cwd: path.resolve(__dirname, ".."),
+    encoding: "utf8",
+  });
+  fs.rmSync(dir, { recursive: true, force: true });
+  assert.notEqual(result.status, 0, "A missing mandatory personas catalog must fail, not warn");
+});

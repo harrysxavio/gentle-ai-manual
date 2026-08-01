@@ -18,7 +18,9 @@ let resourceIds = null;
 let glossaryTerms = null;
 let gentleAiVersions = null;
 let resourcesPathOverride = null;
+let personasPathOverride = null;
 let catalogErrors = null;
+let personaErrors = null;
 
 // Normalize a snapshot value to the canonical version format (X.Y.Z without
 // leading "v"). "v2.2.3" and "2.2.3" are the same canonical version.
@@ -28,15 +30,48 @@ function normalizeVersion(value) {
   return /^\d+\.\d+\.\d+$/.test(normalized) ? normalized : null;
 }
 
+// Required fields for every persona record, documented in MIGRATION.md.
+// Scalar fields must be non-empty strings; the list fields must be non-empty
+// lists of strings. Duplicate ids would make lesson references ambiguous.
+const PERSONA_SCALAR_FIELDS = ["nombre", "perfil", "contexto", "nivel_tecnico"];
+const PERSONA_LIST_FIELDS = ["problemas_tipicos", "restricciones", "herramientas"];
+
 function getPersonaIds() {
   if (personaIds) return personaIds;
-  if (!fs.existsSync(PERSONAS_PATH)) {
-    console.error("Warning: personas file not found at", PERSONAS_PATH);
+  const personasPath = personasPathOverride || PERSONAS_PATH;
+  if (!fs.existsSync(personasPath)) {
+    personaErrors = [`personas.yml: mandatory catalog not found at ${personasPath}`];
     personaIds = new Set();
     return personaIds;
   }
-  const raw = yaml.load(fs.readFileSync(PERSONAS_PATH, "utf8"));
-  personaIds = new Set((raw.personas || []).map((p) => p.id));
+  const raw = yaml.load(fs.readFileSync(personasPath, "utf8"));
+  const records = raw.personas || [];
+  const ids = new Set();
+  personaErrors = [];
+  for (const record of records) {
+    const id = record && record.id;
+    if (typeof id !== "string" || id.trim() === "") {
+      personaErrors.push("personas.yml: every persona record must have a non-empty string 'id'");
+      continue;
+    }
+    if (ids.has(id)) {
+      personaErrors.push(`personas.yml: duplicate persona id '${id}'`);
+    }
+    ids.add(id);
+    for (const field of PERSONA_SCALAR_FIELDS) {
+      const value = record[field];
+      if (typeof value !== "string" || value.trim() === "") {
+        personaErrors.push(`personas.yml: persona '${id}' missing required field '${field}'`);
+      }
+    }
+    for (const field of PERSONA_LIST_FIELDS) {
+      const value = record[field];
+      if (!Array.isArray(value) || value.length === 0 || value.some((e) => typeof e !== "string" || e.trim() === "")) {
+        personaErrors.push(`personas.yml: persona '${id}' missing required field '${field}'`);
+      }
+    }
+  }
+  personaIds = ids;
   return personaIds;
 }
 
@@ -357,6 +392,9 @@ function main() {
     if (args[i] === "--resources" && args[i + 1]) {
       resourcesPathOverride = path.resolve(ROOT, args[i + 1]);
       i += 1;
+    } else if (args[i] === "--personas" && args[i + 1]) {
+      personasPathOverride = path.resolve(ROOT, args[i + 1]);
+      i += 1;
     } else {
       positional.push(args[i]);
     }
@@ -367,12 +405,14 @@ function main() {
     files = walk(path.join(ROOT, "src", "content", "docs"));
   }
   const mdFiles = files.filter((file) => /\.(md|mdx)$/i.test(file) && fs.existsSync(file));
-  // Load the catalog eagerly: catalog records must be validated even when the
+  // Load the catalogs eagerly: records must be validated even when the
   // repository has no lesson-v2 pages yet (validateFile only loads them when
   // a V2 page is found).
   getResourceIds();
+  getPersonaIds();
   const errors = mdFiles.flatMap(validateFile);
   if (catalogErrors) errors.push(...catalogErrors);
+  if (personaErrors) errors.push(...personaErrors);
 
   if (errors.length) {
     console.error("V2 contract validation failed:\n");
