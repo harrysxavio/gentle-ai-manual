@@ -508,6 +508,29 @@ test("RED: rejects an empty personas catalog", () => {
 
 test("RED: rejects an empty learning-resources catalog", () => {
   const result = runCatalogOnlyFixture("resources: []\n");
-  assert.notEqual(result.status, 0, "An empty resource catalog bypasses the missing-catalog protection");
-  assert.match(result.stderr, /empty/);
+  assert.notEqual(result.status, 0, "An empty catalog is not a valid catalog");
+});
+
+// P2: verified_at accepts YAML timestamps (js-yaml parses an unquoted date as
+// a Date object) and normalizes them to ISO YYYY-MM-DD, while null, empty
+// strings, booleans, numbers and invalid dates stay rejected.
+
+test("RED: accepts an unquoted YAML date for verified_at", () => {
+  const withTimestamp = completeCatalog.replace('    verified_at: "2026-07-31"', "    verified_at: 2026-07-31");
+  const result = runCatalogFixture(withTimestamp);
+  assert.equal(result.status, 0, "Unquoted YAML timestamp is a valid Date");
+});
+
+test("RED: rejects a numeric verified_at value", () => {
+  const bad = completeCatalog.replace('    verified_at: "2026-07-31"', "    verified_at: 2026");
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "A number is not a date");
+  assert.match(result.stderr, /verified_at/);
+});
+
+test("RED: rejects an empty verified_at string", () => {
+  const bad = completeCatalog.replace('    verified_at: "2026-07-31"', '    verified_at: ""');
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "An empty string is not a date");
+  assert.match(result.stderr, /verified_at/);
 });

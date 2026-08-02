@@ -89,6 +89,19 @@ const RESOURCE_SCALAR_FIELDS = [
 ];
 const RESOURCE_LIST_FIELDS = ["topics", "level"];
 
+// verified_at accepts a non-empty string or a YAML timestamp: js-yaml parses
+// an unquoted date such as `verified_at: 2026-07-31` as a Date object. Dates
+// are normalized to ISO YYYY-MM-DD before being validated or compared. null,
+// empty strings, booleans, numbers and invalid dates are rejected. This
+// mirrors the claims validator, which accepts either form for the same field.
+function normalizeVerifiedAt(value) {
+  if (typeof value === "string") return value.trim() === "" ? null : value.trim();
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString().slice(0, 10);
+  }
+  return null;
+}
+
 function getResourceIds() {
   if (resourceIds) return resourceIds;
   const resourcesPath = resourcesPathOverride || RESOURCES_PATH;
@@ -119,7 +132,11 @@ function getResourceIds() {
     ids.add(id);
     for (const field of RESOURCE_SCALAR_FIELDS) {
       const value = record[field];
-      if (typeof value !== "string" || value.trim() === "") {
+      const valid =
+        field === "verified_at"
+          ? normalizeVerifiedAt(value) !== null
+          : typeof value === "string" && value.trim() !== "";
+      if (!valid) {
         catalogErrors.push(`learning-resources.yml: resource '${id}' missing required field '${field}'`);
       }
     }
