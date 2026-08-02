@@ -89,17 +89,37 @@ const RESOURCE_SCALAR_FIELDS = [
 ];
 const RESOURCE_LIST_FIELDS = ["topics", "level"];
 
-// verified_at accepts a non-empty string or a YAML timestamp: js-yaml parses
-// an unquoted date such as `verified_at: 2026-07-31` as a Date object. Dates
-// are normalized to ISO YYYY-MM-DD before being validated or compared. null,
-// empty strings, booleans, numbers and invalid dates are rejected. This
-// mirrors the claims validator, which accepts either form for the same field.
+// verified_at accepts a valid Date produced by js-yaml (an unquoted YAML
+// timestamp such as `verified_at: 2026-07-31`) or a string that is EXACTLY a
+// real calendar date in YYYY-MM-DD format. Dates are normalized to ISO
+// YYYY-MM-DD before being validated or compared. null, empty strings,
+// booleans, numbers, invalid dates, free text and out-of-range components
+// ("2026-99-99") are rejected, and the UTC round-trip rejects impossible
+// calendar dates ("2026-02-30") that `new Date(value)` would silently
+// normalize. This mirrors the claims validator, which accepts either form
+// for the same field.
+const VERIFIED_AT_DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
+
 function normalizeVerifiedAt(value) {
-  if (typeof value === "string") return value.trim() === "" ? null : value.trim();
   if (value instanceof Date && !Number.isNaN(value.getTime())) {
     return value.toISOString().slice(0, 10);
   }
-  return null;
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  const match = VERIFIED_AT_DATE_PATTERN.exec(trimmed);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  if (
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month - 1 ||
+    date.getUTCDate() !== day
+  ) {
+    return null;
+  }
+  return trimmed;
 }
 
 function getResourceIds() {

@@ -534,3 +534,35 @@ test("RED: rejects an empty verified_at string", () => {
   assert.notEqual(result.status, 0, "An empty string is not a date");
   assert.match(result.stderr, /verified_at/);
 });
+
+// P2: verified_at strings must be real calendar dates in exact YYYY-MM-DD
+// format. Text, out-of-range components and impossible calendar dates (which
+// JavaScript Date would silently normalize) must all be rejected.
+
+test("RED: rejects a non-date verified_at string", () => {
+  const bad = completeCatalog.replace('    verified_at: "2026-07-31"', '    verified_at: "not-a-date"');
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "A non-date string must be rejected");
+  assert.match(result.stderr, /verified_at/);
+});
+
+test("RED: rejects an out-of-range month in verified_at", () => {
+  const bad = completeCatalog.replace('    verified_at: "2026-07-31"', '    verified_at: "2026-99-99"');
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "Month 99 must be rejected");
+  assert.match(result.stderr, /verified_at/);
+});
+
+test("RED: rejects an impossible calendar date in verified_at", () => {
+  const bad = completeCatalog.replace('    verified_at: "2026-07-31"', '    verified_at: "2026-02-30"');
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "February 30 does not exist in any calendar");
+  assert.match(result.stderr, /verified_at/);
+});
+
+test("RED: rejects a date with trailing text in verified_at", () => {
+  const bad = completeCatalog.replace('    verified_at: "2026-07-31"', '    verified_at: "2026-07-31 extra"');
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "Extra text after the date must be rejected");
+  assert.match(result.stderr, /verified_at/);
+});
