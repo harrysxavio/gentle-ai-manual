@@ -4,10 +4,11 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const cp = require("node:child_process");
+const yaml = require("js-yaml");
 
 const ROOT = process.cwd();
 const DOC_ROOT = path.join(ROOT, "src", "content", "docs");
-const VALID_CONTRACTS = new Set(["lesson-v1", "reference-v1", "lab-v1"]);
+const VALID_CONTRACTS = new Set(["lesson-v1", "lesson-v2", "reference-v1", "lab-v1"]);
 const REQUIRED_LESSON_GROUPS = [
   ["Resultado de aprendizaje"],
   ["Respuesta simple", "En pocas palabras"],
@@ -55,18 +56,22 @@ function changedFiles(baseRef) {
     .map((file) => path.join(ROOT, file));
 }
 
+// YAML-aware frontmatter parser. A line-based parser would silently skip
+// general content rules (hotlinked images, command fences, @ts-nocheck) when
+// legal YAML formatting such as quoted keys is used, while the V2 validator
+// recognizes the page. Reuse the same parser family as
+// validate-v2-contracts.cjs so all validators agree on the contract.
 function frontmatter(text) {
   if (!text.startsWith("---\n") && !text.startsWith("---\r\n")) return {};
   const end = text.indexOf("\n---", 4);
   if (end < 0) return {};
   const block = text.slice(4, end);
-  const data = {};
-  for (const line of block.split(/\r?\n/)) {
-    const match = /^([a-zA-Z0-9_-]+):\s*(.*)$/.exec(line);
-    if (!match) continue;
-    data[match[1]] = match[2].replace(/^["']|["']$/g, "").trim();
+  try {
+    const data = yaml.load(block);
+    return data && typeof data === "object" && !Array.isArray(data) ? data : {};
+  } catch {
+    return {};
   }
-  return data;
 }
 
 function headings(text) {
@@ -208,8 +213,10 @@ function validateFile(file) {
     }
   }
 
-  if (!hasHeadingGroup(foundHeadings, ["Fuentes y alcance"])) {
-    errors.push(`${relative}: missing 'Fuentes y alcance'`);
+  if (contract === "lesson-v1" || contract === "reference-v1" || contract === "lab-v1") {
+    if (!hasHeadingGroup(foundHeadings, ["Fuentes y alcance"])) {
+      errors.push(`${relative}: missing 'Fuentes y alcance'`);
+    }
   }
 
   if (text.includes("@ts-nocheck")) {

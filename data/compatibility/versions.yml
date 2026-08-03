@@ -1,19 +1,28 @@
 # Version compatibility matrix — structured data
-# Source: VERSION_COMPATIBILITY.md (verified 2026-07-20)
-# Last updated: 2026-07-20
+# Source: VERSION_COMPATIBILITY.md (verified 2026-07-31)
+# Last updated: 2026-07-31
+# Canonical snapshot: gentle-ai v2.2.3 (919ea3daf2afd8287bb42d86f8d979a9741b4b9e)
+# Historical snapshots: v2.2.0 (719b0f6cd0178bd797c074236e7077be8d00dde7, 2026-07-27)
 
 components:
   - name: "gentle-ai"
-    version_verified: "2.2.0"
-    verified_commit: "719b0f6cd0178bd797c074236e7077be8d00dde7"
-    verified_date: "2026-07-27"
-    release_name: "Organic RDD"
+    version_verified: "2.2.3"
+    verified_commit: "919ea3daf2afd8287bb42d86f8d979a9741b4b9e"
+    verified_date: "2026-07-31"
+    release_name: "Compact SDD attempts + exact review recovery"
     status: "experimental"
     stable_reference: "v1.46.0"
     installed: true
-    latest: "2.2.0"
+    latest: "2.2.3"
+    snapshot_role: "canonical current — this tanda (PR 7)"
+    historical_verified:
+      - version: "2.2.0"
+        verified_commit: "719b0f6cd0178bd797c074236e7077be8d00dde7"
+        verified_date: "2026-07-27"
+        release_name: "Organic RDD"
+        snapshot_role: "historical — replaced by v2.2.3"
     runtime: "OpenCode 1.x (required), Codex (optional)"
-    install: "go install github.com/gentleman-programming/gentle-ai/v2/cmd/gentle-ai@v2.2.0"
+    install: "go install github.com/gentleman-programming/gentle-ai/v2/cmd/gentle-ai@v2.2.3"
     requirements:
       - "Go 1.25.10+ (for go install)"
       - "Git"
@@ -27,7 +36,7 @@ components:
     paths:
       global_config: "~/.config/gentle-ai/ (Linux/macOS), %APPDATA%/gentle-ai/ (Windows)"
       workspace: "{project}/.gentle-ai/"
-    notes: "v2.2.0 introduces Organic RDD. Go module path: github.com/gentleman-programming/gentle-ai/v2. Windows: official binary distribution and Scoop temporarily unavailable."
+    notes: "v2.2.3 published 2026-07-31 at commit 919ea3d. Compact SDD attempts, exact review recovery, declined-candidate delivery. v2.2.0 (Organic RDD) is the historical snapshot of this tanda. Go module path: github.com/gentleman-programming/gentle-ai/v2. Windows: official binary distribution and Scoop temporarily unavailable."
 
   - name: "engram"
     version_verified: "1.19.0"
@@ -155,6 +164,21 @@ components:
     notes: "No releases, no tags — community-managed"
 
 compatibility_matrix:
+  - gentle_ai: "2.2.3"
+    gentle_ai_channel: "rdd"
+    gentle_ai_status: "experimental"
+    opencode: "1.17.20"
+    status: "compatible"
+    codex: "0.144.0"
+    codex_status: "compatible"
+    engram: "1.19.0"
+    engram_status: "compatible"
+    gga: "2.10.1"
+    gga_status: "compatible"
+    nodejs: "22.17.0"
+    nodejs_status: "compatible"
+    snapshot_role: "canonical current — verified 2026-07-31"
+
   - gentle_ai: "2.2.0"
     gentle_ai_channel: "rdd"
     gentle_ai_status: "experimental"
@@ -168,6 +192,7 @@ compatibility_matrix:
     gga_status: "compatible"
     nodejs: "22.17.0"
     nodejs_status: "compatible"
+    snapshot_role: "historical — verified 2026-07-27"
 
   - gentle_ai: "2.1.10"
     opencode: "1.16.x"
