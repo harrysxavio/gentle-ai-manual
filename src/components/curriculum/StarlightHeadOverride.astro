@@ -1,0 +1,42 @@
+---
+// Override Starlight's <head> so the home page gets a single clean <title>.
+// Starlight always emits "<pageTitle> | <siteTitle>" from its default Head; on
+// the home page both values are "Manual Gentil para IA", which duplicates the
+// brand (invalid HTML: two <title> elements). The home head is therefore
+// rendered here entirely, replicating @astrojs/starlight/components/Head.astro
+// defaults for THIS site's configuration (base, favicon, single root locale,
+// sitemap, config.head). Keep this file in sync when upgrading Starlight or
+// changing astro.config.mjs (title, description, favicon, social, head).
+import DefaultHead from '@astrojs/starlight/components/Head.astro';
+
+const base = import.meta.env.BASE_URL;
+const pathname = Astro.url.pathname;
+const isHome = pathname === base || pathname === base.replace(/\/$/, '');
+
+const siteTitle = 'Manual Gentil para IA';
+const description = 'Manual pedagógico, técnico e interactivo del ecosistema Gentle-AI';
+const canonical = Astro.site ? new URL(pathname, Astro.site) : undefined;
+---
+{isHome ? (
+  <>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{siteTitle}</title>
+    <link rel="canonical" href={canonical?.href} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="shortcut icon" href={`${base}logo.svg`} type="image/svg+xml" />
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content={canonical?.href} />
+    <meta property="og:locale" content="es" />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content={siteTitle} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="sitemap" href={`${base}sitemap-index.xml`} />
+    {/* Single description meta, matching Starlight's mergeHead behavior: the
+        config.head description replaces the default one on every other page. */}
+    <meta name="description" content="Manual completo del ecosistema Gentle-AI para OpenCode y Codex" />
+  </>
+) : (
+  <DefaultHead {...Astro.props} />
+)}

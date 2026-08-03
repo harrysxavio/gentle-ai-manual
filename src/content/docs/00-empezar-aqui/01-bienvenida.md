@@ -13,7 +13,6 @@ learningOutcomes:
   - Entender qué es el ecosistema Gentle y qué cubre este manual
   - Elegir la ruta de aprendizaje correcta según tu nivel
   - Comprender la estructura del manual
-  - Saber cómo verificar si el contenido está actualizado
 ---
 
 ## ¿Qué es este manual?
@@ -39,14 +38,14 @@ La meta final no es solo que puedas ejecutar Gentle-AI, sino que entiendas **qu�
 ### Cómo avanza el curso
 
 ```mermaid
-flowchart TB
-    A["Elegí tu ruta según tu experiencia"] --> B["Fundamentos<br/>Módulos 00–04"]
+flowchart LR
+    A["Elegí tu ruta<br/>según tu experiencia"] --> B["Fundamentos<br/>Módulos 00–04"]
     B --> C["Preparación y primer proyecto<br/>Módulos 05–06"]
     C --> D["Núcleo del ecosistema<br/>Gentle-AI, SDD, Engram y Skills<br/>Módulos 07–10"]
-    D --> E["Calidad y herramientas de trabajo<br/>Revisión, OpenCode y Codex<br/>Módulos 11–13"]
-    E --> F["Decisiones avanzadas<br/>Modelos, terminal, arquitectura y gobierno<br/>Módulos 14–17"]
-    F --> G["Aplicación real<br/>Producto integrador y laboratorios<br/>Módulos 18–19"]
-    G --> H["Consulta permanente<br/>Referencia, comandos y glosario<br/>Módulo 20"]
+    D --> E["Calidad y herramientas<br/>Revisión, OpenCode y Codex<br/>Módulos 11–13"]
+    E --> F["Decisiones avanzadas<br/>Modelos, terminal, arquitectura<br/>Módulos 14–17"]
+    F --> G["Aplicación real<br/>Producto integrador<br/>Módulos 18–19"]
+    G --> H["Consulta permanente<br/>Referencia y glosario<br/>Módulo 20"]
 
     B -. "Entender" .-> D
     D -. "Aplicar" .-> F
@@ -143,25 +142,7 @@ Módulo 20 → Referencia (comandos, glosario, catálogo)
 
 ### Glosario
 
-Cada término técnico está definido en el archivo `GLOSSARY.md` (raíz del repositorio). La primera vez que aparece un término en un capítulo, se explica en el texto. Pero si más adelante no recordás qué significa "topic_key" o "linaje", el glosario está a un clic.
-
-### Verificación de versiones
-
-La tecnología cambia rápido. Los modelos de IA se deprecan, los comandos cambian, las versiones avanzan.
-
-Cada capítulo incluye al final:
-
-```markdown
-## Fuentes verificadas
-- Repositorio: gentle-ai, commit b0a88faf1296...
-- Versión: gentle-ai 2.1.10
-- Fecha: 2026-07-20
-- Estado: 🟢 Verificado
-```
-
-El **estado** te dice si la información fue verificada contra el código real (`🟢 Verificado`), contra documentación (`🟡 Documentado`), o está pendiente (`🔴 PENDIENTE`).
-
-Si encontrás algo que no coincide con tu versión, consultá el archivo `appendices/MIGRATIONS-AND-LEGACY.md` para ver cambios documentados entre versiones.
+Cada término técnico está definido en el [glosario del manual](../../20-referencia/02-glosario/). La primera vez que aparece un término en un capítulo, se explica en el texto. Pero si más adelante no recordás qué significa "topic_key" o "linaje", el glosario está a un clic.
 
 ## Lo que NO es este manual
 
@@ -187,10 +168,6 @@ No necesitás:
 
 ## Empecemos
 
-Elegí tu ruta en el archivo `INDEX.md` (raíz del repositorio) y empezá por el primer módulo de tu nivel.
+Elegí tu ruta en el [índice completo](../02-indice-completo/) del manual y empezá por el primer módulo de tu nivel.
 
 Si no sabés por dónde empezar, la ruta segura es: **00 → 01 → 02 → 03 → 04**. Son los fundamentos que todo el mundo necesita, sin importar el nivel.
-
----
-
-> **Siguiente**: [Módulo 01 — Fundamentos tecnológicos](../../01-fundamentos-tecnologicos/01-como-funciona-una-computadora/)

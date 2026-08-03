@@ -4,6 +4,7 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import starlightLinksValidator from 'starlight-links-validator';
 import rehypeMermaid from 'rehype-mermaid';
+import rehypeMermaidZoom from './src/plugins/mermaid-zoom.js';
 import { autoImportComponents } from './src/plugins/auto-import-components.js';
 import { buildSidebar } from './src/data/curriculum.mjs';
 
@@ -11,11 +12,11 @@ export default defineConfig({
   site: 'https://harrysxavio.github.io',
   base: '/gentle-ai-manual/',
   markdown: {
-    rehypePlugins: [[rehypeMermaid, { strategy: 'inline-svg' }]],
+    rehypePlugins: [[rehypeMermaid, { strategy: 'inline-svg' }], rehypeMermaidZoom],
   },
   integrations: [
     starlight({
-      title: 'Gentle AI — Mega Manual',
+      title: 'Manual Gentil para IA',
       description: 'Manual pedagógico, técnico e interactivo del ecosistema Gentle-AI',
       logo: {
         src: '/public/logo.svg',
@@ -35,6 +36,8 @@ export default defineConfig({
       sidebar: buildSidebar(),
       components: {
         Footer: './src/components/curriculum/StarlightFooterOverride.astro',
+        Head: './src/components/curriculum/StarlightHeadOverride.astro',
+        PageTitle: './src/components/curriculum/StarlightPageTitleOverride.astro',
       },
       customCss: [
         './src/styles/custom.css',

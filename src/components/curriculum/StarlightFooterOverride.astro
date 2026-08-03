@@ -1,12 +1,16 @@
 ---
 import DefaultFooter from '@astrojs/starlight/components/Footer.astro';
 import RouteContext from './RouteContext.astro';
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <div class="curriculum-route-nav-wrapper">
   <RouteContext />
 </div>
 <DefaultFooter {...Astro.props} />
+
+<script src={`${base}scripts/mermaid-zoom.js`} defer></script>
 
 <style>
   .curriculum-route-nav-wrapper {
