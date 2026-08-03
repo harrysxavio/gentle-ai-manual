@@ -511,14 +511,15 @@ test("RED: rejects an empty learning-resources catalog", () => {
   assert.notEqual(result.status, 0, "An empty catalog is not a valid catalog");
 });
 
-// P2: verified_at accepts YAML timestamps (js-yaml parses an unquoted date as
-// a Date object) and normalizes them to ISO YYYY-MM-DD, while null, empty
-// strings, booleans, numbers and invalid dates stay rejected.
+// P2: verified_at accepts unquoted YAML dates (preserved as strings by
+// yaml.JSON_SCHEMA, not normalized to Date) and quoted YYYY-MM-DD strings,
+// while null, empty strings, booleans, numbers and invalid dates stay
+// rejected.
 
 test("RED: accepts an unquoted YAML date for verified_at", () => {
   const withTimestamp = completeCatalog.replace('    verified_at: "2026-07-31"', "    verified_at: 2026-07-31");
   const result = runCatalogFixture(withTimestamp);
-  assert.equal(result.status, 0, "Unquoted YAML timestamp is a valid Date");
+  assert.equal(result.status, 0, "Unquoted YAML date is preserved as a valid string");
 });
 
 test("RED: rejects a numeric verified_at value", () => {
@@ -564,5 +565,91 @@ test("RED: rejects a date with trailing text in verified_at", () => {
   const bad = completeCatalog.replace('    verified_at: "2026-07-31"', '    verified_at: "2026-07-31 extra"');
   const result = runCatalogFixture(bad);
   assert.notEqual(result.status, 0, "Extra text after the date must be rejected");
+  assert.match(result.stderr, /verified_at/);
+});
+
+// P2: an unquoted YAML date must keep its original components. js-yaml's
+// default schema converts `verified_at: 2026-02-30` into a Date already
+// normalized to March 2, so the string round-trip never sees the original
+// value. The catalog loader must preserve YAML date scalars as strings so
+// impossible calendar dates are rejected exactly like quoted values.
+
+test("RED: accepts an unquoted leap-year verified_at date", () => {
+  const good = completeCatalog.replace('    verified_at: "2026-07-31"', "    verified_at: 2024-02-29");
+  const result = runCatalogFixture(good);
+  assert.equal(result.status, 0, "2024-02-29 is a real calendar date");
+});
+
+test("RED: rejects an unquoted impossible February date in verified_at", () => {
+  const bad = completeCatalog.replace('    verified_at: "2026-07-31"', "    verified_at: 2026-02-30");
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "js-yaml must not normalize 2026-02-30 into March 2");
+  assert.match(result.stderr, /verified_at/);
+});
+
+test("RED: rejects an unquoted impossible April date in verified_at", () => {
+  const bad = completeCatalog.replace('    verified_at: "2026-07-31"', "    verified_at: 2026-04-31");
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "April 31 does not exist");
+  assert.match(result.stderr, /verified_at/);
+});
+
+test("RED: rejects an unquoted non-leap February 29 in verified_at", () => {
+  const bad = completeCatalog.replace('    verified_at: "2026-07-31"', "    verified_at: 2025-02-29");
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "2025 is not a leap year");
+  assert.match(result.stderr, /verified_at/);
+});
+
+test("RED: rejects an unquoted out-of-range month in verified_at", () => {
+  const bad = completeCatalog.replace('    verified_at: "2026-07-31"', "    verified_at: 2026-13-01");
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "Month 13 must be rejected");
+  assert.match(result.stderr, /verified_at/);
+});
+
+test("RED: rejects an unquoted zero month in verified_at", () => {
+  const bad = completeCatalog.replace('    verified_at: "2026-07-31"', "    verified_at: 2026-00-10");
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "Month 00 must be rejected");
+  assert.match(result.stderr, /verified_at/);
+});
+
+test("RED: rejects an unquoted zero day in verified_at", () => {
+  const bad = completeCatalog.replace('    verified_at: "2026-07-31"', "    verified_at: 2026-01-00");
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "Day 00 must be rejected");
+  assert.match(result.stderr, /verified_at/);
+});
+
+test("RED: rejects quoted non-ISO date formats in verified_at", () => {
+  for (const value of ['"31-07-2026"', '"2026/07/31"']) {
+    const bad = completeCatalog.replace('    verified_at: "2026-07-31"', `    verified_at: ${value}`);
+    const result = runCatalogFixture(bad);
+    assert.notEqual(result.status, 0, `${value} is not YYYY-MM-DD`);
+    assert.match(result.stderr, /verified_at/);
+  }
+});
+
+test("RED: rejects a whitespace-only verified_at string", () => {
+  const bad = completeCatalog.replace('    verified_at: "2026-07-31"', '    verified_at: "   "');
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "Whitespace is not a date");
+  assert.match(result.stderr, /verified_at/);
+});
+
+test("RED: rejects non-scalar verified_at values", () => {
+  for (const value of ["null", "true", "[]", "{}"]) {
+    const bad = completeCatalog.replace('    verified_at: "2026-07-31"', `    verified_at: ${value}`);
+    const result = runCatalogFixture(bad);
+    assert.notEqual(result.status, 0, `YAML ${value} is not a date`);
+    assert.match(result.stderr, /verified_at/);
+  }
+});
+
+test("RED: rejects a timestamp with time in verified_at", () => {
+  const bad = completeCatalog.replace('    verified_at: "2026-07-31"', "    verified_at: 2026-07-31T12:00:00Z");
+  const result = runCatalogFixture(bad);
+  assert.notEqual(result.status, 0, "A timestamp with time is not an exact YYYY-MM-DD date");
   assert.match(result.stderr, /verified_at/);
 });

@@ -89,21 +89,22 @@ const RESOURCE_SCALAR_FIELDS = [
 ];
 const RESOURCE_LIST_FIELDS = ["topics", "level"];
 
-// verified_at accepts a valid Date produced by js-yaml (an unquoted YAML
-// timestamp such as `verified_at: 2026-07-31`) or a string that is EXACTLY a
-// real calendar date in YYYY-MM-DD format. Dates are normalized to ISO
-// YYYY-MM-DD before being validated or compared. null, empty strings,
-// booleans, numbers, invalid dates, free text and out-of-range components
-// ("2026-99-99") are rejected, and the UTC round-trip rejects impossible
-// calendar dates ("2026-02-30") that `new Date(value)` would silently
-// normalize. This mirrors the claims validator, which accepts either form
-// for the same field.
+// verified_at must be EXACTLY a real calendar date in YYYY-MM-DD format.
+// The catalog is loaded with yaml.JSON_SCHEMA so js-yaml never converts an
+// unquoted date scalar (such as `verified_at: 2026-02-30`) into a Date that
+// has already been normalized to a different calendar day: YAML date
+// scalars are preserved as strings and validated here from their ORIGINAL
+// components. JSON_SCHEMA never produces a Date for this loader, so any
+// non-string value is rejected as a defensive, fail-closed guard. Validation uses an
+// exact regex, integer components, a UTC construction and a year/month/day
+// round-trip comparison, so out-of-range components ("2026-99-99"),
+// impossible calendar dates ("2026-02-30", "2026-04-31", non-leap
+// "2025-02-29"), free text, extra text and timestamps with time are all
+// rejected. This is stricter than the claims validator, which accepts
+// either a string or a Date for the same field.
 const VERIFIED_AT_DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
 
 function normalizeVerifiedAt(value) {
-  if (value instanceof Date && !Number.isNaN(value.getTime())) {
-    return value.toISOString().slice(0, 10);
-  }
   if (typeof value !== "string") return null;
   const trimmed = value.trim();
   const match = VERIFIED_AT_DATE_PATTERN.exec(trimmed);
@@ -133,7 +134,10 @@ function getResourceIds() {
     resourceIds = new Set();
     return resourceIds;
   }
-  const raw = yaml.load(fs.readFileSync(resourcesPath, "utf8"));
+  // yaml.JSON_SCHEMA preserves YAML date scalars as strings (no automatic
+  // Date normalization), keeping booleans, numbers, arrays, objects and
+  // strings at their expected types.
+  const raw = yaml.load(fs.readFileSync(resourcesPath, "utf8"), { schema: yaml.JSON_SCHEMA });
   const records = raw.resources || [];
   const ids = new Set();
   catalogErrors = [];
