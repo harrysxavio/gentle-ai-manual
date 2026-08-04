@@ -38,7 +38,7 @@ const home = readHtml('.');
 check(home.length > 0, 'home index.html exists and is readable');
 
 const titleTag = (home.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || '';
-check(!titleTag.includes('|') || titleTag.trim() === 'Manual Gentil para IA', 'home <title> is not a duplicated "X | X" and is the canonical brand (got: ' + titleTag.trim().slice(0, 80) + ')');
+check(!titleTag.includes('|') && titleTag.trim() === 'Manual Gentil para IA', 'home <title> is not a duplicated "X | X" and is the exact canonical brand (got: ' + titleTag.trim().slice(0, 80) + ')');
 
 const h1s = (home.match(/<h1[^>]*>[\s\S]*?<\/h1>/g) || []).length;
 check(h1s === 1, 'home has exactly one H1 (got: ' + h1s + ')');
