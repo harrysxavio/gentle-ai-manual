@@ -1089,3 +1089,19 @@ body:has(.landing-hero) .sl-container { max-width: 72rem; }
 @media (prefers-reduced-motion: reduce) {
   .mermaid-zoom__btn, .mermaid-zoom__close { transition: none; }
 }
+/* Fallback modal for browsers without native <dialog> support (no showModal) */
+.mermaid-zoom__overlay {
+  /* Safari 14.0.x (no <dialog>, i.e. the fallback audience) lacks `inset`;
+     the longhands still cover the viewport there. `inset` stays for modern. */
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  overflow: auto; padding: 1em;
+}
+.mermaid-zoom__panel {
+  /* -moz-fit-content covers Firefox 66-93 (fallback era); fit-content stays */
+  max-width: min(90vw, 1400px); width: -moz-fit-content; width: fit-content;
+  max-height: 88vh; overflow: auto;
+  border: 1px solid var(--sl-color-gray-5); border-radius: 8px;
+  padding: 0; background: var(--sl-color-bg); color: var(--sl-color-text);
+}
