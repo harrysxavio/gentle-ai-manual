@@ -803,12 +803,12 @@ terms:
     category: "fundamentos-tecnologicos"
 
   - term: "PowerShell"
-    simple: "Terminal y lenguaje de script predeterminado en Windows. Es una vuelta inicial para comandos en ese sistema."
+    simple: "Shell y lenguaje de script predeterminado en Windows. Es una buena puerta de entrada para comandos en ese sistema."
     reference: "content/01-fundamentos-tecnologicos/02-la-terminal/"
     category: "fundamentos-tecnologicos"
 
   - term: "Bash"
-    simple: "Terminal y lenguaje de script común en macOS y GNU/Linux. También disponible en Windows."
+    simple: "Shell y lenguaje de script común en macOS y GNU/Linux. También disponible en Windows."
     reference: "content/01-fundamentos-tecnologicos/02-la-terminal/"
     category: "fundamentos-tecnologicos"
 

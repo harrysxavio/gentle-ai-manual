@@ -223,8 +223,8 @@ Lo esencial para recordar: la terminal es la ventana, el shell decide el idioma 
 - **Shell**: el programa que interpreta comandos en la terminal (PowerShell, Bash, Zsh).
 - **CLI (Command Line Interface)**: interfaz de texto donde se escriben comandos.
 - **TUI (Text User Interface)**: interfaz de usuario basada en texto con elementos visuales como paneles y menús.
-- **PowerShell**: terminal y lenguaje de script predeterminado en Windows. Es una buena puerta de entrada para comandos en ese sistema.
-- **Bash**: terminal y lenguaje de script común en macOS y GNU/Linux. También disponible en Windows.
+- **PowerShell**: shell y lenguaje de script predeterminado en Windows. Es una buena puerta de entrada para comandos en ese sistema.
+- **Bash**: shell y lenguaje de script común en macOS y GNU/Linux. También disponible en Windows.
 - **Carpeta (directorio)**: contenedor que organiza archivos y otras carpetas dentro del disco.
 - **Sistema operativo**: programa base que administra los componentes de la computadora y permite ejecutar otros programas.
 
