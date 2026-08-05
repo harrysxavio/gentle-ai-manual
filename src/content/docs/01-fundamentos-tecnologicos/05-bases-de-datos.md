@@ -176,7 +176,7 @@ Ahora puedes responder una pregunta concreta: ¿qué recuerda tu agente entre se
 
 Esto importa por tres razones prácticas:
 
-- **Para entender al agente**: cuando dice "recuerdo que ayer decidimos usar SQLite", está buscando en su base de datos, no inventando. Saber esto te ayuda a interpretar sus respuestas y a pedirle que guarde lo importante.
+- **Para entender al agente**: cuando dice "recuerdo que ayer decidimos usar SQLite", probablemente está buscando en su memoria persistente en lugar de inventar sobre la marcha. Eso no es una garantía de exactitud: un modelo puede equivocarse o recuperar un recuerdo irrelevante, así que conviene verificar la información importante contra su fuente. Saber esto te ayuda a interpretar sus respuestas y a pedirle que guarde lo importante.
 - **Para saber dónde viven tus datos**: casi todo lo que guardan las aplicaciones que usas (cuentas, pedidos, documentos) vive en bases de datos. Entender las tablas y el disco te quita el misterio de dónde está tu información.
 - **Para crear cosas con agentes**: cuando le pidas al agente una aplicación con datos que deben durar (como el formulario de Camila), la base de datos es la pieza que lo hace posible. Saber que existe y cómo se elige entre SQLite y PostgreSQL te permite seguir y evaluar el trabajo del agente.
 

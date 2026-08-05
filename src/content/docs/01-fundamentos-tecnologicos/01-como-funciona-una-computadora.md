@@ -162,7 +162,7 @@ Esta lección marca el terreno, pero deja fuera varios temas a propósito:
 - **Cómo se escribe un programa**: compilar, interpretar y los lenguajes de programación son tema de la lección de programación.
 - **Cliente, servidor y la nube**: dónde corren las aplicaciones y cómo se comunican se explica en la lección de frontend y backend.
 
-También conviene conocer los límites de lo que aprendiste aquí. Si la RAM se llena, la computadora empieza a usar el disco como memoria de respaldo y todo se vuelve lento; por eso cerrar programas que no usas devuelve fluidez. Y recuerda que el modelo de IA no vive en tu computadora: sin internet, el agente puede trabajar con tus archivos locales, pero no puede consultar al modelo.
+También conviene conocer los límites de lo que aprendiste aquí. Si la RAM se llena, la computadora empieza a usar el disco como memoria de respaldo y todo se vuelve lento; por eso cerrar programas que no usas devuelve fluidez. Y recuerda que, en el caso habitual, el modelo de IA no vive en tu computadora: sin internet, el agente puede trabajar con tus archivos locales, pero no puede consultar al modelo remoto. La excepción son los proveedores locales (Ollama, llama.cpp y similares), donde el modelo corre en tu máquina y puede responder sin conexión.
 
 ## Errores frecuentes
 
