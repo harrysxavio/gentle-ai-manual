@@ -121,9 +121,9 @@ La computadora no entiende ese texto directamente: hay que convertirlo. Hay dos 
 
 ### Runtime: el entorno que hace falta para correr
 
-El **Runtime**\* es el entorno donde se ejecuta un programa. En los lenguajes interpretados, ese entorno es imprescindible: JavaScript y TypeScript necesitan Node.js instalado, y sin Node.js un archivo `.js` no se puede ejecutar. En los lenguajes compilados, el ejecutable ya lleva consigo todo lo necesario.
+El **Runtime**\* es el entorno donde se ejecuta un programa. En los lenguajes interpretados, ese entorno es imprescindible: JavaScript y TypeScript necesitan Node.js instalado, y sin Node.js un archivo `.js` no se puede ejecutar. En los lenguajes compilados, la historia es variada: algunos generan un ejecutable que ya trae consigo lo necesario (por ejemplo, un binario de Go), mientras que otros necesitan un entorno de ejecución aparte (Java necesita la JVM y C# normalmente necesita .NET, salvo que se empaquete como autónomo). Por eso, al instalar una herramienta, la pregunta práctica no es solo "¿en qué lenguaje está escrita?" sino "¿qué necesita instalado para correr?".
 
-Esto tiene consecuencias prácticas que ya viste en el ecosistema: OpenCode y Codex necesitan Node.js instalado para funcionar. Las herramientas del ecosistema escritas en Go, como gentle-ai y Engram, no necesitan Go instalado para ejecutarse: el programa compilado ya trae todo dentro.
+Esto tiene consecuencias prácticas que ya viste en el ecosistema: OpenCode y Codex necesitan Node.js instalado para funcionar. Las herramientas del ecosistema escritas en Go, como gentle-ai y Engram, se distribuyen como binarios que ya traen todo dentro y no necesitan Go instalado para ejecutarse.
 
 ### Variables de entorno: configuración fuera del código
 
@@ -216,7 +216,7 @@ Vuelve al caso de Camila: su pedido no fue código, fue una descripción con con
 - Qué observas: el programa no da error, pero tampoco usa tu valor.
 - Qué significa: si una variable no existe, el programa lee un valor vacío o usa un valor por defecto; no siempre avisa.
 - Cómo comprobar: lista las variables con `Get-ChildItem Env:` o `printenv` y busca el nombre exacto.
-- Cómo resolver: revisa mayúsculas y ortografía del nombre; los nombres de variables distinguen mayúsculas de minúsculas.
+- Cómo resolver: revisa la ortografía exacta del nombre. En Windows los nombres de variables no distinguen mayúsculas de minúsculas, pero en Linux y macOS sí; si copiaste el nombre de otro sistema, fíjate bien en las letras.
 - Cómo confirmar: el programa vuelve a leer la variable y cambia su comportamiento.
 
 ### ¿Tengo que aprender a programar para usar agentes?
