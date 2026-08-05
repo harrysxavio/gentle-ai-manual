@@ -145,11 +145,11 @@ Las bases de datos relacionales se presentan en dos familias, y la diferencia pr
 
 ```mermaid
 flowchart LR
-    Q{"¿Quién usa los datos?"} -->|"una persona, en su computadora"| S["SQLite: un archivo, sin servidor"]
-    Q -->|"muchas personas, por internet"| P["PostgreSQL: un servidor dedicado"]
+    Q{"¿Cómo se despliega y cuánta carga tiene?"} -->|"un solo programa local, sin muchos escritores a la vez"| S["SQLite: un archivo, sin servidor"]
+    Q -->|"servidor compartido por internet, con muchos escritores"| P["PostgreSQL: un servidor dedicado"]
 ```
 
-Se lee de izquierda a derecha: la pregunta es quién usa los datos. Si los usa una persona en su computadora, SQLite alcanza; si los usan muchas personas por internet, conviene PostgreSQL. No es que uno sea mejor: es que resuelven problemas distintos.
+Se lee de izquierda a derecha: la pregunta es cómo se despliega la aplicación y cuánta escritura simultánea necesita. Como regla general, si el programa usa la base de datos en un solo lugar y sin muchos escritores a la vez, SQLite alcanza; si la base vive en un servidor al que acceden muchas personas por internet con escrituras concurrentes, conviene PostgreSQL. Es una regla aproximada: hay aplicaciones web con pocos usuarios que funcionan bien con SQLite, y aplicaciones de un solo usuario que necesitan PostgreSQL por funciones de servidor o acceso remoto. Lo importante es pensar en la topología y la carga de trabajo, no solo en cuántas personas son.
 
 Un detalle que vale la pena conocer: las bases de datos aplican los cambios en grupos llamados transacciones, de modo que un conjunto de cambios se aplica todo junto o no se aplica ninguno. Así, si algo falla a mitad de un guardado, los datos no quedan a medias. SQLite lo soporta y PostgreSQL también; para ti, como idea, alcanza con saber que los guardados son confiables.
 
@@ -182,7 +182,7 @@ Esto importa por tres razones prácticas:
 
 ## Decisiones y límites
 
-- **SQLite y PostgreSQL no compiten**: se eligen según el escenario. Local y de una persona, SQLite; multiusuario, en internet o en la nube, PostgreSQL. El resto de los matices se deciden cuando se diseña una aplicación, no en esta lección.
+- **SQLite y PostgreSQL no compiten**: se eligen según el escenario de despliegue y la carga de trabajo. Como regla general, un programa local sin muchos escritores a la vez puede usar SQLite; una base compartida por internet con escrituras concurrentes suele pedir PostgreSQL. El resto de los matices se deciden cuando se diseña una aplicación, no en esta lección.
 - **Esta lección no enseña a diseñar bases de datos**: el diseño de tablas, relaciones y consultas avanzadas se ve en las lecciones de stack y de aplicaciones modernas.
 - **Engram se menciona como ejemplo real, no se estudia a fondo**: su arquitectura completa tiene un módulo propio más adelante.
 - **SQL se muestra solo a nivel de idea** (leer y guardar); no necesitas escribirlo para seguir el manual.
@@ -209,9 +209,9 @@ Esto importa por tres razones prácticas:
 ### No sé si usar SQLite o PostgreSQL
 
 - Qué observas: ves nombres de bases de datos y no sabes cuál elegir.
-- Qué significa: la pregunta correcta no es "cuál es mejor" sino "quién usa los datos": una persona en su computadora (SQLite) o muchas personas por internet (PostgreSQL).
-- Cómo comprobar: si la aplicación correrá solo en tu equipo y la usas tú, SQLite alcanza; si será una página a la que entra mucha gente, PostgreSQL.
-- Cómo resolver: en la duda, deja que el agente lo proponga y explíquele el escenario; esta lección te da el criterio para evaluar su propuesta.
+- Qué significa: la pregunta correcta no es "cuál es mejor" sino cómo se desplegará la aplicación y cuánta escritura simultánea tendrá. Como regla general, un programa local sin muchos escritores a la vez puede usar SQLite; una base compartida por internet con escrituras concurrentes suele pedir PostgreSQL.
+- Cómo comprobar: si la aplicación correrá solo en tu equipo y la usas tú, SQLite alcanza; si será una página en un servidor a la que entra mucha gente al mismo tiempo, PostgreSQL es el camino más común.
+- Cómo resolver: en la duda, deja que el agente lo proponga y explícale el escenario (dónde corre, cuántos escritores, si necesita acceso remoto); esta lección te da el criterio para evaluar su propuesta.
 - Cómo confirmar: puedes explicar con tus palabras por qué tu escenario pide una u otra.
 
 ## Resumen
@@ -224,7 +224,7 @@ Esto importa por tres razones prácticas:
 | SQL (Structured Query Language) | Lenguaje para consultar y guardar datos | `SELECT ... FROM solicitudes` |
 | Índice | Estructura que acelera las búsquedas | El índice del cuaderno que lleva directo a la página |
 | SQLite | Base de datos en un solo archivo, sin servidor | La base de datos local de Engram |
-| PostgreSQL | Base de datos que corre como servidor, para muchos usuarios | Una aplicación web con muchos usuarios |
+| PostgreSQL | Base de datos que corre como servidor, para despliegues compartidos o con mucha escritura | Una aplicación web en la nube con escrituras concurrentes |
 | Engram | Memoria persistente del agente entre sesiones | Lo que el agente recuerda de ayer |
 | FTS5 (Full-Text Search 5) | Búsqueda de texto completo integrada en SQLite | Encontrar un recuerdo por palabras clave |
 

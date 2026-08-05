@@ -70,7 +70,7 @@ En lugar de armarlo sola, le pide al agente en OpenCode: "haz un programa que le
 
 ### Qué es un programa: instrucciones en orden
 
-Un **Programa**\* es un conjunto de instrucciones que la computadora ejecuta para cumplir una tarea. Cada instrucción se ejecuta en orden, una después de la otra, y la computadora no salta ninguna: si el paso 3 dice "lee el archivo de ventas", eso ocurre antes del paso 4, que dice "suma los totales".
+Un **Programa**\* es un conjunto de instrucciones que la computadora ejecuta para cumplir una tarea. En un programa sencillo y lineal, cada instrucción se ejecuta en orden, una después de la otra: si el paso 3 dice "lee el archivo de ventas", eso ocurre antes del paso 4, que dice "suma los totales". En programas con decisiones o repeticiones (que verás enseguida), algunas instrucciones se saltan o se repiten; el modelo lineal es un buen punto de partida, no la regla universal.
 
 La **lógica de programación** es la habilidad de pensar la tarea como una secuencia de pasos. Tres piezas aparecen en casi cualquier programa:
 
@@ -208,7 +208,7 @@ Vuelve al caso de Camila: su pedido no fue código, fue una descripción con con
 - Qué observas: definiste una variable y el programa se comporta como antes.
 - Qué significa: los programas leen las variables cuando arrancan, no en cada instante.
 - Cómo comprobar: verifica con la terminal que la variable existe y tiene el valor que esperas.
-- Cómo resolver: abre una terminal nueva o reinicia el programa para que vuelva a leer el entorno.
+- Cómo resolver: reinicia el programa desde la misma terminal donde definiste la variable, porque los valores temporales solo viven en ese shell; si abres una terminal nueva, la variable ya no existe y el programa seguirá sin verla. Para que sobreviva, debes guardarla en tu archivo de perfil (lo verás en la configuración de tus herramientas).
 - Cómo confirmar: el programa refleja el nuevo valor.
 
 ### Escribí mal el nombre de una variable y no pasa nada
