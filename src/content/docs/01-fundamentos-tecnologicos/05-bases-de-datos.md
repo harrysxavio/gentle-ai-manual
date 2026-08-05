@@ -201,9 +201,9 @@ Esto importa por tres razones prácticas:
 ### El agente no recuerda la conversación de ayer
 
 - Qué observas: abres tu agente y no parece conocer nada de la sesión anterior.
-- Qué significa: la conversación es estado pasajero; lo que permanece es lo que el agente guardó en su memoria persistente (Engram). Si nada se guardó, no hay nada que recuperar.
+- Qué significa: la conversación es estado pasajero; lo que permanece es lo que el agente guardó en su memoria persistente. Si tu agente tiene Engram configurado, esa memoria es su base de datos; si no, puede no haber ninguna memoria entre sesiones. Si nada se guardó, no hay nada que recuperar.
 - Cómo comprobar: pregúntale al agente por algo puntual de la sesión anterior y observa si lo encuentra.
-- Cómo resolver: pide al agente que guarde las decisiones importantes con su herramienta de memoria durante la sesión, para que queden disponibles después.
+- Cómo resolver: pide al agente que guarde las decisiones importantes con su herramienta de memoria (como Engram, si está configurado) durante la sesión, para que queden disponibles después.
 - Cómo confirmar: en una sesión nueva, el agente recupera lo que guardaste y lo menciona.
 
 ### No sé si usar SQLite o PostgreSQL

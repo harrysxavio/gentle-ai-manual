@@ -258,7 +258,7 @@ Las definiciones canónicas de todos los términos del manual están en el [glos
 
 ## Para seguir aprendiendo
 
-- [Cómo aprender programación — introducción (Gentleman Programming)](https://youtu.be/mNwVtWU_Gtc): video en español que introduce el razonamiento lógico detrás de la programación, en sintonía con esta lección.
+- [Cómo aprender arquitectura correctamente (Gentleman Programming)](https://youtu.be/mNwVtWU_Gtc): video en español sobre el razonamiento de arquitectura de software; está pensado como una mirada adelante: no lo necesitas hoy, pero te muestra hacia dónde crece la disciplina.
 - [Khan Academy — Computación](https://es.khanacademy.org/computing): introducción visual y amable a la programación, en español y gratis.
 - [freeCodeCamp](https://www.freecodecamp.org/espanol/): certificaciones gratuitas con ejercicios interactivos, con versión en español.
 - [The Odin Project](https://www.theodinproject.com/): currículo completo de desarrollo web basado en proyectos, en inglés y gratis.

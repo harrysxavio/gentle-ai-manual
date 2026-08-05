@@ -156,15 +156,15 @@ resources:
     scope: learning
 
   - id: video-programacion-introduccion
-    title: "Cómo aprender programación — introducción (Gentleman Programming)"
+    title: "Cómo aprender arquitectura correctamente (Gentleman Programming)"
     url: https://youtu.be/mNwVtWU_Gtc
     type: video
     language: es
     access: gratuito
     provider: YouTube — Gentleman Programming
-    topics: [programacion, logica, abstraccion]
-    level: [principiante]
-    purpose: introducción visual a la programación y el razonamiento lógico
+    topics: [programacion, arquitectura, logica]
+    level: [intermedio]
+    purpose: introducción visual al razonamiento de arquitectura de software, útil después de dominar los fundamentos
     verified_at: "2026-08-05"
     status: activo
     notes: Recurso de aprendizaje; no es evidencia de comportamiento actual de ninguna herramienta.

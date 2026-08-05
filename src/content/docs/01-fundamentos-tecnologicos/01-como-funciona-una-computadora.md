@@ -71,7 +71,7 @@ Su tarea de hoy: convertir varias notas dispersas en un informe ordenado. En lug
 
 Empecemos por los tres componentes que participan en cada tarea, incluida la de Camila.
 
-La **CPU (procesador)**\* es el componente que ejecuta las instrucciones de los programas. Cuando el agente ordena las notas de Camila, es la CPU la que va avanzando esas instrucciones una por una. La velocidad de la CPU se mide en gigahertz (GHz), que significa miles de millones de operaciones por segundo.
+La **CPU (procesador)**\* es el componente que ejecuta las instrucciones de los programas. Cuando el agente ordena las notas de Camila, es la CPU la que va avanzando esas instrucciones una por una. La velocidad de la CPU se mide en gigahertz (GHz): una frecuencia de reloj de un gigahertz significa mil millones de ciclos por segundo. Cuántas operaciones logra en cada ciclo depende del diseño de la CPU y de la tarea, así que el GHz sirve como referencia de potencia, no como una equivalencia directa de velocidad.
 
 La **RAM (memoria)**\* es la mesa de trabajo: guarda, de forma temporal, lo que los programas están usando en este momento. Cuando el agente abre las notas de Camila, las carga desde el disco a la RAM para trabajar con ellas. La RAM es rápida, pero volátil: si la computadora se apaga, todo lo que estaba en la RAM se pierde. Por eso, si tu equipo se pone lento cuando hay muchos programas abiertos, lo más probable es que la RAM esté al límite.
 
