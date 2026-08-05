@@ -51,7 +51,7 @@ Aquí vas a entender qué es la **persistencia** (la capacidad de que los datos 
 
 Cuando un programa se cierra, lo que tenía en la memoria se pierde. Los datos que deben durar se guardan en el **disco**, el mismo lugar donde viven tus archivos. Guardar datos de forma que sobrevivan se llama **persistencia**, y la manera más organizada de lograrlo es una **base de datos**: un sistema que guarda datos de forma ordenada y permite recuperarlos después.
 
-Dentro de una base de datos, los datos viven en **tablas** (filas y columnas, como una planilla), y se consultan con un lenguaje llamado **SQL**. Hay bases de datos livianas que son un solo archivo, como **SQLite**, y otras que corren como un servidor, como **PostgreSQL**. Y hay un ejemplo que ya usas sin saberlo: **Engram**, la memoria de tus agentes, es una base de datos SQLite que guarda lo que el agente aprende entre sesiones.
+Dentro de una base de datos, los datos viven en **tablas** (filas y columnas, como una planilla), y se consultan con un lenguaje llamado **SQL**. Hay bases de datos livianas que son un solo archivo, como **SQLite**, y otras que corren como un servidor, como **PostgreSQL**. Y en este manual hay un ejemplo cercano: **Engram**, la memoria de los agentes de Gentle-AI, es una base de datos SQLite que guarda lo que el agente aprende entre sesiones. Es una integración opcional: se usa cuando está instalada y configurada en tu agente, no viene en cualquier configuración por defecto.
 
 ## Analogía: la memoria y el cuaderno
 

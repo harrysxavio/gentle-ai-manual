@@ -83,7 +83,7 @@ La diferencia clave entre RAM y disco es el tiempo: la RAM es rápida y temporal
 
 La **GPU (tarjeta gráfica)**\* es un componente especializado en hacer muchas operaciones en paralelo. Nació para dibujar imágenes y video, y por eso es la estrella de los juegos y de la edición de video.
 
-Quizá escuchaste que la IA necesita GPUs potentes, y es cierto para los servidores que entrenan y ejecutan los modelos. Pero cuando usas un agente, los modelos corren en servidores remotos, no en tu computadora. Por eso no necesitas una GPU cara para trabajar con OpenCode, Codex o Claude: una computadora común alcanza. La GPU local solo se ocupa de dibujar la interfaz que ves en pantalla.
+Quizá escuchaste que la IA necesita GPUs potentes, y es cierto para los servidores que entrenan y ejecutan los modelos. Cuando usas un agente, los modelos suelen correr en servidores remotos, no en tu computadora, así que en el caso habitual no necesitas una GPU cara para trabajar con OpenCode, Codex o Claude: una computadora común alcanza. Existe también la opción de usar proveedores locales (por ejemplo, Ollama o llama.cpp), donde el modelo corre en tu propia máquina y puede aprovechar la GPU local; ese caso se explica en la lección de modelos y proveedores. En el uso cotidiano, la GPU local solo se ocupa de dibujar la interfaz que ves en pantalla.
 
 ### El sistema operativo: el encargado
 
