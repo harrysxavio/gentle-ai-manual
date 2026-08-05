@@ -1,312 +1,260 @@
 ---
 title: Frontend y backend
-description: Qué son el frontend y el backend, cómo se comunican, qué es una API, el estado de una aplicación y el rol de cada parte.
+description: "Qué son el frontend, el backend y la API, cómo se comunican el cliente y el servidor, dónde corre cada parte y por qué importa para trabajar con agentes de IA."
+manual_contract: lesson-v2
+content_level:
+  - beginner
+  - operator
+estimated_minutes: 30
+learning_outcome: "Explicar qué son el frontend y el backend por su responsabilidad, qué es una API y el modelo cliente-servidor, distinguir CLI, TUI y terminal, y diferenciar un servidor local de uno en la nube."
+canonical_concepts:
+  - frontend-y-backend
+  - api
+  - cliente-y-servidor
+  - servidor-local-y-nube
+  - cli-tui-y-terminal
+  - api-y-agentes
+lesson_terms:
+  - Frontend
+  - Backend
+  - API
+  - Cliente (contexto red)
+  - Servidor (contexto red)
+  - Nube (computación en la nube)
+  - CLI (Command Line Interface)
+  - TUI (Text User Interface)
+  - Terminal
+persona: administracion
+learning_resources:
+  - video-frontend-basico
+  - video-backend-basico
+  - mdn-web-docs
+  - freecodecamp
+snapshot: none
+faq_mode: faq
+practice_mode: guided
+diagram_mode: mermaid
+source_status: verified
 level: 1
 estimatedTime: 30 min
-tags:
-  - frontend
-  - backend
-  - api
-  - interfaz
-  - servidor
-  - cliente
-  - estado
-  - procesos
-prerequisites:
-  - Programación (01-03)
-verifiedVersion: "N/A — conceptos fundamentales"
-learningOutcomes:
-  - Diferenciar frontend de backend por su responsabilidad
-  - Explicar qué es un cliente, un servidor y una API
-  - Comprender qué es el estado de una aplicación
-  - Identificar frontend y backend en el ecosistema Gentle
 ---
 
 # Frontend y backend
 
-## Qué aprenderás
+## Propósito
 
-Cuando abrís Gentle-AI en la terminal, ves una interfaz con colores, menús y texto. Esa interfaz se comunica con programas que procesan datos, consultan archivos y ejecutan agentes de IA.
+En la lección de programación viste que un programa es una secuencia de instrucciones y que un agente puede escribirlo por ti. Ahora falta responder otra pregunta: ¿dónde vive el software que usas y en qué partes se divide?
 
-Toda aplicación moderna se divide en dos grandes partes: lo que el usuario **ve** (frontend) y lo que procesa los **datos** (backend). En este capítulo vas a entender cómo funcionan, cómo se comunican y dónde está cada uno en el ecosistema Gentle.
+Esta lección te da el mapa de las dos caras de casi todo software: el **frontend** (lo que ves y usas), el **backend** (lo que procesa y guarda detrás) y la **API**, el contrato que los conecta. También vas a ver dónde corre cada parte, en tu computadora o en la nube, y por qué toda esta división importa cuando trabajas con agentes como OpenCode, Codex o Claude. No necesitas programar: se trata de entender el mapa.
 
-## Por qué importa
+## Respuesta simple
 
-Cuando usás Gentle-AI, Engram o cualquier herramienta, estás interactuando con un frontend que se comunica con uno o más backends. Cuando algo falla, saber si el error está en el frontend o en el backend te ahorra horas de búsqueda. Cuando leés documentación o archivos de configuración, entender esta división te da contexto sobre qué hace cada pieza.
+Toda aplicación tiene dos caras. El frontend es la parte que ves y con la que interactúas: botones, formularios, menús y pantallas. El backend es la parte que trabaja detrás: recibe lo que el frontend le pide, procesa los datos y devuelve resultados. No se comunican a gritos: usan una API, un contrato que define qué operaciones ofrece el backend y cómo pedirlas.
 
-## Visión simple
+El backend corre en un servidor, un programa que espera pedidos y responde. Ese servidor puede estar en tu propia computadora (servidor local) o en computadoras de otra persona a las que llegas por internet (la nube). Y la interfaz desde la que usas tus agentes, la terminal con sus programas de comandos y sus interfaces de texto, también es un frontend, igual que la pantalla de una aplicación.
 
-Toda aplicación tiene dos caras:
+## Analogía: el restaurante
 
-1. **Frontend**: lo que el usuario ve y con lo que interactúa. Botones, menús, pantallas, formularios. Su trabajo es mostrar información y capturar lo que el usuario hace.
-2. **Backend**: lo que procesa los datos. Recibe pedidos del frontend, los procesa, consulta bases de datos, ejecuta lógica, y devuelve resultados. El usuario nunca ve el backend directamente.
+Imagina que una aplicación es un restaurante. El frontend es lo que tú ves: la mesa, el menú y el mozo que te atiende. El backend es la cocina: nadie entra, pero allí se prepara el plato. La API es el menú: define qué puedes pedir y cómo lo pides. El mozo es la comunicación: lleva tu pedido a la cocina y te trae el plato listo. Tú, el cliente, pides; la cocina, el servidor, recibe el pedido y responde.
 
-El frontend **pide**. El backend **responde**.
+Esta analogía tiene un límite: un mozo tolera pedidos imprecisos, como "algo fresco", pero una API exige exactitud. Cada operación tiene una dirección y un formato precisos; si pides mal, obtienes un error. Además, en un restaurante la mesa y la cocina están en el mismo edificio; en el software, cliente y servidor suelen vivir en computadoras distintas, conectadas por internet.
 
-## Analogía
+## Ejemplo continuo: Camila y el formulario de vacaciones
 
-Imaginá un restaurante.
+Camila trabaja en administración: organiza documentos y cronogramas, no programa y usa Windows. En la lección anterior le pidió a un agente que sumara las ventas de varios archivos. Hoy tiene otro problema: las vacaciones del equipo se coordinan por correo y se pierden pedidos.
 
-El **frontend** es el menú, el mozo y la mesa. Vos ves el menú (interfaz), elegís un plato (interacción), y se lo decís al mozo (request). El mozo te trae el plato (response). Nunca ves lo que pasa en la cocina.
+Quiere una página simple donde sus compañeros carguen sus fechas y ella vea la lista. Abre OpenCode y le pide al agente que la construya. El agente va a crear dos partes: el formulario que ven sus compañeros (frontend) y la parte que guarda los pedidos y los lista (backend), conectadas por una API. Primero todo correrá en la computadora de Camila, para probar (servidor local); después, con ayuda del agente, publicará la página para que el equipo la use desde internet (la nube). Camila no escribe código: sigue el trabajo del agente con el mapa de esta lección.
 
-El **backend** es la cocina. Los cocineros reciben tu pedido, buscan los ingredientes, cocinan el plato, y se lo pasan al mozo para que te lo lleve. Vos no entrás a la cocina. Solo ves el resultado.
+## Explicación progresiva
 
-El **dato** que viaja es el pedido: "milanesa con papas fritas". Ese mismo dato lo escribe el mozo (frontend), lo lee el cocinero (backend), y el resultado viaja de vuelta.
+### Frontend y backend: dos responsabilidades, no dos tecnologías
 
-Si la cocina se quema (error de backend), el mozo no tiene plato para traerte. Si el menú está mal escrito (error de frontend), pedís algo que no existe.
+El **Frontend**\* es la parte de una aplicación que corre en el dispositivo de la persona que la usa y gestiona la interfaz: muestra información, captura lo que la persona hace y envía los datos al backend.
 
-## Cómo funciona realmente
+El **Backend**\* es la parte que procesa los datos: recibe pedidos, los valida, consulta información, ejecuta la lógica y devuelve resultados. No tiene pantalla: nadie lo ve, solo habla con los demás programas.
 
-### Frontend: lo que el usuario ve
-
-El **frontend** es un programa que se ejecuta en el dispositivo del usuario. Su responsabilidad es:
-
-1. **Mostrar información** al usuario (texto, listas, gráficos, paneles)
-2. **Capturar interacciones** (teclas que presiona, clics, comandos que escribe)
-3. **Enviar datos** al backend cuando el usuario hace algo
-4. **Recibir respuestas** del backend y actualizar lo que se muestra
-
-Los frontends pueden tener muchas formas:
-
-| Tipo | Ejemplo | ¿Dónde corre? |
-|------|---------|--------------|
-| **CLI** | `git status` | Terminal |
-| **TUI** | `gentle-ai` (sin argumentos) | Terminal |
-| **Web** | Gmail, GitHub | Navegador |
-| **App móvil** | Twitter, WhatsApp | Teléfono |
-| **App de escritorio** | VS Code | Computadora |
-
-Todos son frontends. Todos muestran algo y capturan interacción del usuario.
-
-### Backend: lo que procesa datos
-
-El **backend** es un programa que se ejecuta en un **servidor** (otra computadora, o la misma). No tiene pantalla. No muestra nada. Solo:
-
-1. **Recibe requests** (pedidos) del frontend
-2. **Procesa datos**: consulta una base de datos, ejecuta lógica, llama a otros servicios
-3. **Devuelve responses** (respuestas) al frontend
-
-El backend no sabe si el frontend es una TUI, una web o una app móvil. Solo recibe datos y devuelve datos.
-
-### Cliente y servidor
-
-**Cliente**: el programa que **inicia** la comunicación. Pide algo. El frontend es siempre el cliente.
-
-**Servidor**: el programa que **espera** comunicaciones. Responde a los pedidos. El backend es siempre el servidor.
-
-```
-Cliente (frontend)                  Servidor (backend)
-      │                                  │
-      │──── GET /api/agentes ──────────>│
-      │                                  │  (busca agentes en la base de datos)
-      │<─── { agentes: [...] } ──────────│
-      │                                  │
-```
-
-Esta comunicación usa un **protocolo** (un conjunto de reglas). El protocolo más común es **HTTP** (HyperText Transfer Protocol), el mismo que usa la web.
-
-### API
-
-**API** (Application Programming Interface): es la "carta del restaurante" del backend. Define qué pedidos acepta y cómo deben ser.
-
-Imaginá que el backend tiene estas operaciones disponibles:
-
-```
-GET    /api/agentes       → devuelve lista de agentes
-POST   /api/agentes       → crea un agente nuevo
-GET    /api/agentes/:id   → devuelve un agente específico
-DELETE /api/agentes/:id   → borra un agente
-```
-
-Cada línea es un **endpoint** de la API. El frontend hace un request a un endpoint y recibe un response.
-
-Un request HTTP se ve así:
-
-```
-GET /api/agentes HTTP/1.1
-Host: localhost:8080
-Authorization: Bearer token123
-```
-
-Un response HTTP se ve así:
-
-```
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-  "agentes": [
-    { "id": 1, "nombre": "code-reviewer", "activo": true },
-    { "id": 2, "nombre": "doc-writer", "activo": false }
-  ]
-}
-```
-
-Los **códigos de estado HTTP** te dicen si el request funcionó:
-
-| Código | Significado | Ejemplo de uso |
-|--------|------------|----------------|
-| `200` | OK (todo bien) | GET exitoso |
-| `201` | Creado | POST exitoso (creó un recurso) |
-| `400` | Bad Request (pedido mal formado) | Faltan datos obligatorios |
-| `404` | Not Found (no existe) | URL mal escrita |
-| `500` | Internal Server Error | El backend falló internamente |
-
-### Estado
-
-El **estado** de una aplicación es toda la información que define "cómo están las cosas en este momento".
-
-Ejemplos de estado:
-
-- "El usuario está logueado o no"
-- "Hay 3 agentes seleccionados en la lista"
-- "El archivo se está guardando" (estado de carga)
-- "El modal de confirmación está abierto o cerrado"
-
-El estado puede vivir en dos lugares:
-
-**Estado local** (frontend): información que solo le importa a la interfaz. Por ejemplo, si un menú está desplegado o no. Si cerrás la app, ese estado se pierde.
-
-**Estado del servidor** (backend): información persistente que vive en la base de datos. Por ejemplo, la lista de agentes configurados. Si cerrás la app, el estado sigue ahí.
-
-El frontend sincroniza su estado con el backend a través de la API. Cuando el usuario hace algo, el frontend envía un request al backend, el backend actualiza la base de datos, y devuelve el nuevo estado.
-
-### Base de datos como parte del backend
-
-La **base de datos** es donde el backend guarda información de forma permanente. Cuando el backend necesita recordar algo (un agente, una configuración, un usuario), lo escribe en la base de datos. Cuando necesita recuperarlo, lo consulta.
-
-```
-Frontend ──> Backend ──> Base de datos
-              │
-              │ (procesa el request,
-              │  consulta la BD,
-              │  forma la respuesta)
-              │
-              v
-           Response al frontend
-```
-
-### Procesos distintos
-
-Frontend y backend son **procesos separados**. Cada uno tiene su propia memoria, su propio código, y puede ejecutarse en computadoras diferentes.
-
-```
-Computadora del usuario               Servidor remoto
-┌─────────────────────┐              ┌──────────────────────┐
-│  gentle-ai (TUI)    │  ──── HTTP ──> │  API server           │
-│  (proceso #1234)    │  <─── JSON ──── │  (proceso #5678)      │
-│                     │              │                       │
-│  frontend           │              │  backend + BD          │
-└─────────────────────┘              └──────────────────────┘
-```
-
-Esto significa que el frontend puede fallar sin afectar al backend, y viceversa. También significa que podés tener varios frontends distintos (TUI, web, móvil) conectados al mismo backend.
-
-### TUI también es un frontend
-
-Es común pensar que frontend = página web. Pero no. Una **TUI** (Text User Interface) es un frontend tan válido como una página web.
-
-En el ecosistema Gentle:
-
-- **gentle-ai** (sin argumentos) abre una TUI. Usa Bubbletea, un framework de Go para construir interfaces de terminal con teclas, colores, paneles y navegación. El usuario selecciona componentes, escribe prompts, ve progreso. Eso es frontend.
-
-- **Engram** también tiene TUI. Cuando ejecutás `engram` sin argumentos, ves una interfaz para navegar y buscar memoria. Eso es frontend.
-
-- El **backend** de Engram es el servidor MCP que recibe requests de la TUI o de otras herramientas y responde con datos de memoria.
-
-Ejemplo concreto:
+La división es por responsabilidad, no por tecnología. Un frontend puede ser una página web, una aplicación de celular, un programa de escritorio o una interfaz de terminal; lo que lo hace frontend es que la persona lo ve y lo usa. El frontend pide; el backend responde.
 
 ```mermaid
-graph LR
-    TUI[TUI gentle-ai] -->|lee/escribe archivos| FS[Sistema de archivos]
-    TUI -->|ejecuta| CMD[Comandos / Scripts]
-    TUI -->|HTTP request| API[API de IA]
-    API -->|HTTP response| TUI
-
-    TUI2[TUI engram] -->|request MCP| MCP[Engram MCP server]
-    MCP -->|consulta| SQL[SQLite]
-    SQL -->|datos| MCP
-    MCP -->|response| TUI2
+flowchart LR
+    U["Tú"] --> F["Frontend<br/>lo que ves y usas"]
+    F -->|"pide datos"| B["Backend<br/>procesa y guarda"]
+    B -->|"devuelve el resultado"| F
 ```
 
-### Componentes, navegación, validación
+Se lee de izquierda a derecha: tú usas el frontend, el frontend pide datos al backend y el backend devuelve el resultado, que el frontend muestra. El recorrido del formulario de Camila es el mismo: sus compañeros ven el formulario, el formulario pide guardar las fechas y el backend guarda el pedido y lo devuelve a la lista.
 
-Los frontends, sean TUI, web o móvil, comparten conceptos:
+Otra idea útil: el **estado**. El frontend guarda un estado pasajero, lo que la pantalla muestra en este momento; el backend guarda los datos que deben durar, como los pedidos de vacaciones guardados. Cómo se guardan esos datos de forma permanente es el tema de la próxima lección, bases de datos.
 
-**Componentes**: piezas reutilizables de la interfaz. Un botón, una lista, un campo de texto, un panel. En la TUI de gentle-ai, el selector de componentes es un componente. La barra de progreso es otro.
+### Cliente y servidor: quién pide y quién responde
 
-**Navegación**: cómo el usuario se mueve entre pantallas o secciones. En una TUI, con teclas (Tab, flechas, Enter). En una web, con clicks en links o botones.
+El **Cliente (contexto red)**\* es el programa que inicia la comunicación: el que pide. El **Servidor (contexto red)**\* es el programa que espera los pedidos y responde. En una aplicación típica el frontend es el cliente y el backend es el servidor, pero el rol no lo define la tecnología: lo define quién inicia el pedido.
 
-**Validación**: verificar que los datos que ingresa el usuario son correctos antes de enviarlos al backend. Por ejemplo, si el usuario escribe un prompt vacío, el frontend muestra un error sin molestar al backend.
+¿Dónde vive el servidor? En dos lugares, y conviene diferenciarlos.
 
-Validación del lado del frontend:
+**Servidor local**: corre en tu propia computadora, como cualquier programa. Cuando Camila prueba el formulario en su PC, el agente levanta el servidor en su computadora y su navegador se conecta a él escribiendo `localhost` en la dirección.
 
-```
-Usuario escribe "" (vacío)
-       │
-Frontend: "El prompt no puede estar vacío"
-       │
-       └── (no envía nada al backend)
+```mermaid
+flowchart LR
+    C["Cliente: tu computadora"] -->|"HTTP request"| S["Servidor local: en tu computadora"]
+    S -->|"HTTP response"| C
 ```
 
-Validación del lado del backend:
+Cliente y servidor viven en la misma computadora, pero siguen siendo dos programas distintos: uno pide y el otro responde. Esto es lo que pasa cada vez que pruebas una aplicación en tu equipo.
 
-```
-Usuario escribe "" (vacío)
-       │
-Frontend envía POST /api/ejecutar
-       │
-Backend: "error: prompt vacío"
-       │
-Frontend muestra el error
+**Servidor en la nube**: la **Nube (computación en la nube)**\* son computadoras y servicios de otra persona, un proveedor como Google, Amazon o Microsoft, a los que accedes por internet. Cuando el formulario queda publicado para el equipo, el servidor vive en la nube: no mantienes ninguna computadora, pero dependes de internet.
+
+```mermaid
+flowchart LR
+    C["Cliente: tu computadora"] -->|"HTTP request por internet"| S["Servidor en la nube: computadoras de un proveedor"]
+    S -->|"HTTP response"| C
 ```
 
-Las aplicaciones bien diseñadas validan en ambos lados: el frontend para responder rápido, el backend como protección de seguridad.
+El pedido viaja por internet hasta el servidor, y la respuesta vuelve por el mismo camino. Recuerda de la primera lección que el modelo de IA de tus agentes también corre en un servidor remoto: eso es la nube en acción.
+
+### La API: el menú de operaciones
+
+La **API**\* (Application Programming Interface) es el contrato que permite que dos programas se comuniquen: define qué operaciones ofrece el backend y cómo se piden. Es el menú del restaurante: no entras a la cocina, pides del menú.
+
+```mermaid
+flowchart LR
+    M["Tú, en la mesa"] -->|"pedido"| MO["Mozo: la API"]
+    MO -->|"lleva el pedido"| CO["Cocina: el backend"]
+    CO -->|"plato listo"| MO
+    MO -->|"te trae el plato"| M
+```
+
+La API está entre el frontend y el backend: recibe el pedido del frontend, lo traduce y se lo entrega al backend, y hace el camino inverso con la respuesta. En el formulario de Camila, la API define operaciones como "guardar un pedido de vacaciones" y "listar los pedidos guardados".
+
+Para pedir, los programas usan un protocolo común en internet: **HTTP (HyperText Transfer Protocol)**. El pedido se llama request y la respuesta, response. La respuesta trae un código que resume el resultado: 200 significa "todo bien", 404 "no existe lo que pediste" y 500 "el servidor falló". Por ahora no necesitas más que eso.
+
+¿Por qué importa entender la API en este manual? Porque los agentes viven de APIs:
+
+- Cuando el agente necesita pensar, llama a la API del proveedor del modelo de IA, que corre en la nube.
+- Cuando el agente necesita actuar, usa herramientas (leer archivos, ejecutar comandos) y cada herramienta es una API. Los servidores MCP (Model Context Protocol), que conectan herramientas con agentes, también definen APIs; se estudian a fondo en su propio módulo.
+- Cuando le pides al agente que construya un servicio como el de Camila, él crea la API que conecta el formulario con la parte que guarda datos.
+
+Entender qué es una API te da el mapa de dónde se unen los programas y de qué hacer cuando uno de esos puntos falla.
+
+### CLI, TUI y terminal: tres cosas que se confunden
+
+En la lección de la terminal viste la diferencia entre la ventana y el programa que interpreta comandos. Ahora conviene separar otros tres conceptos que suenan igual.
+
+La **Terminal**\* es la ventana: el lugar de texto donde escribes. Un **CLI (Command Line Interface)**\* es un programa que se opera escribiendo comandos, como Git o los propios agentes: `opencode` y `codex` son comandos que escribes en la terminal. Una **TUI (Text User Interface)**\* es un programa que, dentro de la misma ventana, dibuja paneles y menús que navegas con las teclas; la interfaz con la que se abre OpenCode en la terminal es una TUI.
+
+```mermaid
+flowchart LR
+    T["Terminal: la ventana de texto"] -->|"comandos"| C["CLI: programas que se operan escribiendo"]
+    T -->|"paneles y menús"| U["TUI: programas con interfaz de texto navegable"]
+    C --> A["Agente: OpenCode, Codex o Claude"]
+```
+
+La terminal es el lugar; el CLI y la TUI son dos maneras en que los programas se presentan en ese lugar. Y hay un matiz que evita confusiones: cuando una conversación sobre una aplicación dice "el frontend", se habla de la parte visible de esa aplicación; cuando hablas de tus herramientas, la terminal, el CLI y la TUI desde donde usas tus agentes también son un frontend. Es el mismo concepto, la interfaz visible, aplicado a dos escenarios.
+
+## Aplicación práctica: el agente y las APIs
+
+Este diagrama resume el mapa completo de lo que pasa cuando usas un agente:
+
+```mermaid
+flowchart LR
+    U["Tú"] --> A["Agente: OpenCode, Codex o Claude"]
+    A -->|"API del modelo"| M["Modelo de IA<br/>en la nube"]
+    A -->|"API de herramientas"| H["Herramientas: archivos, comandos, MCP"]
+    M --> A
+    H --> A
+```
+
+Se lee de izquierda a derecha: tú hablas con el agente, el agente llama por API al modelo de IA para pensar y por API a sus herramientas para actuar, y los resultados vuelven a él. Cada punto de unión de este diagrama es una API. Cuando algo falla, saber cuál de estas uniones es la que falla te dice si el problema es de red, del proveedor del modelo o de una herramienta.
+
+### Práctica guiada: ver el frontend y el backend en acción
+
+Para afianzar el mapa, mira dos videos cortos en español, en orden:
+
+1. [Todo lo que necesitas saber del desarrollo frontend](https://youtu.be/Rla0IMxIlNc): qué es el frontend y qué hace.
+2. [Todo lo que necesitas saber del desarrollo backend](https://youtu.be/l3HJsXA-Fa4): qué es el backend y cómo se relaciona con el frontend.
+
+Después responde con tus palabras (puedes escribirlas o pedírselas a tu agente): ¿de qué se encarga el frontend? ¿De qué se encarga el backend? ¿Cómo se comunican?
+
+Como comprobación final, elige una aplicación que uses a diario (el correo, una página de trámites, una app del celular) e identifica en ella la parte que ves y la parte que procesa los datos. Si puedes explicar esa diferencia, la lección cumplió su objetivo. La consigna es abierta: no hay examen.
+
+## Decisiones y límites
+
+- **MCP y protocolos de herramientas** se estudian a fondo en sus propios módulos; aquí solo aparece como ejemplo de por qué la API importa.
+- **Esta lección no enseña a elegir tecnologías**: eso es la lección de elegir stack. Tampoco construye una aplicación completa: eso es la lección de cómo funciona una aplicación moderna.
+- **HTTP se explica solo a nivel de idea** (request, response y códigos); los detalles son tema de las lecciones de la web.
+- **Frontend y backend son roles, no marcas**: un mismo programa puede contener ambas partes, y cada parte puede usar tecnologías distintas.
+- **El estado se menciona solo como idea**: cómo se guardan los datos de forma permanente es el tema de la próxima lección.
 
 ## Errores frecuentes
 
-1. **"Error 500" en la TUI**: el backend falló. Revisá que el servidor esté corriendo, que la base de datos esté disponible, y que el request sea correcto.
-2. **"No se pudo conectar"**: el frontend no encuentra el backend. Verificá que la URL y el puerto sean correctos. En Engram, que el MCP server esté iniciado.
-3. **La interfaz no responde**: puede ser que el frontend esté esperando una respuesta del backend que nunca llega. Revisá el backend. También puede ser que el frontend tenga un error de lógica (bug).
-4. **"CORS error"**: el navegador bloquea requests del frontend web a un backend en otro dominio. No aplica a TUI/CLI porque no usan navegador.
-5. **Estado desincronizado**: el frontend muestra datos viejos porque no refrescó su estado después de un cambio en el backend. Solución: refrescar (reiniciar la TUI, recargar la página).
+### Veo "404" o "500" en una página y no sé qué significa
+
+- Qué observas: la página carga, pero el contenido no aparece y hay un número de error.
+- Qué significa: el frontend llegó a la API, pero algo falló: 404 es "no existe lo que pediste" y 500 es "el servidor falló".
+- Cómo comprobar: el error aparece al pedir un dato específico, no al abrir la página.
+- Cómo resolver: para 404, revisa la dirección o el enlace; para 500, suele ser un problema del backend que debes avisar o esperar.
+- Cómo confirmar: al reintentar, la página muestra el contenido.
+
+### Dice "no se puede conectar con el servidor"
+
+- Qué observas: la aplicación avisa que no encuentra al servidor.
+- Qué significa: el frontend está, pero el backend no responde: puede estar apagado, no iniciado (servidor local) o con una dirección incorrecta.
+- Cómo comprobar: si es un servicio local, confirma que el programa servidor esté corriendo.
+- Cómo resolver: inicia el servidor o verifica la dirección; si es la nube, revisa tu conexión a internet.
+- Cómo confirmar: la aplicación responde de nuevo.
+
+### Confundo CLI, TUI y terminal
+
+- Qué observas: usas las tres palabras como sinónimos.
+- Qué significa: la terminal es la ventana; el CLI y la TUI son dos formas de interfaz de los programas que corren en ella.
+- Cómo comprobar: si escribes un comando y el programa termina, es un CLI; si quedan paneles que navegas con las teclas, es una TUI.
+- Cómo resolver: di "terminal" al lugar, y "CLI" o "TUI" a la forma del programa.
+- Cómo confirmar: describes cada pieza con su palabra correcta.
+
+### "Frontend es lo mismo que página web"
+
+- Qué observas: piensas que solo las páginas web tienen frontend.
+- Qué significa: frontend es toda interfaz visible: también la de los programas de terminal, las apps de celular y las de escritorio.
+- Cómo comprobar: la interfaz desde la que usas OpenCode en la terminal es un frontend y no es una página web.
+- Cómo resolver: piensa en "la parte que ves y usas", no en una tecnología.
+- Cómo confirmar: identificas frontends en programas que no son web.
 
 ## Resumen
 
-| Concepto | ¿Qué es? | ¿Dónde está? |
-|----------|---------|-------------|
-| Frontend | La interfaz que ve el usuario | En la computadora del usuario |
-| Backend | El que procesa datos | En un servidor |
-| Cliente | El que inicia la comunicación | Generalmente el frontend |
-| Servidor | El que espera y responde | Generalmente el backend |
-| API | La "carta" del backend (qué endpoints acepta) | Definida por el backend |
-| HTTP | Protocolo de comunicación | Viaja por la red |
-| Request | Pedido del cliente al servidor | Ej: GET /api/agentes |
-| Response | Respuesta del servidor | Ej: JSON con datos |
-| Estado local | Info efímera del frontend | Memoria del frontend |
-| Estado persistente | Info guardada en BD | Base de datos |
-| Endpoint | Una operación específica de la API | Ej: POST /api/agentes |
-| Componente | Pieza reutilizable de la interfaz | Botón, lista, panel |
+| Concepto | Qué es | Ejemplo |
+|----------|--------|---------|
+| Frontend | La parte que la persona ve y usa | El formulario de vacaciones |
+| Backend | La parte que procesa y guarda datos | Guardar los pedidos de vacaciones |
+| API | El contrato que conecta programas | Las operaciones del formulario |
+| Cliente (contexto red) | El programa que pide | El navegador de los compañeros de Camila |
+| Servidor (contexto red) | El programa que espera y responde | El programa que guarda los pedidos |
+| Servidor local | Servidor en tu propia computadora | La prueba en la PC de Camila |
+| Nube (computación en la nube) | Computadoras ajenas a las que llegas por internet | La página publicada para el equipo |
+| Terminal | La ventana de texto | PowerShell, Terminal.app |
+| CLI (Command Line Interface) | Programa que se opera por comandos | Git, OpenCode, Codex |
+| TUI (Text User Interface) | Interfaz de texto con paneles y menús | La interfaz de OpenCode en la terminal |
 
-## Preguntas
+Lo esencial para recordar: el frontend es lo que ves, el backend es lo que trabaja detrás, la API es el contrato que los conecta, el servidor puede vivir en tu computadora o en la nube, y la terminal, el CLI y la TUI son tres piezas distintas que a menudo se confunden.
 
-1. ¿Cuál es la diferencia principal entre frontend y backend?
-2. ¿Qué es una API y para qué sirve?
-3. ¿Qué significa que el frontend y el backend sean procesos distintos?
-4. ¿Por qué la validación debe hacerse tanto en frontend como en backend?
-5. En el ecosistema Gentle, ¿qué parte es frontend y qué parte es backend?
+## Términos de esta lección
 
-## Ejercicio
+- **Frontend**: la parte de una aplicación que corre en el dispositivo del usuario y gestiona la interfaz que ve y usa.
+- **Backend**: la parte de una aplicación que corre en el servidor y gestiona datos, lógica y autenticación.
+- **API**: contrato que permite que dos programas se comuniquen entre sí.
+- **Cliente (contexto red)**: el programa que inicia la comunicación, pidiendo algo al servidor.
+- **Servidor (contexto red)**: el programa que espera los pedidos del cliente y responde.
+- **Nube (computación en la nube)**: computadoras y servicios a los que se accede por internet, sin mantener el hardware propio.
+- **CLI (Command Line Interface)**: interfaz de texto donde se escriben comandos.
+- **TUI (Text User Interface)**: interfaz de usuario basada en texto con elementos visuales como paneles y menús.
+- **Terminal**: interfaz de texto donde escribes comandos para que la computadora los ejecute.
 
-1. Abrí Gentle-AI en la terminal con `gentle-ai`. Identificá qué partes son frontend (interfaz, menús) y qué partes son backend (procesamiento, llamadas a API de IA).
-2. Si tenés Engram instalado, ejecutá `engram doctor` (CLI) y después `engram` (TUI). Notá la diferencia. El CLI devuelve un resultado y termina. La TUI queda abierta esperando tu interacción. Ambas son frontends.
-3. Abrí PowerShell y ejecutá `Get-Process | Where-Object ProcessName -like "*node*"` para ver si algún proceso backend de Node.js está corriendo.
-4. Pensá en una aplicación que uses (WhatsApp, Gmail, GitHub). Identificá: ¿cuál es el frontend? ¿Cuál es el backend? ¿Cómo se comunican?
+Las definiciones canónicas de todos los términos del manual están en el [glosario](../../20-referencia/02-glosario/).
 
-## Fuentes verificadas
+## Para seguir aprendiendo
 
-- Concepto: documentación general de arquitectura de software
-- Protocolo: HTTP/1.1 (RFC 7231)
-- Ecosistema: gentle-ai 2.x (Bubbletea TUI), engram 1.x (TUI + MCP server)
-- Fecha: 2026-07-20
-- Estado: 🟢 Verificado (conocimiento fundamental, no depende de versión específica)
+- [Todo lo que necesitas saber del desarrollo frontend (BettaTech)](https://youtu.be/Rla0IMxIlNc): video en español que introduce qué es el frontend y qué hace.
+- [Todo lo que necesitas saber del desarrollo backend (BettaTech)](https://youtu.be/l3HJsXA-Fa4): video en español que explica el backend y su relación con el frontend.
+- [MDN Web Docs](https://developer.mozilla.org/es/): referencia técnica autorizada de tecnologías web, con versión en español.
+- [freeCodeCamp](https://www.freecodecamp.org/espanol/): certificaciones gratuitas con ejercicios interactivos, con versión en español.
+
+La próxima lección te lleva a [bases de datos](../05-bases-de-datos/), donde verás cómo el backend guarda los datos de forma permanente.

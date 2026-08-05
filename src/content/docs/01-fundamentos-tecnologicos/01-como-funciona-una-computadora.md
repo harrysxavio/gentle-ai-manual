@@ -1,232 +1,226 @@
 ---
 title: Cómo funciona una computadora
-description: Hardware, software, sistema operativo, procesos, memoria y archivos. Explicado desde cero.
+description: "Qué componentes de la computadora intervienen al usar agentes de IA: memoria, disco, sistema operativo, archivos, IDE y procesos."
+manual_contract: lesson-v2
+content_level:
+  - beginner
+estimated_minutes: 20
+learning_outcome: "Explicar qué componentes de la computadora intervienen al usar agentes de IA y cómo el agente ejecuta sus herramientas como procesos."
+canonical_concepts:
+  - componentes-de-hardware
+  - sistema-operativo
+  - archivos-y-carpetas
+  - ide-y-terminal
+  - procesos
+  - agentes-y-herramientas
+lesson_terms:
+  - CPU (procesador)
+  - GPU (tarjeta gráfica)
+  - RAM (memoria)
+  - Disco (almacenamiento)
+  - Sistema operativo
+  - Archivo
+  - Carpeta (directorio)
+  - Proceso (informática)
+persona: administracion
+learning_resources:
+  - khan-academy-computing
+  - freecodecamp
+snapshot: none
+faq_mode: faq
+practice_mode: none
+diagram_mode: mermaid
+source_status: verified
 level: 1
 estimatedTime: 20 min
-tags:
-  - computadora
-  - hardware
-  - software
-  - sistema-operativo
-  - procesos
-  - memoria
-prerequisites: []
-verifiedVersion: "N/A — fundamentos"
-learningOutcomes:
-  - Identificar las partes principales de una computadora
-  - Explicar la diferencia entre hardware y software
-  - Comprender qué es un sistema operativo y qué hace
-  - Definir qué es un proceso, un archivo y la memoria
 ---
 
 # Cómo funciona una computadora
 
-## Qué aprenderás
+## Propósito
 
-Antes de hablar de agentes de IA, modelos y herramientas de programación, necesitás entender el terreno donde todo eso vive: **la computadora**.
+Esta lección asume que ya sabes qué es una computadora y que la usas todos los días. No vamos a explicar qué es un programa ni cómo se escribe: eso viene en la lección de programación.
 
-En este capítulo vas a aprender qué es realmente una computadora, de qué partes está hecha y cómo trabajan juntas para ejecutar programas.
+Aquí vas a conocer los componentes que intervienen cuando trabajas con agentes de IA como OpenCode, Codex o Claude. Cuando le pides algo a un agente, en tu computadora se ponen en marcha la memoria, el disco, el sistema operativo, los archivos de tu proyecto y varios programas en ejecución. Entender ese terreno te ayuda a usar los agentes con confianza y a diagnosticar qué falla cuando algo no funciona.
 
-No necesitás saber nada de antemano. Empezamos desde la idea más básica.
+## Respuesta simple
 
-## Por qué importa
+Cuando usas un agente de IA, tu computadora es el escenario donde ocurre todo: el agente es un programa que corre en tu computadora, lee y escribe archivos de tu disco, usa la memoria para trabajar y, cuando necesita pensar, consulta al modelo de IA por internet.
 
-Cuando instalás Gentle-AI, Engram o cualquier herramienta del ecosistema, estás poniendo programas en tu computadora. Esos programas van a crear procesos, leer y escribir archivos, usar memoria, y comunicarse entre sí.
+Cuatro piezas hacen posible ese recorrido: la memoria RAM, donde se trabaja con lo que está en uso; el disco, donde se guarda todo de forma permanente; el sistema operativo, que administra los programas y los archivos; y los procesos, que son los programas ya en ejecución. A eso se suman las carpetas y archivos donde vive tu trabajo, y las herramientas donde el agente se apoya, como el IDE y la terminal.
 
-Si no entendés qué es un proceso, un archivo o la memoria, no vas a poder diagnosticar por qué algo falla. Y en el mundo del desarrollo con IA, las cosas fallan seguido.
+## Analogía: tu computadora como una oficina
 
-## Visión simple
+Imagina tu computadora como una oficina con tres muebles.
 
-Una computadora es una máquina que hace cuatro cosas:
+- El **escritorio** es la memoria RAM: sobre él trabajas con lo que tienes a la mano. Si el escritorio se llena, tienes que guardar cosas para seguir, y al apagar la luz, todo lo que quedó sobre el escritorio se pierde.
+- El **archivador** es el disco: allí guardas documentos de forma permanente. Puedes apagar la oficina y los documentos siguen en su lugar.
+- La persona que **procesa** el trabajo es el procesador (CPU): toma documentos del escritorio, los lee, los modifica y los devuelve al archivador.
 
-1. **Recibe** información (teclado, mouse, internet)
-2. **Procesa** esa información (hace cálculos, toma decisiones)
-3. **Guarda** resultados (en disco, en la nube)
-4. **Muestra** resultados (en pantalla, por parlantes)
+Esta analogía tiene un límite: en una oficina el trabajo avanza a ritmo humano, mientras que una computadora ejecuta miles de millones de operaciones por segundo. Tampoco refleja la estricta disciplina con que el sistema operativo reparte la atención entre todos los programas: si un programa falla, no puede llevarse puesta la memoria de los demás.
 
-Esas cuatro operaciones las hacen dos tipos de componentes:
+## Ejemplo continuo: Camila y su informe
 
-- **Hardware**: las partes físicas que podés tocar (procesador, memoria, disco, pantalla)
-- **Software**: las instrucciones que le dicen al hardware qué hacer (programas, sistema operativo)
+Camila trabaja en administración: organiza documentos, prepara informes y lleva los cronogramas de su equipo. No programa, usa Windows y su día transcurre entre Word, Excel, Outlook y el navegador.
 
-## Hardware: las partes físicas
+Su tarea de hoy: convertir varias notas dispersas en un informe ordenado. En lugar de armarlo sola, abre OpenCode y le pide al agente que reúna las notas, las ordene por tema y le deje un borrador listo. Lo que pasa después en su computadora es el hilo conductor de esta lección: el agente tendrá que leer archivos del disco, trabajar con la memoria, apoyarse en el sistema operativo y, al final, guardar un archivo nuevo con el informe.
+
+## Explicación progresiva
+
+### Memoria, disco y procesador: los tres que trabajan
+
+Empecemos por los tres componentes que participan en cada tarea, incluida la de Camila.
+
+La **CPU (procesador)**\* es el componente que ejecuta las instrucciones de los programas. Cuando el agente ordena las notas de Camila, es la CPU la que va avanzando esas instrucciones una por una. La velocidad de la CPU se mide en gigahertz (GHz), que significa miles de millones de operaciones por segundo.
+
+La **RAM (memoria)**\* es la mesa de trabajo: guarda, de forma temporal, lo que los programas están usando en este momento. Cuando el agente abre las notas de Camila, las carga desde el disco a la RAM para trabajar con ellas. La RAM es rápida, pero volátil: si la computadora se apaga, todo lo que estaba en la RAM se pierde. Por eso, si tu equipo se pone lento cuando hay muchos programas abiertos, lo más probable es que la RAM esté al límite.
+
+El **Disco (almacenamiento)**\* es el archivador permanente: allí se guardan los programas, los documentos y los archivos de tus proyectos, y todo sigue ahí aunque apagues la computadora. Hoy los discos son casi siempre SSD, que son mucho más rápidos que los discos mecánicos (HDD) de antes. Cuando el agente de Camila guarda el informe, lo escribe en el disco.
+
+La diferencia clave entre RAM y disco es el tiempo: la RAM es rápida y temporal, el disco es lento y permanente. Cada vez que un programa necesita algo del disco, lo copia primero a la RAM.
+
+### La GPU: cuándo importa de verdad
+
+La **GPU (tarjeta gráfica)**\* es un componente especializado en hacer muchas operaciones en paralelo. Nació para dibujar imágenes y video, y por eso es la estrella de los juegos y de la edición de video.
+
+Quizá escuchaste que la IA necesita GPUs potentes, y es cierto para los servidores que entrenan y ejecutan los modelos. Pero cuando usas un agente, los modelos corren en servidores remotos, no en tu computadora. Por eso no necesitas una GPU cara para trabajar con OpenCode, Codex o Claude: una computadora común alcanza. La GPU local solo se ocupa de dibujar la interfaz que ves en pantalla.
+
+### El sistema operativo: el encargado
+
+El **Sistema operativo**\* es el programa base que administra todos los recursos de la computadora: decide qué programa usa la CPU, cuánta RAM recibe cada uno y qué archivos puede leer. También organiza los archivos en carpetas y aísla los programas entre sí para que uno no interfiera con otro.
+
+Los tres sistemas operativos principales son Windows, macOS y Linux. El mismo agente, como OpenCode o Codex, puede correr en los tres; lo que cambia son los detalles, como la forma de abrir la terminal o el lugar donde se guardan las configuraciones. Esas diferencias las verás en la próxima lección, cuando trabajemos con la terminal.
+
+### Archivos y carpetas: dónde vive tu trabajo
+
+Un **Archivo**\* es una unidad de datos guardada en el disco con un nombre: un documento, una imagen, un informe. Una **Carpeta (directorio)**\* es un contenedor que organiza archivos y otras carpetas dentro del disco.
+
+Los archivos de Camila podrían verse así:
+
+```
+C:\Users\Camila\Documentos\Informes\
+├── notas-reunion.txt
+├── datos-ventas.csv
+└── borrador-final.txt
+```
+
+La ruta `C:\Users\Camila\Documentos\Informes\notas-reunion.txt` indica exactamente dónde vive ese archivo, desde la raíz del disco hasta el nombre. Cuando el agente de Camila dice "voy a leer tus notas", está abriendo archivos como este desde su carpeta real, no desde "dentro" de la aplicación.
+
+### El IDE y la terminal: tus herramientas de trabajo
+
+Para trabajar con agentes de IA se usan dos tipos de herramientas. El **IDE (entorno de desarrollo integrado)**, como Visual Studio Code, reúne en una sola aplicación el editor de archivos, una terminal y otras herramientas para programar y revisar proyectos. La **terminal** es una ventana donde se escriben comandos de texto; es la puerta de entrada a los programas de línea de comandos (CLI) y la estudiaremos a fondo en la próxima lección.
+
+El agente no es un componente separado de tu computadora: es un programa que vive en estas herramientas. Cuando abres OpenCode, Codex o Claude, estás abriendo un programa más, como abrirías Word.
+
+### Procesos: los programas en acción
+
+Un **Proceso (informática)**\* es un programa en ejecución dentro del sistema operativo. Cuando Camila abre OpenCode, el sistema operativo lee el programa desde el disco, lo carga en la RAM y crea un proceso. Ese proceso tiene memoria asignada, archivos abiertos y un estado: está ejecutándose.
+
+Cada vez que el agente ejecuta una herramienta —leer un archivo, buscar un texto, guardar un borrador—, también lo hace como proceso o dentro del proceso del agente. Todos esos procesos conviven en la misma computadora, y el sistema operativo reparte entre ellos la CPU y la RAM.
+
+Puedes ver los procesos de tu sistema en el Administrador de tareas de Windows (Ctrl+Shift+Esc), en el Monitor de Actividad de macOS o con el comando `ps` en Linux.
+
+## Aplicación práctica: el agente en tu computadora
+
+Ahora une las piezas con el caso de Camila. Este diagrama muestra quién interviene cuando ella le pide algo al agente:
 
 ```mermaid
-graph TB
-    CPU[Procesador - CPU] -->|Lee y escribe| RAM[Memoria RAM]
-    CPU -->|Controla| GPU[Gráficos - GPU]
-    RAM -->|Transfiere| DISK[Disco - Almacenamiento]
-    CPU -->|Recibe| INPUT[Entrada - Teclado, Mouse]
-    CPU -->|Envía| OUTPUT[Salida - Pantalla, Sonido]
-    
-    subgraph "Componentes principales"
-        CPU
-        RAM
-        DISK
-        GPU
-    end
+flowchart LR
+    U["Tú escribes el prompt"] --> AG["Agente: OpenCode, Codex o Claude"]
+    AG --> OS["Sistema operativo"]
+    OS --> PR["Proceso del agente"]
+    PR --> CPU["CPU"]
+    PR <--> RAM["RAM (memoria)"]
+    PR <--> DSK["Disco (archivos del proyecto)"]
+    AG <--> MOD["Modelo de IA (servidor remoto)"]
 ```
 
-### Procesador (CPU)
+Se lee de izquierda a derecha: tú escribes el pedido, el agente se convierte en un proceso administrado por el sistema operativo, la CPU ejecuta sus instrucciones, la RAM guarda el trabajo en curso y el disco aporta los archivos del proyecto. Cuando el agente necesita razonar, consulta al modelo de IA, que responde desde un servidor remoto a través de internet.
 
-Es el "cerebro" de la computadora. Ejecuta instrucciones, una por una, a una velocidad de miles de millones por segundo (GHz = gigahertz = mil millones de operaciones por segundo).
+El recorrido completo del informe de Camila es este:
 
-Cada instrucción es muy simple: "sumá estos dos números", "compará si este valor es mayor que este otro", "leé el próximo byte del archivo". La magia está en que puede hacer millones de estas por segundo.
+1. Camila abre OpenCode y escribe su pedido: "reúne estas notas y deja un borrador ordenado".
+2. El sistema operativo crea el proceso del agente y le asigna RAM.
+3. El agente usa una herramienta para leer las notas desde el disco: los archivos pasan del disco a la RAM.
+4. La CPU procesa la tarea mientras el agente consulta al modelo por internet para ordenar y redactar.
+5. El agente escribe el resultado en un archivo nuevo del disco, dentro de la carpeta del proyecto.
 
-### Memoria RAM
+Si quieres comprobarlo con tus propios ojos, puedes ver los procesos que más CPU usan con este comando en PowerShell:
 
-Es la "mesa de trabajo" del procesador. Cuando abrís un programa, se carga desde el disco a la RAM. La RAM es:
-
-- **Rápida**: el procesador puede leer y escribir en nanosegundos
-- **Volátil**: cuando apagás la computadora, todo lo que estaba en RAM se pierde
-- **Limitada**: tu computadora tiene una cantidad fija (8 GB, 16 GB, 32 GB)
-
-Cuando un programa usa más RAM de la disponible, la computadora se vuelve lenta porque empieza a usar el disco como "RAM falsa" (swap), y el disco es mucho más lento.
-
-### Disco (SSD o HDD)
-
-Es el "archivo" de la computadora. Guarda información de forma permanente. Cuando apagás la computadora, los datos en disco no se pierden.
-
-Hay dos tipos:
-- **HDD** (disco duro): mecánico, más lento, más barato, mayor capacidad
-- **SSD** (disco sólido): electrónico, mucho más rápido, más caro
-
-Hoy en día casi todo usa SSD. La diferencia de velocidad es enorme: un SSD puede ser 100 veces más rápido que un HDD.
-
-### Gráficos (GPU)
-
-Procesa imágenes y video. Originalmente solo para juegos, hoy es fundamental para inteligencia artificial porque puede hacer miles de cálculos en paralelo, mientras que la CPU los hace de a uno.
-
-No necesitás una GPU cara para usar Gentle-AI. Los modelos de IA corren en servidores remotos (la nube), no en tu computadora.
-
-## Software: las instrucciones
-
-### Sistema operativo
-
-El sistema operativo es el programa más importante de tu computadora. Es el intermediario entre vos y el hardware.
-
-Sus trabajos principales:
-
-1. **Administrar recursos**: decide qué programa usa el procesador, cuánta memoria recibe, qué archivos puede leer
-2. **Proveer una interfaz**: te permite interactuar con la computadora (ventanas, íconos, línea de comandos)
-3. **Aislar programas**: evita que un programa interfiera con otro
-4. **Manejar archivos**: organiza los datos en carpetas y archivos
-
-Los sistemas operativos más comunes:
-- **Windows**: el que probablemente estás usando
-- **macOS**: el de las computadoras Apple
-- **Linux**: gratuito, de código abierto, muy usado en servidores
-
-### ¿Qué es un programa?
-
-Un programa es un archivo que contiene instrucciones que el procesador puede ejecutar. Cuando hacés doble clic en un ícono, el sistema operativo:
-
-1. Lee el archivo del programa desde el disco
-2. Lo carga en la memoria RAM
-3. Le dice al procesador: "empezá a ejecutar desde la primera instrucción"
-
-Eso es lo que llamamos un **proceso**: un programa en ejecución.
-
-### Procesos
-
-Cuando abrís un programa, se crea un **proceso**. Un proceso tiene:
-
-- **Un ID único**: un número que lo identifica
-- **Memoria asignada**: una porción de RAM que solo él puede usar
-- **Archivos abiertos**: qué archivos está leyendo o escribiendo
-- **Un estado**: ejecutándose, esperando, dormido, terminado
-
-Podés ver los procesos de tu computadora en:
-- Windows: `Ctrl+Shift+Esc` → Administrador de tareas
-- macOS: `Cmd+Espacio` → "Monitor de Actividad"
-- Linux: comando `ps aux` o `htop` en la terminal
-
-### Archivos y carpetas
-
-Un **archivo** es una colección de datos guardados en disco con un nombre. Por ejemplo:
-
-- `foto.jpg`: una imagen
-- `documento.pdf`: un PDF
-- `programa.exe`: un programa ejecutable
-- `datos.json`: datos estructurados
-
-Una **carpeta** (o directorio) es un contenedor que organiza archivos:
-
-```
-C:\
-├── Users\
-│   └── harry\
-│       ├── Documentos\
-│       │   └── proyecto\
-│       │       └── main.js
-│       └── Descargas\
-└── Windows\
+```powershell
+Get-Process | Sort-Object CPU -Descending | Select-Object -First 5
 ```
 
-La ruta `C:\Users\harry\Documentos\proyecto\main.js` te dice exactamente dónde está ese archivo, navegando desde la raíz del disco `C:`.
+Verás una tabla con los cinco procesos que más CPU están consumiendo. Entre ellos suele aparecer el proceso de tu navegador y, si tienes un agente abierto, el proceso de ese programa.
 
-### Variables de entorno
+## Decisiones y límites
 
-Son valores que el sistema operativo guarda y que los programas pueden leer. Funcionan como "configuración global".
+Esta lección marca el terreno, pero deja fuera varios temas a propósito:
 
-Por ejemplo, la variable `PATH` contiene una lista de carpetas donde el sistema busca programas ejecutables. Cuando escribís `gentle-ai` en la terminal, el sistema busca en cada carpeta del `PATH` hasta encontrar `gentle-ai.exe`.
+- **Variables de entorno**: se explican en la lección de programación, donde encajan con la lógica de configuración de los programas.
+- **La terminal a fondo**: qué es un shell, qué es un comando y cómo se abre en cada sistema se ve en la siguiente lección.
+- **Cómo se escribe un programa**: compilar, interpretar y los lenguajes de programación son tema de la lección de programación.
+- **Cliente, servidor y la nube**: dónde corren las aplicaciones y cómo se comunican se explica en la lección de frontend y backend.
 
-Otras variables útiles:
-- `HOME` o `USERPROFILE`: tu carpeta personal
-- `TEMP`: carpeta para archivos temporales
-- `LANG`: idioma del sistema
+También conviene conocer los límites de lo que aprendiste aquí. Si la RAM se llena, la computadora empieza a usar el disco como memoria de respaldo y todo se vuelve lento; por eso cerrar programas que no usas devuelve fluidez. Y recuerda que el modelo de IA no vive en tu computadora: sin internet, el agente puede trabajar con tus archivos locales, pero no puede consultar al modelo.
 
-En Windows podés verlas con: `Get-ChildItem Env:` (PowerShell)
-En macOS/Linux: `env` o `echo $HOME`
+## Errores frecuentes
 
-## Cómo funciona todo junto
+### El agente no responde y creo que mi computadora está haciendo todo el trabajo
 
-Cuando abrís Visual Studio Code (o cualquier editor de código):
+- Qué observas: el agente se queda sin respuesta y piensas que la culpa es del hardware.
+- Qué significa: el agente sí corre como proceso en tu computadora, pero el modelo responde desde un servidor remoto. Sin internet, no hay respuesta del modelo.
+- Cómo comprobar: abre el Administrador de tareas y busca el proceso del agente: estará usando CPU y RAM.
+- Cómo resolver: revisa tu conexión a internet antes de culpar a la computadora.
+- Cómo confirmar: al restablecer la conexión, el agente vuelve a responder.
 
-1. El sistema operativo lee `Code.exe` del disco
-2. Lo carga en RAM como un proceso nuevo
-3. Le asigna un ID de proceso y memoria
-4. El proceso muestra una ventana en pantalla
-5. Cuando escribís código, el proceso guarda los cambios en disco
-6. Cuando cerrás el editor, el proceso termina y libera la memoria
+### Creo que necesito una GPU potente para usar agentes de IA
 
-Cuando abrís Gentle-AI desde la terminal:
+- Qué observas: ves promociones de "GPU para IA" y dudas si tu computadora alcanza.
+- Qué significa: los modelos que usan los agentes corren en servidores remotos, no en tu GPU.
+- Cómo comprobar: una computadora común, sin GPU dedicada, puede ejecutar OpenCode, Codex o Claude.
+- Cómo resolver: no necesitas comprar hardware para empezar a trabajar con agentes.
+- Cómo confirmar: el agente responde igual en una computadora con GPU modesta.
 
-1. Escribís `gentle-ai` y presionás Enter
-2. El sistema busca `gentle-ai.exe` en las carpetas del `PATH`
-3. Lo encuentra en `C:\Users\harry\AppData\Local\gentle-ai\bin\`
-4. Crea un proceso nuevo
-5. Ese proceso abre una interfaz visual (TUI) en la terminal
-6. Cuando seleccionás componentes, el proceso modifica archivos de configuración en `~\.config\opencode\`
+### No encuentro el archivo que el agente generó
+
+- Qué observas: guardaste el trabajo, pero no ves el resultado "dentro" de la aplicación.
+- Qué significa: los archivos viven en el disco, dentro de carpetas con una ruta; ninguna aplicación los "contiene".
+- Cómo comprobar: abre el explorador de archivos y navega hasta la carpeta del proyecto.
+- Cómo resolver: busca el archivo en la ruta que el agente te indicó al guardar.
+- Cómo confirmar: puedes abrir el archivo desde su carpeta real y ver su contenido.
 
 ## Resumen
 
-| Concepto | ¿Qué es? | ¿Dónde vive? |
-|----------|---------|-------------|
-| Hardware | Partes físicas | La computadora |
-| Software | Instrucciones | Archivos en disco |
-| Sistema operativo | Administrador de recursos | Arranca al prender |
-| Proceso | Programa en ejecución | RAM |
-| Archivo | Datos con nombre | Disco |
-| Carpeta | Contenedor de archivos | Disco |
-| PATH | Dónde buscar programas | Variable de entorno |
+| Pieza | Qué hace | Dónde vive |
+|---|---|---|
+| CPU (procesador) | Ejecuta las instrucciones de los programas | En el equipo |
+| RAM (memoria) | Mesa de trabajo rápida y temporal | En el equipo |
+| Disco (almacenamiento) | Guarda datos de forma permanente | En el equipo |
+| GPU (tarjeta gráfica) | Operaciones en paralelo para gráficos | En el equipo |
+| Sistema operativo | Administra procesos, memoria y archivos | Se inicia al encender |
+| Archivo y carpeta | Organizan el trabajo en el disco | En el disco |
+| Proceso | Programa en ejecución | En la RAM |
+| Agente de IA | Programa que corre en tu equipo y usa el modelo | En tu computadora |
 
-## Preguntas
+Lo esencial para recordar: el agente corre en tu computadora como un proceso, trabaja sobre archivos reales del disco, y solo el modelo de IA vive fuera, en un servidor remoto.
 
-1. ¿Cuál es la diferencia entre RAM y disco?
-2. ¿Qué hace el sistema operativo?
-3. ¿Cómo encuentra tu computadora el programa `gentle-ai` cuando lo ejecutás?
-4. ¿Qué información tiene un proceso?
-5. ¿Por qué las variables de entorno son útiles?
+## Términos de esta lección
 
-## Ejercicio
+- **CPU (procesador)**: componente que ejecuta las instrucciones de un programa.
+- **GPU (tarjeta gráfica)**: componente optimizado para operaciones en paralelo, especialmente gráficos y algunas cargas de IA.
+- **RAM (memoria)**: memoria rápida y temporal donde se guarda lo que está en uso.
+- **Disco (almacenamiento)**: medio persistente donde se guardan los datos aunque la computadora esté apagada.
+- **Sistema operativo**: programa base que administra los componentes y permite ejecutar otros programas.
+- **Archivo**: unidad de datos almacenada en el disco con un nombre.
+- **Carpeta (directorio)**: contenedor que organiza archivos y otras carpetas dentro del disco.
+- **Proceso (informática)**: programa en ejecución dentro del sistema operativo, con su memoria y recursos asignados.
 
-1. Abrí el administrador de tareas de tu sistema y observá los procesos en ejecución
-2. Buscá dónde está instalado `node` en tu sistema: en PowerShell escribí `where.exe node`
-3. Mirá las variables de entorno: en PowerShell escribí `Get-ChildItem Env: | Select-Object Name`
+Las definiciones canónicas de todos los términos del manual están en el [glosario](../../20-referencia/02-glosario/).
 
-## Fuentes verificadas
+## Para seguir aprendiendo
 
-- Sistema operativo: Windows 10/11 (win32), PowerShell 5.1
-- Fecha: 2026-07-20
-- Estado: 🟢 Verificado (conocimiento fundamental, no depende de versión específica)
+- [Khan Academy — Computación](https://es.khanacademy.org/computing): introducción visual y amable a la computación y la programación, en español y gratis.
+- [freeCodeCamp](https://www.freecodecamp.org/espanol/): certificaciones gratuitas con ejercicios interactivos, con versión en español.
+
+La próxima lección te lleva a la [terminal](../02-la-terminal/), donde aprenderás a escribir comandos y a llamar a los programas desde el teclado.

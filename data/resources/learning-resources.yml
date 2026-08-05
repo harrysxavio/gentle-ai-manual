@@ -155,4 +155,79 @@ resources:
     notes: Amplia cobertura en español.
     scope: learning
 
+  - id: video-programacion-introduccion
+    title: "Cómo aprender programación — introducción (Gentleman Programming)"
+    url: https://youtu.be/mNwVtWU_Gtc
+    type: video
+    language: es
+    access: gratuito
+    provider: YouTube — Gentleman Programming
+    topics: [programacion, logica, abstraccion]
+    level: [principiante]
+    purpose: introducción visual a la programación y el razonamiento lógico
+    verified_at: "2026-08-05"
+    status: activo
+    notes: Recurso de aprendizaje; no es evidencia de comportamiento actual de ninguna herramienta.
+    scope: learning
+
+  - id: video-frontend-basico
+    title: "Todo lo que necesitas saber del desarrollo frontend (BettaTech)"
+    url: https://youtu.be/Rla0IMxIlNc
+    type: video
+    language: es
+    access: gratuito
+    provider: YouTube — BettaTech
+    topics: [frontend, web, interfaz]
+    level: [principiante]
+    purpose: introducción visual a qué es el frontend y qué hace
+    verified_at: "2026-08-05"
+    status: activo
+    notes: Recurso de aprendizaje; no es evidencia de comportamiento actual de ninguna herramienta.
+    scope: learning
+
+  - id: video-backend-basico
+    title: "Todo lo que necesitas saber del desarrollo backend (BettaTech)"
+    url: https://youtu.be/l3HJsXA-Fa4
+    type: video
+    language: es
+    access: gratuito
+    provider: YouTube — BettaTech
+    topics: [backend, servidor, api]
+    level: [principiante]
+    purpose: introducción visual a qué es el backend y cómo se relaciona con el frontend
+    verified_at: "2026-08-05"
+    status: activo
+    notes: Recurso de aprendizaje; no es evidencia de comportamiento actual de ninguna herramienta.
+    scope: learning
+
+  - id: video-bases-de-datos-basico
+    title: "Todo lo que necesitas saber sobre bases de datos (BettaTech)"
+    url: https://youtu.be/xz1fJ7M2g-o
+    type: video
+    language: es
+    access: gratuito
+    provider: YouTube — BettaTech
+    topics: [bases-de-datos, sql, persistencia]
+    level: [principiante]
+    purpose: introducción visual a las bases de datos y su uso
+    verified_at: "2026-08-05"
+    status: activo
+    notes: Recurso de aprendizaje; no es evidencia de comportamiento actual de ninguna herramienta.
+    scope: learning
+
+  - id: video-bases-de-datos-explicacion
+    title: "¿Qué son las bases de datos? — la mejor explicación en español (EDteam)"
+    url: https://youtu.be/knVwokXITGI
+    type: video
+    language: es
+    access: gratuito
+    provider: YouTube — EDteam
+    topics: [bases-de-datos, persistencia]
+    level: [principiante]
+    purpose: explicación amable de qué son las bases de datos y por qué existen
+    verified_at: "2026-08-05"
+    status: activo
+    notes: Recurso de aprendizaje; no es evidencia de comportamiento actual de ninguna herramienta.
+    scope: learning
+
 schema_version: 1.0.0
