@@ -97,6 +97,11 @@
     return;
   }
 
+  // Hide Starlight's native prev/next pager when a route is active (single navigation).
+  document.body.setAttribute('data-route-active', '');
+  var pagination = document.querySelector('.pagination-links');
+  if (pagination) pagination.style.display = 'none';
+
   var current = lessons[currentIndex];
   var total = lessons.length;
   var pct = Math.round(((currentIndex + 1) / total) * 100);

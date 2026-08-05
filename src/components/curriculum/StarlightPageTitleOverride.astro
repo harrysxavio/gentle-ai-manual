@@ -1,0 +1,12 @@
+---
+// Override Starlight's page title so the home page does not render a second H1.
+// The home hero (index.mdx) already owns the only H1; Starlight would add a
+// duplicate generated from the frontmatter title. Every other page keeps the
+// default PageTitle untouched.
+import DefaultPageTitle from '@astrojs/starlight/components/PageTitle.astro';
+
+const base = import.meta.env.BASE_URL;
+const pathname = Astro.url.pathname;
+const isHome = pathname === base || pathname === base.replace(/\/$/, '');
+---
+{!isHome && <DefaultPageTitle {...Astro.props} />}

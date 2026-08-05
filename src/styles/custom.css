@@ -1037,3 +1037,71 @@ html { scroll-behavior: smooth; }
     break-inside: avoid;
   }
 }
+
+/* ---- Global UX (PR 8) ---- */
+
+/* Hide Starlight native pagination when a route is active (single prev/next) */
+body[data-route-active] .pagination-links { display: none; }
+
+/* Landing page: wider readable container (1050-1200px) on desktop */
+body:has(.landing-hero) .sl-container { max-width: 72rem; }
+
+/* Curriculum cards: 3 columns on wide screens */
+@media (min-width: 80rem) {
+  .curriculum-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Mermaid accessible zoom */
+.mermaid-zoom { margin: 2em 0; }
+.mermaid-zoom__stage { overflow-x: auto; padding: 0.5em; }
+.mermaid-zoom__stage svg { max-width: none; width: auto; height: auto; }
+.mermaid-zoom__actions { display: flex; justify-content: center; padding: 0.5em 0 0.75em; }
+.mermaid-zoom__btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: 0.5em 1.1em;
+  border: 1px solid var(--sl-color-gray-5); border-radius: 6px;
+  background: var(--sl-color-gray-6); color: var(--sl-color-text);
+  font-size: 0.9em; font-weight: 600; cursor: pointer;
+}
+.mermaid-zoom__btn:hover { background: var(--sl-color-gray-5); }
+.mermaid-zoom__btn:focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: 2px; }
+.mermaid-zoom__dialog {
+  max-width: min(90vw, 1400px); width: fit-content;
+  max-height: 88vh; overflow: auto;
+  border: 1px solid var(--sl-color-gray-5); border-radius: 8px;
+  padding: 0; background: var(--sl-color-bg); color: var(--sl-color-text);
+}
+/* Older browsers without <dialog> support have no UA style for dialog:not([open]) */
+.mermaid-zoom__dialog:not([open]) {
+  display: none;
+}
+.mermaid-zoom__dialog::backdrop { background: rgba(0, 0, 0, 0.55); }
+.mermaid-zoom__dialog-body { padding: 1em; overflow: auto; }
+.mermaid-zoom__dialog-body svg { max-width: none; width: auto; height: auto; }
+.mermaid-zoom__close {
+  display: block; margin: 0 auto 1em;
+  min-height: 44px; padding: 0.45em 1em;
+  border: 1px solid var(--sl-color-gray-5); border-radius: 6px;
+  background: var(--sl-color-gray-6); color: var(--sl-color-text);
+  font-size: 0.9em; cursor: pointer;
+}
+.mermaid-zoom__close:focus-visible { outline: 2px solid var(--sl-color-accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .mermaid-zoom__btn, .mermaid-zoom__close { transition: none; }
+}
+/* Fallback modal for browsers without native <dialog> support (no showModal) */
+.mermaid-zoom__overlay {
+  /* Safari 14.0.x (no <dialog>, i.e. the fallback audience) lacks `inset`;
+     the longhands still cover the viewport there. `inset` stays for modern. */
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  overflow: auto; padding: 1em;
+}
+.mermaid-zoom__panel {
+  /* -moz-fit-content covers Firefox 66-93 (fallback era); fit-content stays */
+  max-width: min(90vw, 1400px); width: -moz-fit-content; width: fit-content;
+  max-height: 88vh; overflow: auto;
+  border: 1px solid var(--sl-color-gray-5); border-radius: 8px;
+  padding: 0; background: var(--sl-color-bg); color: var(--sl-color-text);
+}

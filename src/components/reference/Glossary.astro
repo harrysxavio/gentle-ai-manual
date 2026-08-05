@@ -108,7 +108,7 @@ function refLabel(ref) {
         {group.map((entry) => {
           const slug = slugify(entry.term);
           return (
-            <article class="glossary-term" id={"term-" + slug} data-glossary-term data-category={entry.category}>
+            <article class="glossary-term" id={"term-" + slug} data-glossary-term data-category={entry.category} data-pagefind-weight="10">
               <h3 class="glossary-term-name">{entry.term}</h3>
               <p class="glossary-term-def">{entry.simple}</p>
               {entry.reference ? (

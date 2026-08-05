@@ -17,7 +17,7 @@
     "validate:curriculum": "node tests/curriculum-contract.test.cjs",
     "validate:manual-content": "node scripts/validate-manual-content.cjs --all",
     "validate:v2-contracts": "node scripts/validate-v2-contracts.cjs",
-    "check-site": "node scripts/validate-built-site.cjs --base /gentle-ai-manual/ dist",
+    "check-site": "node scripts/validate-built-site.cjs --base /gentle-ai-manual/ dist && node scripts/validate-ux-built.cjs dist",
     "test": "node tests/run.cjs && node scripts/run-tests.cjs",
     "test:visual": "node tests/curriculum-visual.cjs && node tests/glossary-clear.cjs",
     "validate": "npm run check && npm run lint && npm run check-mermaid && npm run check-models && npm run check-claims && npm run validate:curriculum && npm run validate:manual-content && npm run validate:v2-contracts && npm run test && npm run build && npm run check-site"
@@ -31,7 +31,8 @@
     "mermaid": "^11.16.0",
     "rehype-mermaid": "^3.0.0",
     "sharp": "^0.34.0",
-    "starlight-links-validator": "^0.16.0"
+    "starlight-links-validator": "^0.16.0",
+    "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
     "jsdom": "^24.1.3",
