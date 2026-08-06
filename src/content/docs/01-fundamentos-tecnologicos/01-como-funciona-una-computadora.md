@@ -145,13 +145,13 @@ El recorrido completo del informe de Camila es este:
 4. La CPU procesa la tarea mientras el agente consulta al modelo por internet para ordenar y redactar.
 5. El agente escribe el resultado en un archivo nuevo del disco, dentro de la carpeta del proyecto.
 
-Si quieres comprobarlo con tus propios ojos, puedes ver los procesos que más CPU usan con este comando en PowerShell:
+Si quieres comprobarlo con tus propios ojos, puedes ver el tiempo de CPU acumulado de los procesos con este comando en PowerShell (un proceso que ha trabajado mucho en total puede aparecer arriba aunque ahora mismo esté inactivo):
 
 ```powershell
 Get-Process | Sort-Object CPU -Descending | Select-Object -First 5
 ```
 
-Verás una tabla con los cinco procesos que más CPU están consumiendo. Entre ellos suele aparecer el proceso de tu navegador y, si tienes un agente abierto, el proceso de ese programa.
+Verás una tabla con los cinco procesos que más tiempo de CPU han acumulado en total. Entre ellos suele aparecer el proceso de tu navegador y, si tienes un agente abierto, el proceso de ese programa. Es un dato acumulado desde que el proceso arrancó, no una foto de cuánto CPU usa en este instante.
 
 ## Decisiones y límites
 

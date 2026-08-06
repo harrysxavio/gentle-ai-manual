@@ -74,7 +74,7 @@ Esta analogía tiene un límite: un cuaderno no hace nada por ti; solo guarda. U
 
 Camila trabaja en administración, no programa y usa Windows. En la lección anterior, un agente le construyó un formulario donde sus compañeros cargan los pedidos de vacaciones y ella ve la lista. El formulario es el frontend; la parte que guarda los pedidos es el backend. Hoy Camila quiere saber algo práctico: si cierra el programa o apaga la computadora, ¿los pedidos siguen ahí?
 
-La respuesta es sí, porque el backend no guarda los pedidos en la memoria del momento, sino en una base de datos: un archivo de su computadora donde cada pedido queda anotado. Camila puede cerrar todo, volver al día siguiente y la lista sigue completa. Sin persistencia, cada cierre del programa borraría el trabajo de todo el equipo.
+La respuesta es sí, porque el backend no guarda los pedidos en la memoria del momento, sino en una base de datos. En este ejemplo, el formulario y el backend corren en la computadora de Camila, así que la base de datos es un archivo de esa máquina donde cada pedido queda anotado: puede cerrar todo, volver al día siguiente y la lista sigue completa. Sin persistencia, cada cierre del programa borraría el trabajo de todo el equipo. Cuando una aplicación se publica en la nube, la base de datos vive junto al backend en el servidor, no en la computadora de quien la usa.
 
 ## Explicación progresiva
 

@@ -118,10 +118,8 @@ La **API**\* (Application Programming Interface) es el contrato que permite que 
 
 ```mermaid
 flowchart LR
-    M["Tú, en la mesa"] -->|"pedido"| MO["Mozo: la API"]
-    MO -->|"lleva el pedido"| CO["Cocina: el backend"]
-    CO -->|"plato listo"| MO
-    MO -->|"te trae el plato"| M
+    M["Tú, en la mesa"] -->|"pedido (API)"| CO["Cocina: el backend"]
+    CO -->|"plato listo (API)"| M
 ```
 
 La API es la interfaz que expone el backend: define las operaciones disponibles y el formato de los datos, como el menú del restaurante. El que recibe el pedido, lo procesa y responde es el propio backend (la cocina); la API no es un servicio intermedio aparte, sino el contrato que dice cómo se habla con él. En el formulario de Camila, la API define operaciones como "guardar un pedido de vacaciones" y "listar los pedidos guardados".
