@@ -138,12 +138,12 @@ Entender qué es una API te da el mapa de dónde se unen los programas y de qué
 
 En la lección de la terminal viste la diferencia entre la ventana y el programa que interpreta comandos. Ahora conviene separar otros tres conceptos que suenan igual.
 
-La **Terminal**\* es la ventana: el lugar de texto donde escribes. Un **CLI (Command Line Interface)**\* es un programa que se opera escribiendo comandos, como Git o los propios agentes: `opencode` y `codex` son comandos que escribes en la terminal. Una **TUI (Text User Interface)**\* es un programa que, dentro de la misma ventana, dibuja paneles y menús que navegas con las teclas; la interfaz con la que se abre OpenCode en la terminal es una TUI.
+La **Terminal**\* es la ventana: el lugar de texto donde escribes. Un **CLI (Command Line Interface)**\* es una interfaz que un programa expone para operarse escribiendo comandos: `opencode` y `codex` son comandos que escribes en la terminal. Una **TUI (Text User Interface)**\* es una interfaz que, dentro de la misma ventana, dibuja paneles y menús que navegas con las teclas; la interfaz con la que se abre OpenCode en la terminal es una TUI. Un mismo programa puede ofrecer ambas interfaces según cómo lo uses.
 
 ```mermaid
 flowchart LR
-    T["Terminal: la ventana de texto"] -->|"comandos"| C["CLI: programas que se operan escribiendo"]
-    T -->|"paneles y menús"| U["TUI: programas con interfaz de texto navegable"]
+    T["Terminal: la ventana de texto"] -->|"comandos"| C["CLI: interfaz para operar escribiendo"]
+    T -->|"paneles y menús"| U["TUI: interfaz de texto navegable"]
     C --> A["Agente: OpenCode, Codex o Claude Code"]
 ```
 

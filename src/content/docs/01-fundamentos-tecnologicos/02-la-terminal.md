@@ -78,11 +78,11 @@ Cuando alguien dice "abre la terminal", en la práctica quiere decir "abre la ap
 
 Desde la terminal se usan dos estilos de programas, y conviene distinguirlos porque la palabra "terminal" se usa para los tres.
 
-Un **CLI (Command Line Interface)**\* es un programa que se opera escribiendo comandos: escribes su nombre, agregas opciones y presionas Enter. Git, OpenCode y Codex son ejemplos de programas con CLI. Este manual usa constantemente programas así.
+Un **CLI (Command Line Interface)**\* es una interfaz de usuario que un programa expone para operarse escribiendo comandos: escribes su nombre, agregas opciones y presionas Enter. Git, `opencode` y `codex` son ejemplos de programas con interfaz CLI. Este manual usa constantemente programas así.
 
-Una **TUI (Text User Interface)**\* es un programa que, dentro de la misma ventana de texto, dibuja paneles y menús que navegas con las teclas. El programa `htop` en Linux es un ejemplo clásico: muestra una lista de procesos que se actualiza sola, en vez de esperar comandos.
+Una **TUI (Text User Interface)**\* es una interfaz de usuario que, dentro de la misma ventana de texto, dibuja paneles y menús que navegas con las teclas. El programa `htop` en Linux es un ejemplo clásico: muestra una lista de procesos que se actualiza sola, en vez de esperar comandos.
 
-La terminal es el lugar; CLI y TUI son dos maneras en que los programas usan ese lugar. Cuando el manual dice "llama al CLI de una herramienta", significa que escribes su nombre como comando.
+La terminal es el lugar; CLI y TUI son dos maneras en que los programas usan ese lugar, y un mismo programa puede ofrecer ambas: por ejemplo, puedes llamar a OpenCode como comando (`opencode`) y, cuando lo abres, su interfaz en la terminal es una TUI. Cuando el manual dice "llama al CLI de una herramienta", significa que escribes su nombre como comando.
 
 ### PowerShell, el camino inicial en Windows
 
@@ -127,7 +127,7 @@ Este diagrama resume el flujo que acabas de estudiar y el que vas a probar ahora
 flowchart LR
     U["Tú escribes un comando"] --> W["Terminal: la ventana"]
     W --> SH["Shell: interpreta el comando"]
-    SH --> P["Programa (CLI): responde"]
+    SH --> P["Programa con interfaz CLI: responde"]
     P --> R["Ves el resultado en la ventana"]
 ```
 
@@ -210,8 +210,8 @@ Todos los comandos de esta práctica son seguros: solo preguntan información y 
 | Terminal | La ventana donde escribes comandos | Terminal de Windows, Terminal.app, GNOME Terminal |
 | Shell | El programa que interpreta los comandos | PowerShell, Bash, Zsh |
 | Comando | La instrucción que escribes | `Get-Location`, `pwd`, `ls` |
-| CLI (Command Line Interface) | Programa que se opera por comandos | Git, OpenCode, Codex |
-| TUI (Text User Interface) | Interfaz de texto con paneles y menús | `htop` |
+| CLI (Command Line Interface) | Interfaz para operar un programa escribiendo comandos | Git, `opencode`, `codex` |
+| TUI (Text User Interface) | Interfaz de texto con paneles y menús | `htop`, la interfaz de OpenCode en la terminal |
 | PowerShell | Shell incluido en Windows | — |
 | Bash | Shell clásico de Unix; en Windows llega con Git Bash o WSL | — |
 
