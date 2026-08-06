@@ -125,16 +125,15 @@ Ahora une las piezas con el caso de Camila. Este diagrama muestra quién intervi
 
 ```mermaid
 flowchart LR
-    U["Tú escribes el prompt"] --> AG["Agente: OpenCode, Codex o Claude Code"]
-    AG --> OS["Sistema operativo"]
-    OS --> PR["Proceso del agente"]
+    U["Tú escribes el prompt"] --> PR["Proceso del agente<br/>(OpenCode, Codex o Claude Code)"]
+    OS["Sistema operativo"] -->|"carga y administra"| PR
     PR --> CPU["CPU"]
     PR <--> RAM["RAM (memoria)"]
     PR <--> DSK["Disco (archivos del proyecto)"]
-    AG <--> MOD["Modelo de IA (servidor remoto)"]
+    PR <--> MOD["Modelo de IA (servidor remoto)"]
 ```
 
-Se lee de izquierda a derecha: tú escribes el pedido, el agente se convierte en un proceso administrado por el sistema operativo, la CPU ejecuta sus instrucciones, la RAM guarda el trabajo en curso y el disco aporta los archivos del proyecto. Cuando el agente necesita razonar, consulta al modelo de IA, que responde desde un servidor remoto a través de internet.
+Se lee así: el sistema operativo carga y administra el proceso del agente, que es el programa con el que tú interactúas escribiendo tu pedido. La CPU ejecuta sus instrucciones, la RAM guarda el trabajo en curso y el disco aporta los archivos del proyecto. Cuando el agente necesita razonar, consulta al modelo de IA, que responde desde un servidor remoto a través de internet.
 
 El recorrido completo del informe de Camila es este:
 

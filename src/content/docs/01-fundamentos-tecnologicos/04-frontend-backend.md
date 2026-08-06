@@ -154,14 +154,14 @@ Este diagrama resume el mapa completo de lo que pasa cuando usas un agente:
 
 ```mermaid
 flowchart LR
-    U["Tú"] --> A["Agente: OpenCode, Codex o Claude Code"]
+    U["Tú"] -->|"terminal, CLI o TUI"| A["Agente: OpenCode, Codex o Claude Code"]
     A -->|"API del modelo"| M["Modelo de IA<br/>en la nube"]
     A -->|"API de herramientas"| H["Herramientas: archivos, comandos, MCP"]
     M --> A
     H --> A
 ```
 
-Se lee de izquierda a derecha: tú hablas con el agente, el agente llama por API al modelo de IA para pensar y por API a sus herramientas para actuar, y los resultados vuelven a él. Cada punto de unión de este diagrama es una API. Cuando algo falla, saber cuál de estas uniones es la que falla te dice si el problema es de red, del proveedor del modelo o de una herramienta.
+Se lee así: tú hablas con el agente a través de la terminal, el CLI o la TUI —esa interacción no es una API, es la interfaz local del programa—; el agente llama por API al modelo de IA para pensar y por API a sus herramientas para actuar, y los resultados vuelven a él. Las uniones marcadas como API son las que conectan al agente con el modelo y con sus herramientas. Cuando algo falla, saber cuál de esas uniones es la que falla te dice si el problema es de red, del proveedor del modelo o de una herramienta.
 
 ### Práctica guiada: ver el frontend y el backend en acción
 
