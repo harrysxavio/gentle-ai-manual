@@ -83,7 +83,7 @@ flowchart LR
 
 Se lee de izquierda a derecha: tú usas el frontend, el frontend pide datos al backend y el backend devuelve el resultado, que el frontend muestra. El recorrido del formulario de Camila es el mismo: sus compañeros ven el formulario, el formulario pide guardar las fechas y el backend guarda el pedido y lo devuelve a la lista.
 
-Otra idea útil: el **estado**. El frontend guarda un estado pasajero, lo que la pantalla muestra en este momento; el backend guarda los datos que deben durar, como los pedidos de vacaciones guardados. Cómo se guardan esos datos de forma permanente es el tema de la próxima lección, bases de datos.
+Otra idea útil: el **estado**. El frontend guarda un estado pasajero, lo que la pantalla muestra en este momento; el backend suele guardar los datos que deben durar, como los pedidos de vacaciones guardados — pero no es una regla absoluta: un frontend también puede guardar datos de forma duradera (por ejemplo, con localStorage en el navegador), y un backend que solo guarda en memoria pierde todo al reiniciarse. Cómo se guardan esos datos de forma permanente es el tema de la próxima lección, bases de datos.
 
 ### Cliente y servidor: quién pide y quién responde
 
@@ -91,11 +91,11 @@ El **Cliente (contexto red)**\* es el programa que inicia la comunicación: el q
 
 ¿Dónde vive el servidor? En dos lugares, y conviene diferenciarlos.
 
-**Servidor local**: corre en tu propia computadora, como cualquier programa. Cuando Camila prueba el formulario en su PC, el agente levanta el servidor en su computadora y su navegador se conecta a él escribiendo `localhost` en la dirección.
+**Servidor local**: corre en tu propia computadora, como cualquier programa. Cuando Camila prueba el formulario en su PC, el agente levanta el servidor en su computadora y su navegador se conecta a él escribiendo la dirección completa que el servidor imprime (por ejemplo `http://localhost:4321`, que incluye el puerto).
 
 ```mermaid
 flowchart LR
-    C["Cliente: tu computadora"] -->|"HTTP request"| S["Servidor local: en tu computadora"]
+    C["Cliente: tu navegador"] -->|"HTTP request"| S["Servidor local: en tu computadora"]
     S -->|"HTTP response"| C
 ```
 
@@ -105,7 +105,7 @@ Cliente y servidor viven en la misma computadora, pero siguen siendo dos program
 
 ```mermaid
 flowchart LR
-    C["Cliente: tu computadora"] -->|"HTTP request por internet"| S["Servidor en la nube: computadoras de un proveedor"]
+    C["Cliente: tu navegador"] -->|"HTTP request por internet"| S["Servidor en la nube: computadoras de un proveedor"]
     S -->|"HTTP response"| C
 ```
 
