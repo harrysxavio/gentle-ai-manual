@@ -116,7 +116,8 @@ La computadora no entiende ese texto directamente: hay que convertirlo. Hay dos 
 |--|----------|-------------|
 | Proceso | Convierte todo de una vez | Ejecuta línea por línea |
 | Resultado | Archivo ejecutable listo para correr | Se ejecuta en el momento |
-| Errores | Se detectan antes de ejecutar | Se detectan durante la ejecución |
+| Errores de sintaxis | Se detectan al compilar | Se detectan al leer el código |
+| Errores de ejecución | Aparecen al correr el programa | Aparecen al correr el programa |
 | Ejemplos | Go, Rust, Java, C# | JavaScript, Python |
 
 ### Runtime: el entorno que hace falta para correr
@@ -145,7 +146,7 @@ export MI_NOMBRE="Camila"
 echo $MI_NOMBRE
 ```
 
-En los dos casos creas una variable llamada `MI_NOMBRE`, la llenas con un valor y le pides a la terminal que la muestre. Eso es todo lo que pasa: un valor guardado en el entorno y un programa (la terminal) que lo lee.
+En los dos casos creas una variable llamada `MI_NOMBRE`, la llenas con un valor y le pides al shell que la muestre. Eso es todo lo que pasa: un valor guardado en el entorno y un programa —el shell— que lo lee y lo imprime; la terminal solo muestra el resultado en la ventana.
 
 Puedes ver todas las variables de tu sistema con `Get-ChildItem Env:` en PowerShell o con `printenv` en Bash. Un detalle importante: las variables definidas a mano duran solo mientras la terminal está abierta; cuando la cierras, se pierden. Por eso las configuraciones que deben durar se guardan en archivos de perfil, un tema que verás cuando configures tus herramientas.
 

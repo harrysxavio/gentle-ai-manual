@@ -90,7 +90,7 @@ Hay un matiz que conviene distinguir: el **estado** de un programa, lo que la pa
 
 Una **Base de datos**\* es un sistema que guarda datos de forma organizada y permite recuperarlos después. La más común es la base de datos **relacional**, que organiza la información en tablas relacionadas entre sí. No necesitas dominar el modelo completo: basta con entender su pieza principal.
 
-Una **Tabla (base de datos)**\* organiza datos en filas y columnas, como una planilla. Cada columna es un tipo de dato (el nombre, la fecha, el estado); cada fila es un registro completo (un pedido de vacaciones). En el formulario de Camila, el backend guarda los pedidos en una tabla llamada `solicitudes`:
+Una **Tabla (base de datos)**\* organiza datos en filas y columnas, como una planilla. Cada columna es un atributo con nombre (el nombre, la fecha, el estado) que tiene un tipo de dato asociado (por ejemplo, texto, fecha o un conjunto de valores permitidos); cada fila es un registro completo (un pedido de vacaciones). En el formulario de Camila, el backend guarda los pedidos en una tabla llamada `solicitudes`:
 
 | nombre | fecha_inicio | fecha_fin | estado |
 |--------|--------------|-----------|--------|
