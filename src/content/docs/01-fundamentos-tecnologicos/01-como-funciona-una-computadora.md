@@ -41,7 +41,7 @@ estimatedTime: 20 min
 
 Esta lección asume que ya sabes qué es una computadora y que la usas todos los días. No vamos a explicar qué es un programa ni cómo se escribe: eso viene en la lección de programación.
 
-Aquí vas a conocer los componentes que intervienen cuando trabajas con agentes de IA como OpenCode, Codex o Claude. Cuando le pides algo a un agente, en tu computadora se ponen en marcha la memoria, el disco, el sistema operativo, los archivos de tu proyecto y varios programas en ejecución. Entender ese terreno te ayuda a usar los agentes con confianza y a diagnosticar qué falla cuando algo no funciona.
+Aquí vas a conocer los componentes que intervienen cuando trabajas con agentes de IA como OpenCode, Codex o Claude Code. Cuando le pides algo a un agente, en tu computadora se ponen en marcha la memoria, el disco, el sistema operativo, los archivos de tu proyecto y varios programas en ejecución. Entender ese terreno te ayuda a usar los agentes con confianza y a diagnosticar qué falla cuando algo no funciona.
 
 ## Respuesta simple
 
@@ -83,7 +83,7 @@ La diferencia clave entre RAM y disco es el tiempo: la RAM es rápida y temporal
 
 La **GPU (tarjeta gráfica)**\* es un componente especializado en hacer muchas operaciones en paralelo. Nació para dibujar imágenes y video, y por eso es la estrella de los juegos y de la edición de video.
 
-Quizá escuchaste que la IA necesita GPUs potentes, y es cierto para los servidores que entrenan y ejecutan los modelos. Cuando usas un agente, los modelos suelen correr en servidores remotos, no en tu computadora, así que en el caso habitual no necesitas una GPU cara para trabajar con OpenCode, Codex o Claude: una computadora común alcanza. Existe también la opción de usar proveedores locales (por ejemplo, Ollama o llama.cpp), donde el modelo corre en tu propia máquina y puede aprovechar la GPU local; ese caso se explica en la lección de modelos y proveedores. En el uso cotidiano, la GPU local solo se ocupa de dibujar la interfaz que ves en pantalla.
+Quizá escuchaste que la IA necesita GPUs potentes, y es cierto para los servidores que entrenan y ejecutan los modelos. Cuando usas un agente, los modelos suelen correr en servidores remotos, no en tu computadora, así que en el caso habitual no necesitas una GPU cara para trabajar con OpenCode, Codex o Claude Code: una computadora común alcanza. Existe también la opción de usar proveedores locales (por ejemplo, Ollama o llama.cpp), donde el modelo corre en tu propia máquina y puede aprovechar la GPU local; ese caso se explica en la lección de modelos y proveedores. En el uso cotidiano, la GPU local solo se ocupa de dibujar la interfaz que ves en pantalla.
 
 ### El sistema operativo: el encargado
 
@@ -110,7 +110,7 @@ La ruta `C:\Users\Camila\Documentos\Informes\notas-reunion.txt` indica exactamen
 
 Para trabajar con agentes de IA se usan dos tipos de herramientas. El **IDE (entorno de desarrollo integrado)**, como Visual Studio Code, reúne en una sola aplicación el editor de archivos, una terminal y otras herramientas para programar y revisar proyectos. La **terminal** es una ventana donde se escriben comandos de texto; es la puerta de entrada a los programas de línea de comandos (CLI) y la estudiaremos a fondo en la próxima lección.
 
-El agente no es un componente separado de tu computadora: es un programa que vive en estas herramientas. Cuando abres OpenCode, Codex o Claude, estás abriendo un programa más, como abrirías Word.
+El agente no es un componente separado de tu computadora: es un programa que vive en estas herramientas. Cuando abres OpenCode, Codex o Claude Code, estás abriendo un programa más, como abrirías Word.
 
 ### Procesos: los programas en acción
 
@@ -126,7 +126,7 @@ Ahora une las piezas con el caso de Camila. Este diagrama muestra quién intervi
 
 ```mermaid
 flowchart LR
-    U["Tú escribes el prompt"] --> AG["Agente: OpenCode, Codex o Claude"]
+    U["Tú escribes el prompt"] --> AG["Agente: OpenCode, Codex o Claude Code"]
     AG --> OS["Sistema operativo"]
     OS --> PR["Proceso del agente"]
     PR --> CPU["CPU"]
@@ -178,7 +178,7 @@ También conviene conocer los límites de lo que aprendiste aquí. Si la RAM se 
 
 - Qué observas: ves promociones de "GPU para IA" y dudas si tu computadora alcanza.
 - Qué significa: los modelos que usan los agentes corren en servidores remotos, no en tu GPU.
-- Cómo comprobar: una computadora común, sin GPU dedicada, puede ejecutar OpenCode, Codex o Claude.
+- Cómo comprobar: una computadora común, sin GPU dedicada, puede ejecutar OpenCode, Codex o Claude Code.
 - Cómo resolver: no necesitas comprar hardware para empezar a trabajar con agentes.
 - Cómo confirmar: el agente responde igual en una computadora con GPU modesta.
 

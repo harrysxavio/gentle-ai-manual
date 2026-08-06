@@ -42,7 +42,7 @@ estimatedTime: 25 min
 
 En la lección anterior viste dónde vive el software: el disco, la memoria, el sistema operativo y las carpetas con tus archivos. Esta lección abre la puerta que te conecta con los programas a través del texto: la terminal.
 
-Aquí vas a aprender qué es una terminal, qué es un shell y qué es un comando, cómo distinguir CLI de TUI, cómo abrir tu terminal en Windows, macOS o Linux y cómo llamar desde ahí a los programas de línea de comandos. Esa es la misma vía por la que llamarás a los agentes OpenCode, Codex o Claude cuando los tengas instalados. No necesitas programar para esta lección: solo tu computadora y unos minutos.
+Aquí vas a aprender qué es una terminal, qué es un shell y qué es un comando, cómo distinguir CLI de TUI, cómo abrir tu terminal en Windows, macOS o Linux y cómo llamar desde ahí a los programas de línea de comandos. Esa es la misma vía por la que llamarás a los agentes OpenCode, Codex o Claude Code cuando los tengas instalados. No necesitas programar para esta lección: solo tu computadora y unos minutos.
 
 ## Respuesta simple
 

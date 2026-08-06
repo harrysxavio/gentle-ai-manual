@@ -155,18 +155,18 @@ Un detalle que vale la pena conocer: las bases de datos aplican los cambios en g
 
 ### Uso: Engram, la memoria del agente
 
-Aquí se conecta todo. Para trabajar con agentes no abres "el ecosistema": abres tu agente, **OpenCode**, **Codex** o **Claude**, y conversas con él. **Gentle-AI** es quien prepara y configura esos agentes, pero quien ejecuta es el agente que tú abres.
+Aquí se conecta todo. Para trabajar con agentes no abres "el ecosistema": abres tu agente, **OpenCode**, **Codex** o **Claude Code**, y conversas con él. **Gentle-AI** es quien prepara y configura esos agentes, pero quien ejecuta es el agente que tú abres.
 
-Ese agente tiene memoria entre sesiones gracias a **Engram**\*, el sistema de memoria persistente del ecosistema: guarda observaciones, decisiones y contexto entre sesiones. Y Engram es, precisamente, una base de datos **SQLite** que vive en tu computadora como un archivo. Cuando el agente guarda un recuerdo con herramientas como `mem_save` o busca uno anterior con `mem_search`, está escribiendo y leyendo esa base de datos.
+Ese agente tiene memoria entre sesiones solo si **Engram**\* está instalado y configurado en tu agente: cuando lo está, es el sistema de memoria persistente del ecosistema y guarda observaciones, decisiones y contexto entre sesiones. Y Engram es, precisamente, una base de datos **SQLite** que vive en tu computadora como un archivo. Cuando el agente guarda un recuerdo con herramientas como `mem_save` o busca uno anterior con `mem_search`, está escribiendo y leyendo esa base de datos.
 
 ```mermaid
 flowchart LR
-    U["Tú"] --> A["Agente: OpenCode, Codex o Claude"]
+    U["Tú"] --> A["Agente: OpenCode, Codex o Claude Code"]
     A -->|"guarda y recupera memoria"| E["Engram: base de datos SQLite en tu computadora"]
     E --> A
 ```
 
-Se lee de izquierda a derecha: tú hablas con el agente, y el agente guarda y recupera memoria en Engram, que es una base de datos en tu computadora. El agente también usa un motor de búsqueda integrado en SQLite, llamado **FTS5 (Full-Text Search 5)**\*, que le permite encontrar recuerdos por palabras clave con rapidez, como buscar en un cuaderno con índice.
+Se lee de izquierda a derecha: tú hablas con el agente y, cuando Engram está configurado, el agente guarda y recupera memoria en una base de datos SQLite en tu computadora. El agente también usa un motor de búsqueda integrado en SQLite, llamado **FTS5 (Full-Text Search 5)**\*, que le permite encontrar recuerdos por palabras clave con rapidez, como buscar en un cuaderno con índice.
 
 No necesitas ejecutar esos comandos a mano: los usa el agente por ti. Te conviene saber que existen para entender qué está pasando cuando el agente dice que recuerda algo de una sesión anterior: está consultando su base de datos.
 

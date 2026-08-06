@@ -46,7 +46,7 @@ estimatedTime: 30 min
 
 En las dos lecciones anteriores viste dónde vive el software y cómo se llama a los programas desde la terminal. Esta lección responde la pregunta que queda pendiente: ¿qué es un programa y qué pasa cuando un agente de IA programa por ti?
 
-Aquí vas a entender qué es un programa, qué es la lógica de programación y qué es la abstracción, cómo pedirle a un agente como OpenCode, Codex o Claude que cree un programa para ti, qué son el código fuente, compilar e interpretar, para qué sirven las variables de entorno y cuáles son los lenguajes de programación más usados. No necesitas escribir código para esta lección: se trata de entender la idea.
+Aquí vas a entender qué es un programa, qué es la lógica de programación y qué es la abstracción, cómo pedirle a un agente como OpenCode, Codex o Claude Code que cree un programa para ti, qué son el código fuente, compilar e interpretar, para qué sirven las variables de entorno y cuáles son los lenguajes de programación más usados. No necesitas escribir código para esta lección: se trata de entender la idea.
 
 ## Respuesta simple
 
@@ -174,7 +174,7 @@ Este diagrama resume el recorrido completo del programa de Camila, desde su pedi
 
 ```mermaid
 flowchart LR
-    P["Tú describes el objetivo"] --> A["Agente: OpenCode, Codex o Claude"]
+    P["Tú describes el objetivo"] --> A["Agente: OpenCode, Codex o Claude Code"]
     A --> S["Piensa la secuencia de pasos"]
     S --> C["Escribe código fuente"]
     C --> R["Ejecuta el programa"]
@@ -221,7 +221,7 @@ Vuelve al caso de Camila: su pedido no fue código, fue una descripción con con
 
 ### ¿Tengo que aprender a programar para usar agentes?
 
-- Qué observas: piensas que sin saber programar no puedes aprovechar OpenCode, Codex o Claude.
+- Qué observas: piensas que sin saber programar no puedes aprovechar OpenCode, Codex o Claude Code.
 - Qué significa: no es necesario para empezar: el agente escribe el código por ti y tú haces la abstracción y la verificación.
 - Cómo comprobar: Camila no programa y su informe quedó resuelto en el ejemplo de esta lección.
 - Cómo resolver: empieza describiendo tareas pequeñas con contexto; aprende los fundamentos cuando el agente te muestre algo que quieras entender mejor.

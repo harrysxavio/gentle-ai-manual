@@ -45,7 +45,7 @@ estimatedTime: 30 min
 
 En la lección de programación viste que un programa es una secuencia de instrucciones y que un agente puede escribirlo por ti. Ahora falta responder otra pregunta: ¿dónde vive el software que usas y en qué partes se divide?
 
-Esta lección te da el mapa de las dos caras de casi todo software: el **frontend** (lo que ves y usas), el **backend** (lo que procesa y guarda detrás) y la **API**, el contrato que los conecta. También vas a ver dónde corre cada parte, en tu computadora o en la nube, y por qué toda esta división importa cuando trabajas con agentes como OpenCode, Codex o Claude. No necesitas programar: se trata de entender el mapa.
+Esta lección te da el mapa de las dos caras de casi todo software: el **frontend** (lo que ves y usas), el **backend** (lo que procesa y guarda detrás) y la **API**, el contrato que los conecta. También vas a ver dónde corre cada parte, en tu computadora o en la nube, y por qué toda esta división importa cuando trabajas con agentes como OpenCode, Codex o Claude Code. No necesitas programar: se trata de entender el mapa.
 
 ## Respuesta simple
 
@@ -124,7 +124,7 @@ flowchart LR
     MO -->|"te trae el plato"| M
 ```
 
-La API está entre el frontend y el backend: recibe el pedido del frontend, lo traduce y se lo entrega al backend, y hace el camino inverso con la respuesta. En el formulario de Camila, la API define operaciones como "guardar un pedido de vacaciones" y "listar los pedidos guardados".
+La API es la interfaz que expone el backend: define las operaciones disponibles y el formato de los datos, como el menú del restaurante. El que recibe el pedido, lo procesa y responde es el propio backend (la cocina); la API no es un servicio intermedio aparte, sino el contrato que dice cómo se habla con él. En el formulario de Camila, la API define operaciones como "guardar un pedido de vacaciones" y "listar los pedidos guardados".
 
 Para pedir, los programas usan un protocolo común en internet: **HTTP (HyperText Transfer Protocol)**. El pedido se llama request y la respuesta, response. La respuesta trae un código que resume el resultado: 200 significa "todo bien", 404 "no existe lo que pediste" y 500 "el servidor falló". Por ahora no necesitas más que eso.
 
@@ -146,7 +146,7 @@ La **Terminal**\* es la ventana: el lugar de texto donde escribes. Un **CLI (Com
 flowchart LR
     T["Terminal: la ventana de texto"] -->|"comandos"| C["CLI: programas que se operan escribiendo"]
     T -->|"paneles y menús"| U["TUI: programas con interfaz de texto navegable"]
-    C --> A["Agente: OpenCode, Codex o Claude"]
+    C --> A["Agente: OpenCode, Codex o Claude Code"]
 ```
 
 La terminal es el lugar; el CLI y la TUI son dos maneras en que los programas se presentan en ese lugar. Y hay un matiz que evita confusiones: cuando una conversación sobre una aplicación dice "el frontend", se habla de la parte visible de esa aplicación; cuando hablas de tus herramientas, la terminal, el CLI y la TUI desde donde usas tus agentes también son un frontend. Es el mismo concepto, la interfaz visible, aplicado a dos escenarios.
@@ -157,7 +157,7 @@ Este diagrama resume el mapa completo de lo que pasa cuando usas un agente:
 
 ```mermaid
 flowchart LR
-    U["Tú"] --> A["Agente: OpenCode, Codex o Claude"]
+    U["Tú"] --> A["Agente: OpenCode, Codex o Claude Code"]
     A -->|"API del modelo"| M["Modelo de IA<br/>en la nube"]
     A -->|"API de herramientas"| H["Herramientas: archivos, comandos, MCP"]
     M --> A
