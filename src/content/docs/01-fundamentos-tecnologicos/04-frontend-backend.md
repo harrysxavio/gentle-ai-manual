@@ -228,7 +228,7 @@ Como comprobación final, elige una aplicación que uses a diario (el correo, un
 | Servidor local | Servidor en tu propia computadora | La prueba en la PC de Camila |
 | Nube (computación en la nube) | Computadoras ajenas a las que llegas por internet | La página publicada para el equipo |
 | Terminal | La ventana de texto | PowerShell, Terminal.app |
-| CLI (Command Line Interface) | Programa que se opera por comandos | Git, OpenCode, Codex |
+| CLI (Command Line Interface) | Interfaz para operar un programa escribiendo comandos u opciones | Git, OpenCode, Codex |
 | TUI (Text User Interface) | Interfaz de texto con paneles y menús | La interfaz de OpenCode en la terminal |
 
 Lo esencial para recordar: el frontend es lo que ves, el backend es lo que trabaja detrás, la API es el contrato que los conecta, el servidor puede vivir en tu computadora o en la nube, y la terminal, el CLI y la TUI son tres piezas distintas que a menudo se confunden.

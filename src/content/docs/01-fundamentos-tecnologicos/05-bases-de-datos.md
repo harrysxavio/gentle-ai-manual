@@ -105,7 +105,7 @@ flowchart LR
     T --> F["Filas: cada pedido de vacaciones"]
 ```
 
-Se lee de izquierda a derecha: dentro de la base de datos vive la tabla, y la tabla se compone de columnas (los tipos de dato) y filas (cada registro). Es la misma estructura de una planilla de Excel, con una diferencia: la base de datos puede responder preguntas sobre miles de filas con rapidez y sin errores.
+Se lee de izquierda a derecha: dentro de la base de datos vive la tabla, y la tabla se compone de columnas (atributos con nombre y un tipo de dato asociado) y filas (cada registro). Es la misma estructura de una planilla de Excel, con una diferencia: la base de datos puede responder preguntas sobre miles de filas con rapidez y sin errores.
 
 ### SQL: el idioma para preguntar
 

@@ -44,6 +44,12 @@ test("REQ-019: CLI y TUI son interfaces, no tipos excluyentes de programa", () =
     "04 no debe presentar a OpenCode como 'un programa CLI' excluyente");
   assert.match(p04, /opencode[^]*?comando|CLI[^]*?OpenCode/i,
     "04 debe reconocer que opencode es un comando (CLI) del programa");
+
+  // 5. La tabla resumen de 04 no debe definir CLI/TUI como programas
+  assert.doesNotMatch(p04, /\| CLI \(Command Line Interface\) \| Programa que se opera por comandos \|/i,
+    "04 tabla resumen no debe definir CLI como 'Programa que se opera por comandos'");
+  assert.match(p04, /\| CLI \(Command Line Interface\) \| Interfaz para operar un programa escribiendo comandos u opciones \|/i,
+    "04 tabla resumen debe definir CLI como interfaz para operar escribiendo comandos u opciones");
 });
 
 test("REQ-019: glosario define CLI y TUI como interfaces, no programas", () => {

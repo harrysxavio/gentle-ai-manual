@@ -42,10 +42,15 @@ test("REQ-021: nombre de columna vs tipo de dato", () => {
   // Cada columna es un atributo con nombre y un tipo asociado (TEXT, DATE, enum), no un tipo de dato.
   assert.match(p05, /cada columna es un (atributo|campo)/i,
     "05 debe describir cada columna como atributo/campo con nombre");
-  assert.match(p05, /tipo/i,
+  assert.match(p05, /tipo de dato asociado/i,
     "05 debe mencionar que cada columna tiene un tipo asociado");
   assert.doesNotMatch(p05, /Cada columna es un tipo de dato/i,
     "05 no debe decir que la columna ES un tipo de dato");
+  // El párrafo del diagrama (L108) no debe denominar a las columnas "los tipos de dato".
+  assert.doesNotMatch(p05, /columnas \(los tipos de dato\)/i,
+    "05 no debe llamar a las columnas 'los tipos de dato'");
+  assert.match(p05, /columnas \(atributos con nombre y un tipo de dato asociado\)/i,
+    "05 debe describir las columnas como atributos con nombre y tipo asociado");
 });
 
 test("REQ-022: CLI vs TUI se distinguen por modalidad de interacción, no por duración del proceso", () => {
