@@ -36,7 +36,6 @@ level: 1
 estimatedTime: 25 min
 ---
 
-# La terminal
 
 ## Propósito
 

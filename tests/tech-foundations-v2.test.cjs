@@ -168,10 +168,11 @@ function validatePage(rel) {
     errors.push(`${rel}: estimatedTime must be a non-empty string`);
   }
 
-  // Título no duplicado: un único H1 en el cuerpo
+  // Título visible único: Starlight renderiza el H1 desde el frontmatter title,
+  // así que el cuerpo NO debe tener ningún H1 (evitar dos H1 visibles).
   const body = text.replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, "");
   const h1s = body.match(/^#\s+.+$/gm) || [];
-  if (h1s.length !== 1) errors.push(`${rel}: expected exactly one H1, found ${h1s.length}`);
+  if (h1s.length !== 0) errors.push(`${rel}: expected zero H1 in the body (Starlight renders the title), found ${h1s.length}`);
 
   return errors;
 }

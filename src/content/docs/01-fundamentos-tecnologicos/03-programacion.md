@@ -40,7 +40,6 @@ level: 1
 estimatedTime: 30 min
 ---
 
-# Programación
 
 ## Propósito
 

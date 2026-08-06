@@ -35,7 +35,6 @@ level: 1
 estimatedTime: 20 min
 ---
 
-# Cómo funciona una computadora
 
 ## Propósito
 

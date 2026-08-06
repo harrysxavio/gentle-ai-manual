@@ -39,7 +39,6 @@ level: 1
 estimatedTime: 30 min
 ---
 
-# Bases de datos
 
 ## Propósito
 
@@ -97,7 +96,7 @@ Una **Tabla (base de datos)**\* organiza datos en filas y columnas, como una pla
 | Luciana | 2026-08-10 | 2026-08-17 | pendiente |
 | Bruno | 2026-08-24 | 2026-08-28 | pendiente |
 
-Todas las filas tienen las mismas columnas, pero cada fila describe algo distinto: una persona, sus fechas y su estado. Cada fila además tiene un identificador que no se repite, para poder referirse a ese pedido exacto sin confusiones.
+Todas las filas tienen las mismas columnas, pero cada fila describe algo distinto: una persona, sus fechas y su estado. Las tablas de aplicaciones bien diseñadas suelen incluir una columna de identificador (llamada clave primaria) que no se repite, para poder referirse a un registro exacto sin confusiones; no es algo que la base de datos agregue sola, sino una decisión de quien diseña la tabla.
 
 ```mermaid
 flowchart LR

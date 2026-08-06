@@ -47,3 +47,21 @@ test("REQ-021: nombre de columna vs tipo de dato", () => {
   assert.doesNotMatch(p05, /Cada columna es un tipo de dato/i,
     "05 no debe decir que la columna ES un tipo de dato");
 });
+
+test("REQ-022: CLI vs TUI se distinguen por modalidad de interacción, no por duración del proceso", () => {
+  const p04 = read("src/content/docs/01-fundamentos-tecnologicos/04-frontend-backend.md");
+  // Una CLI puede ser interactiva o de larga duración; no se distingue por si el proceso termina.
+  assert.match(p04, /modalidad de interacci[óo]n|interfaz navegable|escribiendo comandos/i,
+    "04 debe distinguir CLI de TUI por la forma de interactuar");
+  assert.doesNotMatch(p04, /si escribes un comando y el programa termina, es un CLI/i,
+    "04 no debe distinguir CLI por si el proceso termina");
+});
+
+test("REQ-022: el identificador de fila es una decisión de diseño, no una garantía inherente", () => {
+  const p05 = read("src/content/docs/01-fundamentos-tecnologicos/05-bases-de-datos.md");
+  // Las tablas bien diseñadas suelen definir una clave primaria; no es automático por defecto.
+  assert.match(p05, /clave primaria|identificador/i,
+    "05 debe mencionar identificador o clave primaria");
+  assert.doesNotMatch(p05, /Cada fila adem[áa]s tiene un identificador que no se repite/i,
+    "05 no debe afirmar que toda fila tiene identificador único por defecto");
+});

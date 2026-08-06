@@ -39,7 +39,6 @@ level: 1
 estimatedTime: 30 min
 ---
 
-# Frontend y backend
 
 ## Propósito
 
@@ -205,7 +204,7 @@ Como comprobación final, elige una aplicación que uses a diario (el correo, un
 
 - Qué observas: usas las tres palabras como sinónimos.
 - Qué significa: la terminal es la ventana; el CLI y la TUI son dos formas de interfaz de los programas que corren en ella.
-- Cómo comprobar: si escribes un comando y el programa termina, es un CLI; si quedan paneles que navegas con las teclas, es una TUI.
+- Cómo comprobar: si te comunicas escribiendo comandos u opciones, es un CLI; si quedan paneles que navegas con las teclas, es una TUI. Que un programa termine o siga abierto no define la interfaz: una CLI puede ser de larga duración o interactiva.
 - Cómo resolver: di "terminal" al lugar, y "CLI" o "TUI" a la forma del programa.
 - Cómo confirmar: describes cada pieza con su palabra correcta.
 
