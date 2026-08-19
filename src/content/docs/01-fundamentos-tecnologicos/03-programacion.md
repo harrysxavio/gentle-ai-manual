@@ -1,294 +1,176 @@
 ---
 title: Programación
-description: Qué es un programa, código fuente, compilar vs interpretar, lenguajes, runtime, dependencias y variables de entorno.
-level: 1
-estimatedTime: 30 min
-tags:
-  - programación
-  - código-fuente
+description: Qué es un programa, cómo se crea a partir de código fuente, y por qué la abstracción y las variables de entorno importan para usar agentes.
+manual_contract: lesson-v2
+content_level:
+  - beginner
+  - operator
+estimated_minutes: 30
+learning_outcome: "Explicar qué es un programa y cómo se crea, y reconocer la abstracción y las variables de entorno en el trabajo con agentes."
+canonical_concepts:
+  - programa
+  - codigo-fuente
   - compilar
-  - runtime
-  - librería
-  - framework
-  - gestor-paquetes
-  - dependencia
-prerequisites:
-  - La terminal (01-02)
-verifiedVersion: "Node.js 22, Go 1.22, PowerShell 5.1"
-learningOutcomes:
-  - Explicar qué es un programa y cómo se crea
-  - Diferenciar código fuente de binario, y compilar de interpretar
-  - Identificar los lenguajes del ecosistema Gentle y para qué sirve cada uno
-  - Comprender qué es un runtime, una librería, un framework y una dependencia
-  - Usar variables de entorno para configurar programas
+  - interpretar
+  - abstraccion
+  - variables-de-entorno
+lesson_terms:
+  - Programa
+  - Código fuente
+  - Compilar
+  - Interpretar
+  - Lenguaje de programación
+  - Abstracción
+  - Variable de entorno
+  - Runtime
+  - Dependencia
+  - Librería
+persona: administracion
+learning_resources:
+  - freecodecamp
+  - khan-academy-computing
+  - the-odin-project
+snapshot: none
+practice_mode: none
+diagram_mode: mermaid
+faq_mode: faq
+source_status: verified
+level: 1
+estimatedTime: "30 min"
 ---
 
-# Programación
+## Propósito
 
-## Qué aprenderás
+Un agente de IA es un programa. Para usarlo bien no necesitas programar, pero sí entender qué es un programa, cómo se crea y qué piezas lo componen. Con esa base podrás leer configuraciones, entender los errores que aparecen en la terminal y saber por qué un agente puede leer archivos, ejecutar comandos o recordar información.
 
-Cuando escribís `gentle-ai` en la terminal y ves aparecer una interfaz, estás ejecutando un **programa**. Alguien escribió ese programa usando un **lenguaje de programación**. Ese lenguaje pasó por un proceso para convertirse en algo que la computadora pueda entender.
+## Respuesta simple
 
-En este capítulo vas a entender qué es un programa, cómo se crea, qué lenguajes se usan en el ecosistema Gentle, y cómo los programas se organizan, comparten y configuran.
-
-## Por qué importa
-
-El ecosistema Gentle está construido con varios lenguajes: Go, TypeScript, Bash, SQL, y más. Cuando leas la documentación, veas el código de una herramienta, o tengas que instalar una dependencia, vas a encontrarte con estos conceptos.
-
-Si no entendés qué significa "compilar", "runtime" o "dependencia", la falta de contexto te va a frenar. Pero si los entendés, podés diagnosticar errores, leer configuraciones y entender cómo funciona cada pieza.
-
-## Visión simple
-
-Un **programa** es una serie de instrucciones que le decís a la computadora que ejecute en orden. Es como una receta de cocina: primero hacé esto, luego esto otro, si pasa X hacé Y, y al final mostrá el resultado.
-
-La computadora no entiende español ni inglés. Solo entiende unos y ceros: **código binario**. Pero los humanos escribimos en lenguajes que podemos leer y entender. Esos lenguajes después se convierten a binario para que la computadora los ejecute.
+Un programa es un conjunto de instrucciones que una computadora ejecuta para cumplir una tarea. Las personas escriben esas instrucciones en un **lenguaje de programación** y las guardan en un archivo de texto llamado **código fuente**. Para que la computadora ejecute el programa, ese código se compila o se interpreta.
 
 ## Analogía
 
-Imaginá que querés que alguien prepare una torta. Tenés dos opciones:
+Imagina una receta de cocina. El código fuente es la receta escrita en un cuaderno: pasos claros, uno después de otro, con decisiones ("si la masa está pegajosa, agrega harina"). Compilar es traducir la receta completa a un instructivo exacto que el cocinero puede seguir de punta a punta. Interpretar es tener a una persona que lee la receta paso a paso y cocina cada instrucción en el momento.
 
-**Opción A — Traducir antes**: le escribís la receta completa en un papel, alguien la lleva a un cocinero profesional que la traduce a instrucciones exactas de cocina, y le pasás esas instrucciones al que va a cocinar. Eso es **compilar**: el programa se traduce completo antes de ejecutarse.
+La analogía tiene un límite: una computadora no tiene sentido común ni improvisa. Ejecuta exactamente lo que dice el programa, ni más ni menos. Cuando un programa falla, suele ser porque la instrucción escrita no era la correcta para la situación real.
 
-**Opción B — Traducir sobre la marcha**: te parás al lado del cocinero y le vas leyendo la receta paso a paso, traduciendo cada instrucción justo cuando la necesita. Eso es **interpretar**: un intérprete lee el programa línea por línea y lo ejecuta en el momento.
+## Ejemplo continuo
 
-En la Opción A, el cocinero solo necesita las instrucciones finales (el binario). En la Opción B, el cocinero necesita tener al intérprete al lado todo el tiempo (el runtime).
+Camila le pide a un agente en OpenCode que organice sus facturas por fecha. El agente es un programa: sigue instrucciones para leer archivos, comparar fechas y ordenar resultados. Camila no escribe ese programa, pero puede observar sus efectos: ve qué archivos lee, qué comandos ejecuta y qué resultados produce. Ese comportamiento es posible porque detrás hay código fuente, un lenguaje de programación y un mecanismo para ejecutarlo.
 
-## Cómo funciona realmente
+## Código fuente y ejecución
 
-### Código fuente vs binario
-
-**Código fuente**: el texto que escribe un programador. Se lee en un editor de texto (VS Code, Vim). Por ejemplo, este archivo `main.go`:
-
-```go
-package main
-
-import "fmt"
-
-func main() {
-    fmt.Println("Hola, Gentle!")
-}
-```
-
-**Binario** (o **ejecutable**): el archivo que la computadora puede ejecutar directamente. Contiene los unos y ceros que el procesador entiende. En Windows termina en `.exe`. Por ejemplo, `gentle-ai.exe`.
-
-El paso de código fuente a binario se llama **compilación**.
-
-### Compilar vs interpretar
-
-| | Compilar | Interpretar |
-|--|----------|------------|
-| Proceso | Traduce todo de una vez | Traduce línea por línea |
-| Resultado | Archivo binario (`.exe`) | Se ejecuta sobre la marcha |
-| Errores | Se detectan antes de ejecutar | Se detectan durante la ejecución |
-| Velocidad | Más rápido al ejecutar | Más lento (traduce mientras corre) |
-| Lenguajes | Go, C, Rust | JavaScript, Python, Bash |
-| Ejemplo | `go build` produce `programa.exe` | `node programa.js` ejecuta directo |
-
-**Lenguajes compilados**: escribís, compilás una vez, y obtenés un ejecutable que podés compartir. Eso hace Go: producís un solo archivo `.exe` que no necesita nada más para correr.
-
-**Lenguajes interpretados**: escribís y ejecutás directamente con un **intérprete**. Eso hace JavaScript/TypeScript: necesitás Node.js instalado para correr el programa.
-
-### Lenguajes relevantes al ecosistema
-
-El ecosistema Gentle usa estos lenguajes:
-
-| Lenguaje | Tipo | ¿Para qué se usa? | Archivos típicos |
-|----------|------|-------------------|------------------|
-| **Go** | Compilado | Gentle-AI, GGA, Engram (las herramientas principales) | `.go` |
-| **TypeScript** | Interpretado (compila a JS) | Extensiones, configuraciones, agentes | `.ts`, `.tsx` |
-| **JavaScript** | Interpretado | Node.js, plugins, scripts de configuración | `.js`, `.mjs` |
-| **Bash** | Interpretado (shell) | Scripts de automatización, hooks de Git | `.sh` |
-| **SQL** | Interpretado (BD) | Consultas a bases de datos, Engram | `.sql` |
-| **Markdown** | Lenguaje de marcado | Documentación, README | `.md` |
-| **YAML** | Lenguaje de marcado | Configuración (`.opencode/`, `gentle-ai`) | `.yaml`, `.yml` |
-| **JSON** | Formato de datos | Configuración, comunicación entre programas | `.json` |
-| **TOML** | Formato de datos | Configuración (Cargo, algunas herramientas) | `.toml` |
-
-No hace falta que sepas todos estos lenguajes. Pero es útil saber cuál es cuándo ves un archivo:
-
-- Si ves `.go`, sabés que es código compilado (Go)
-- Si ves `.ts` o `.js`, sabés que necesita Node.js
-- Si ves `.sh`, sabés que es un script de Bash
-- Si ves `.yaml` o `.json`, sabés que es configuración
-
-### Runtime
-
-**Runtime** (entorno de ejecución) es el programa que permite que un lenguaje interpretado se ejecute.
-
-Node.js es el runtime de JavaScript/TypeScript. Cuando ejecutás `node archivo.js`, Node.js lee el archivo, lo interpreta y lo ejecuta. Sin Node.js, el archivo `.js` no sirve para nada.
-
-El runtime incluye:
-- El **intérprete** del lenguaje
-- **Bibliotecas base** (funciones incorporadas para leer archivos, conectarse a internet, etc.)
-- El **recolector de basura** (libera memoria que ya no se usa automáticamente)
-
-Para lenguajes compilados como Go, el runtime está "empaquetado" dentro del binario. No necesitás instalar nada aparte para ejecutar un programa de Go.
-
-### Librería vs Framework
-
-**Librería** (o **biblioteca**): un conjunto de funciones reutilizables que tu programa puede llamar. Vos decidís cuándo y cómo usarlas.
-
-Por ejemplo, `chalk` es una librería de Node.js para dar color al texto en la terminal. En tu código la importás y la usás cuando querés:
+El código fuente es texto legible que describe instrucciones. Se escribe en un lenguaje de programación, que es un idioma formal con reglas precisas. Este es un ejemplo mínimo de código fuente:
 
 ```javascript
-import chalk from 'chalk';
-console.log(chalk.green('Todo ok!'));  // usás chalk cuando querés
+const mensaje = "Hola, bienvenida al manual";
+console.log(mensaje);
 ```
 
-**Framework**: una estructura que define cómo organizar tu código. El framework te llama a vos, no al revés.
+Ese texto no lo ejecuta la computadora directamente: primero debe transformarse. Hay dos caminos:
 
-Por ejemplo, Bubbletea es un framework para construir TUI en Go. Bubbletea define un modelo con funciones específicas (`Init`, `Update`, `View`) y vos completás esas funciones. El framework decide cuándo llamarlas.
+- **Compilar**: traducir el código fuente completo a un archivo ejecutable (un binario) antes de ejecutarlo. El binario ya está listo para correr y no necesita nada más.
+- **Interpretar**: ejecutar el código fuente línea por línea usando un intérprete, que es el programa que lee y ejecuta cada instrucción en el momento.
 
-| | Librería | Framework |
-|--|----------|-----------|
-| Quién controla | Vos llamás a la librería | El framework te llama a vos |
-| Flexibilidad | Alta (usás solo lo que necesitás) | Baja (seguís su estructura) |
-| Dependencia | Podés cambiarla fácilmente | Cambiar cuesta más |
-| Ejemplo en Go | `encoding/json` | Bubbletea |
-| Ejemplo en JS | `chalk`, `date-fns` | React, Vue |
+El **runtime** (entorno de ejecución) es el programa que permite ejecutar el código interpretado. Por ejemplo, JavaScript se ejecuta con el runtime de Node.js. Los lenguajes compilados, como Go, generan un binario que ya incluye todo lo necesario.
 
-### Dependencia y gestor de paquetes
-
-**Dependencia**: cualquier librería o framework que tu programa necesita para funcionar. Si tu programa usa `chalk`, entonces `chalk` es una dependencia.
-
-**Gestor de paquetes**: programa que instala, actualiza y administra dependencias automáticamente.
-
-| Ecosistema | Gestor de paquetes | Archivo de configuración |
-|------------|-------------------|-------------------------|
-| Node.js/JS/TS | `npm` (Node Package Manager) | `package.json` |
-| Go | El compilador (`go mod`) | `go.mod` |
-| Python | `pip` | `requirements.txt` |
-| Rust | `cargo` | `Cargo.toml` |
-
-En el ecosistema Gentle:
-- **Engram** está escrito en Go. Su `go.mod` lista las dependencias que necesita.
-- **GGA** también está en Go. Depende de librerías HTTP, parsing y análisis de código.
-- **Gentle-AI** usa Node.js y TypeScript. Su `package.json` lista dependencias como Bubbletea (TUI), Zod (validación) y otras.
-
-Cuando ejecutás `npm install` en un proyecto con `package.json`, npm lee ese archivo, descarga cada dependencia de internet y las guarda en una carpeta `node_modules/`.
-
-Cuando ejecutás `go mod tidy` en un proyecto Go, Go descarga las dependencias listadas en `go.mod` y las guarda en el caché local.
-
-### Código de salida de un programa
-
-Viste en el capítulo de la terminal que todo programa devuelve un **código de salida**. Recordá:
-
-| Código | Significado |
-|--------|------------|
-| `0` | Éxito |
-| `1` | Error genérico |
-| Otros | Error específico (define cada programa) |
-
-En código, el programador decide qué código devolver. En Go:
-
-```go
-package main
-
-import (
-    "fmt"
-    "os"
-)
-
-func main() {
-    if archivoNoExiste {
-        fmt.Println("Error: archivo no encontrado")
-        os.Exit(1)  // código de error
-    }
-    os.Exit(0)  // todo bien
-}
+```mermaid
+flowchart LR
+    Codigo[Código fuente] --> Proceso[Compilar o interpretar]
+    Proceso --> Ejec[Programa listo para ejecutar]
+    Ejec --> Shell[El shell lo lanza desde la terminal]
+    Shell --> Proc[Proceso en ejecución]
 ```
 
-En JavaScript/Node.js:
+## Lenguajes comunes y tipos de software
 
-```javascript
-const fs = require('fs');
-if (!fs.existsSync('config.json')) {
-    console.error('Error: no se encuentra config.json');
-    process.exit(1);
-}
-```
+No hace falta conocer todos los lenguajes, pero sí reconocer cuáles existen y para qué se usan. El código fuente de cada lenguaje se guarda en archivos con una extensión reconocible:
 
-Esto permite encadenar programas. Si GGA devuelve `1`, sabés que el código no pasó la revisión. Si devuelve `0`, el código está aprobado.
+| Lenguaje | Tipo | Para qué se usa | Archivos típicos |
+|----------|------|-----------------|------------------|
+| Go | Compilado | Herramientas de terminal y servidores | `.go` |
+| JavaScript / TypeScript | Interpretado | Aplicaciones web, automatización, agentes | `.js`, `.ts` |
+| Python | Interpretado | Análisis de datos, automatización, IA | `.py` |
+| Bash | Interpretado | Scripts de automatización en la terminal | `.sh` |
+| SQL | Lenguaje de consulta | Consultar y modificar bases de datos | `.sql` |
+| Markdown / YAML / JSON | Lenguaje de marcado o datos | Documentación y configuración | `.md`, `.yml`, `.json` |
 
-### Variables de entorno
+Los programas también se clasifican por su tipo: un **programa de terminal** como Git, una **aplicación web** que se ve en el navegador, o un **servicio** que corre en un servidor sin pantalla. Los agentes de IA son programas que además se conectan con un modelo y con herramientas para cumplir tareas.
 
-Las **variables de entorno** son valores que el sistema operativo guarda y que los programas pueden leer. Funcionan como "configuración global" que no está escrita en el código.
+## Abstracción: usar sin conocer los detalles
 
-El ecosistema Gentle usa muchas variables `OPENCODE_*`:
+La **abstracción** es la capacidad de usar algo complejo a través de una interfaz simple, sin conocer sus detalles internos. Cuando escribes un comando como `git status`, no sabes (ni necesitas saber) cómo Git organiza los archivos internamente: la abstracción te da una instrucción simple para una tarea compleja.
 
-| Variable | ¿Qué hace? | ¿Qué programa la usa? |
-|----------|-----------|----------------------|
-| `OPENCODE_LLM_PROVIDER` | Define qué proveedor de IA usar | gentle-ai |
-| `OPENCODE_AGENT_CONFIG` | Ruta al archivo de configuración del agente | gentle-ai |
-| `OPENCODE_PROJECT` | Nombre del proyecto actual | engram |
+Los agentes están llenos de abstracciones. Cuando le pides a un agente que ordene facturas, no describes cómo se lee cada archivo ni cómo se compara cada fecha: describes el resultado deseado y el agente resuelve los detalles. Saber que existe esa capa de abstracción te ayuda a distinguir qué controlas tú (el objetivo) y qué resuelve el programa (el mecanismo).
 
-Cada programa decide qué variables leer en su código:
+## Variables de entorno
 
-```javascript
-// Ejemplo simplificado de cómo gentle-ai lee variables
-const provider = process.env.OPENCODE_LLM_PROVIDER || 'anthropic';
-// Si la variable no existe, usa 'anthropic' como valor por defecto
-```
+Una **variable de entorno** es un valor que el sistema operativo guarda y que los programas pueden leer para ajustar su configuración. Cuando el shell lanza un programa, lee las variables de entorno y las pone a disposición del programa. No están escritas dentro del código fuente, así que puedes cambiar la configuración sin tocar el código.
 
-Podés ver todas las variables de entorno desde la terminal:
-- PowerShell: `Get-ChildItem Env: | Where-Object Name -like "OPENCODE*"`
-- Bash: `env | grep OPENCODE`
-
-Podés definir una variable temporalmente al ejecutar un comando:
+Un ejemplo frecuente: un agente necesita saber qué proveedor de modelo usar o dónde está su archivo de configuración. Esa información suele vivir en variables de entorno. Para ver las variables de entorno desde la terminal:
 
 ```powershell
-# PowerShell
-$env:OPENCODE_LLM_PROVIDER = "anthropic"; gentle-ai
+Get-ChildItem Env:
 ```
 
 ```bash
-# Bash
-OPENCODE_LLM_PROVIDER=anthropic gentle-ai
+env
 ```
+
+Cada programa decide qué variables lee y qué hace si una variable no existe, por ejemplo usar un valor por defecto. Por eso dos personas con la misma herramienta pueden tener comportamientos distintos: sus variables de entorno son distintas.
+
+## Librerías y dependencias
+
+Un programa rara vez se escribe desde cero. Los programas reutilizan piezas llamadas **librerías**: conjuntos de funciones que otros ya escribieron y que el programa llama cuando las necesita. Una **dependencia** es cualquier librería que tu programa necesita para funcionar.
+
+Por ejemplo, un programa que trabaja con tablas puede usar una librería que ya sabe leer hojas de cálculo. El programa solo describe qué necesita en un archivo de configuración, y un gestor de paquetes (como `npm` en Node.js) instala esas dependencias automáticamente.
 
 ## Errores frecuentes
 
-1. **"module not found"** o **"cannot find package"**: falta una dependencia. Ejecutá `npm install` o `go mod tidy` según corresponda.
-2. **"command not found"** (ej. `node no se reconoce`): el runtime no está instalado o no está en el PATH. Instalalo desde su página oficial.
-3. **El programa compila pero no funciona como esperaba**: el error es lógico, no de sintaxis. El código se ejecuta pero hace algo distinto a lo que querías. Revisá la lógica.
-4. **Error de sintaxis**: escribiste algo que el lenguaje no entiende. Por ejemplo, falta una coma, un paréntesis, o usaste una palabra clave incorrecta. El compilador o intérprete te dice la línea exacta.
-5. **Versión incorrecta**: un programa necesita Node.js 18+ y tenés Node.js 16. Verificá con `node --version`.
+### ¿Por qué aparece "module not found" o "command not found"?
+
+**Qué observas:** al ejecutar un programa, la terminal muestra un error de módulo o de comando inexistente.
+
+**Qué suele significar:** falta una dependencia (un módulo no está instalado) o el programa que se intenta ejecutar no está instalado o no está en el `PATH`.
+
+**Cómo comprobarlo:** revisa si el archivo de dependencias del proyecto existe y si el programa está instalado con su comando de verificación (por ejemplo `node --version`).
+
+**Cómo resolverlo:** instala las dependencias con el gestor correspondiente del proyecto o instala el programa desde su fuente oficial.
+
+**Cómo confirmar la solución:** vuelve a ejecutar el programa y verifica que termine sin errores.
+
+### ¿Por qué un programa da un error de sintaxis?
+
+**Qué observas:** el programa no se ejecuta y el intérprete o compilador indica una línea concreta del código.
+
+**Qué suele significar:** el código fuente tiene un error de escritura: falta un símbolo, un paréntesis o una palabra clave mal escrita.
+
+**Cómo comprobarlo:** lee el mensaje de error, que indica la línea y el carácter exacto.
+
+**Cómo resolverlo:** corrige el texto del código fuente en esa línea siguiendo las reglas del lenguaje.
+
+**Cómo confirmar la solución:** vuelve a compilar o ejecutar el programa y verifica que el error desaparezca.
 
 ## Resumen
 
 | Concepto | ¿Qué es? | Ejemplo |
-|----------|---------|---------|
-| Código fuente | Texto que escribe el programador | `main.go`, `index.ts` |
-| Binario | Archivo ejecutable (unos y ceros) | `gentle-ai.exe` |
-| Compilar | Traducir código fuente a binario | `go build` |
-| Interpretar | Ejecutar código fuente línea por línea | `node archivo.js` |
+|----------|----------|---------|
+| Programa | Conjunto de instrucciones que la computadora ejecuta | Un agente de IA |
+| Código fuente | Texto legible escrito en un lenguaje | `main.go`, `index.js` |
+| Compilar | Traducir todo el código a un binario | Go, C |
+| Interpretar | Ejecutar el código línea por línea | JavaScript, Python |
+| Lenguaje de programación | Idioma formal para escribir instrucciones | Go, Python, SQL |
+| Abstracción | Usar algo complejo con una interfaz simple | `git status` |
+| Variable de entorno | Valor que el shell ofrece a los programas | `PATH`, claves de configuración |
 | Runtime | Programa que ejecuta código interpretado | Node.js |
-| Librería | Funciones que vos llamás | `chalk`, `encoding/json` |
-| Framework | Estructura que te llama a vos | Bubbletea, React |
-| Dependencia | Algo que tu programa necesita | `package.json` lo lista |
-| Gestor de paquetes | Programa que maneja dependencias | `npm`, `go mod` |
-| Código de salida | Número que devuelve un programa al terminar | `0` = bien, `1` = mal |
-| Variable de entorno | Configuración global del sistema | `OPENCODE_LLM_PROVIDER` |
+| Dependencia | Librería que un programa necesita para funcionar | npm la instala |
 
-## Preguntas
+## Términos de esta lección
 
-1. ¿Cuál es la diferencia entre un lenguaje compilado y uno interpretado?
-2. ¿Por qué un binario de Go se puede ejecutar en cualquier computadora sin instalar nada, pero un archivo de JavaScript necesita Node.js?
-3. ¿Qué diferencia hay entre una librería y un framework?
-4. Si ves que un programa devuelve código de salida `1`, ¿qué significa?
-5. ¿Para qué sirven las variables de entorno en el ecosistema Gentle?
+Programa, Código fuente, Compilar, Interpretar, Lenguaje de programación, Abstracción, Variable de entorno, Runtime, Dependencia y Librería. Todos están definidos en el [glosario](../../20-referencia/02-glosario/).
 
-## Ejercicio
+## Para seguir aprendiendo
 
-1. Abrí PowerShell y ejecutá `Get-ChildItem Env: | Where-Object Name -like "OPENCODE*"` para ver si tenés variables de entorno de Gentle definidas.
-2. Sin Node.js instalado, no podrías ejecutar código JavaScript. Verificá si tenés Node.js con `node --version`.
-3. Verificá si tenés Go instalado con `go version`.
-4. Elegí una carpeta vacía y ejecutá `npm init -y` para generar un `package.json`. Abrí el archivo con `Get-Content package.json`. Ahí es donde se escribirían las dependencias.
-
-## Fuentes verificadas
-
-- Runtime: Node.js 22, Go 1.22 (documentación oficial)
-- Gestores: npm 10, go 1.22
-- Ecosistema: gentle-ai 2.x, engram 1.x
-- Fecha: 2026-07-20
-- Estado: 🟢 Verificado (conocimiento fundamental, no depende de versión específica)
+- [freeCodeCamp](https://www.freecodecamp.org/espanol/): certificaciones gratuitas con ejercicios interactivos en español.
+- [Khan Academy — Computación](https://es.khanacademy.org/computing): introducción visual a la programación.
+- [The Odin Project](https://www.theodinproject.com/): currículo completo de desarrollo web con proyectos (en inglés).
+- La siguiente lección, [Frontend y backend](../04-frontend-backend/), explica cómo se organizan las aplicaciones modernas.

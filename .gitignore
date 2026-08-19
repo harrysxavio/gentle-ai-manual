@@ -43,6 +43,9 @@ tmp/
 # Engram local data
 .engram/
 
+# Gentle AI local context/state (never versioned)
+.gentle/
+
 # Python
 __pycache__/
 *.pyc
