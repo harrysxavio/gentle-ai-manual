@@ -55,7 +55,7 @@ Laura trabaja en operaciones y necesita revisar una lista de incidencias guardad
 Get-ChildItem
 ```
 
-El shell interpreta el comando y muestra la lista de archivos y carpetas de la carpeta actual. Laura acaba de usar una CLI: escribió un comando, recibió un resultado y el comando terminó. Si en cambio escribe el nombre de una herramienta sin argumentos, como `git`, la herramienta puede abrir una TUI: una interfaz que se queda en pantalla esperando que Laura navegue con las teclas.
+El shell interpreta el comando y muestra la lista de archivos y carpetas de la carpeta actual. Laura acaba de usar una CLI: escribió un comando, recibió un resultado y el comando terminó. Si en cambio escribe una herramienta que se presenta en modo TUI, como un editor de terminal o un monitor de procesos, la interfaz se queda en pantalla esperando que Laura navegue con las teclas hasta que decide salir.
 
 ## Cómo abrir una terminal
 
@@ -86,7 +86,7 @@ PowerShell y Bash son shells distintos con sintaxis distinta. No son intercambia
 |--------|-----------|------|
 | Listar archivos | `Get-ChildItem` | `ls` |
 | Leer un archivo | `Get-Content archivo.txt` | `cat archivo.txt` |
-| Variable de entorno | `$env:NOMBRE` | `echoNOMBRE` |
+| Variable de entorno | `$env:NOMBRE` | `echo $NOMBRE` |
 | Código de salida | `$LASTEXITCODE` | `$?` |
 | Encadenar solo si funciona | `cmd1; if ($?) { cmd2 }` | `cmd1 && cmd2` |
 
