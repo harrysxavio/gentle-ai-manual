@@ -1,6 +1,6 @@
 # Glossary — structured terminology data
 # Source: GLOSSARY.md (2026-07-20)
-# Last updated: 2026-07-27
+# Last updated: 2026-08-18
 terms:
   - term: "Agente"
     simple: "Un programa que usa un modelo de IA, tiene instrucciones, puede usar herramientas y actúa por su cuenta para cumplir una tarea."
@@ -761,3 +761,173 @@ terms:
     simple: "Mecanismo donde un perfil de modelos hereda configuraciones de otro y solo sobrescribe las fases que necesita cambiar."
     reference: "content/14-modelos-y-enrutamiento/02-asignar-modelos/"
     category: "modelos"
+
+  - term: "CPU"
+    simple: "El procesador de una computadora, encargado de ejecutar las instrucciones de los programas."
+    reference: "content/01-fundamentos-tecnologicos/01-como-funciona-una-computadora/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "GPU"
+    simple: "Procesador especializado en cálculos paralelos, usado para gráficos y para ejecutar modelos de IA."
+    reference: "content/01-fundamentos-tecnologicos/01-como-funciona-una-computadora/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "RAM"
+    simple: "Memoria rápida y volátil donde se cargan los programas en ejecución; se pierde al apagar la computadora."
+    reference: "content/01-fundamentos-tecnologicos/01-como-funciona-una-computadora/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Disco (almacenamiento)"
+    simple: "Dispositivo que guarda datos de forma permanente (SSD o HDD); los datos sobreviven al apagado."
+    reference: "content/01-fundamentos-tecnologicos/01-como-funciona-una-computadora/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Sistema operativo"
+    simple: "El software que administra los recursos de la computadora: procesos, memoria, archivos y dispositivos."
+    reference: "content/01-fundamentos-tecnologicos/01-como-funciona-una-computadora/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Proceso"
+    simple: "Un programa en ejecución, con un identificador propio, memoria asignada y estado."
+    reference: "content/01-fundamentos-tecnologicos/01-como-funciona-una-computadora/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Archivo"
+    simple: "Una colección de datos guardada en disco con un nombre y una ubicación."
+    reference: "content/01-fundamentos-tecnologicos/01-como-funciona-una-computadora/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Terminal"
+    simple: "La aplicación que muestra texto y permite escribir comandos; no es el intérprete de comandos."
+    reference: "content/01-fundamentos-tecnologicos/02-la-terminal/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "IDE (Entorno de desarrollo integrado)"
+    simple: "Aplicación que reúne editor de código, terminal y otras herramientas para desarrollar programas."
+    reference: "content/01-fundamentos-tecnologicos/01-como-funciona-una-computadora/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Variable de entorno"
+    simple: "Valor que el sistema operativo guarda y que los programas pueden leer para ajustar su configuración."
+    reference: "content/01-fundamentos-tecnologicos/03-programacion/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "PowerShell"
+    simple: "El shell nativo de Windows, orientado a objetos, con verbos como Get-ChildItem."
+    reference: "content/01-fundamentos-tecnologicos/02-la-terminal/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Bash"
+    simple: "El shell clásico de Unix/Linux, basado en texto; en Windows se instala con Git Bash o WSL."
+    reference: "content/01-fundamentos-tecnologicos/02-la-terminal/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Comando"
+    simple: "Una orden escrita en la terminal que el shell interpreta para ejecutar un programa o una acción."
+    reference: "content/01-fundamentos-tecnologicos/02-la-terminal/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Programa"
+    simple: "Un conjunto de instrucciones que una computadora ejecuta para cumplir una tarea."
+    reference: "content/01-fundamentos-tecnologicos/03-programacion/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Código fuente"
+    simple: "El texto legible que escribe una persona programadora en un lenguaje de programación."
+    reference: "content/01-fundamentos-tecnologicos/03-programacion/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Compilar"
+    simple: "Traducir el código fuente completo a un archivo ejecutable (binario) antes de ejecutarlo."
+    reference: "content/01-fundamentos-tecnologicos/03-programacion/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Interpretar"
+    simple: "Ejecutar el código fuente línea por línea usando un intérprete o runtime, sin generar un binario."
+    reference: "content/01-fundamentos-tecnologicos/03-programacion/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Lenguaje de programación"
+    simple: "Un idioma formal con reglas precisas que permite escribir instrucciones para una computadora."
+    reference: "content/01-fundamentos-tecnologicos/03-programacion/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Abstracción"
+    simple: "La capacidad de usar algo complejo a través de una interfaz simple, sin conocer sus detalles internos."
+    reference: "content/01-fundamentos-tecnologicos/03-programacion/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Librería"
+    simple: "Un conjunto de funciones reutilizables que un programa puede llamar cuando las necesita."
+    reference: "content/01-fundamentos-tecnologicos/03-programacion/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Endpoint"
+    simple: "Una operación concreta que una API expone, por ejemplo GET /api/agentes."
+    reference: "content/01-fundamentos-tecnologicos/04-frontend-backend/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Puerto (red)"
+    simple: "Número que identifica un servicio dentro de una computadora, por ejemplo 4321 o 8080."
+    reference: "content/01-fundamentos-tecnologicos/04-frontend-backend/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Navegador"
+    simple: "Programa como Chrome, Firefox o Safari que muestra sitios web y ejecuta su código."
+    reference: "content/01-fundamentos-tecnologicos/04-frontend-backend/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Interfaz"
+    simple: "El punto de contacto entre dos partes: entre una persona y un programa, o entre dos programas."
+    reference: "content/01-fundamentos-tecnologicos/04-frontend-backend/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Dato"
+    simple: "Un valor individual, como un nombre, un número o una fecha, que un sistema guarda o procesa."
+    reference: "content/01-fundamentos-tecnologicos/05-bases-de-datos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Persistencia"
+    simple: "La capacidad de que los datos sobrevivan entre ejecuciones de un programa, por ejemplo en disco."
+    reference: "content/01-fundamentos-tecnologicos/05-bases-de-datos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Tabla"
+    simple: "Estructura de una base de datos relacional que organiza datos en filas y columnas."
+    reference: "content/01-fundamentos-tecnologicos/05-bases-de-datos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Fila"
+    simple: "Un registro completo dentro de una tabla; cada fila es una entrada de datos."
+    reference: "content/01-fundamentos-tecnologicos/05-bases-de-datos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Columna"
+    simple: "Un atributo de una tabla con un tipo definido, como texto, número o fecha."
+    reference: "content/01-fundamentos-tecnologicos/05-bases-de-datos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Clave primaria"
+    simple: "El atributo (o combinación de atributos) elegido para identificar de forma única cada fila de una tabla."
+    reference: "content/01-fundamentos-tecnologicos/05-bases-de-datos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "PostgreSQL"
+    simple: "Base de datos cliente-servidor con funciones avanzadas, usada cuando varios usuarios comparten datos."
+    reference: "content/01-fundamentos-tecnologicos/05-bases-de-datos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Transacción"
+    simple: "Un grupo de operaciones que se ejecutan como una sola unidad: todas se aplican o ninguna."
+    reference: "content/01-fundamentos-tecnologicos/05-bases-de-datos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Nube"
+    simple: "Conjunto de servidores accesibles por internet que ofrecen cómputo y almacenamiento a demanda."
+    reference: "content/01-fundamentos-tecnologicos/05-bases-de-datos/"
+    category: "fundamentos-tecnologicos"
+
+  - term: "Backup"
+    simple: "Copia de seguridad de datos que permite restaurarlos si el original se pierde o se daña."
+    reference: "content/01-fundamentos-tecnologicos/05-bases-de-datos/"
+    category: "fundamentos-tecnologicos"

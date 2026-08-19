@@ -155,4 +155,19 @@ resources:
     notes: Amplia cobertura en español.
     scope: learning
 
+  - id: sqlite-docs
+    title: SQLite Documentation
+    url: https://sqlite.org/docs.html
+    type: documentacion
+    language: en
+    access: gratuito
+    provider: SQLite Consortium
+    topics: [sqlite, bases-de-datos, sql]
+    level: [principiante, intermedio, avanzado]
+    purpose: documentación oficial de SQLite con tutoriales y referencia de SQL
+    verified_at: "2026-08-18"
+    status: activo
+    notes: Documentación en inglés. Incluye un tutorial de introducción a SQL.
+    scope: learning
+
 schema_version: 1.0.0

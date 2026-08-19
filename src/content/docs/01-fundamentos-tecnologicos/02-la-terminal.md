@@ -1,189 +1,161 @@
-﻿---
+---
 title: La terminal
-description: Qué es la terminal, cómo funciona el shell, qué es un comando, y por qué todo el ecosistema se usa desde acá.
-level: 1
-estimatedTime: 25 min
-tags:
+description: Qué es la terminal, el shell, PowerShell, Bash, la CLI y la TUI, y cómo ejecutar un primer comando en cada sistema operativo.
+manual_contract: lesson-v2
+content_level:
+  - beginner
+  - operator
+estimated_minutes: 25
+learning_outcome: "Distinguir terminal, shell, CLI y TUI, y ejecutar un primer comando en Windows, macOS o Linux."
+canonical_concepts:
   - terminal
   - shell
-  - comandos
   - cli
   - tui
   - powershell
   - bash
-prerequisites:
-  - Cómo funciona una computadora (01-01)
-verifiedVersion: "PowerShell 5.1, Git Bash en Windows"
-learningOutcomes:
-  - Explicar qué es una terminal y un shell
-  - Ejecutar comandos básicos (navegar, listar, leer archivos)
-  - Entender qué es stdin, stdout, stderr y el código de salida
-  - Diferenciar CLI de TUI
-  - Comprender por qué las herramientas del ecosistema usan terminal
+lesson_terms:
+  - Terminal
+  - Shell
+  - CLI (Command Line Interface)
+  - TUI (Text User Interface)
+  - PowerShell
+  - Bash
+  - Comando
+persona: operaciones
+learning_resources:
+  - microsoft-learn-powershell
+  - git-scm-docs
+snapshot: none
+practice_mode: none
+diagram_mode: mermaid
+faq_mode: faq
+source_status: verified
+level: 1
+estimatedTime: "25 min"
 ---
 
-# La terminal
+## Propósito
+
+Los agentes de IA se usan desde una terminal: allí escribes comandos, ves el progreso de una tarea y ejecutas herramientas como Git, npm o el propio agente. La terminal parece misteriosa al principio, pero en realidad tiene pocas piezas: una ventana, un intérprete de comandos y las interfaces que usan los programas que invocas. Entender esas piezas te permite operar cualquier herramienta de línea de comandos sin depender de tutoriales memorizados.
 
 ## Respuesta simple
 
-Una **terminal** es la aplicación donde escribís comandos. Un **shell** es el lenguaje que entiende esos comandos. No son lo mismo.
+La **terminal** es la ventana donde escribes comandos. El **shell** es el programa que interpreta esos comandos y ejecuta lo que pides. La **CLI** es una interfaz de texto para usar un programa comando a comando, y la **TUI** es una interfaz de texto con paneles y menús que queda abierta esperando tus teclas. Terminal, shell, CLI y TUI no son lo mismo, aunque a menudo se usan como si lo fueran.
 
-## Qué es cada cosa
+## Analogía
 
-Tres conceptos distintos que se mezclan constantemente:
+Imagina el mostrador de atención de una empresa. La terminal es el mostrador: la ventana física por donde hablas. El shell es la persona que atiende: recibe tu pedido, lo interpreta y lo ejecuta. La CLI es la forma de pedir algo con una frase breve que termina y listo ("una fotocopia, por favor"). La TUI es la forma de pedir algo y quedarte conversando hasta resolverlo ("acompáñame a completar este formulario"). La analogía tiene un límite: un shell no entiende lenguaje natural, solo comandos con una sintaxis exacta.
 
-| Concepto | ¿Qué es? | Ejemplos |
-|----------|----------|----------|
-| **Terminal** | Aplicación con pantalla y teclado | Windows Terminal, iTerm2, GNOME Terminal |
-| **Shell** | Intérprete de comandos | PowerShell, Bash, Zsh, Fish |
-| **Multiplexor** | Organizador de sesiones de terminal | tmux, Zellij |
+## Ejemplo continuo
 
-La terminal muestra texto y te deja escribir. El shell recibe lo que escribís, lo interpreta y ejecuta programas. El multiplexor te permite tener varias sesiones en una sola ventana y mantenerlas vivas aunque cerrés la terminal.
+Laura trabaja en operaciones y necesita revisar una lista de incidencias guardada en su computadora con Windows. Abre la terminal (PowerShell) y escribe un primer comando:
 
-Ninguno de los tres es lo mismo. Cuando alguien dice "usá la terminal", puede estar refiriéndose a cualquiera de los tres, lo que genera confusión.
+```powershell
+Get-ChildItem
+```
 
-## PowerShell en Windows
+El shell interpreta el comando y muestra la lista de archivos y carpetas de la carpeta actual. Laura acaba de usar una CLI: escribió un comando, recibió un resultado y el comando terminó. Si en cambio escribe el nombre de una herramienta sin argumentos, como `git`, la herramienta puede abrir una TUI: una interfaz que se queda en pantalla esperando que Laura navegue con las teclas.
 
-PowerShell es el shell moderno de Windows. Viene instalado, es potente y trabaja con **objetos** (no solo texto).
+## Cómo abrir una terminal
 
-Su sintaxis es DIFERENTE a Bash:
+Cada sistema operativo tiene su forma de abrir la ventana de la terminal:
+
+| Sistema operativo | Cómo abrir la terminal | Shell inicial |
+|-------------------|------------------------|---------------|
+| Windows | Menú inicio, escribir `PowerShell` y elegir "Windows PowerShell" | PowerShell |
+| macOS | `Cmd + Espacio`, escribir `Terminal` y presionar Enter | Zsh o Bash |
+| Linux | Atajo de teclado o menú de aplicaciones, buscar "Terminal" | Bash |
+
+En Windows, PowerShell es el camino inicial recomendado: viene instalado y es el shell nativo del sistema. No necesitas instalar Bash para los primeros pasos.
+
+## Cuándo instalar Bash en Windows
+
+Bash es el shell clásico de Unix/Linux. En Windows no viene instalado, y no hace falta instalarlo para usar agentes: las herramientas del ecosistema funcionan con PowerShell. Solo lo necesitas cuando quieres ejecutar scripts escritos para Unix o herramientas que esperan un entorno de Bash. En ese caso tienes dos opciones documentadas en las fuentes oficiales:
+
+- **Git Bash**: un entorno que emula Bash y viene incluido con Git for Windows. Sirve para comandos de Git y scripts simples.
+- **WSL** (Windows Subsystem for Linux): instala un Linux real dentro de Windows y es la opción completa si necesitas herramientas de Linux.
+
+La documentación oficial de Git explica cómo descargar Git for Windows en [git-scm.com](https://git-scm.com/), y Microsoft documenta la instalación de WSL en su centro de aprendizaje.
+
+## PowerShell y Bash
+
+PowerShell y Bash son shells distintos con sintaxis distinta. No son intercambiables: un comando de Bash no funciona en PowerShell sin cambios, y viceversa. Estas son las diferencias que más verás al empezar:
 
 | Acción | PowerShell | Bash |
 |--------|-----------|------|
 | Listar archivos | `Get-ChildItem` | `ls` |
-| Leer archivo | `Get-Content archivo.txt` | `cat archivo.txt` |
-| Variable | `$env:NOMBRE` | `$NOMBRE` |
-| Pipe | <code>Get-ChildItem &#124; Where-Object {...}</code> | <code>ls &#124; grep algo</code> |
-| Encadenar | `cmd1; if ($?) { cmd2 }` | `cmd1 && cmd2` |
-
-PowerShell usa verbos (`Get-`, `Set-`, `Remove-`) en vez de comandos cortos. Tiene alias para algunos comandos clásicos (`ls`, `cat`, `rm`) pero el comportamiento puede diferir del de Bash.
-
-## Bash en macOS/Linux
-
-Bash es el shell clásico de Unix. Viene por defecto en la mayoría de distribuciones Linux. En macOS, el shell por defecto ahora es Zsh (2019+), pero Bash sigue disponible.
-
-Bash usa sintaxis corta y todo es texto:
-
-```
-ls -la | grep config
-echo $HOME
-cat archivo.txt
-```
-
-## Git Bash en Windows
-
-Git Bash es un entorno que emula Bash dentro de Windows. Viene incluido con **Git for Windows**.
-
-Útil para:
-- Comandos de Git con sintaxis familiar
-- Scripts Bash sin necesidad de WSL
-- Herramientas que esperan entorno Unix
-
-No es un Linux real. Faltan comandos y el sistema de archivos subyacente sigue siendo Windows.
-
-## WSL — Windows Subsystem for Linux
-
-WSL ejecuta un **kernel Linux real** dentro de Windows. No es una terminal ni un shell — es un entorno completo.
-
-Características:
-- Necesita una distribución (Ubuntu, Debian, Alpine)
-- Sin distribución instalada no hay Bash operativo
-- Acceso al sistema de archivos de Windows desde /mnt/c/
-- Bash real, no emulado
-
-Para usar WSL: `wsl --install` (Windows 10/11), luego `wsl` para entrar.
-
-WSL es la opción más potente si necesitás herramientas Linux en Windows. Si solo necesitás Git, Git Bash alcanza.
-
-## tmux y Zellij — multiplexores
-
-Los multiplexores NO son shells. Son programas que organizan sesiones de terminal.
-
-| Función | tmux | Zellij |
-|---------|------|--------|
-| Dividir pantalla | `Ctrl+B` + `%` | `Ctrl+P` o layout automático |
-| Sesiones persistentes | Sí | Sí |
-| Paneles | Sí | Sí |
-| Funciona en Windows | No nativo (WSL) | Sí, nativo |
-
-Sirven para:
-- Mantener sesiones activas aunque cerrés la terminal
-- Dividir la terminal en paneles (editor a la izquierda, comandos a la derecha)
-- Conectarte a la misma sesión desde otra máquina
-
-## Guía de decisión
-
-| Si usás... | Usá esto... |
-|------------|-------------|
-| Windows, tareas Windows | **PowerShell** (viene instalado) |
-| Windows, solo Git | **Git Bash** (viene con Git) |
-| Windows, herramientas Linux | **WSL + Bash** |
-| macOS | **Terminal.app + Zsh** (viene por defecto) |
-| Linux | **GNOME Terminal + Bash** (viene por defecto) |
-| Cualquier SO, sesiones persistentes | **tmux** o **Zellij** |
-
-## PowerShell vs Bash — comandos comunes
-
-| Operación | PowerShell | Bash |
-|-----------|-----------|------|
-| Navegar a carpeta | `cd ruta` | `cd ruta` |
-| Listar archivos | `Get-ChildItem` o `ls` | `ls` |
-| Crear carpeta | `New-Item -ItemType Dir nombre` o `mkdir nombre` | `mkdir nombre` |
-| Eliminar archivo | `Remove-Item archivo` o `rm archivo` | `rm archivo` |
-| Mover/renombrar | `Move-Item origen destino` o `mv origen destino` | `mv origen destino` |
-| Copiar | `Copy-Item origen destino` o `cp origen destino` | `cp origen destino` |
-| Leer archivo | `Get-Content archivo` o `cat archivo` | `cat archivo` |
-| Variable de entorno | `$env:NOMBRE` | `$NOMBRE` |
+| Leer un archivo | `Get-Content archivo.txt` | `cat archivo.txt` |
+| Variable de entorno | `$env:NOMBRE` | `echoNOMBRE` |
 | Código de salida | `$LASTEXITCODE` | `$?` |
-| Ejecutar si funciona | `cmd1; if ($?) { cmd2 }` | `cmd1 && cmd2` |
-| Ejecutar si falla | <code>cmd1; if (-not $?) { cmd2 }</code> | <code>cmd1 &#124;&#124; cmd2</code> |
+| Encadenar solo si funciona | `cmd1; if ($?) { cmd2 }` | `cmd1 && cmd2` |
 
-## Declaración explícita
+En esta tabla puedes ver dos elementos estructurales de todo comando: la **variable de entorno**, un valor que el shell pone a disposición de los programas que lanza, y el **código de salida**, el número que un programa devuelve al terminar (`0` para éxito, otro valor para error).
 
-PowerShell y Bash **no tienen sintaxis intercambiable**. Un script de Bash no funciona en PowerShell sin modificaciones, y viceversa.
+PowerShell trabaja con objetos y usa verbos como `Get-` o `Set-`. Bash trabaja con texto y usa comandos cortos. No necesitas memorizar las dos sintaxis: alcanza con saber que existen, que son distintas y que puedes consultar la ayuda de cada una.
 
-Las diferencias clave:
+## CLI y TUI como modalidades de interacción
 
-| Aspecto | PowerShell | Bash |
-|---------|-----------|------|
-| Filosofía | Objetos (.NET) | Texto plano |
-| Verbos | `Get-ChildItem`, `Set-Location` | `ls`, `cd` |
-| Variables | `$variable` (ámbito automático) | `variable=valor` (requiere `export`) |
-| Condicionales | `if ($?)` | `if [ $? -eq 0 ]` |
-| Bucles | `foreach ($item in $lista)` | `for item in lista` |
-| Funciones | `function Nombre { param($x) }` | `nombre() { echo "$1"; }` |
+Un programa de terminal puede ofrecer dos modalidades de interacción:
+
+- **CLI** (Command Line Interface): escribes un comando con sus argumentos, el programa ejecuta la tarea, devuelve el resultado y termina. Es la modalidad para automatizar y encadenar pasos.
+- **TUI** (Text User Interface): el programa dibuja una interfaz con paneles, menús y colores dentro de la terminal, y se queda abierta esperando tus teclas. Es la modalidad para explorar opciones de forma visual.
+
+CLI y TUI son interfaces, no programas en sí: son la forma en que un programa se presenta dentro de la terminal. Tanto una CLI como una TUI se invocan desde la terminal, a través del shell.
+
+```mermaid
+flowchart LR
+    Persona[Persona] --> Term[Terminal]
+    Term --> Shell[Shell: PowerShell o Bash]
+    Shell --> CLI[Programa en modo CLI: comando y resultado]
+    Shell --> TUI[Programa en modo TUI: interfaz abierta con teclas]
+```
+
+Cuando ejecutas un programa en modo CLI, el shell lo lanza, el programa hace su trabajo y el control vuelve al shell. Cuando lo ejecutas en modo TUI, el programa toma el control de la pantalla hasta que decides salir.
+
+## Errores frecuentes
+
+### ¿Por qué el sistema dice que un comando no se reconoce?
+
+**Qué observas:** escribes un comando y el shell responde algo como "el término no se reconoce" o "command not found".
+
+**Qué suele significar:** el programa que intentas usar no está instalado, o el shell no sabe dónde buscarlo.
+
+**Cómo comprobarlo:** confirma el nombre del comando y verifica si el programa está instalado (por ejemplo, en Windows con `Get-Command git`).
+
+**Cómo resolverlo:** instala el programa desde su fuente oficial o agrega su carpeta a la variable de entorno `PATH` siguiendo la documentación del programa.
+
+**Cómo confirmar la solución:** vuelve a escribir el comando y verifica que el shell lo ejecute sin errores.
+
+### ¿Estoy en PowerShell o en Bash?
+
+**Qué observas:** no sabes qué shell está interpretando tus comandos.
+
+**Qué suele significar:** en Windows la terminal abre PowerShell por defecto; en macOS y Linux abre Bash o Zsh. Son shells distintos con comandos distintos.
+
+**Cómo comprobarlo:** en PowerShell escribe `$PSVersionTable`; en Bash escribe `echo $0` o `echo $BASH_VERSION`.
+
+**Cómo resolverlo:** según el shell que veas, usa la sintaxis correspondiente: verbos como `Get-ChildItem` en PowerShell o comandos cortos como `ls` en Bash.
+
+**Cómo confirmar la solución:** ejecuta el comando equivalente en cada shell y compara el resultado.
 
 ## Resumen
 
-| Concepto | ¿Qué es? |
-|----------|---------|
-| Terminal | La ventana donde escribís comandos |
-| Shell | El intérprete de comandos (PowerShell, Bash) |
-| Multiplexor | Organizador de sesiones (tmux, Zellij) |
-| PowerShell | Shell nativo de Windows, orientado a objetos |
-| Bash | Shell clásico de Unix, basado en texto |
-| Git Bash | Entorno Bash emulado para Windows |
-| WSL | Linux real dentro de Windows |
+| Concepto | ¿Qué es? | Ejemplo |
+|----------|----------|---------|
+| Terminal | La ventana donde escribes comandos | Windows Terminal, Terminal de macOS |
+| Shell | El intérprete que ejecuta los comandos | PowerShell, Bash, Zsh |
+| CLI | Interfaz de texto comando a comando | `git status` |
+| TUI | Interfaz de texto con paneles y menús | un programa abierto en la terminal |
+| PowerShell | Shell nativo de Windows, orientado a objetos | `Get-ChildItem` |
+| Bash | Shell clásico de Unix/Linux, basado en texto | `ls` |
 
-## Preguntas
+## Términos de esta lección
 
-1. ¿Cuál es la diferencia entre terminal, shell y multiplexor?
-2. ¿Por qué PowerShell y Bash no son intercambiables?
-3. ¿Qué necesitás para tener Bash en Windows?
-4. ¿Para qué sirve un multiplexor como tmux o Zellij?
-5. Si estás en Windows y solo necesitás Git, ¿usás PowerShell, Git Bash o WSL?
+Terminal, Shell, CLI (Command Line Interface), TUI (Text User Interface), PowerShell, Bash y Comando. Todos están definidos en el [glosario](../../20-referencia/02-glosario/).
 
-## Ejercicio
+## Para seguir aprendiendo
 
-1. Abrí PowerShell
-2. Ejecutá `Get-ChildItem env:PATH` para ver las carpetas en tu PATH
-3. Abrí Git Bash (si lo tenés instalado) y ejecutá `echo $PATH`
-4. Compará ambos resultados — son dos shells distintos viendo rutas distintas
-5. Identificá en qué carpeta están `git.exe` (PowerShell: `Get-Command git`, Bash: `which git`)
-
-## Fuentes verificadas
-
-- Shell: PowerShell 5.1 en Windows 10/11, Git Bash 2.45
-- Ecosistema: gentle-ai 2.1.10
-- Fecha: 2026-07-21
-- Estado: 🔵 Verificado
+- [Microsoft Learn — PowerShell](https://learn.microsoft.com/es-es/training/powershell/): rutas de aprendizaje oficiales de PowerShell en español.
+- [Git — Documentation](https://git-scm.com/doc): documentación oficial de Git y el libro Pro Git gratuito.
+- La siguiente lección, [Programación](../03-programacion/), explica qué es un programa y cómo se crea.

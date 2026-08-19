@@ -1,427 +1,182 @@
 ---
 title: Bases de datos
-description: Qué es un dato, persistencia, SQLite, Postgres, SQL, consultas, índices y cómo Engram guarda memoria.
-level: 1
-estimatedTime: 30 min
-tags:
-  - base-de-datos
-  - sqlite
-  - postgres
+description: Qué es un dato, la persistencia y las bases de datos relacionales, y cómo decidir entre un archivo, SQLite o PostgreSQL.
+manual_contract: lesson-v2
+content_level:
+  - beginner
+  - operator
+estimated_minutes: 30
+learning_outcome: "Explicar qué es un dato, la persistencia y las bases de datos relacionales, y justificar cuándo conviene un archivo, SQLite o PostgreSQL."
+canonical_concepts:
+  - dato
   - persistencia
-  - sql
-  - fts5
+  - base-de-datos
   - tabla
-  - índice
-prerequisites:
-  - Programación (01-03)
-verifiedVersion: "SQLite 3.46, PostgreSQL 17 (documentación oficial)"
-learningOutcomes:
-  - Explicar qué es la persistencia y por qué es necesaria
-  - Diferenciar un archivo de una base de datos
-  - Identificar las partes de una base de datos relacional (tabla, fila, columna, clave primaria, índice)
-  - Escribir consultas SQL básicas (SELECT, INSERT, UPDATE, DELETE)
-  - Comprender por qué Engram usa SQLite y cuándo se necesita Postgres
+  - sql
+  - sqlite
+  - postgresql
+  - transaccion
+lesson_terms:
+  - Dato
+  - Persistencia
+  - Base de datos
+  - Tabla
+  - Fila
+  - Columna
+  - Clave primaria
+  - Índice
+  - SQL (Structured Query Language)
+  - SQLite
+  - PostgreSQL
+  - Transacción
+  - Nube
+  - Backup
+persona: analisis
+learning_resources:
+  - sqlite-docs
+  - freecodecamp
+snapshot: none
+practice_mode: none
+diagram_mode: mermaid
+faq_mode: faq
+source_status: verified
+level: 1
+estimatedTime: "30 min"
 ---
 
-# Bases de datos
+## Propósito
 
-## Qué aprenderás
+Cuando usas un agente, este puede recordar decisiones, guardar resultados o llevar el historial de un proyecto. Esa información no vive en el aire: se guarda en un lugar y con un formato concreto. Entender qué es un dato, qué es la persistencia y qué diferencia hay entre un archivo, una base de datos ligera y un servidor de base de datos te permite saber dónde está tu información, cómo respaldarla y por qué una herramienta elige un almacenamiento y no otro.
 
-Cuando cerrás Gentle-AI y lo volvés a abrir, tu configuración sigue ahí. Cuando Engram guarda un recuerdo de una conversación anterior, lo recupera después de reiniciar el sistema. Eso es posible gracias a una **base de datos**: un sistema que guarda información de forma permanente y permite buscarla rápidamente.
+## Respuesta simple
 
-En este capítulo vas a entender qué son los datos, cómo se guardan, qué es SQL, por qué Engram usa SQLite, y cuándo se necesita Postgres.
-
-## Por qué importa
-
-Engram, la herramienta de memoria persistente del ecosistema Gentle, usa una base de datos SQLite para guardar todos tus recuerdos, decisiones y descubrimientos. Cuando ejecutás `engram search` o `mem_search`, estás consultando una base de datos SQLite con búsqueda de texto completo (FTS5). Sin entender qué es una base de datos, no podés entender cómo funciona Engram ni por qué es confiable. Tampoco vas a poder diagnosticar por qué una búsqueda no encuentra algo, o por qué tu configuración desapareció.
-
-## Visión simple
-
-Un **dato** es un valor: un nombre, un número, una fecha. Por ejemplo: `"Harry"`, `42`, `2026-07-20`.
-
-Una **base de datos** es un sistema para guardar datos de forma organizada y recuperarlos rápidamente. Es como un archivero con carpetas etiquetadas, en vez de tirar todos los papeles en una caja.
-
-La **persistencia** es la capacidad de que los datos sobrevivan entre ejecuciones de un programa. Cuando apagás la computadora y la volvés a prender, los datos persistentes siguen ahí. Los datos no persistentes (como los que están en la RAM) se pierden.
+Un **dato** es un valor individual, como un nombre, un número o una fecha. La **persistencia** es la capacidad de conservar esos datos entre sesiones, para que no se pierdan al cerrar un programa o apagar la computadora. Una **base de datos** es un sistema que guarda datos de forma organizada y permite recuperarlos con rapidez. No toda la información necesita una base de datos: a veces un archivo es suficiente y más simple.
 
 ## Analogía
 
-Imaginá una biblioteca.
+Imagina una biblioteca. Los datos son los libros: cada uno tiene un título, un autor, un año y un género. La biblioteca es la base de datos: tiene estantes (las tablas), un catálogo (los índices) y un bibliotecario (el sistema de base de datos) que encuentra cualquier libro en segundos. Guardar todos los papeles en una caja sin orden es como no tener base de datos: la información existe, pero encontrarla es lento e inseguro.
 
-Los **datos** son los libros. Cada libro tiene un título, un autor, un año, un género.
+La analogía tiene un límite: en una base de datos, las reglas de orden y de búsqueda están definidas con precisión matemática, y el sistema garantiza que los datos no se corrompan aunque varios programas accedan a la vez.
 
-La **base de datos** es la biblioteca completa: los estantes, el sistema de clasificación, el catálogo, el bibliotecario.
+## Ejemplo continuo
 
-Las **tablas** son los estantes. Un estante para novelas, otro para ciencia, otro para historia. Cada estante solo tiene libros de una categoría.
+Diego trabaja como analista y usa agentes en OpenCode o Codex para revisar tablas de métricas. Pide al agente que guarde un resumen de cada análisis para comparar resultados después. Esa instrucción activa la persistencia: el agente guarda el resumen en su memoria persistente, que está implementada con una base de datos SQLite en la computadora de Diego. Cuando Diego vuelve a abrir el agente al día siguiente, los resúmenes siguen ahí, porque se guardaron en disco y no solo en la memoria temporal del programa.
 
-Las **filas** son cada libro individual. En el estante de novelas, cada libro es una fila.
+## Persistencia: la progresión desde la memoria hasta la base de datos
 
-Las **columnas** son los datos de cada libro: título, autor, año, género. Todos los libros tienen los mismos campos.
+Para entender dónde vive la información, piensa en una progresión de tres niveles:
 
-El **bibliotecario** es el sistema de base de datos (SQLite, Postgres). Vos le pedís: "dame todos los libros de ciencia ficción del año 2000 en adelante". El bibliotecario busca en el estante correcto, aplica el filtro, y te trae los resultados.
+1. **Memoria RAM**: rápida, pero se pierde al cerrar el programa o apagar la computadora. Sirve para lo que está en uso ahora.
+2. **Archivo en disco**: sobrevive al apagado. Sirve para configuraciones, notas o listas simples que un solo programa lee.
+3. **Base de datos**: organiza muchos datos, permite buscarlos rápido y permite que varios programas accedan a la vez.
 
-## Cómo funciona realmente
-
-### Dato
-
-Un **dato** es la unidad mínima de información. Puede ser:
-
-| Tipo de dato | Ejemplo | ¿Para qué se usa? |
-|-------------|---------|-------------------|
-| Texto (`TEXT`) | `"Harry"` | Nombres, descripciones, contenido |
-| Número entero (`INTEGER`) | `42` | IDs, edades, contadores |
-| Número decimal (`REAL`) | `3.14` | Mediciones, precios |
-| Booleano (`BOOLEAN`) | `true` / `false` | Sí/no, activo/inactivo |
-| Fecha (`DATE`) | `2026-07-20` | Fechas de creación, modificación |
-| Hora (`TIMESTAMP`) | `2026-07-20 15:30:00` | Fechas con hora exacta |
-
-En el contexto de Engram, un dato puede ser el texto de una memoria (`"Fixed N+1 query en UserList"`), su tipo (`"bugfix"`), o su fecha de creación.
-
-### Persistencia
-
-La **persistencia** es lo que separa un programa "descartable" de uno "que recuerda".
-
-Un programa sin persistencia:
-
-```
-1. Ejecutás el programa
-2. Configurás algo
-3. Cerrás el programa
-4. Todo lo que configuraste se pierde
-```
-
-Un programa con persistencia:
-
-```
-1. Ejecutás el programa
-2. Configurás algo
-3. El programa escribe la configuración en disco
-4. Cerrás el programa
-5. Volvés a ejecutarlo
-6. El programa lee la configuración del disco
-7. Tu configuración sigue ahí
-```
-
-La persistencia se logra escribiendo datos en **disco** (SSD/HDD), no en **RAM**. El disco mantiene los datos cuando la energía se corta.
-
-### Archivo vs base de datos
-
-Podés guardar datos en un archivo de texto o en una base de datos. ¿Cuándo usar cada uno?
-
-| | Archivo plano | Base de datos |
-|--|--------------|---------------|
-| Formato | TXT, JSON, YAML, CSV | Binario / SQL |
-| Estructura | La define el programador | Tablas con filas y columnas |
-| Búsqueda | Leer todo y filtrar en código | SQL optimizado con índices |
-| Concurrente | Un programa a la vez | Múltiples programas simultáneos |
-| Consistencia | Manual (el programa debe cuidarla) | Automática (transacciones) |
-| Velocidad | Lento con muchos datos | Rápido con índices y optimizaciones |
-
-Usá un **archivo** cuando:
-- Son pocos datos (decenas o cientos de elementos)
-- Solo un programa accede a la vez
-- La estructura es simple
-- Ejemplo: un archivo `.env` con variables de entorno
-
-Usá una **base de datos** cuando:
-- Son muchos datos (miles, millones de registros)
-- Varios programas o procesos necesitan acceder al mismo tiempo
-- Necesitás búsquedas rápidas y complejas
-- Necesitás garantías de que los datos no se corrompan
-- Ejemplo: todas las memorias de Engram
-
-Engram usa una base de datos SQLite para guardar sus observaciones. Podría usar archivos JSON, pero la búsqueda sería lenta y propensa a errores con varios procesos.
-
-### Tablas, filas, columnas
-
-Una **tabla** es una estructura que organiza datos en filas y columnas.
-
-Ejemplo de tabla `memorias`:
-
-| id | titulo | tipo | fecha |
-|----|--------|------|-------|
-| 1 | Fixed N+1 query | bugfix | 2026-07-19 |
-| 2 | Decidí usar SQLite | decision | 2026-07-18 |
-| 3 | Descubrí FTS5 | discovery | 2026-07-17 |
-
-- **Columna**: un campo específico (`id`, `titulo`, `tipo`, `fecha`). Todas las filas tienen las mismas columnas, pero los valores pueden ser diferentes.
-- **Fila**: un registro completo. Cada memoria es una fila.
-- **Celda**: el valor en la intersección de una fila y una columna. Por ejemplo, `"bugfix"` es la celda de la fila 1, columna `tipo`.
-
-### Clave primaria
-
-La **clave primaria** (primary key) es una columna (o combinación de columnas) que identifica **de forma única** cada fila.
-
-En la tabla de arriba, `id` es la clave primaria. Ninguna fila puede tener el mismo `id`. Si intentás insertar otra fila con `id = 1`, la base de datos te va a rechazar.
-
-La clave primaria garantiza que siempre podés referirte a un registro específico sin ambigüedad.
-
-### Índice
-
-Un **índice** es una estructura que la base de datos usa para encontrar filas rápido, sin tener que leer toda la tabla.
-
-Sin índice, buscar todas las memorias de tipo `"bugfix"` obliga a la base de datos a leer **cada fila** de la tabla y revisar si el tipo coincide. Eso se llama **full table scan** y es lento cuando la tabla tiene millones de filas.
-
-Con un índice en la columna `tipo`, la base de datos mantiene una lista ordenada de tipos con punteros a las filas correspondientes. La búsqueda es casi instantánea.
-
-```sql
--- Crear un índice en la columna tipo
-CREATE INDEX idx_tipo ON memorias(tipo);
-
--- Ahora esta consulta es rápida aunque haya millones de filas
-SELECT * FROM memorias WHERE tipo = 'bugfix';
-```
-
-El índice es como el índice alfabético al final de un libro. No leés el libro entero para encontrar "FTS5". Buscás en el índice, ves "página 42", y vas directo.
-
-### SQL
-
-**SQL** (Structured Query Language) es el lenguaje que se usa para comunicarse con bases de datos relacionales. No es un lenguaje de programación general (no podés escribir un videojuego en SQL). Es un lenguaje de consulta: solo sirve para hablar con bases de datos.
-
-Los cuatro comandos fundamentales son:
-
-**SELECT** — Leer datos:
-
-```sql
--- Traer todas las memorias
-SELECT * FROM memorias;
-
--- Traer solo las de tipo 'bugfix'
-SELECT * FROM memorias WHERE tipo = 'bugfix';
-
--- Traer solo título y fecha, ordenado por fecha descendente
-SELECT titulo, fecha FROM memorias ORDER BY fecha DESC;
-
--- Limitar a 10 resultados
-SELECT * FROM memorias LIMIT 10;
-```
-
-**INSERT** — Agregar datos:
-
-```sql
-INSERT INTO memorias (titulo, tipo, fecha)
-VALUES ('Fixed N+1 query en UserList', 'bugfix', '2026-07-19');
-```
-
-**UPDATE** — Modificar datos:
-
-```sql
-UPDATE memorias
-SET titulo = 'Fixed N+1 query en UserList (completo)'
-WHERE id = 1;
-```
-
-**DELETE** — Borrar datos:
-
-```sql
-DELETE FROM memorias WHERE id = 3;
-```
-
-Cuidado con `UPDATE` y `DELETE` sin `WHERE`: afectan **todas** las filas.
-
-### SQLite
-
-**SQLite** es un sistema de base de datos **embebido**, **sin servidor** y **archivo único**.
-
-- **Embebido**: no es un programa separado. Es una librería que tu programa (Go, Node.js, Python) incluye y usa directamente. No necesitás instalar nada.
-- **Sin servidor**: no hay un proceso "servidor de base de datos" corriendo. Tu programa lee y escribe directamente el archivo `.db`.
-- **Archivo único**: toda la base de datos es un solo archivo en tu disco. Si copiás ese archivo, copiás toda la base de datos.
+La diferencia clave entre la memoria y las demás es la duración: lo que está solo en la RAM desaparece; lo que se escribe en disco o en una base de datos persiste. Esta progresión aparece en todas las aplicaciones, desde el navegador (que guarda preferencias en localStorage) hasta los agentes (que guardan memoria en una base de datos local).
 
 ```mermaid
-graph LR
-    APP[Aplicación] -->|SQLite API| ARCHIVO[(archivo .db)]
-    
-    subgraph "SQLite"
-        ARCHIVO
-    end
-
-    APP2[Aplicación con Postgres] -->|driver| PG[Postgres server]
-    PG --> DATA[(datos en disco)]
+flowchart LR
+    RAM["Memoria RAM: se pierde al apagar"] --> Archivo["Archivo en disco: sobrevive"]
+    Archivo --> SQLite["SQLite: un archivo, sin servidor"]
+    SQLite --> Postgres["PostgreSQL: servidor multiusuario"]
 ```
 
-**Ventajas de SQLite**:
-- Cero configuración: no instalás nada, no iniciás ningún servicio
-- Portátil: copiás un archivo y tenés todos los datos
-- Rápido para lecturas locales
-- Ideal para aplicaciones de escritorio, terminales, dispositivos móviles
-- FTS5 (búsqueda de texto completo) incluido
+## La teoría: tablas, filas y columnas
 
-**Desventajas**:
-- Escritura concurrente limitada (un proceso escribe a la vez)
-- No pensado para múltiples usuarios escribiendo al mismo tiempo
-- No escala horizontalmente (no podés tener 10 servidores compartiendo el mismo SQLite)
+Una base de datos relacional organiza los datos en **tablas**. Una tabla es una estructura de filas y columnas: las **filas** son los registros completos, y las **columnas** son los atributos de cada registro.
 
-**Por qué Engram usa SQLite**: Engram corre en tu computadora local. Solo vos lo usás. No necesitás un servidor de base de datos. SQLite permite que Engram guarde memoria de forma simple, rápida y portátil. Tu archivo de memoria Engram es un archivo `.db` que podés respaldar copiándolo.
+Una tabla de resúmenes de análisis podría verse así:
 
-### FTS5
+| id | cliente | periodo | resumen | creado |
+|----|---------|---------|---------|--------|
+| 1 | Mercado Libre | 2026-07 | Crecimiento del 12 % en ventas | 2026-08-01 |
+| 2 | Tienda Azul | 2026-07 | Caída en conversión del 5 % | 2026-08-02 |
 
-**FTS5** (Full-Text Search versión 5) es una extensión de SQLite que permite búsqueda de texto completo.
+Una **columna** es un atributo con un tipo definido: texto, número o fecha. La columna `cliente` guarda texto, la columna `id` guarda números enteros y la columna `creado` guarda fechas. Ese tipo le dice a la base de datos cómo interpretar y comparar cada valor.
 
-La búsqueda normal de SQL es así:
+La **clave primaria** es el atributo elegido para identificar de forma única cada fila. En la tabla anterior, la columna `id` es la clave primaria: cada fila tiene un valor distinto y ese valor identifica al registro sin ambigüedad. Elegir la clave primaria es una decisión de diseño: se elige según qué dato sea estable, único y nunca cambie. El índice acelera las búsquedas: es la estructura que la base de datos usa para encontrar filas sin revisar la tabla completa.
+
+## El software: SQLite, PostgreSQL y SQL
+
+Hay dos tipos de sistemas de base de datos que verás con frecuencia:
+
+**SQLite** es una base de datos ligera que guarda todo en un solo archivo y no necesita un servidor. El programa que la usa lee y escribe ese archivo directamente. Es ideal para aplicaciones locales, herramientas de terminal y memoria de agentes: no hay nada que instalar ni iniciar, y respaldarla es tan simple como copiar un archivo.
+
+**PostgreSQL** (o Postgres) es una base de datos cliente-servidor: corre como un proceso separado al que los programas se conectan a través de la red. Ofrece funciones avanzadas y soporta muchos usuarios escribiendo a la vez. Se usa cuando la información debe compartirse entre varias computadoras o cuando la aplicación crece más allá de un solo usuario local.
+
+**SQL** es el lenguaje para comunicarse con bases de datos relacionales. Con SQL se lee, se agrega, se modifica y se elimina información. Un ejemplo de lectura:
 
 ```sql
-SELECT * FROM memorias WHERE contenido LIKE '%N+1%';
+SELECT cliente, resumen FROM resumenes WHERE periodo = '2026-07';
 ```
 
-Esto funciona pero es lento (tiene que leer todas las filas) y no entiende de palabras: busca exactamente el texto `%N+1%` en cualquier lugar del contenido.
+Esa consulta pide las columnas `cliente` y `resumen` de las filas cuyo periodo es julio de 2026. No hace falta memorizar SQL: alcanza con reconocer que existe y que es el idioma común de las bases de datos relacionales.
 
-FTS5 permite:
+## El uso: cuándo elegir cada opción
 
-```sql
--- Crear una tabla virtual FTS5
-CREATE VIRTUAL TABLE memorias_fts USING fts5(titulo, contenido);
+| Situación | Opción recomendada | Motivo |
+|-----------|--------------------|--------|
+| Pocos datos, un solo programa, configuración simple | Archivo | Simple y suficiente |
+| Datos organizados, un solo usuario local, herramienta de terminal | SQLite | Rápida, sin servidor, un archivo |
+| Varios usuarios o varias computadoras comparten datos | PostgreSQL | Soporta acceso concurrente |
+| Copias de seguridad | Archivo o SQLite | Copiar un archivo es suficiente |
+| Información crítica compartida | PostgreSQL | Transacciones y funciones avanzadas |
 
--- Insertar datos (la tabla FTS se sincroniza)
-INSERT INTO memorias_fts(titulo, contenido)
-VALUES ('Fixed N+1', 'Se arregló la query N+1 en UserList');
+Una **transacción** es un conjunto de operaciones que se ejecutan como una sola unidad: todas se aplican o ninguna. Si una operación falla a mitad de camino, la base de datos vuelve al estado anterior, como si nada hubiera pasado. Eso protege la información en casos donde importa que los datos queden completos.
 
--- Buscar: encuentra "query" o "N+1" o ambos
-SELECT * FROM memorias_fts WHERE memorias_fts MATCH 'query OR N+1';
+La **nube** aparece cuando el almacenamiento se traslada a servidores remotos accesibles por internet. Guardar datos en la nube no cambia las reglas de las bases de datos: lo que cambia es quién administra el servidor y desde dónde se accede.
 
--- Buscar frase exacta
-SELECT * FROM memorias_fts WHERE memorias_fts MATCH '"N+1"';
-```
-
-FTS5:
-- **Indexa palabras** individualmente, no busca subcadenas
-- **Entiende de búsqueda**: podés buscar `"query N+1"`, `"query AND N+1"`, `"query NOT lento"`
-- **Ordena por relevancia**: los resultados más relevantes aparecen primero
-- **Es rápido**: usa un índice inverso en vez de escanear filas
-
-Cuando ejecutás `mem_search` o `engram search`, detrás de escena Engram usa FTS5 para encontrar rápido qué memorias contienen las palabras que buscás.
-
-### Postgres
-
-**PostgreSQL** (o Postgres) es un sistema de base de datos **cliente-servidor**. A diferencia de SQLite, Postgres corre como un proceso separado (el servidor) al que los programas se conectan a través de la red.
-
-**Cuándo se necesita Postgres** en lugar de SQLite:
-
-| Situación | SQLite | Postgres |
-|-----------|--------|----------|
-| Un solo usuario local | ✅ Ideal | ❌ Excesivo |
-| Varios usuarios concurrentes | ❌ Limitado | ✅ Ideal |
-| Aplicación web con muchos usuarios | ❌ No escala | ✅ Escala horizontal |
-| Backup en caliente (mientras corre) | ❌ Complejo | ✅ Nativo |
-| Replicación geográfica | ❌ No | ✅ Sí |
-| Funcionalidades avanzadas (JSONB, arrays) | ❌ Parcial | ✅ Completo |
-
-**Engram Cloud** (si existe en el futuro) usaría Postgres para permitir que múltiples usuarios y dispositivos compartan memoria. Engram local usa SQLite porque es más simple y no necesita servidor.
-
-### Transacciones
-
-Una **transacción** es un conjunto de operaciones que se ejecutan como una sola unidad atómica: **todas se ejecutan o ninguna**.
-
-Ejemplo: transferencia bancaria entre dos cuentas.
-
-```sql
-BEGIN TRANSACTION;
-
--- Paso 1: debitar de cuenta A
-UPDATE cuentas SET saldo = saldo - 100 WHERE id = 'A';
-
--- Paso 2: acreditar a cuenta B
-UPDATE cuentas SET saldo = saldo + 100 WHERE id = 'B';
-
--- Si todo salió bien, confirmar
-COMMIT;
-
--- Si algo falló (ej. cuenta B no existe), deshacer todo
-ROLLBACK;
-```
-
-Sin transacciones, si el paso 1 se ejecuta pero el paso 2 falla (por ejemplo, porque la cuenta B no existe), la plata desaparece. Con transacciones, si algo falla, la base de datos vuelve al estado anterior como si nada hubiera pasado.
-
-SQLite soporta transacciones. Postgres también. Engram las usa para garantizar que las memorias se guarden completas o no se guarden.
-
-### Source of truth
-
-**Source of truth** (fuente de verdad) es el lugar autorizado donde vive un dato. Si hay una discrepancia entre dos lugares, el source of truth es el que manda.
-
-En Engram local:
-
-```
-El archivo SQLite en ~/.config/opencode/memory.db
-es la fuente de verdad de todas las memorias.
-```
-
-Si Engram también mostrara datos en una interfaz web, esos datos podrían estar en caché (copia temporal). Pero si la interfaz muestra algo distinto al SQLite, el SQLite tiene la razón. La interfaz web se actualiza consultando el SQLite.
-
-**Arquitectura típica con dos fuentes de verdad**:
-
-```
-Engram local → SQLite (source of truth local)
-Engram cloud → Postgres (source of truth cloud)
-
-La TUI lee de SQLite local.
-El servidor cloud escribe en Postgres.
-Si usás ambos, se sincronizan.
-```
-
-### Backup (copia de seguridad)
-
-Con SQLite, el backup es trivial: copiás el archivo `.db`.
-
-```powershell
-# PowerShell
-Copy-Item "$env:USERPROFILE\.config\opencode\memory.db" "$env:USERPROFILE\backup-memory-$(Get-Date -Format 'yyyy-MM-dd').db"
-```
-
-```bash
-# Bash
-cp ~/.config/opencode/memory.db ~/backup-memory-$(date +%Y-%m-%d).db
-```
-
-**Por qué Engram no requiere backup externo con SQLite**: SQLite es un solo archivo. No hay un servidor que tengas que detener para respaldar. Podés copiar el archivo mientras Engram está cerrado (o incluso abierto, con precaución). Eso significa que vos controlás tus datos: copiás el archivo a un disco externo, a la nube, o lo que quieras.
-
-Con Postgres, el backup requiere herramientas específicas (`pg_dump`) y es más complejo.
+Un **backup** es una copia de seguridad de los datos que permite restaurarlos si el original se pierde o se daña. Con SQLite, el backup es copiar el archivo de la base de datos. Con PostgreSQL, el respaldo requiere herramientas específicas del servidor.
 
 ## Errores frecuentes
 
-1. **"SQLITE_BUSY"**: otro proceso está escribiendo en la base de datos. SQLite permite un escritor por vez. Esperá a que termine y reintentá.
-2. **"no such table"**: el nombre de la tabla está mal escrito. Verificá con `.tables` en SQLite o `\dt` en Postgres.
-3. **"UNIQUE constraint failed"**: intentaste insertar un valor duplicado en una columna que requiere valores únicos (como la clave primaria).
-4. **Olvidar el WHERE en UPDATE o DELETE**: ejecutar `UPDATE memorias SET tipo = 'bugfix'` sin WHERE cambia **todas** las filas. Siempre verificá antes.
-5. **Base de datos corrupta**: raro con SQLite, pero puede pasar si el archivo se daña (disco lleno, corte de energía durante una escritura). Engram tiene mecanismos de integridad y un solo archivo fácil de restaurar desde backup.
+### ¿Por qué la base de datos dice que está ocupada?
+
+**Qué observas:** un error que indica que la base de datos está ocupada o bloqueada.
+
+**Qué suele significar:** otro proceso está escribiendo en la base de datos en ese momento. Algunas bases de datos locales permiten un escritor a la vez.
+
+**Cómo comprobarlo:** revisa qué programas están accediendo a esa base de datos y si quedó un proceso abierto.
+
+**Cómo resolverlo:** espera a que termine la escritura o cierra el programa que esté usando la base de datos, y reintenta la operación.
+
+**Cómo confirmar la solución:** vuelve a ejecutar la operación y verifica que se complete sin errores.
+
+### ¿Por qué no encuentro una fila que sé que existe?
+
+**Qué observas:** una búsqueda no devuelve un registro que debería estar en la tabla.
+
+**Qué suele significar:** la consulta filtra por un valor distinto al guardado (un formato de fecha, un espacio de más o una mayúscula) o la información se guardó en otra tabla.
+
+**Cómo comprobarlo:** revisa la consulta que estás usando y compara el valor exacto que filtra con el valor guardado en la base de datos.
+
+**Cómo resolverlo:** corrige el valor de la consulta o consulta la tabla correcta.
+
+**Cómo confirmar la solución:** ejecuta la consulta corregida y verifica que la fila aparezca.
 
 ## Resumen
 
 | Concepto | ¿Qué es? | Ejemplo |
-|----------|---------|---------|
-| Dato | Valor individual | `"Harry"`, `42`, `2026-07-20` |
-| Persistencia | Datos que sobreviven al apagar | Archivos en disco, BD |
-| Base de datos | Sistema organizado de persistencia | SQLite, Postgres |
-| Tabla | Estructura de filas y columnas | `memorias` |
-| Fila | Un registro | Una memoria |
-| Columna | Un campo de datos | `tipo`, `fecha` |
-| Clave primaria | Identificador único de fila | `id` |
-| Índice | Acelerador de búsqueda | `idx_tipo` |
-| SQL | Lenguaje para consultar BD | `SELECT * FROM...` |
-| SQLite | BD embebida, archivo único | `memory.db` |
-| FTS5 | Búsqueda de texto completo | `MATCH 'query OR N+1'` |
-| Postgres | BD cliente-servidor, multiusuario | Para Engram Cloud |
-| Transacción | Operación atómica (todo o nada) | `BEGIN...COMMIT` |
-| Source of truth | Lugar autorizado del dato | SQLite local |
+|----------|----------|---------|
+| Dato | Un valor individual | Un nombre, un número, una fecha |
+| Persistencia | Conservar datos entre sesiones | Guardar en disco o en base de datos |
+| Base de datos | Sistema organizado para guardar y buscar datos | SQLite, PostgreSQL |
+| Tabla | Estructura de filas y columnas | `resumenes` |
+| Fila | Un registro completo | Un resumen de análisis |
+| Columna | Un atributo con un tipo definido | `cliente` (texto) |
+| Clave primaria | Atributo elegido para identificar cada fila | `id` |
+| Índice | Estructura que acelera las búsquedas | Índice sobre la columna `periodo` |
+| SQL | Lenguaje para consultar bases de datos | `SELECT ... WHERE ...` |
+| SQLite | Base de datos ligera, de un solo archivo | Memoria local de un agente |
+| PostgreSQL | Base de datos cliente-servidor multiusuario | Datos compartidos por varios usuarios |
+| Transacción | Operaciones que se aplican todas o ninguna | Transferencia entre cuentas |
+| Nube | Servidores remotos de cómputo y almacenamiento | Acceso por internet a datos |
+| Backup | Copia de seguridad de los datos | Copiar el archivo de la base de datos |
 
-## Preguntas
+## Términos de esta lección
 
-1. ¿Cuál es la diferencia entre guardar datos en un archivo JSON y en SQLite?
-2. ¿Qué es una clave primaria y por qué es necesaria?
-3. ¿Para qué sirve un índice? ¿Qué pasa si una tabla no tiene índices?
-4. ¿Por qué Engram usa SQLite y no Postgres?
-5. ¿Qué significa que una transacción sea "atómica"?
+Dato, Persistencia, Base de datos, Tabla, Fila, Columna, Clave primaria, Índice, SQL (Structured Query Language), SQLite, PostgreSQL, Transacción, Nube y Backup. Todos están definidos en el [glosario](../../20-referencia/02-glosario/).
 
-## Ejercicio
+## Para seguir aprendiendo
 
-1. Abrí PowerShell y ejecutá `sqlite3` para ver si SQLite está disponible. Si lo está, salí con `.quit`.
-2. Si Engram está instalado, buscá el archivo de base de datos: `Get-ChildItem -Recurse -Filter "*.db" "$env:USERPROFILE\.config\opencode\"`.
-3. Si tenés acceso a la base de datos de Engram, podés explorarla con: `sqlite3 "$env:USERPROFILE\.config\opencode\memory.db"` y dentro escribir `.tables` para ver las tablas.
-4. Sin salir de sqlite3, probá `SELECT * FROM observations LIMIT 5;` (ajustá el nombre de tabla según corresponda).
-5. Salí con `.quit`.
-
-## Fuentes verificadas
-
-- SQLite: documentación oficial (sqlite.org), versión 3.46
-- PostgreSQL: documentación oficial (postgresql.org), versión 17
-- FTS5: documentación oficial SQLite FTS5 Extension
-- Ecosistema: engram 1.x (SQLite + FTS5 para memoria persistente)
-- Fecha: 2026-07-20
-- Estado: 🟢 Verificado (conocimiento fundamental, no depende de versión específica)
+- [SQLite Documentation](https://sqlite.org/docs.html): documentación oficial de SQLite con tutoriales de introducción a SQL.
+- [freeCodeCamp](https://www.freecodecamp.org/espanol/): cursos gratuitos con secciones de bases de datos.
+- La siguiente lección, [Elegir un stack tecnológico](../06-elegir-stack/), te ayuda a decidir qué tecnologías usar según el problema a resolver.
